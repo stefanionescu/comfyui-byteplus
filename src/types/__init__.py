@@ -1,6 +1,12 @@
 """Records shared by the runtime: dataclasses for in-process values, pydantic models for JSON."""
 
+from typing import Literal
 from pydantic import BaseModel, ConfigDict
+
+
+type Json = bool | int | float | str | list[Json] | dict[str, Json] | None
+# The kinds of request a paid node sends; each kind has its own body, reserved fields, and model families.
+type Kind = Literal["chat", "images", "layers", "videos", "meshes", "embeddings"]
 
 
 class Value(BaseModel):
@@ -16,4 +22,5 @@ class Reply(BaseModel):
     model_config = ConfigDict(extra="ignore", frozen=True)
 
 
+# Type aliases are imported by name; __all__ lists runtime names.
 __all__ = ["Reply", "Value"]

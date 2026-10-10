@@ -1,1 +1,1 @@
-"""Requests to BytePlus: the model table lookup and one operation per kind of model."""
+"""Requests to BytePlus: the model check and one operation per kind of request."""
