@@ -5,21 +5,21 @@ outputs each image's ModelArk address as a reference.
 
 ## Inputs
 
-| Input                 | What it takes                                                                                                                              |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `model`               | Any Seedream model ID from the ModelArk model list; the default is `dola-seedream-5-0-flash-260915`.                                       |
-| `size`                | `1K`, `1.5K`, `2K`, `3K`, or `4K`. **model default** is 2K.                                                                                |
-| `aspect_ratio`        | The shape, such as `16:9`. **model default** lets the model take the shape from the prompt.                                                |
-| `count`               | How many images to make, 1 to 15. Above 1, only models that make image series take it, and they may make fewer.                            |
-| `background`          | `transparent` keeps the transparency of one reference image that has it, such as one from **Join Image with Alpha**, and makes a PNG.      |
-| `output_format`       | `png` or `jpeg`. **model default** is JPEG. Seedream 4.5 and 4.0 always make JPEG.                                                         |
-| `prompt_optimization` | `standard` or `fast`. Fast answers sooner with slightly lower quality, on models that offer it.                                            |
-| `watermark`           | Adds an AI-generated mark in the lower right corner.                                                                                       |
-| `reference_images`    | Images to edit or combine: one, a batch, or a list, each at its own size. They are Image 1, Image 2, and so on, before any **references**. |
-| `references`          | Image references, such as the **references** of another **Image: Generate**. Assets are refused.                                           |
-| `run_number`          | Change it to send the same request again.                                                                                                  |
-| `prompt`              | What to draw or change. Name references as Image 1, Image 2, and so on.                                                                    |
-| `options`             | Settings from **Request Options**.                                                                                                         |
+| Input                 | What it takes                                                                                                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `model`               | Any Seedream model ID from the ModelArk model list; the default is `dola-seedream-5-0-flash-260915`.                                                                                 |
+| `size`                | `1K`, `1.5K`, `2K`, `3K`, or `4K`. **model default** is 2K.                                                                                                                          |
+| `aspect_ratio`        | The shape, such as `16:9`. **model default** lets the model take the shape from the prompt.                                                                                          |
+| `count`               | The most images to make, 1 to 15. Above 1, only models that make image series take it; ask for that many in the prompt, such as "Generate 4 images of …", or the model may make one. |
+| `background`          | `transparent` keeps the transparency of one reference image that has it, such as one from **Join Image with Alpha**, and makes a PNG.                                                |
+| `output_format`       | `png` or `jpeg`. **model default** is JPEG. Seedream 4.5 and 4.0 always make JPEG.                                                                                                   |
+| `prompt_optimization` | `standard` or `fast`. Fast answers sooner with slightly lower quality, on models that offer it.                                                                                      |
+| `watermark`           | Adds an AI-generated mark in the lower right corner.                                                                                                                                 |
+| `reference_images`    | Images to edit or combine: one, a batch, or a list, each at its own size. They are Image 1, Image 2, and so on, before any **references**.                                           |
+| `references`          | Image references, such as the **references** of another **Image: Generate**. Assets are refused.                                                                                     |
+| `run_number`          | Change it to send the same request again.                                                                                                                                            |
+| `prompt`              | What to draw or change. Name references as Image 1, Image 2, and so on.                                                                                                              |
+| `options`             | Settings from **Request Options**.                                                                                                                                                   |
 
 **model default** sends nothing, except for **size**, which always sends a
 size. Before anything is paid, the node refuses a size, shape, count, format,

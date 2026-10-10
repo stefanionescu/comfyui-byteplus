@@ -109,8 +109,8 @@ POSTER_SERIES = Workflow(
             HostNode.TEXT_BLOCK,
             {
                 "value": (
-                    "Four travel posters for the same seaside town, one for each season, in one flat illustration "
-                    'style, each with the town\'s name, "Port Ellis", at the top in the same typeface.'
+                    "Generate 4 travel posters for the same seaside town, one for each season, in one flat "
+                    'illustration style, each with the town\'s name, "Port Ellis", at the top in the same typeface.'
                 )
             },
             title=SHARED_TEXTS["brief"],

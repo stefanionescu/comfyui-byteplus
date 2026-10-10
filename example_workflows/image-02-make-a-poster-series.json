@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the series in **Brief**: what each poster shows and what they share.\n3. Press **Run**. Up to four posters are saved under `image/byteplus`.\n\nModel: Seedream 4.0. Activate it on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the series in **Brief**, starting with how many, such as \"Generate 4 posters\".\n3. Press **Run**. Up to four posters are saved under `image/byteplus`.\n\nModel: Seedream 4.0. Activate it on ModelArk's **Model activation** page."
       ],
       "title": "Start Here"
     },
@@ -140,7 +140,7 @@
         "Node name for S&R": "PrimitiveStringMultiline"
       },
       "widgets_values": [
-        "Four travel posters for the same seaside town, one for each season, in one flat illustration style, each with the town's name, \"Port Ellis\", at the top in the same typeface."
+        "Generate 4 travel posters for the same seaside town, one for each season, in one flat illustration style, each with the town's name, \"Port Ellis\", at the top in the same typeface."
       ],
       "title": "Brief"
     },

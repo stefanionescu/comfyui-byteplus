@@ -47,7 +47,8 @@ _CONTROLS = (
         min=1,
         max=COUNT["MAX"],
         tooltip=(
-            "How many images to make. Above 1, only models that make image series take it, and they may make fewer."
+            "The most images to make. Above 1, only models that make image series take it, and the prompt must ask "
+            'for that many, such as "Generate 4 images of a lighthouse".'
         ),
     ),
     io.Combo.Input(

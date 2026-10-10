@@ -25,7 +25,7 @@ WORKFLOW_TEXTS = {
     },
     "image-02-make-a-poster-series": {
         "input": (
-            KEY_STEP + "2. Describe the series in **Brief**: what each poster shows and what they share.\n"
+            KEY_STEP + '2. Describe the series in **Brief**, starting with how many, such as "Generate 4 posters".\n'
             "3. Press **Run**. Up to four posters are saved under `image/byteplus`.\n\n"
             "Model: Seedream 4.0. Activate it on ModelArk's **Model activation** page."
         ),
