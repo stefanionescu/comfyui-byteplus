@@ -14,6 +14,7 @@ from scripts.workflows.page.graph import Node, NAMESPACE
 from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.paths import REPO_ROOT, README_PATH, EXAMPLES_DIR
 from scripts.workflows.page.sizes import measure, measure_note
+from scripts.workflows.descriptions.image import IMAGE_WORKFLOWS
 from scripts.workflows.page.layout import place_stacks, place_columns
 from scripts.workflows.page.serialize import (
     encode_links,
@@ -28,7 +29,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping, Iterable
     from scripts.workflows.page.graph import Workflow
 
-WORKFLOWS: tuple[Workflow, ...] = ()
+WORKFLOWS = (*IMAGE_WORKFLOWS,)
 
 
 def _build_palette(export: dict[str, object], workflow: Workflow) -> Palette:

@@ -1,17 +1,21 @@
-"""Build the inputs the paid nodes share, the seed, the run number, and the options, and encode their media lists."""
+"""Build the inputs the paid nodes share, the seed, the run number, and the options, and encode their media inputs."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import torch
 from comfy_api.latest import io, Input
-from ..config.media import MP4_URL_PREFIX
+from typing import cast, TYPE_CHECKING
+from ..types.images import EncodedImage
 from ..config.namespace import SOCKET_TYPES
+from ..types.errors import ErrorCode, ByteplusError
+from ..config.media import IMAGE_TENSOR, MP4_URL_PREFIX
 from ..comfy.media import encode_audio, encode_video, encode_images
-from ..config.generation.inputs import SEED, INPUT_NAMES, RUN_NUMBER
+from ..config.generation.inputs import SEED, RUN_NUMBER, INPUT_NAMES
+from ..config.messages.inputs import IMAGE_SINGLE, REFERENCE_IMAGE_ASSET, REFERENCE_IMAGE_SINGLE
 
 if TYPE_CHECKING:
-    import torch
     from collections.abc import Sequence
+    from ..types.references import Reference
 
 # The references input every media node shares; ComfyUI only reads an input definition, so one instance serves all.
 REFERENCES_INPUT = io.Custom(SOCKET_TYPES["REFERENCES"]).Input(
@@ -22,6 +26,8 @@ REFERENCES_INPUT = io.Custom(SOCKET_TYPES["REFERENCES"]).Input(
         "Video: Generate, or Video: Download."
     ),
 )
+# The types of a socket that takes one ComfyUI image or references, passed to each such socket's MultiType input.
+IMAGE_SOCKET_TYPES = (io.Image, io.Custom(SOCKET_TYPES["REFERENCES"]))
 
 
 def build_request_inputs(*, has_seed: bool) -> list[io.Input]:
@@ -72,4 +78,47 @@ def encode_media(
     return image_urls, video_urls, tuple(encode_audio(clip) for clip in clips)
 
 
-__all__ = ["REFERENCES_INPUT", "build_request_inputs", "encode_media"]
+def encode_sized_images(batches: Sequence[torch.Tensor]) -> tuple[EncodedImage, ...]:
+    """Encode every image of every batch, in list order and then batch order, with its size and transparency.
+
+    A ComfyUI image is transparent only when it has a fourth channel, as Join Image with Alpha makes it.
+    """
+    encoded: list[EncodedImage] = []
+    for batch in batches:
+        urls = encode_images(batch)
+        height, width, channels = batch.shape[1:]
+        has_alpha = channels == IMAGE_TENSOR["RGBA_CHANNELS"]
+        encoded.extend(EncodedImage(url, width, height, has_alpha) for url in urls)
+    return tuple(encoded)
+
+
+def read_image_socket(label: str, values: Sequence[object]) -> EncodedImage | Reference:
+    """Read a socket that takes one ComfyUI image or references that hold one image.
+
+    The socket's node takes input lists, so the values arrive as a list: images, or one references chain, whose other
+    kinds this socket does not use. A tensor tells the two apart, as ComfyUI's own multi-type nodes do. More than one
+    image is refused before any is encoded.
+    """
+    if isinstance(values[0], torch.Tensor):
+        batches = cast("list[torch.Tensor]", list(values))
+        if sum(batch.shape[0] for batch in batches) > 1:
+            raise ByteplusError(ErrorCode.INVALID_INPUT, IMAGE_SINGLE.format(input=label))
+        return encode_sized_images(batches)[0]
+    chain = cast("tuple[Reference, ...]", values[0])
+    images = [reference for reference in chain if reference.kind == "image"]
+    if len(images) != 1:
+        message = REFERENCE_IMAGE_SINGLE.format(input=label, count=len(images))
+        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+    if images[0].origin == "asset":
+        raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_IMAGE_ASSET.format(input=label))
+    return images[0]
+
+
+__all__ = [
+    "IMAGE_SOCKET_TYPES",
+    "REFERENCES_INPUT",
+    "build_request_inputs",
+    "encode_media",
+    "encode_sized_images",
+    "read_image_socket",
+]

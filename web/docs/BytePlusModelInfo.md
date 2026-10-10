@@ -63,4 +63,6 @@ For example, part of the report for `seed-2-0-lite-260428`:
 Another extension can run the node and read **info** instead of copying a
 model's limits; the advanced guide explains how.
 
+Example: **image-02-make-a-poster-series**.
+
 [ModelArk model list](https://docs.byteplus.com/en/docs/modelark/model-list)

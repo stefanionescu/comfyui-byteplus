@@ -10,13 +10,11 @@ from your ComfyUI server straight to BytePlus and are billed to your BytePlus
 account. This is not ComfyUI's built-in ByteDance support, whose nodes bill
 your Comfy account.
 
-- **Request Options:** the flex tier and extra request fields for any paid
-  node.
-
 ## Contents
 
 - [Requirements](#requirements)
 - [Install](#install)
+- [Example workflows](#example-workflows)
 - [Nodes](#nodes)
 - [License](#license)
 
@@ -78,14 +76,30 @@ From the folder that holds `ComfyUI` and `python_embeded`, in PowerShell:
 .\python_embeded\python.exe -m pip install -r .\ComfyUI\custom_nodes\comfyui-byteplus\requirements.txt
 ```
 
+## Example workflows
+
+| Workflow                                                                                        | Input                   |
+| ----------------------------------------------------------------------------------------------- | ----------------------- |
+| [Image: Design a Character](example_workflows/image-01-design-a-character.json)                 | A character description |
+| [Image: Make a Poster Series](example_workflows/image-02-make-a-poster-series.json)             | A brief                 |
+| [Image: Split a Poster into Layers](example_workflows/image-03-split-a-poster-into-layers.json) | A poster description    |
+
+They are in **Browse Templates → comfyui-byteplus**. Start with each
+workflow's **Start Here** note; each step is a subgraph. Media inputs start
+empty, and most workflows draw their own inputs with Seedream.
+
+After an update, open the examples in a new tab to get the new versions.
+
 ## Nodes
 
 The nodes are under **BytePlus** in the node menu, and each has a help page.
 
-| Node                                                  | What it does                                                   | Paid |
-| ----------------------------------------------------- | -------------------------------------------------------------- | ---- |
-| [Request Options](web/docs/BytePlusRequestOptions.md) | Sets the service tier and extra request fields for paid nodes. | No   |
-| [Model: Info](web/docs/BytePlusModelInfo.md)          | Shows what a model reads, makes, and takes, as JSON.           | No   |
+| Node                                                        | What it does                                                                  | Paid |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------- | ---- |
+| [Image: Generate](web/docs/BytePlusImageGenerate.md)        | Generates or edits images with Seedream, and keeps their addresses for video. | Yes  |
+| [Image: Split Layers](web/docs/BytePlusImageSplitLayers.md) | Splits an image into a base image and transparent layers.                     | Yes  |
+| [Request Options](web/docs/BytePlusRequestOptions.md)       | Sets the service tier and extra request fields for paid nodes.                | No   |
+| [Model: Info](web/docs/BytePlusModelInfo.md)                | Shows what a model reads, makes, and takes, as JSON.                          | No   |
 
 ## License
 

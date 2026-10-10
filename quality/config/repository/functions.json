@@ -50,48 +50,28 @@
             },
             {
                 "path": "src/byteplus/models.py",
-                "names": ["validate_model", "validate_range", "validate_value"],
-                "reason": "The paid nodes check their inputs against the model's row; each node plan removes the names it calls."
-            },
-            {
-                "path": "src/byteplus/failures.py",
-                "names": ["build_failure"],
-                "reason": "The image, video, and 3D nodes build the failure of an error inside a reply; Image: Generate removes the entry."
+                "names": ["validate_range"],
+                "reason": "Video: Generate checks its numbers against the model's row; the Video milestone removes the entry."
             },
             {
                 "path": "src/byteplus/operation.py",
-                "names": ["measure_encoded_bytes", "validate_upload_size"],
-                "reason": "The paid node operations check their media sizes; each node plan removes the names it calls."
-            },
-            {
-                "path": "src/byteplus/options.py",
-                "names": ["build_request_body"],
-                "reason": "Every paid node merges Request Options into its body; the first paid node removes the entry."
+                "names": ["measure_encoded_bytes"],
+                "reason": "The chat and 3D nodes measure each file against ModelArk's per-file limits; the first of them removes the entry."
             },
             {
                 "path": "src/byteplus/references.py",
-                "names": ["build_reference_parts", "parse_reference_source", "validate_references"],
-                "reason": "The media nodes and Reference: Add use the reference rules; each node plan removes the names it calls."
+                "names": ["build_reference_parts", "parse_reference_source"],
+                "reason": "Video: Generate orders its references and Reference: Add parses what is typed; each plan removes the name it calls."
             },
             {
                 "path": "src/byteplus/transport.py",
-                "names": ["download_output", "send_json", "send_lookup", "send_task_cancel"],
-                "reason": "The paid nodes, task operations, and model listing send these requests; each plan removes the names it calls."
-            },
-            {
-                "path": "src/comfy/execution.py",
-                "names": ["send_request", "wait_for_task"],
-                "reason": "Every paid node runs its request through the run wrapper; the first paid node removes the entry."
-            },
-            {
-                "path": "src/comfy/media.py",
-                "names": ["decode_image"],
-                "reason": "The image and video nodes decode the images BytePlus returns; Image: Generate removes the entry."
+                "names": ["send_lookup", "send_task_cancel"],
+                "reason": "The task operations and the chat model listing send these requests; each plan removes the names it calls."
             },
             {
                 "path": "src/nodes/inputs.py",
-                "names": ["build_request_inputs", "encode_media"],
-                "reason": "Every paid node adds the shared inputs and encodes its media lists; each node plan removes the names it calls."
+                "names": ["encode_media"],
+                "reason": "The chat, search, and 3D nodes encode their media lists; the first of them removes the entry."
             }
         ]
     },
