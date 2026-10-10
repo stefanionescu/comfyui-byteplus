@@ -16,7 +16,7 @@ outputs each image's ModelArk address as a reference.
 | `prompt_optimization` | `standard` or `fast`. Fast answers sooner with slightly lower quality, on models that offer it.                                                                                      |
 | `watermark`           | Adds an AI-generated mark in the lower right corner.                                                                                                                                 |
 | `reference_images`    | Images to edit or combine: one, a batch, or a list, each at its own size. They are Image 1, Image 2, and so on, before any **references**.                                           |
-| `references`          | Image references, such as the **references** of another **Image: Generate**. Assets are refused.                                                                                     |
+| `references`          | Image references from **Image: Generate**, **Video: Generate**, or **Reference: Add**. Assets are refused.                                                                           |
 | `run_number`          | Change it to send the same request again.                                                                                                                                            |
 | `prompt`              | What to draw or change. Name references as Image 1, Image 2, and so on.                                                                                                              |
 | `options`             | Settings from **Request Options**.                                                                                                                                                   |
@@ -37,9 +37,13 @@ or number of references the model does not take, naming what it does take.
 
 1. Write the prompt and type the model ID.
 2. Connect any reference images or references.
-3. Connect **images** to **Save Image**, and select **Run**.
+3. Connect **images** to **Save Image**, and select **Run**. To start a video
+   from an image, connect **references** to **first frame** on **Video:
+   Generate**.
 
 Examples: **image-01-design-a-character** and
-**image-02-make-a-poster-series**.
+**image-02-make-a-poster-series**. Seedance trusts faces in images Seedream 5.0
+made from text for 30 days, but only in the original file, so connect
+**references**, not **images**.
 
 [ModelArk image generation documentation](https://docs.byteplus.com/en/docs/modelark/image-generation-api)

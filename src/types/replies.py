@@ -2,6 +2,7 @@
 
 from . import Reply
 from pydantic import Field
+from typing import Literal
 
 
 class ErrorBody(Reply):
@@ -69,6 +70,53 @@ class ImageReply(Reply):
     created: int
     images: tuple[ImageItemReply, ...] = Field(default=(), alias="data")
     error: ErrorBody | None = None
+
+
+class TaskCreateReply(Reply):
+    """The reply to a task's create request.
+
+    Attributes:
+        id: The new task's ID.
+
+    """
+
+    id: str
+
+
+class TaskContentReply(Reply):
+    """The output addresses of a finished task.
+
+    Attributes:
+        video_url: The video.
+        last_frame_url: The video's last frame, when the request asked for it.
+        file_url: The 3D file.
+
+    """
+
+    video_url: str | None = None
+    last_frame_url: str | None = None
+    file_url: str | None = None
+
+
+class TaskReply(Reply):
+    """A video or 3D task's status check.
+
+    Attributes:
+        id: The task's ID.
+        status: Where the task is: queued, running, or one of the statuses of a task that has ended.
+        content: What a succeeded task made.
+        error: Why a failed task failed.
+        created_at: When ModelArk accepted the task, in Unix seconds.
+        updated_at: When the task last changed status, in Unix seconds.
+
+    """
+
+    id: str
+    status: Literal["queued", "running", "succeeded", "failed", "cancelled", "expired"]
+    content: TaskContentReply | None = None
+    error: ErrorBody | None = None
+    created_at: int
+    updated_at: int
 
 
 class ChatMessage(Reply):
@@ -209,4 +257,7 @@ __all__ = [
     "ListedModel",
     "ListedTokenLimits",
     "ModelListReply",
+    "TaskContentReply",
+    "TaskCreateReply",
+    "TaskReply",
 ]

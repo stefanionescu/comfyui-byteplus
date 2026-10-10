@@ -1,5 +1,7 @@
 """Create the shared stores when ComfyUI loads the extension."""
 
+from ..config.storage import JOB_FILES
+from ..byteplus.tasks.jobs import JobStore
 from ..settings.store import ConfigurationStore
 from ..storage.files import choose_state_directory
 from ..types.errors import ErrorCode, ByteplusError
@@ -11,16 +13,19 @@ class Runtime:
 
     Attributes:
         configuration: Private settings and the API key.
+        jobs: Recorded video and 3D tasks.
 
     """
 
-    __slots__ = ("configuration",)
+    __slots__ = ("configuration", "jobs")
 
     configuration: ConfigurationStore
+    jobs: JobStore
 
     def __init__(self) -> None:
         """Create the shared stores and place their state under one private directory."""
         self.configuration = ConfigurationStore(choose_state_directory())
+        self.jobs = JobStore(self.configuration.directory / JOB_FILES["FOLDER"])
 
 
 _runtime: Runtime | None = None

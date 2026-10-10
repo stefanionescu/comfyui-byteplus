@@ -21,6 +21,20 @@ SHARED_TEXTS = {
     "poster": "Poster",
     "draw": "Draw",
     "split": "Split",
+    "scene": "Scene",
+    "animate": "Animate",
+    "opening": "Opening",
+    "next": "Next",
+    "shot_1": "Shot 1",
+    "shot_2": "Shot 2",
+    "join": "Join",
+    "video": "Video",
+    "film": "Film",
+    "prompt": "Prompt",
+    "draft": "Draft",
+    "finish": "Finish",
+    "recover": "Recover",
+    "last_frame": "Last Frame",
 }
 
 __all__ = ["SHARED_TEXTS"]

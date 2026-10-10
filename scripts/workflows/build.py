@@ -16,6 +16,7 @@ from scripts.paths import REPO_ROOT, README_PATH, EXAMPLES_DIR
 from scripts.workflows.descriptions.chat import CHAT_WORKFLOWS
 from scripts.workflows.page.sizes import measure, measure_note
 from scripts.workflows.descriptions.image import IMAGE_WORKFLOWS
+from scripts.workflows.descriptions.video import VIDEO_WORKFLOWS
 from scripts.workflows.page.layout import place_stacks, place_columns
 from scripts.workflows.page.serialize import (
     encode_links,
@@ -33,6 +34,7 @@ if TYPE_CHECKING:
 WORKFLOWS = (
     *CHAT_WORKFLOWS,
     *IMAGE_WORKFLOWS,
+    *VIDEO_WORKFLOWS,
 )
 
 

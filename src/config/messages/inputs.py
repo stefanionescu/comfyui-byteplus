@@ -1,10 +1,20 @@
 """Messages for node inputs the extension refuses before sending anything.
 
 {input} is an image input's label as the node shows it, such as image or first frame. {size} is in MB of 1,000,000
-bytes, rounded up to one decimal.
+bytes, rounded up to one decimal. {mode} is what a video starts from, in the words of VIDEO_MODE_LABELS, {kind} is
+image, video, or audio, and {seconds} has one decimal.
 """
 
 ANSWER_SCHEMA_INVALID = "The answer schema must be a JSON object that describes the answer."
+
+AUDIO_LENGTH = "{model} takes reference audio clips of {minimum} to {maximum} seconds; one is {seconds} seconds."
+
+AUDIO_NEEDS_MEDIA = "{model} needs a reference image or video beside reference audio."
+
+AUDIO_TOTAL = (
+    "{model} takes at most {maximum} seconds of reference audio in all; the connected clips add up to {seconds} "
+    "seconds."
+)
 
 CHAT_AUDIO_SIZE = (
     "Each audio clip sent to Chat: Ask may be at most 25 MB as WAV, and one is {size} MB. Trim it, or put it at a "
@@ -38,11 +48,33 @@ DOCUMENT_SIZE = "The document is larger than the maximum upload size of {maximum
 
 DOCUMENT_UNREADABLE = "The document could not be read as UTF-8 text. Save it as UTF-8 or as a PDF."
 
+DRAFT_ALONE = (
+    "A draft keeps its own prompt and media. Clear the prompt and disconnect frames and other references to finish it."
+)
+
+DRAFT_FINISH_SIZE = "{model} finishes drafts at {resolutions}. Set resolution to one of them."
+
+DRAFT_FINISH_UNSUPPORTED = "{model} cannot finish drafts. Choose the model that made the draft."
+
+DRAFT_REUSED = (
+    "Finishing a draft keeps its aspect ratio, sound, task, and camera. Set aspect ratio and generate audio to model "
+    "default, task to auto, and camera fixed off."
+)
+
+DRAFT_SINGLE = "Connect one draft to finish; the references hold {count}."
+
+DRAFT_TWICE = "Turn off draft to finish a draft."
+
 EFFORT_UNSUPPORTED = "{model} does not take a reasoning effort. Set reasoning effort to model default."
 
 EFFORT_WITHOUT_THINKING = (
     "With thinking off, ModelArk takes only the minimal reasoning effort. Set reasoning effort to minimal or model "
     "default, or turn thinking on."
+)
+
+FRAMES_BESIDE_REFERENCES = (
+    "A video starts from frames or follows reference media, not both. Disconnect one, or name a reference image as "
+    "the first frame in the prompt."
 )
 
 IMAGE_COUNT_SINGLE = (
@@ -63,6 +95,8 @@ IMAGE_REFERENCE_SHAPE = (
 )
 
 IMAGE_SINGLE = "Connect one image to {input}, not a batch or a list."
+
+LAST_FRAME_ALONE = "Connect a first frame with the last frame."
 
 LAYER_IMAGE_SIZE = (
     "The image to split is {width} by {height} pixels. It needs at least 262,144 pixels in all, such as 512 by 512, "
@@ -86,7 +120,17 @@ OUTPUT_TOKENS_RANGE = (
     "{model} writes at most {maximum} tokens, reasoning included. Set max tokens to {maximum} or less, or to 0."
 )
 
+PROMPT_COMMAND = (
+    "Remove {command} from the prompt. ModelArk reads it as a setting; set the video's settings with the node's inputs."
+)
+
 PROMPT_EMPTY = "Write a prompt."
+
+RATIO_ADAPTIVE_ONLY = (
+    "{model} keeps the shape of its input for a video from {mode}. Set aspect ratio to adaptive or model default."
+)
+
+RATIO_FIXED_ONLY = "{model} cannot choose the shape of a video from {mode}. Choose an aspect ratio such as 16:9."
 
 REFERENCE_IMAGE_ASSET = "The {input} input takes an image made by ModelArk or a public address, not an asset."
 
@@ -104,6 +148,12 @@ SCHEMA_UNSUPPORTED = (
 
 SINGLE_VALUE = "Connect one value to {name}, not a list."
 
+TASK_NEEDS_REFERENCES = (
+    "Task {task} needs reference media. Connect references or reference images, or set task to auto."
+)
+
+TASK_NEEDS_VIDEO = "Task {task} needs a reference video. Add one to references, or set task to reference or auto."
+
 TEMPERATURE_FIXED = (
     "{model} always uses its own temperature. Set temperature to model default, or choose another model."
 )
@@ -119,8 +169,32 @@ TRANSPARENT_SOURCE = (
     "Image with Alpha."
 )
 
+VIDEO_EMPTY = "Write a prompt, or connect a first frame or references."
+
+VIDEO_IMAGE_SIZE = (
+    "An image for {input} is {width} by {height} pixels. Seedance needs each side from 300 to 6,000 pixels and the "
+    "long side at most 2.5 times the short side. Crop or resize it."
+)
+
+# The modes of a video request, and the edit and extend task types, as {mode} names them.
+VIDEO_MODE_LABELS = {
+    "text": "a prompt alone",
+    "first_frame": "a first frame",
+    "first_last_frame": "first and last frames",
+    "references": "reference media",
+    "edit": "a video to edit",
+    "extend": "a video to extend",
+}
+
+VIDEO_MODE_UNSUPPORTED = "{model} cannot make a video from {mode}. Choose a model that can; Model: Info shows which do."
+
+VIDEO_REFERENCE_LIMIT = "{model} takes at most {maximum} {kind} references, and {count} are connected."
+
 __all__ = [
     "ANSWER_SCHEMA_INVALID",
+    "AUDIO_LENGTH",
+    "AUDIO_NEEDS_MEDIA",
+    "AUDIO_TOTAL",
     "CHAT_AUDIO_SIZE",
     "CHAT_BODY_SIZE",
     "CHAT_IMAGE_SIZE",
@@ -131,28 +205,46 @@ __all__ = [
     "DOCUMENT_OUTSIDE",
     "DOCUMENT_SIZE",
     "DOCUMENT_UNREADABLE",
+    "DRAFT_ALONE",
+    "DRAFT_FINISH_SIZE",
+    "DRAFT_FINISH_UNSUPPORTED",
+    "DRAFT_REUSED",
+    "DRAFT_SINGLE",
+    "DRAFT_TWICE",
     "EFFORT_UNSUPPORTED",
     "EFFORT_WITHOUT_THINKING",
+    "FRAMES_BESIDE_REFERENCES",
     "IMAGE_COUNT_SINGLE",
     "IMAGE_COUNT_TOTAL",
     "IMAGE_REFERENCE_LIMIT",
     "IMAGE_REFERENCE_SHAPE",
     "IMAGE_SINGLE",
+    "LAST_FRAME_ALONE",
     "LAYER_IMAGE_SIZE",
     "OPTIONS_JSON",
     "OPTION_FLEX",
     "OPTION_RESERVED_FIELD",
     "OPTION_TIER_KIND",
     "OUTPUT_TOKENS_RANGE",
+    "PROMPT_COMMAND",
     "PROMPT_EMPTY",
+    "RATIO_ADAPTIVE_ONLY",
+    "RATIO_FIXED_ONLY",
     "REFERENCE_IMAGE_ASSET",
     "REFERENCE_IMAGE_SINGLE",
     "SCHEMA_JSON_ONLY",
     "SCHEMA_UNSUPPORTED",
     "SINGLE_VALUE",
+    "TASK_NEEDS_REFERENCES",
+    "TASK_NEEDS_VIDEO",
     "TEMPERATURE_FIXED",
     "THINKING_FIXED",
     "THINKING_UNSUPPORTED",
     "TRANSPARENT_FORMAT",
     "TRANSPARENT_SOURCE",
+    "VIDEO_EMPTY",
+    "VIDEO_IMAGE_SIZE",
+    "VIDEO_MODE_LABELS",
+    "VIDEO_MODE_UNSUPPORTED",
+    "VIDEO_REFERENCE_LIMIT",
 ]

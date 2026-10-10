@@ -6,9 +6,10 @@ import torch
 from comfy_api.latest import io, Input
 from typing import cast, TYPE_CHECKING
 from ..types.images import EncodedImage
+from ..types.videos import EncodedAudio
 from ..config.namespace import SOCKET_TYPES
 from ..types.errors import ErrorCode, ByteplusError
-from ..config.media import IMAGE_TENSOR, MP4_URL_PREFIX
+from ..config.media import WAV, IMAGE_TENSOR, MP4_URL_PREFIX
 from ..comfy.media import encode_audio, encode_video, encode_images
 from ..config.generation.inputs import SEED, RUN_NUMBER, INPUT_NAMES
 from ..config.messages.inputs import IMAGE_SINGLE, REFERENCE_IMAGE_ASSET, REFERENCE_IMAGE_SINGLE
@@ -92,6 +93,18 @@ def encode_sized_images(batches: Sequence[torch.Tensor]) -> tuple[EncodedImage, 
     return tuple(encoded)
 
 
+def encode_audio_clips(clips: Sequence[Input.Audio]) -> tuple[EncodedAudio, ...]:
+    """Encode every clip of every batch as a WAV data URL with its length, in list order and then batch order."""
+    _image_urls, _video_urls, encoded = encode_media(None, None, clips)
+    lengths: list[float] = []
+    for clip in clips:
+        waveform = clip["waveform"]
+        lengths.extend([waveform.shape[-1] / clip["sample_rate"]] * waveform.shape[0])
+    return tuple(
+        EncodedAudio(WAV["URL_PREFIX"] + text, seconds) for text, seconds in zip(encoded, lengths, strict=True)
+    )
+
+
 def read_image_socket(label: str, values: Sequence[object]) -> EncodedImage | Reference:
     """Read a socket that takes one ComfyUI image or references that hold one image.
 
@@ -118,6 +131,7 @@ __all__ = [
     "IMAGE_SOCKET_TYPES",
     "REFERENCES_INPUT",
     "build_request_inputs",
+    "encode_audio_clips",
     "encode_media",
     "encode_sized_images",
     "read_image_socket",

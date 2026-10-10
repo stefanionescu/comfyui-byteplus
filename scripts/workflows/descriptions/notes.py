@@ -102,6 +102,114 @@ WORKFLOW_TEXTS = {
         ),
         "split_description": "Splits the poster into transparent layers and saves them.",
     },
+    "video-01-animate-a-character": {
+        "input": (
+            KEY_STEP + "2. Describe your character in **Character**, and what they do and say in **Scene**. Put "
+            "spoken words in double quotation marks.\n"
+            "3. Press **Run**. The video is saved under `video/byteplus`.\n\n"
+            "Models: Seedream 5.0 flash and Seedance 2.0 mini. Activate them on ModelArk's **Model activation** page."
+        ),
+        "design": (
+            "Seedream 5.0 flash draws the character, which becomes the video's first frame. Seedance refuses images "
+            "of real-looking faces, but it trusts images ModelArk made itself for 30 days, as long as it gets the "
+            "original file. **references** carries that original address, not a copy."
+        ),
+        "design_description": "Draws the character.",
+        "animate": (
+            "Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the "
+            "line. The character's address works for 24 hours; after that, open **Design** and change **run "
+            "number** to draw a new one.\n\n"
+            "If you cancel while the task waits in BytePlus's queue, it is cancelled and nothing is billed. Once it "
+            "has started, it runs to the end; collect it with **video-05-recover-a-video**."
+        ),
+        "animate_description": "Turns the character into a video and saves it.",
+    },
+    "video-02-continue-a-shot": {
+        "input": (
+            KEY_STEP + "2. Describe the first shot in **Opening** and the next in **Next**.\n"
+            "3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`.\n\n"
+            "Model: Seedance 2.0 mini. Activate it on ModelArk's **Model activation** page."
+        ),
+        "shot_1": (
+            "Seedance 2.0 mini makes the first five-second shot at 480p. Its **references** carry the shot's video "
+            "and its last frame on, as BytePlus's own files."
+        ),
+        "shot_1_description": "Makes the first shot and saves it.",
+        "shot_2": (
+            "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same "
+            "way, each connected to the one before.\n\n"
+            "To continue the clip itself rather than start from its last frame, use Seedance 2.5, set **task** to "
+            "**extend**, and connect the first shot's **references** to **references** instead of **first frame**."
+        ),
+        "shot_2_description": "Makes the next shot from the first shot's last frame and saves it.",
+        "join": (
+            "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.\n\n"
+            "If you cancel while a shot waits in BytePlus's queue, it is cancelled and nothing is billed. A shot that "
+            "has started runs to the end; collect it with **video-05-recover-a-video**."
+        ),
+        "join_description": "Joins the two shots and saves the result.",
+    },
+    "video-03-cast-a-preset-character": {
+        "input": (
+            KEY_STEP + "2. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open the **Digital "
+            "characters** tab. Open a character, copy its asset ID, and paste it into **asset ID or address** on "
+            "**Reference: Add** in **Character**.\n"
+            "3. Describe the product in **Product** and the shot in **Scene**.\n"
+            "4. Press **Run**. The video is saved under `video/byteplus`.\n\n"
+            "BytePlus allows videos made with preset characters only for trying the models and internal use. Models: "
+            "Seedream 5.0 flash and Seedance 2.0 mini. Activate them on ModelArk's **Model activation** page."
+        ),
+        "product": (
+            "Seedream 5.0 flash draws the product. Its **references** carry the image's address on to **Reference: "
+            "Add**."
+        ),
+        "draw_description": "Draws the product.",
+        "character": (
+            "**Reference: Add** adds the preset character after the product, so the product is Image 1 and the "
+            "character Image 2, as **Scene** says. The first run stops here until you paste an asset ID."
+        ),
+        "video": (
+            "Seedance 2.0 mini films the character with the product. BytePlus trusts its preset characters, so their "
+            "faces are not blocked.\n\n"
+            "If you cancel while the task waits in BytePlus's queue, it is cancelled and nothing is billed. Once it "
+            "has started, collect it with **video-05-recover-a-video**."
+        ),
+        "film_description": "Films the preset character with the product and saves the video.",
+    },
+    "video-04-draft-then-finish": {
+        "input": (
+            KEY_STEP + "2. Describe the video in **Prompt**.\n"
+            "3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n"
+            "4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. "
+            "Only the finish runs; ComfyUI reuses the draft.\n\n"
+            "Model: Seedance 2.5. Activate it on ModelArk's **Model activation** page."
+        ),
+        "draft": (
+            "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which BytePlus "
+            "keeps for seven days."
+        ),
+        "draft_description": "Makes a four-second 480p draft and saves it.",
+        "finish": (
+            "**Finish** is off when the workflow opens, because a finished video is billed as a 1080p video. "
+            "Seedance 2.5 remakes the draft at 1080p with the same prompt, length, and shape; a draft can be "
+            "finished only at 1080p.\n\n"
+            "1080p video from Seedance 2.5 is 10-bit H.265. If your player shows nothing, open the file in VLC, mpv, "
+            "or QuickTime Player."
+        ),
+        "finish_description": "Finishes the draft at 1080p and saves it.",
+    },
+    "video-05-recover-a-video": {
+        "recover": (
+            "Use this after you cancel a run of **Video: Generate** once its task has started, after the run times "
+            "out, or after ComfyUI restarts while a video is being made. BytePlus keeps making the video. A task that "
+            "was still queued when you cancelled was cancelled, and is not listed.\n\n"
+            + KEY_STEP
+            + "2. In **job**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
+            "to list tasks started after the page loaded.\n"
+            "3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\n"
+            "A task leaves the list once its video is saved. BytePlus deletes a finished video's file after 24 hours."
+        ),
+    },
 }
 
 __all__ = ["WORKFLOW_TEXTS"]

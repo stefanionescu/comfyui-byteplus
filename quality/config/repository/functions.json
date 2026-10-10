@@ -49,19 +49,9 @@
                 "reason": "aiohttp calls this route handler itself."
             },
             {
-                "path": "src/byteplus/models.py",
-                "names": ["validate_range"],
-                "reason": "Video: Generate checks its numbers against the model's row; the Video milestone removes the entry."
-            },
-            {
-                "path": "src/byteplus/references.py",
-                "names": ["build_reference_parts", "parse_reference_source"],
-                "reason": "Video: Generate orders its references and Reference: Add parses what is typed; each plan removes the name it calls."
-            },
-            {
-                "path": "src/byteplus/transport.py",
-                "names": ["send_task_cancel"],
-                "reason": "The task operations cancel a queued task with this request; the Video milestone removes the entry."
+                "path": "src/byteplus/tasks/operation.py",
+                "names": ["TaskOperation.validate"],
+                "reason": "The run wrapper calls this Operation step, and each kind of task brings its own checks to it."
             }
         ]
     },
