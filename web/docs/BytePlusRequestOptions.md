@@ -26,4 +26,6 @@ sets itself, such as `model` or `prompt`. **Model: Info** shows `"flex": true`
 for each model that takes flex. A flex request waits in ModelArk's queue, so
 it can take much longer.
 
+Example: **chat-02-summarize-a-voice-note**.
+
 [ModelArk flex tier documentation](https://docs.byteplus.com/en/docs/modelark/online-inference-flex)

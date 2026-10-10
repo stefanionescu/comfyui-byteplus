@@ -6,12 +6,13 @@ It also holds the request fields each kind of request reserves, and the service 
 # Every ModelArk request goes to Asia Pacific (Johor), the one region that serves every model the pack takes.
 BASE_URL = "https://ark.ap-southeast.bytepluses.com/api/v3"
 
-# The paid endpoints; layer splitting shares images, and videos and 3D share tasks.
+# The endpoints; layer splitting shares images, and videos and 3D share tasks. The model listing bills nothing.
 ENDPOINT_URLS = {
     "chat": BASE_URL + "/chat/completions",
     "images": BASE_URL + "/images/generations",
     "tasks": BASE_URL + "/contents/generations/tasks",
     "embeddings": BASE_URL + "/embeddings/multimodal",
+    "models": BASE_URL + "/models",
 }
 
 # One video or 3D task: GET checks it, and DELETE cancels it while it is queued.

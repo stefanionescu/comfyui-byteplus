@@ -16,6 +16,8 @@ MODEL_RANGE = "{model} takes {field} from {minimum} to {maximum}."
 
 MODEL_RANGE_EXTRA = "{model} takes {field} from {minimum} to {maximum}, or {extra}."
 
+MODEL_SHUT_DOWN = "ModelArk has shut down {model}. Pick a current model from the ModelArk model list."
+
 MODEL_UNKNOWN = (
     "{model} is not in this extension's model table. {node} takes these model families: {families}. "
     "Copy an ID from the ModelArk model list, or update the extension if the model is new."
@@ -38,6 +40,7 @@ __all__ = [
     "MODEL_KIND",
     "MODEL_RANGE",
     "MODEL_RANGE_EXTRA",
+    "MODEL_SHUT_DOWN",
     "MODEL_UNKNOWN",
     "MODEL_UNKNOWN_ANY",
     "MODEL_VALUE",

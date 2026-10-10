@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from collections.abc import Mapping
 
 type ModelStatus = Literal["current", "deprecated", "retiring"]
-type MatchMethod = Literal["exact", "family"]
+type MatchMethod = Literal["exact", "family", "listing"]
 
 
 class ChatLimits(Value):
@@ -251,12 +251,13 @@ class MeshRow(ModelRow):
 
 @dataclass(frozen=True, slots=True)
 class ModelMatch[Row: ModelRow]:
-    """How a typed model ID matched the bundled table.
+    """How a typed model ID matched a row of the bundled table, or of ModelArk's model listing.
 
     Attributes:
         model_id: The typed ID without surrounding whitespace: the ID every request sends.
         row: The row the checks use.
-        matched: exact when the ID names a row or an alias; family for another version of a known family.
+        matched: exact when the ID names a row or an alias; family for another version of a known family; listing
+            for a chat model the table lacks, read from ModelArk's model listing.
         kind: The kind the ID was looked up for; None for Model: Info, which takes a model of any kind.
 
     """

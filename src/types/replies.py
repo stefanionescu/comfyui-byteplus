@@ -71,4 +71,142 @@ class ImageReply(Reply):
     error: ErrorBody | None = None
 
 
-__all__ = ["ErrorBody", "ErrorReply", "ImageItemReply", "ImageReply", "LayerBoxReply"]
+class ChatMessage(Reply):
+    """The assistant message of one chat choice.
+
+    Attributes:
+        content: The answer.
+        reasoning_content: The model's reasoning, or a summary of it from some Seed models.
+
+    """
+
+    content: str | None = None
+    reasoning_content: str | None = None
+
+
+class ChatChoice(Reply):
+    """One chat choice.
+
+    Attributes:
+        finish_reason: Why the answer ended, such as stop, length, or content_filter.
+        message: The model's message.
+
+    """
+
+    finish_reason: str | None = None
+    message: ChatMessage | None = None
+
+
+class ChatReply(Reply):
+    """A chat completion.
+
+    Attributes:
+        choices: The model's answers; the extension reads the first.
+
+    """
+
+    choices: tuple[ChatChoice, ...] = ()
+
+
+class ListedModalities(Reply):
+    """What a listed model reads and makes.
+
+    Attributes:
+        input_modalities: What it reads, such as text, image, video, or audio.
+        output_modalities: What it makes, such as text or image.
+
+    """
+
+    input_modalities: tuple[str, ...] = ()
+    output_modalities: tuple[str, ...] = ()
+
+
+class ListedAnswerFormats(Reply):
+    """The structured output modes a listed model takes.
+
+    Attributes:
+        has_json: Whether it takes json_object, which makes valid JSON without following a schema.
+        has_schema: Whether it takes json_schema.
+
+    """
+
+    has_json: bool = Field(default=False, alias="json_object")
+    has_schema: bool = Field(default=False, alias="json_schema")
+
+
+class ListedFeatures(Reply):
+    """What a listed model offers beyond plain text.
+
+    Attributes:
+        structured_outputs: Its structured output modes.
+
+    """
+
+    structured_outputs: ListedAnswerFormats = ListedAnswerFormats()
+
+
+class ListedTokenLimits(Reply):
+    """A listed model's token limits; 0 where the listing gives none.
+
+    Attributes:
+        context_window: Tokens the model holds: prompt, reasoning, and answer.
+        max_input_token_length: The longest prompt.
+        max_output_token_length: The longest answer, reasoning included.
+        max_reasoning_token_length: The longest reasoning.
+
+    """
+
+    context_window: int = 0
+    max_input_token_length: int = 0
+    max_output_token_length: int = 0
+    max_reasoning_token_length: int = 0
+
+
+class ListedModel(Reply):
+    """One model in ModelArk's model listing.
+
+    Attributes:
+        id: The model ID.
+        domain: Its kind, such as LLM, VLM, or ImageGeneration.
+        status: Shutdown or Retiring; None for a current model.
+        modalities: What it reads and makes.
+        features: Its structured output modes.
+        token_limits: Its token limits.
+
+    """
+
+    id: str
+    domain: str = ""
+    status: str | None = None
+    modalities: ListedModalities = ListedModalities()
+    features: ListedFeatures = ListedFeatures()
+    token_limits: ListedTokenLimits = ListedTokenLimits()
+
+
+class ModelListReply(Reply):
+    """ModelArk's model listing: every public model, not only those the account activated.
+
+    Attributes:
+        models: Every listed model, under ModelArk's name data.
+
+    """
+
+    models: tuple[ListedModel, ...] = Field(default=(), alias="data")
+
+
+__all__ = [
+    "ChatChoice",
+    "ChatMessage",
+    "ChatReply",
+    "ErrorBody",
+    "ErrorReply",
+    "ImageItemReply",
+    "ImageReply",
+    "LayerBoxReply",
+    "ListedAnswerFormats",
+    "ListedFeatures",
+    "ListedModalities",
+    "ListedModel",
+    "ListedTokenLimits",
+    "ModelListReply",
+]

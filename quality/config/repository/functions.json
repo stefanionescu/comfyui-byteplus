@@ -54,24 +54,14 @@
                 "reason": "Video: Generate checks its numbers against the model's row; the Video milestone removes the entry."
             },
             {
-                "path": "src/byteplus/operation.py",
-                "names": ["measure_encoded_bytes"],
-                "reason": "The chat and 3D nodes measure each file against ModelArk's per-file limits; the first of them removes the entry."
-            },
-            {
                 "path": "src/byteplus/references.py",
                 "names": ["build_reference_parts", "parse_reference_source"],
                 "reason": "Video: Generate orders its references and Reference: Add parses what is typed; each plan removes the name it calls."
             },
             {
                 "path": "src/byteplus/transport.py",
-                "names": ["send_lookup", "send_task_cancel"],
-                "reason": "The task operations and the chat model listing send these requests; each plan removes the names it calls."
-            },
-            {
-                "path": "src/nodes/inputs.py",
-                "names": ["encode_media"],
-                "reason": "The chat, search, and 3D nodes encode their media lists; the first of them removes the entry."
+                "names": ["send_task_cancel"],
+                "reason": "The task operations cancel a queued task with this request; the Video milestone removes the entry."
             }
         ]
     },

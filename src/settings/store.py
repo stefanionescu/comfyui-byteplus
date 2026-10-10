@@ -49,7 +49,7 @@ class ConfigurationStore:
         """Read effective values together and invalidate unreadable configuration."""
         with self.lock:
             try:
-                settings = _read_settings(self.directory)
+                settings = read_settings(self.directory)
                 credential = read_credential(self.directory)
             except ByteplusError:
                 self._previous = None
@@ -62,7 +62,7 @@ class ConfigurationStore:
     def read_status(self) -> dict[str, Json]:
         """Describe effective settings and API key presence without returning the key."""
         with self.lock:
-            settings = _read_settings(self.directory)
+            settings = read_settings(self.directory)
             source = read_credential_source(self.directory)
         return {
             "settings": asdict(settings),
@@ -80,7 +80,7 @@ class ConfigurationStore:
         if changes.keys() - EDITABLE_SETTINGS:
             raise ByteplusError(ErrorCode.CONFIGURATION, SETTING_READ_ONLY)
         with self.lock:
-            current = _read_settings(self.directory)
+            current = read_settings(self.directory)
             if revision != current.revision:
                 raise ByteplusError(ErrorCode.CONFLICT, SETTINGS_CHANGED)
             updated = parse_settings(asdict(current) | changes)
@@ -111,7 +111,7 @@ class ConfigurationStore:
         return self.read_status()
 
 
-def _read_settings(directory: Path) -> Settings:
+def read_settings(directory: Path) -> Settings:
     """Read settings without creating files or directories."""
     path = directory / FILE_NAMES["SETTINGS"]
     if not path.exists():
@@ -119,4 +119,4 @@ def _read_settings(directory: Path) -> Settings:
     return parse_settings(validate_fields(parse_json(read_file(path, max_bytes=MAX_FILE_BYTES["SETTINGS"]).decode())))
 
 
-__all__ = ["ConfigurationStore"]
+__all__ = ["ConfigurationStore", "read_settings"]

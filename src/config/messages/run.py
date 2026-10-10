@@ -18,6 +18,13 @@ ACCOUNT_STATUS = (
     "BytePlus support."
 )
 
+ANSWER_CUT = (
+    "The model reached its token limit before it began the answer. Raise max tokens or set it to 0, or lower the "
+    "reasoning effort or turn thinking off."
+)
+
+ANSWER_FILTERED = "ModelArk's content moderation stopped the answer. Change the prompt or the media, and run again."
+
 BYTEPLUS_UNREACHABLE = "ComfyUI could not reach BytePlus. Check the connection and try again."
 
 ENDPOINT_CLOSED = "ModelArk's endpoint for this model is closed or briefly unavailable. Try again later."
@@ -116,6 +123,8 @@ __all__ = [
     "ACCESS_DENIED",
     "ACCOUNT_OVERDUE",
     "ACCOUNT_STATUS",
+    "ANSWER_CUT",
+    "ANSWER_FILTERED",
     "BYTEPLUS_UNREACHABLE",
     "ENDPOINT_CLOSED",
     "FREE_QUOTA_USED",

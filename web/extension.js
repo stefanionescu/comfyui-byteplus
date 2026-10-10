@@ -71,7 +71,9 @@ function requestLocal(route, options) {
 }
 
 // web/scripts/nodes.ts
-var dynamicControlInputs = /* @__PURE__ */ new Map();
+var dynamicControlInputs = /* @__PURE__ */ new Map([
+  ["BytePlusChatAsk", ["temperature"]]
+]);
 
 // web/scripts/dom.ts
 function element(tag, text) {

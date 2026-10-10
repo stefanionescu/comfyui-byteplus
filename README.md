@@ -78,11 +78,13 @@ From the folder that holds `ComfyUI` and `python_embeded`, in PowerShell:
 
 ## Example workflows
 
-| Workflow                                                                                        | Input                   |
-| ----------------------------------------------------------------------------------------------- | ----------------------- |
-| [Image: Design a Character](example_workflows/image-01-design-a-character.json)                 | A character description |
-| [Image: Make a Poster Series](example_workflows/image-02-make-a-poster-series.json)             | A brief                 |
-| [Image: Split a Poster into Layers](example_workflows/image-03-split-a-poster-into-layers.json) | A poster description    |
+| Workflow                                                                                        | Input                      |
+| ----------------------------------------------------------------------------------------------- | -------------------------- |
+| [Chat: Write a Product Listing](example_workflows/chat-01-write-a-product-listing.json)         | A spec sheet (PDF or text) |
+| [Chat: Summarize a Voice Note](example_workflows/chat-02-summarize-a-voice-note.json)           | A voice note               |
+| [Image: Design a Character](example_workflows/image-01-design-a-character.json)                 | A character description    |
+| [Image: Make a Poster Series](example_workflows/image-02-make-a-poster-series.json)             | A brief                    |
+| [Image: Split a Poster into Layers](example_workflows/image-03-split-a-poster-into-layers.json) | A poster description       |
 
 They are in **Browse Templates → comfyui-byteplus**. Start with each
 workflow's **Start Here** note; each step is a subgraph. Media inputs start
@@ -94,12 +96,14 @@ After an update, open the examples in a new tab to get the new versions.
 
 The nodes are under **BytePlus** in the node menu, and each has a help page.
 
-| Node                                                        | What it does                                                                  | Paid |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------- | ---- |
-| [Image: Generate](web/docs/BytePlusImageGenerate.md)        | Generates or edits images with Seedream, and keeps their addresses for video. | Yes  |
-| [Image: Split Layers](web/docs/BytePlusImageSplitLayers.md) | Splits an image into a base image and transparent layers.                     | Yes  |
-| [Request Options](web/docs/BytePlusRequestOptions.md)       | Sets the service tier and extra request fields for paid nodes.                | No   |
-| [Model: Info](web/docs/BytePlusModelInfo.md)                | Shows what a model reads, makes, and takes, as JSON.                          | No   |
+| Node                                                            | What it does                                                                  | Paid |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---- |
+| [Chat: Ask](web/docs/BytePlusChatAsk.md)                        | Asks a model a question, with images, video, audio, or documents.             | Yes  |
+| [Chat: Attach Document](web/docs/BytePlusChatAttachDocument.md) | Attaches a PDF or text file from ComfyUI's input folder.                      | No   |
+| [Image: Generate](web/docs/BytePlusImageGenerate.md)            | Generates or edits images with Seedream, and keeps their addresses for video. | Yes  |
+| [Image: Split Layers](web/docs/BytePlusImageSplitLayers.md)     | Splits an image into a base image and transparent layers.                     | Yes  |
+| [Request Options](web/docs/BytePlusRequestOptions.md)           | Sets the service tier and extra request fields for paid nodes.                | No   |
+| [Model: Info](web/docs/BytePlusModelInfo.md)                    | Shows what a model reads, makes, and takes, as JSON.                          | No   |
 
 ## License
 

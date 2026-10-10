@@ -1,0 +1,251 @@
+"""Ask any ModelArk chat model, with images, video, audio, or documents when the model reads them."""
+
+from __future__ import annotations
+
+import asyncio
+from ..base import PaidNode
+from comfy_api.latest import io
+from typing import cast, TYPE_CHECKING
+from ...types.parsing import parse_json
+from comfy_execution.graph import ExecutionBlocker
+from ...byteplus.chat.operation import ChatOperation
+from ...types.errors import ErrorCode, ByteplusError
+from ...config.generation.models import DEFAULT_MODELS
+from ...types.chat import Turn, ChatRequest, Conversation
+from ...config.messages.inputs import ANSWER_SCHEMA_INVALID
+from ...config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
+from ..inputs import encode_media, REFERENCES_INPUT, build_request_inputs
+from ...comfy.execution import send_request, wait_for_task, wait_for_thread
+from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
+from ...config.generation.chat import (
+    EFFORTS,
+    TEMPERATURE,
+    THINKING_TYPES,
+    THINKING_CHOICES,
+    TEMPERATURE_CHOICE,
+    MAX_COMPLETION_TOKENS,
+)
+
+if TYPE_CHECKING:
+    import torch
+    from ...types import Json
+    from comfy_api.latest import Input
+    from collections.abc import Mapping
+    from ...types.options import Options
+    from ...types.references import Reference
+    from ...types.chat import Document, ChatResult
+
+
+# One socket for each kind of media; everything connected goes in one request, each item at its own size.
+_MEDIA = (
+    io.Image.Input(
+        "images",
+        optional=True,
+        tooltip="Images for the model to read: one, a batch, or a list. Create List joins several Load Image nodes.",
+    ),
+    io.Video.Input("videos", optional=True, tooltip="Videos for the model to read. Create List joins several."),
+    io.Audio.Input(
+        "audio",
+        optional=True,
+        tooltip="Audio clips for models that read audio, such as seed-2-0-lite. Create List joins several.",
+    ),
+)
+
+
+# The controls a chat model may take; each left at its default sends nothing.
+_CONTROLS = (
+    io.Combo.Input(
+        "thinking",
+        options=list(THINKING_CHOICES),
+        default=MODEL_DEFAULT,
+        tooltip="Whether the model reasons before answering. Off is faster and costs less; some models always think.",
+    ),
+    io.Combo.Input(
+        "reasoning_effort",
+        display_name="reasoning effort",
+        options=list(EFFORTS),
+        default=MODEL_DEFAULT,
+        advanced=True,
+        tooltip="How much the model reasons before answering. With thinking off, only minimal is allowed.",
+    ),
+    io.Int.Input(
+        "max_tokens",
+        display_name="max tokens",
+        default=0,
+        min=0,
+        max=MAX_COMPLETION_TOKENS,
+        advanced=True,
+        tooltip=(
+            "The most tokens the model may write, reasoning included; 0 keeps the model's 4,096-token answer limit."
+        ),
+    ),
+    io.DynamicCombo.Input(
+        TEMPERATURE_CHOICE["INPUT"],
+        options=[
+            io.DynamicCombo.Option(MODEL_DEFAULT, []),
+            io.DynamicCombo.Option(
+                TEMPERATURE_CHOICE["SET"],
+                [
+                    io.Float.Input(
+                        TEMPERATURE_CHOICE["VALUE"],
+                        display_name="value",
+                        default=TEMPERATURE["DEFAULT"],
+                        min=0,
+                        max=TEMPERATURE["MAX"],
+                        step=TEMPERATURE["STEP"],
+                        advanced=True,
+                        tooltip="Higher values vary the answer more.",
+                    )
+                ],
+            ),
+        ],
+        tooltip="How much the answer varies. Set sends a value to models that take a temperature.",
+        extra_dict={"advanced": True},
+    ),
+)
+
+
+def _read_temperature(choice: Mapping[str, object] | None) -> float | None:
+    """Read the set temperature; model default, or no choice from a node that calls this one, sends none."""
+    if choice is None or choice[TEMPERATURE_CHOICE["INPUT"]] != TEMPERATURE_CHOICE["SET"]:
+        return None
+    return float(cast("float", choice[TEMPERATURE_CHOICE["VALUE"]]))
+
+
+def _read_schema(text: str) -> Mapping[str, Json] | None:
+    """Read the answer schema, which must be a JSON object; empty text means free text."""
+    if not text.strip():
+        return None
+    try:
+        schema = parse_json(text)
+    except ByteplusError:
+        schema = None
+    if not isinstance(schema, dict):
+        raise ByteplusError(ErrorCode.INVALID_INPUT, ANSWER_SCHEMA_INVALID)
+    return schema
+
+
+def _build_outputs(result: ChatResult, history: Conversation, prompt: str) -> io.NodeOutput:
+    """Return the answer and the reasoning, and extend the conversation with this exchange's words."""
+    turns = (*history.turns, Turn("user", prompt), Turn("assistant", result.text))
+    reasoning: object = result.reasoning or ExecutionBlocker(None)
+    return io.NodeOutput(result.text, reasoning, Conversation(turns))
+
+
+class ChatAsk(PaidNode):
+    """Send one chat completion and return the answer, the reasoning, and the conversation."""
+
+    list_inputs = frozenset({"images", "videos", "audio"})
+
+    @classmethod
+    def define_schema(cls) -> io.Schema:
+        """List the model, the conversation, the media sockets, every control a chat model may take, and the text."""
+        return io.Schema(
+            node_id=f"{NODE_PREFIX}{cls.__name__}",
+            display_name="Chat: Ask",
+            category=MENUS["CHAT"],
+            description=(
+                "Ask any ModelArk chat model, with images, video, audio, or documents when the model reads them."
+            ),
+            inputs=[
+                io.String.Input(INPUT_NAMES["MODEL"], default=DEFAULT_MODELS["chat"], tooltip=MODEL_TOOLTIP),
+                io.Custom(SOCKET_TYPES["CONVERSATION"]).Input(
+                    "conversation", optional=True, tooltip="Connect a previous Chat: Ask to continue its conversation."
+                ),
+                io.Custom(SOCKET_TYPES["DOCUMENTS"]).Input(
+                    "documents",
+                    optional=True,
+                    tooltip=(
+                        "Connect Chat: Attach Document. PDFs need a model that reads them; text files go to any model."
+                    ),
+                ),
+                *_MEDIA,
+                REFERENCES_INPUT,
+                *_CONTROLS,
+                *build_request_inputs(has_seed=False),
+                io.String.Input(
+                    "answer_schema",
+                    display_name="answer schema",
+                    placeholder="answer schema",
+                    default="",
+                    multiline=True,
+                    advanced=True,
+                    tooltip="A JSON schema the answer must follow; leave empty for free text.",
+                ),
+                io.String.Input(
+                    "prompt", multiline=True, default="", placeholder="prompt", tooltip="The question or instruction."
+                ),
+                io.String.Input(
+                    "system_prompt",
+                    display_name="system prompt",
+                    placeholder="system prompt",
+                    multiline=True,
+                    default="",
+                    optional=True,
+                    advanced=True,
+                    tooltip="Instructions the model follows for the whole answer.",
+                ),
+            ],
+            outputs=[
+                io.String.Output("text", display_name="text"),
+                io.String.Output("reasoning", display_name="reasoning"),
+                io.Custom(SOCKET_TYPES["CONVERSATION"]).Output("conversation", display_name="conversation"),
+            ],
+            is_input_list=True,
+            hidden=[io.Hidden.unique_id],
+        )
+
+    @classmethod
+    async def send(  # noqa: PLR0913 -- reason: ComfyUI requires one named argument for each saved node input.
+        cls,
+        *,
+        prompt: str,
+        model: str,
+        thinking: str = MODEL_DEFAULT,
+        reasoning_effort: str = MODEL_DEFAULT,
+        max_tokens: int = 0,
+        temperature: Mapping[str, object] | None = None,
+        answer_schema: str = "",
+        system_prompt: str = "",
+        conversation: Conversation | None = None,
+        documents: tuple[Document, ...] | None = None,
+        images: list[torch.Tensor] | None = None,
+        videos: list[Input.Video] | None = None,
+        audio: list[Input.Audio] | None = None,
+        references: tuple[Reference, ...] | None = None,
+        options: Options | None = None,
+    ) -> io.NodeOutput:
+        """Read the schema before any media is encoded, then encode the media inside the owned task and send."""
+        history = conversation or Conversation(())
+        schema = _read_schema(answer_schema)
+        temperature_value = _read_temperature(temperature)
+
+        async def send_encoded() -> io.NodeOutput:
+            """Encode the media inside the owned task, then send the request."""
+            image_urls, video_urls, clips = await wait_for_thread(lambda: encode_media(images, videos, audio))
+            # A dropdown left at model default sends nothing.
+            request = ChatRequest(
+                model_id=model.strip(),
+                system_prompt=system_prompt,
+                prompt=prompt,
+                conversation=history,
+                image_urls=image_urls,
+                video_urls=video_urls,
+                audio_clips=clips,
+                documents=documents or (),
+                references=references or (),
+                thinking=THINKING_TYPES.get(thinking),
+                effort=None if reasoning_effort == MODEL_DEFAULT else reasoning_effort,
+                max_tokens=max_tokens,
+                temperature=temperature_value,
+                answer_schema=schema,
+                options=options,
+            )
+            return await send_request(
+                ChatOperation(request), lambda result: _build_outputs(result, history, prompt), cls.hidden.unique_id
+            )
+
+        return await wait_for_task(asyncio.create_task(send_encoded()))
+
+
+__all__ = ["ChatAsk"]

@@ -13,6 +13,7 @@ from scripts.workflows.page.palette import Palette
 from scripts.workflows.page.graph import Node, NAMESPACE
 from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.paths import REPO_ROOT, README_PATH, EXAMPLES_DIR
+from scripts.workflows.descriptions.chat import CHAT_WORKFLOWS
 from scripts.workflows.page.sizes import measure, measure_note
 from scripts.workflows.descriptions.image import IMAGE_WORKFLOWS
 from scripts.workflows.page.layout import place_stacks, place_columns
@@ -29,7 +30,10 @@ if TYPE_CHECKING:
     from collections.abc import Mapping, Iterable
     from scripts.workflows.page.graph import Workflow
 
-WORKFLOWS = (*IMAGE_WORKFLOWS,)
+WORKFLOWS = (
+    *CHAT_WORKFLOWS,
+    *IMAGE_WORKFLOWS,
+)
 
 
 def _build_palette(export: dict[str, object], workflow: Workflow) -> Palette:
