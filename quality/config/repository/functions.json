@@ -47,6 +47,11 @@
                 "path": "src/settings/routes.py",
                 "names": ["ConfigurationRoutes.read_status"],
                 "reason": "aiohttp calls this route handler itself."
+            },
+            {
+                "path": "src/byteplus/models.py",
+                "names": ["find_model", "validate_model", "validate_range", "validate_value"],
+                "reason": "The paid nodes and Model: Info call the model lookup and its checks; each node plan removes the names it calls."
             }
         ]
     },

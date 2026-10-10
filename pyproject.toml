@@ -124,6 +124,8 @@ lint.pylint.max-statements = 30
 [tool.interrogate]
 fail-under = 100
 ignore-init-method = true
+# Ruff's D418 refuses a docstring on an @overload stub; the implementation carries the docstring.
+ignore-overloaded-functions = true
 exclude = [ ".artifacts", ".git", ".venv", "node_modules", "web" ]
 verbose = 1
 
