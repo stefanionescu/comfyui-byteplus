@@ -1,4 +1,4 @@
-# ![comfyui-byteplus: a ComfyUI extension that runs any BytePlus ModelArk model](docs/images/banner.svg)
+# ![comfyui-byteplus: run any BytePlus ModelArk model in ComfyUI](docs/images/banner.jpg)
 
 [![ComfyUI 0.37.2 or later](docs/images/badge-comfyui.svg)](#requirements)
 [![Frontend 1.52.7 or later](docs/images/badge-frontend.svg)](#requirements)
