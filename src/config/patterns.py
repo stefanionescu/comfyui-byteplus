@@ -9,15 +9,37 @@ MODEL_VERSION_PATTERN = r"-(\d{6})$"
 # A video or 3D task ID: the documented "cgt-" prefix and characters that are safe in a file name and a URL path.
 TASK_ID_PATTERN = r"^cgt-[0-9A-Za-z-]{1,64}$"
 
+# A preset or private asset ID, alone or after asset://. The owner compiles it case-insensitively: BytePlus's API
+# reference writes "Asset-2026…", the Playground "asset-2026…". Group 1 is the ID as typed.
+ASSET_ID_PATTERN = r"^(?:asset://)?(asset-\d{14}-[a-z0-9]{5})$"
+
 # Prompt text that Seedance would read as an old-style parameter command, such as "--rs 720p".
 VIDEO_COMMAND_PATTERN = r"(?:^|\s)--(?:rs|resolution|rt|ratio|dur|duration|frames|seed|cf|camerafixed|wm|watermark)\b"
 
 # A settings revision, a SHA-256 digest.
 REVISION_PATTERN = r"^[a-f0-9]{64}$"
 
+# A failed reply's reason is cleaned before a person sees it. Console addresses stay, without the scheme; other
+# addresses, ModelArk's request ID, and key-shaped text go: a UUID, an ark- key, or a run of 32 or more letters,
+# digits, and base64 signs that holds both a letter and a digit. FREE_TRIAL tells ModelArk's two QuotaExceeded
+# replies apart.
+REASON_PATTERNS = {
+    "CONSOLE_URL": r"https://(console\.byteplus\.com/\S*?)(?=[.,;:]?(?:\s|$))",
+    "URL": r"https?://\S+",
+    "REQUEST_ID": r"(?i)\s*request id\s*:\s*[0-9A-Za-z-]*\.?",
+    "KEY": (
+        r"\b[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}\b"
+        r"|\bark-[\w-]{16,}"
+        r"|(?<![\w+/=-])(?=[\w+/=]*\d)(?=[\w+/=]*[A-Za-z])[\w+/=]{32,}"
+    ),
+    "FREE_TRIAL": r"(?i)\bfree trial\b",
+}
+
 __all__ = [
+    "ASSET_ID_PATTERN",
     "MODEL_ID_PATTERN",
     "MODEL_VERSION_PATTERN",
+    "REASON_PATTERNS",
     "REVISION_PATTERN",
     "TASK_ID_PATTERN",
     "VIDEO_COMMAND_PATTERN",
