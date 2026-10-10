@@ -50,8 +50,8 @@
             },
             {
                 "path": "src/byteplus/models.py",
-                "names": ["find_model", "validate_model", "validate_range", "validate_value"],
-                "reason": "The paid nodes and Model: Info call the model lookup and its checks; each node plan removes the names it calls."
+                "names": ["validate_model", "validate_range", "validate_value"],
+                "reason": "The paid nodes check their inputs against the model's row; each node plan removes the names it calls."
             },
             {
                 "path": "src/byteplus/failures.py",

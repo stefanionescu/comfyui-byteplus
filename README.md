@@ -10,10 +10,14 @@ from your ComfyUI server straight to BytePlus and are billed to your BytePlus
 account. This is not ComfyUI's built-in ByteDance support, whose nodes bill
 your Comfy account.
 
+- **Request Options:** the flex tier and extra request fields for any paid
+  node.
+
 ## Contents
 
 - [Requirements](#requirements)
 - [Install](#install)
+- [Nodes](#nodes)
 - [License](#license)
 
 ## Requirements
@@ -73,6 +77,15 @@ From the folder that holds `ComfyUI` and `python_embeded`, in PowerShell:
 ```powershell
 .\python_embeded\python.exe -m pip install -r .\ComfyUI\custom_nodes\comfyui-byteplus\requirements.txt
 ```
+
+## Nodes
+
+The nodes are under **BytePlus** in the node menu, and each has a help page.
+
+| Node                                                  | What it does                                                   | Paid |
+| ----------------------------------------------------- | -------------------------------------------------------------- | ---- |
+| [Request Options](web/docs/BytePlusRequestOptions.md) | Sets the service tier and extra request fields for paid nodes. | No   |
+| [Model: Info](web/docs/BytePlusModelInfo.md)          | Shows what a model reads, makes, and takes, as JSON.           | No   |
 
 ## License
 
