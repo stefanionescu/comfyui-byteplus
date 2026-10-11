@@ -4,7 +4,7 @@ title = "BytePlus node secret rules"
 useDefault = true
 
 [[rules]]
-id = "byteplus-credential"
+id = "byteplus-api-key"
 description = "BytePlus ModelArk API key assigned to its environment variable"
 regex = '''\bARK_API_KEY["'\]]{0,2}[ \t]*[:=][ \t]*["']?([A-Za-z0-9+/=_.-]{20,})'''
 secretGroup = 1

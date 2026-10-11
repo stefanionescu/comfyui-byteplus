@@ -15,7 +15,7 @@ from .options import build_request_body
 from .tasks.operation import TaskOperation
 from .operation import validate_upload_size
 from .references import validate_references
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.patterns import MESH_FORMAT_COMMAND_PATTERN
 from ..config.messages.inputs import (
     MESH_INPUT_EMPTY,
@@ -26,7 +26,7 @@ from ..config.messages.inputs import (
 
 if TYPE_CHECKING:
     from ..types import Json
-    from .tasks.jobs import JobStore
+    from .tasks.records import TaskStore
     from ..types.settings import Settings
     from ..types.meshes import MeshRequest
 
@@ -43,7 +43,7 @@ def _build_text(request: MeshRequest, command: str) -> str:
     values = [value.lower() for value in _FORMAT_COMMAND.findall(request.prompt)]
     other = next((value for value in values if value != glb), None)
     if other is not None:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_FORMAT_COMMAND.format(value=other, command=command))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MESH_FORMAT_COMMAND.format(value=other, command=command))
     if values:
         return request.prompt
     return " ".join(word for word in (request.prompt, command) if word)
@@ -56,7 +56,7 @@ def _validate_mesh_request(request: MeshRequest, settings: Settings) -> None:
     the task starts.
     """
     if not request.prompt and not request.images and not request.references:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_INPUT_EMPTY)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MESH_INPUT_EMPTY)
     validate_upload_size([image.url for image in request.images], settings)
     validate_references(request.references, ("image",), can_read_assets=False)
 
@@ -70,24 +70,24 @@ def _build_mesh_body(request: MeshRequest) -> dict[str, Json]:
     """
     match = find_model(request.model_id, "meshes")
     if not request.images and not request.references and "text" not in match.row.inputs:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_IMAGE_REQUIRED.format(model=match.model_id))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MESH_IMAGE_REQUIRED.format(model=match.model_id))
     limits = match.row.mesh
     text = _build_text(request, limits.format_command)
     if 0 < limits.max_prompt_characters < len(text):
         # The prompt is what the text holds beyond the added command and the space before it.
         maximum = limits.max_prompt_characters - (len(text) - len(request.prompt))
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_PROMPT_LENGTH.format(model=match.model_id, maximum=maximum))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MESH_PROMPT_LENGTH.format(model=match.model_id, maximum=maximum))
     content: list[Json] = [{"type": "text", "text": text}]
     content.extend({"type": "image_url", "image_url": {"url": image.url}} for image in request.images)
     content.extend({"type": "image_url", "image_url": {"url": reference.address}} for reference in request.references)
     return build_request_body({"model": match.model_id, "content": content}, request.options, "meshes", match.row)
 
 
-def build_mesh_operation(request: MeshRequest, jobs: JobStore) -> TaskOperation:
+def build_mesh_operation(request: MeshRequest, tasks: TaskStore) -> TaskOperation:
     """Build the task that checks the 3D request, sends it, and records it."""
     validate_request = partial(_validate_mesh_request, request)
     build_body = partial(_build_mesh_body, request)
-    return TaskOperation(TaskRequest("meshes", request.model_id, validate_request, build_body, is_draft=False), jobs)
+    return TaskOperation(TaskRequest("meshes", request.model_id, validate_request, build_body, is_draft=False), tasks)
 
 
 __all__ = ["build_mesh_operation"]

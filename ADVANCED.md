@@ -11,7 +11,7 @@ for developers. For installation and a first run, see the [README](README.md).
 - [Models](#models)
 - [Characters and references](#characters-and-references)
 - [Caching and reruns](#caching-and-reruns)
-- [Recover a video or 3D job](#recover-a-video-or-3d-job)
+- [Recover a video or 3D task](#recover-a-video-or-3d-task)
 - [Account setup](#account-setup)
 - [Limits](#limits)
 - [When a node stops](#when-a-node-stops)
@@ -164,7 +164,7 @@ it with **Reference: Add** as a video.
 - Cancelling stops the wait only: a chat model still bills the tokens it
   produced, and a video or 3D task that ModelArk has started keeps running.
 
-## Recover a video or 3D job
+## Recover a video or 3D task
 
 **Video: Generate** and **3D: Generate** record each task as soon as ModelArk
 accepts it. ModelArk usually starts a task at once, and a started task runs to
@@ -226,8 +226,8 @@ reference has expired; or a draft is combined with other media.
 
 **Video: Download** stops when the chosen task is not recorded on this server.
 
-**Reference: Add** stops when the asset ID or address is empty, or is not an
-asset ID, an `asset://` URI, or an `https://` address.
+**Reference: Add** stops when **url** is empty, or is not an asset ID, an
+`asset://` URI, or an `https://` address.
 
 **Search: Embed** stops when there are no items.
 

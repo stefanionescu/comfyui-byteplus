@@ -37,11 +37,11 @@ class ImageRequest:
         prompt: What to draw or change.
         images: The images connected to image, in list order and then batch order.
         references: The references chain, in chain order.
-        size: A size tier such as 2K, or WIDTHxHEIGHT in pixels.
-        max_images: The most images to make; above 1 asks a series model for up to that many.
+        size: A size such as 2K, or WIDTHxHEIGHT in pixels.
+        max_images: The most images to make; above 1 asks for sequential image generation of up to that many.
         background: transparent, or None.
         output_format: png or jpeg.
-        prompt_mode: The optimize_prompt_options.mode, standard or fast.
+        optimize_prompt_mode: The optimize_prompt_options.mode, standard or fast.
         has_watermark: Whether ModelArk marks the images as AI-generated.
         options: The service tier and extra fields from Request Options.
 
@@ -55,7 +55,7 @@ class ImageRequest:
     max_images: int
     background: str | None
     output_format: str | None
-    prompt_mode: str | None
+    optimize_prompt_mode: str | None
     has_watermark: bool
     options: Options | None
 
@@ -82,8 +82,8 @@ class LayerRequest:
         model_id: The model ID sent to ModelArk.
         prompt: What to split out; empty splits every main part.
         image: The image to split: encoded here, or a reference ModelArk reads by address.
-        size: The size tier of the base image and the layers.
-        prompt_mode: The optimize_prompt_options.mode, standard or fast.
+        size: The size of the base image and the layers.
+        optimize_prompt_mode: The optimize_prompt_options.mode, standard or fast.
         has_watermark: Whether ModelArk marks the images as AI-generated.
         options: The service tier and extra fields from Request Options.
 
@@ -93,7 +93,7 @@ class LayerRequest:
     prompt: str
     image: EncodedImage | Reference
     size: str
-    prompt_mode: str | None
+    optimize_prompt_mode: str | None
     has_watermark: bool
     options: Options | None
 

@@ -27,8 +27,8 @@ SERIES_VIDEO = {
     "has_seed": False,
     "has_fixed_camera": False,
     "output_formats": (),
-    "task_types": (),
-    "draft_finishes": (),
+    "omni_reference_task_types": (),
+    "draft_resolutions": (),
 }
 
 # Seedance 1.0 pro, which makes no sound and takes no adaptive ratio from a prompt alone.
@@ -43,8 +43,8 @@ PRO_VIDEO = {
     "has_seed": True,
     "has_fixed_camera": True,
     "output_formats": (),
-    "task_types": (),
-    "draft_finishes": (),
+    "omni_reference_task_types": (),
+    "draft_resolutions": (),
 }
 
 VIDEO_ROWS = {
@@ -64,8 +64,8 @@ VIDEO_ROWS = {
             "has_seed": False,
             "has_fixed_camera": False,
             "output_formats": ("mp4", "mov"),
-            "task_types": ("auto", "reference", "edit", "extend"),
-            "draft_finishes": ("1080p",),
+            "omni_reference_task_types": ("auto", "reference", "edit", "extend"),
+            "draft_resolutions": ("1080p",),
         },
         "sources": (*VIDEO_PAGES, "seedance-2-5"),
     },
@@ -97,7 +97,7 @@ VIDEO_ROWS = {
             "can_choose_duration": True,
             "fixed_ratio_modes": (),
             "has_audio": True,
-            "draft_finishes": ("480p", "720p", "1080p"),
+            "draft_resolutions": ("480p", "720p", "1080p"),
         },
         "sources": (*VIDEO_PAGES, "seedance-1-5-pro", "model-deprecation-notice"),
         "has_flex": True,

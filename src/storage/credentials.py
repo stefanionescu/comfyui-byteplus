@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from .files import read_file
 from ..types.credentials import Credential
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.security import MAX_CREDENTIAL_CHARACTERS
 from ..config.storage import ENVIRONMENT_VARIABLES, FILE_NAMES
 from ..config.messages.settings import KEY_EMPTY, KEY_REQUIRED, KEY_UNREADABLE, KEY_WHITESPACE
@@ -13,9 +13,9 @@ from ..config.messages.settings import KEY_EMPTY, KEY_REQUIRED, KEY_UNREADABLE, 
 def parse_credential(value: str) -> Credential:
     """Reject empty, oversized, or whitespace-containing API keys; ModelArk decides whether a key is valid."""
     if not value or value != value.strip() or len(value) > MAX_CREDENTIAL_CHARACTERS:
-        raise ByteplusError(ErrorCode.CONFIGURATION, KEY_EMPTY.format(maximum=MAX_CREDENTIAL_CHARACTERS))
+        raise BytePlusError(ErrorCode.CONFIGURATION, KEY_EMPTY.format(maximum=MAX_CREDENTIAL_CHARACTERS))
     if any(character.isspace() for character in value):
-        raise ByteplusError(ErrorCode.CONFIGURATION, KEY_WHITESPACE)
+        raise BytePlusError(ErrorCode.CONFIGURATION, KEY_WHITESPACE)
     return Credential(value)
 
 
@@ -28,8 +28,8 @@ def read_credential(directory: Path) -> Credential:
         try:
             return parse_credential(read_file(path, max_bytes=MAX_CREDENTIAL_CHARACTERS).decode("utf-8"))
         except (OSError, UnicodeError):
-            raise ByteplusError(ErrorCode.CONFIGURATION, KEY_UNREADABLE) from None
-    raise ByteplusError(ErrorCode.AUTHENTICATION, KEY_REQUIRED)
+            raise BytePlusError(ErrorCode.CONFIGURATION, KEY_UNREADABLE) from None
+    raise BytePlusError(ErrorCode.AUTHENTICATION, KEY_REQUIRED)
 
 
 def read_credential_source(directory: Path) -> str:

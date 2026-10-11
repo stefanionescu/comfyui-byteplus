@@ -11,15 +11,15 @@ FORMATS = ("png", "jpeg")
 
 # Seedream 5.0 pro and flash: the edit models, which make one image a request and can split it into layers.
 EDIT_IMAGE = {
-    "tiers": ("1K", "1.5K", "2K"),
-    "has_series": False,
+    "sizes": ("1K", "1.5K", "2K"),
+    "has_sequential_image_generation": False,
     "backgrounds": ("transparent",),
     "output_formats": FORMATS,
 }
 
-# Seedream 5.0 lite, 4.5, and 4.0: the series models.
-SERIES_IMAGE = {
-    "has_series": True,
+# Seedream 5.0 lite, 4.5, and 4.0: the models that take sequential image generation.
+SEQUENTIAL_IMAGE = {
+    "has_sequential_image_generation": True,
     "backgrounds": (),
 }
 
@@ -27,23 +27,23 @@ IMAGE_ROWS = {
     "dola-seedream-5-0-pro-260628": {
         "kinds": ("images", "layers"),
         "inputs": IMAGE_INPUTS,
-        "image": {**EDIT_IMAGE, "prompt_modes": ("standard", "fast")},
+        "image": {**EDIT_IMAGE, "optimize_prompt_modes": ("standard", "fast")},
         "sources": (*IMAGE_PAGES, "seedream-5-0-pro"),
     },
     "dola-seedream-5-0-flash-260915": {
         "kinds": ("images", "layers"),
         "inputs": IMAGE_INPUTS,
-        "image": {**EDIT_IMAGE, "prompt_modes": ("standard",)},
+        "image": {**EDIT_IMAGE, "optimize_prompt_modes": ("standard",)},
         "sources": (*IMAGE_PAGES, "seedream-5-0-pro"),
     },
     "seedream-5-0-260128": {
         "kinds": ("images",),
         "inputs": IMAGE_INPUTS,
         "image": {
-            **SERIES_IMAGE,
-            "tiers": ("2K", "3K", "4K"),
+            **SEQUENTIAL_IMAGE,
+            "sizes": ("2K", "3K", "4K"),
             "output_formats": FORMATS,
-            "prompt_modes": ("standard",),
+            "optimize_prompt_modes": ("standard",),
         },
         "sources": IMAGE_PAGES,
     },
@@ -52,10 +52,10 @@ IMAGE_ROWS = {
         "inputs": IMAGE_INPUTS,
         # Seedream 4.5 and 4.0 always make JPEG and take no output_format.
         "image": {
-            **SERIES_IMAGE,
-            "tiers": ("2K", "4K"),
+            **SEQUENTIAL_IMAGE,
+            "sizes": ("2K", "4K"),
             "output_formats": (),
-            "prompt_modes": ("standard",),
+            "optimize_prompt_modes": ("standard",),
         },
         "sources": IMAGE_PAGES,
     },
@@ -63,10 +63,10 @@ IMAGE_ROWS = {
         "kinds": ("images",),
         "inputs": IMAGE_INPUTS,
         "image": {
-            **SERIES_IMAGE,
-            "tiers": ("1K", "2K", "4K"),
+            **SEQUENTIAL_IMAGE,
+            "sizes": ("1K", "2K", "4K"),
             "output_formats": (),
-            "prompt_modes": ("standard", "fast"),
+            "optimize_prompt_modes": ("standard", "fast"),
         },
         "sources": IMAGE_PAGES,
     },

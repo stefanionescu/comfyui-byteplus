@@ -47,7 +47,7 @@ class ImageItemReply(Reply):
         url: The image's address, when it was made.
         z_index: A layer's place in the stack; 0 is the base image, and higher layers sit on top.
         bounding_box: Where a layer sits on the base image.
-        error: Why this one image was not made, in a series that made others.
+        error: Why this one image was not made, in a sequential generation that made others.
 
     """
 
@@ -191,7 +191,7 @@ class ListedModalities(Reply):
     output_modalities: tuple[str, ...] = ()
 
 
-class ListedAnswerFormats(Reply):
+class ListedStructuredOutputs(Reply):
     """The structured output modes a listed model takes.
 
     Attributes:
@@ -212,7 +212,7 @@ class ListedFeatures(Reply):
 
     """
 
-    structured_outputs: ListedAnswerFormats = ListedAnswerFormats()
+    structured_outputs: ListedStructuredOutputs = ListedStructuredOutputs()
 
 
 class ListedTokenLimits(Reply):
@@ -271,10 +271,10 @@ __all__ = [
     "ImageItemReply",
     "ImageReply",
     "LayerBoxReply",
-    "ListedAnswerFormats",
     "ListedFeatures",
     "ListedModalities",
     "ListedModel",
+    "ListedStructuredOutputs",
     "ListedTokenLimits",
     "ModelListReply",
     "TaskContentReply",

@@ -15,7 +15,7 @@ from ..types.parsing import parse_json
 from contextlib import asynccontextmanager
 from ..config.units import BYTES_PER_MEBIBYTE
 from ..config.messages.media import DOWNLOAD_LIMIT
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.byteplus import REPLY_BYTES, CONSOLE_URLS, ENDPOINT_URLS
 from ..config.messages.run import (
     REQUEST_TIMEOUT,
@@ -57,7 +57,7 @@ async def _read_body(response: aiohttp.ClientResponse, settings: Settings) -> by
     async for chunk in response.content.iter_chunked(REPLY_BYTES["CHUNK"]):
         content.extend(chunk)
         if len(content) > maximum * BYTES_PER_MEBIBYTE:
-            raise ByteplusError(ErrorCode.MEDIA, DOWNLOAD_LIMIT.format(maximum=maximum))
+            raise BytePlusError(ErrorCode.MEDIA, DOWNLOAD_LIMIT.format(maximum=maximum))
     return bytes(content)
 
 
@@ -76,12 +76,12 @@ async def _validate_paid_request(settings: Settings) -> AsyncGenerator[None]:
         yield
     except aiohttp.ClientConnectorError:
         # The connection failed before the request was sent, so nothing was billed.
-        raise ByteplusError(ErrorCode.TRANSPORT, BYTEPLUS_UNREACHABLE) from None
+        raise BytePlusError(ErrorCode.TRANSPORT, BYTEPLUS_UNREACHABLE) from None
     except aiohttp.ClientError:
-        raise ByteplusError(ErrorCode.UNCERTAIN, REQUEST_UNCERTAIN.format(**CONSOLE_URLS)) from None
+        raise BytePlusError(ErrorCode.UNCERTAIN, REQUEST_UNCERTAIN.format(**CONSOLE_URLS)) from None
     except TimeoutError:
         seconds = settings.request_timeout_seconds
-        raise ByteplusError(ErrorCode.TIMEOUT, REQUEST_TIMEOUT.format(seconds=seconds, **CONSOLE_URLS)) from None
+        raise BytePlusError(ErrorCode.TIMEOUT, REQUEST_TIMEOUT.format(seconds=seconds, **CONSOLE_URLS)) from None
 
 
 @asynccontextmanager
@@ -100,7 +100,7 @@ async def _send_free_request(
         ):
             yield response
     except (aiohttp.ClientError, TimeoutError):
-        raise ByteplusError(ErrorCode.TRANSPORT, BYTEPLUS_UNREACHABLE) from None
+        raise BytePlusError(ErrorCode.TRANSPORT, BYTEPLUS_UNREACHABLE) from None
 
 
 def _parse_reply(content: bytes, code: ErrorCode) -> Json:
@@ -112,8 +112,8 @@ def _parse_reply(content: bytes, code: ErrorCode) -> Json:
     try:
         text = content.decode("utf-8")
         return parse_json(text, max_bytes=len(content) + 1)
-    except (UnicodeError, ByteplusError):
-        raise ByteplusError(code, REPLY_UNREADABLE) from None
+    except (UnicodeError, BytePlusError):
+        raise BytePlusError(code, REPLY_UNREADABLE) from None
 
 
 async def send_json(url: str, body: Mapping[str, Json], configuration: Configuration) -> Json:
@@ -156,10 +156,10 @@ async def download_output(url: str, settings: Settings) -> bytes:
     returned it ran.
     """
     if not url.startswith("https://"):
-        raise ByteplusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)
+        raise BytePlusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)
     async with _send_free_request("GET", URL(url, encoded=True), settings, None) as response:
         if response.status >= HTTPStatus.MULTIPLE_CHOICES:
-            raise ByteplusError(ErrorCode.TRANSPORT, OUTPUT_DOWNLOAD_FAILED.format(status=response.status))
+            raise BytePlusError(ErrorCode.TRANSPORT, OUTPUT_DOWNLOAD_FAILED.format(status=response.status))
         return await _read_body(response, settings)
 
 

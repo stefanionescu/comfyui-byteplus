@@ -8,7 +8,7 @@ outputs each image's ModelArk address as a reference.
 | Input                     | What it takes                                                                                                                                                                        |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `model`                   | Any Seedream model ID from the ModelArk model list; the default is `dola-seedream-5-0-flash-260915`.                                                                                 |
-| `size`                    | A tier such as `2K`, or pixels such as `2048x1152`. Each model takes some tiers and a range of pixels; **Model: Info** lists both. Empty leaves it to the model.                     |
+| `size`                    | A size such as `2K`, or pixels such as `2048x1152`. Each model takes some sizes by name; **Model: Info** lists them. Empty leaves it to the model.                                   |
 | `max_images`              | The most images to make, 1 to 15. Above 1, only models that make image series take it; ask for that many in the prompt, such as "Generate 4 images of …", or the model may make one. |
 | `background`              | `transparent` keeps the transparency of one reference image that has it, such as one from **Join Image with Alpha**, and makes a PNG.                                                |
 | `output_format`           | `png` or `jpeg`. **model default** is JPEG. Seedream 4.5 and 4.0 always make JPEG.                                                                                                   |

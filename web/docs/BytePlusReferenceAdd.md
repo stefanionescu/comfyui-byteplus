@@ -10,7 +10,7 @@ Chain several of these nodes to add several files. It sends nothing.
 | ------------ | ------------------------------------------------------------------------------------------------------------- |
 | `references` | References from another **Reference: Add**, **Image: Generate**, **Video: Generate**, or **Video: Download**. |
 | `kind`       | What the file is: image, video, or audio. A preset character is an image.                                     |
-| `source`     | An asset ID (`asset-…`), an asset URI (`asset://asset-…`), or a public `https://` address.                    |
+| `url`        | An asset ID (`asset-…`), an asset URI (`asset://asset-…`), or a public `https://` address.                    |
 
 ## Outputs
 
@@ -22,8 +22,7 @@ Chain several of these nodes to add several files. It sends nothing.
 
 1. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open
    the **Digital characters** tab.
-2. Open a character, copy its **asset ID**, and paste it into **asset ID or
-   address**.
+2. Open a character, copy its **asset ID**, and paste it into **url**.
 3. Connect **references** to **Video: Generate**, and name the character in its
    prompt by its place among the images, such as "the person in Image 2".
 

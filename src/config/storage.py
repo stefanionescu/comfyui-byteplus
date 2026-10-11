@@ -26,23 +26,23 @@ FILE_NAMES = {
 }
 
 # The video and 3D task records, one file per task ID.
-JOB_FILES = {
-    "FOLDER": "jobs",
+TASK_FILES = {
+    "FOLDER": "tasks",
     "SUFFIX": ".json",
 }
 
 # The largest settings file and task record the extension reads.
 MAX_FILE_BYTES = {
     "SETTINGS": 65_536,
-    "JOB": 16_384,
+    "TASK": 16_384,
 }
 
 __all__ = [
     "ENVIRONMENT_VARIABLES",
     "FILE_NAMES",
-    "JOB_FILES",
     "MAX_FILE_BYTES",
     "PRIVATE_FOLDER_MODE",
     "STATE_FOLDER_NAMES",
+    "TASK_FILES",
     "TEMPORARY_PREFIX",
 ]

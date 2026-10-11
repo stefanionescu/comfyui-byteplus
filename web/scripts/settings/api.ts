@@ -29,7 +29,7 @@ export async function requestConfiguration(
       signal,
       AbortSignal.timeout(browserLimits.requestTimeoutMilliseconds),
     ]),
-    headers: { 'Content-Type': 'application/json', 'X-Byteplus-Comfy': '1' },
+    headers: { 'Content-Type': 'application/json', 'X-BytePlus-Comfy': '1' },
   };
   if (body !== undefined) options.body = JSON.stringify(body);
   let response: Response;

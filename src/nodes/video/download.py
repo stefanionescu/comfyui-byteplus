@@ -6,7 +6,7 @@ from ..base import TaskDownload
 from comfy_api.latest import io
 from ...comfy.runtime import get_runtime
 from .generate import build_video_outputs
-from ...byteplus.tasks.jobs import list_job_labels
+from ...byteplus.tasks.records import list_task_labels
 from ...config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
 
 
@@ -26,8 +26,8 @@ class VideoDownload(TaskDownload):
             description="Collect a video task that kept running after a cancel, a restart, or a timeout.",
             inputs=[
                 io.Combo.Input(
-                    "job",
-                    options=list_job_labels(get_runtime().jobs, "videos"),
+                    "task",
+                    options=list_task_labels(get_runtime().tasks, "videos"),
                     tooltip="A video task recorded on this server. Press R to list tasks recorded later.",
                 )
             ],

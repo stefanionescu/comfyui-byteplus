@@ -9,9 +9,9 @@ BACKGROUNDS = (MODEL_DEFAULT, "transparent")
 OUTPUT_FORMATS = (MODEL_DEFAULT, "png", "jpeg")
 
 # The optimize_prompt_options.mode choices.
-PROMPT_MODES = (MODEL_DEFAULT, "standard", "fast")
+OPTIMIZE_PROMPT_MODES = (MODEL_DEFAULT, "standard", "fast")
 
-# The max_images widget; 1 turns a series model's sequential_image_generation off.
+# The max_images widget; 1 turns sequential_image_generation off where the model takes it.
 MAX_IMAGES = {
     "DEFAULT": 1,
     "MAX": 15,
@@ -23,7 +23,7 @@ RESPONSE_FORMAT = "url"
 # The Split Layers size choices; every model that splits layers takes them.
 LAYER_SIZES = ("auto", "1K", "1.5K", "2K")
 
-# The default is a tier billed like 1K; auto can reach the 2K tier, which Seedream 5.0 pro bills higher.
+# The default is a size billed like 1K; auto can reach 2K, which Seedream 5.0 pro bills higher.
 LAYER_SIZE_DEFAULT = "1.5K"
 
 __all__ = [
@@ -31,7 +31,7 @@ __all__ = [
     "LAYER_SIZES",
     "LAYER_SIZE_DEFAULT",
     "MAX_IMAGES",
+    "OPTIMIZE_PROMPT_MODES",
     "OUTPUT_FORMATS",
-    "PROMPT_MODES",
     "RESPONSE_FORMAT",
 ]

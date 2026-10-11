@@ -4,7 +4,7 @@ from ..types import Json
 from dataclasses import fields
 from ..types.settings import Settings
 from ..config.settings import SETTING_RANGES
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.messages.settings import SETTINGS_RANGE, SETTING_UNKNOWN, SETTINGS_WHOLE_NUMBERS
 
 
@@ -17,19 +17,19 @@ def _validate_settings(settings: Settings) -> None:
     for name, definition in SETTING_RANGES.items():
         value: int = getattr(settings, name)
         if not definition["minimum"] <= value <= definition["maximum"]:
-            raise ByteplusError(ErrorCode.CONFIGURATION, SETTINGS_RANGE)
+            raise BytePlusError(ErrorCode.CONFIGURATION, SETTINGS_RANGE)
 
 
 def parse_settings(document: dict[str, Json]) -> Settings:
     """Reject unknown settings instead of silently accepting misspelled limits."""
     expected = {item.name for item in fields(Settings)}
     if document.keys() - expected:
-        raise ByteplusError(ErrorCode.CONFIGURATION, SETTING_UNKNOWN)
+        raise BytePlusError(ErrorCode.CONFIGURATION, SETTING_UNKNOWN)
     integers: dict[str, int] = {}
     for name in expected:
         value = document.get(name, getattr(DEFAULT_SETTINGS, name))
         if type(value) is not int:
-            raise ByteplusError(ErrorCode.CONFIGURATION, SETTINGS_WHOLE_NUMBERS)
+            raise BytePlusError(ErrorCode.CONFIGURATION, SETTINGS_WHOLE_NUMBERS)
         integers[name] = value
     settings = Settings(**integers)
     _validate_settings(settings)

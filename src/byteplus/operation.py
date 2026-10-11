@@ -6,7 +6,7 @@ import math
 from typing import Protocol, TYPE_CHECKING
 from ..config.units import BYTES_PER_MEBIBYTE
 from ..config.messages.media import UPLOAD_LIMIT
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -30,7 +30,7 @@ def validate_upload_size(media: Iterable[str], settings: Settings) -> None:
     size = sum(len(item) for item in media)
     if size > settings.max_upload_megabytes * BYTES_PER_MEBIBYTE:
         shown = math.ceil(size * 10 / BYTES_PER_MEBIBYTE) / 10
-        raise ByteplusError(
+        raise BytePlusError(
             ErrorCode.INVALID_INPUT, UPLOAD_LIMIT.format(size=shown, maximum=settings.max_upload_megabytes)
         )
 

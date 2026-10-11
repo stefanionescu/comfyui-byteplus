@@ -138,12 +138,28 @@
             "reason": "BytePlus names this Seedance request field."
         },
         {
-            "path_regexes": ["^src/nodes/options\\.py$"],
+            "path_regexes": ["^src/(nodes|types)/options\\.py$"],
             "languages": ["python"],
-            "categories": ["parameters"],
+            "categories": ["variables", "parameters", "attributes"],
             "names": ["service_tier"],
             "allowed_banned_terms": ["service"],
-            "reason": "Request Options' input takes BytePlus's service_tier field name, and ComfyUI passes it to execute by that name."
+            "reason": "BytePlus names this request field service_tier; Request Options' input and its record keep the name."
+        },
+        {
+            "path_regexes": ["^src/config/byteplus\\.py$"],
+            "languages": ["python"],
+            "categories": ["constants"],
+            "names": ["SERVICE_TIER_CHOICES"],
+            "allowed_banned_terms": ["service"],
+            "reason": "The choices of BytePlus's service_tier field are named after it."
+        },
+        {
+            "path_regexes": ["^src/types/errors\\.py$"],
+            "languages": ["python"],
+            "categories": ["exceptions"],
+            "names": ["BytePlusError"],
+            "allowed_banned_terms": ["plus"],
+            "reason": "BytePlus is the vendor's own name."
         }
     ],
     "excluded_paths": [

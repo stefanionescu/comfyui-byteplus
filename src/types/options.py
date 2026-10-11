@@ -10,12 +10,12 @@ class Options:
     """The service tier and extra fields to merge into one request.
 
     Attributes:
-        tier: The service tier to ask for, "flex", or None for the model's default.
+        service_tier: The service tier to ask for, "flex", or None for the model's default.
         extra_fields: Top-level request fields added to the body as written.
 
     """
 
-    tier: str | None
+    service_tier: str | None
     extra_fields: Mapping[str, Json]
 
 

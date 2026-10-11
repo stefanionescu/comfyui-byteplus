@@ -12,8 +12,8 @@ from ..listing import find_listed_chat_model
 from ..operation import validate_upload_size
 from ..references import validate_references
 from ...types.replies import ChatReply, ChatMessage
-from ..models import find_model, validate_model, validate_value
-from ...types.errors import ErrorCode, ByteplusError, UnknownModelError
+from ..models import find_model, validate_inputs, validate_value
+from ...types.errors import ErrorCode, BytePlusError, UnknownModelError
 from ...config.messages.run import ANSWER_CUT, REPLY_EMPTY, ANSWER_FILTERED, REPLY_UNREADABLE
 from ...config.messages.inputs import (
     PROMPT_EMPTY,
@@ -52,12 +52,12 @@ def _validate_controls(request: ChatRequest, match: ModelMatch[ChatRow]) -> None
     if request.thinking is not None:
         validate_value(match, "thinking", request.thinking, limits.thinking)
     if request.effort is not None and not limits.has_effort:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, EFFORT_UNSUPPORTED.format(model=match.model_id))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, EFFORT_UNSUPPORTED.format(model=match.model_id))
     if request.temperature is not None and not limits.has_temperature:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, TEMPERATURE_FIXED.format(model=match.model_id))
-    if request.json_schema is not None and "json_schema" not in limits.answer_formats:
-        template = SCHEMA_JSON_ONLY if "json_object" in limits.answer_formats else SCHEMA_UNSUPPORTED
-        raise ByteplusError(ErrorCode.INVALID_INPUT, template.format(model=match.model_id))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, TEMPERATURE_FIXED.format(model=match.model_id))
+    if request.json_schema is not None and "json_schema" not in limits.response_formats:
+        template = SCHEMA_JSON_ONLY if "json_object" in limits.response_formats else SCHEMA_UNSUPPORTED
+        raise BytePlusError(ErrorCode.INVALID_INPUT, template.format(model=match.model_id))
 
 
 async def _find_chat_model(model_id: str, configuration: Configuration) -> ModelMatch[ChatRow]:
@@ -84,18 +84,18 @@ def _parse_answer(document: Json) -> ChatResult:
     try:
         reply = ChatReply.model_validate(document)
     except ValidationError:
-        raise ByteplusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE) from None
+        raise BytePlusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE) from None
     if not reply.choices:
-        raise ByteplusError(ErrorCode.TRANSPORT, REPLY_EMPTY)
+        raise BytePlusError(ErrorCode.TRANSPORT, REPLY_EMPTY)
     choice = reply.choices[0]
     if choice.finish_reason == "content_filter":
-        raise ByteplusError(ErrorCode.REFUSED, ANSWER_FILTERED)
+        raise BytePlusError(ErrorCode.REFUSED, ANSWER_FILTERED)
     message = choice.message or ChatMessage()
     if not message.content:
         # Reasoning can spend the whole max_completion_tokens before the answer starts.
         if choice.finish_reason == "length":
-            raise ByteplusError(ErrorCode.INVALID_INPUT, ANSWER_CUT)
-        raise ByteplusError(ErrorCode.TRANSPORT, REPLY_EMPTY)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, ANSWER_CUT)
+        raise BytePlusError(ErrorCode.TRANSPORT, REPLY_EMPTY)
     return ChatResult(text=message.content, reasoning=message.reasoning_content or "")
 
 
@@ -113,7 +113,7 @@ class ChatOperation:
         """
         request = self.request
         if not request.prompt.strip():
-            raise ByteplusError(ErrorCode.INVALID_INPUT, PROMPT_EMPTY)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, PROMPT_EMPTY)
         files = [document.file_url for document in request.documents if document.file_url]
         validate_upload_size((*request.image_urls, *request.video_urls, *request.audio_clips, *files), settings)
         validate_references(request.references, ("image", "video", "audio"), can_read_assets=False)
@@ -122,7 +122,7 @@ class ChatOperation:
         """Check the request against the model's row, send it, and read the answer."""
         request = self.request
         match = await _find_chat_model(request.model_id, configuration)
-        validate_model(match, _list_input_kinds(request))
+        validate_inputs(match, _list_input_kinds(request))
         _validate_controls(request, match)
         body = build_body(request, match.row)
         return _parse_answer(await send_json(ENDPOINT_URLS["chat"], body, configuration))

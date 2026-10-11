@@ -52,7 +52,7 @@ CHARACTER_MODEL = Workflow(
         Node("design", DESIGN.name),
         Node("mesh", f"{NODE_PREFIX}MeshGenerate", {"prompt": "--material PBR --TAPose true"}, is_paid=True),
         Node("save", HostNode.SAVE_MESH, {"filename_prefix": "3d/byteplus/character"}),
-        Node("download", f"{NODE_PREFIX}MeshDownload", {"job": ""}, is_bypassed=True),
+        Node("download", f"{NODE_PREFIX}MeshDownload", {"task": ""}, is_bypassed=True),
         Node("recovered", HostNode.SAVE_MESH, {"filename_prefix": "3d/byteplus/recovered"}, is_bypassed=True),
     ),
     links=(

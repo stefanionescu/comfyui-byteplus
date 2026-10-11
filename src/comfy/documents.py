@@ -4,7 +4,7 @@ import folder_paths
 from pathlib import Path
 from ..types.chat import Document
 from ..config.units import BYTES_PER_MEBIBYTE
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.generation.chat import DOCUMENT_TYPES, PDF_MEDIA_TYPE
 from comfy_api_nodes.util.conversions import text_filepath_to_data_uri
 from ..config.messages.inputs import DOCUMENT_KIND, DOCUMENT_SIZE, DOCUMENT_OUTSIDE, DOCUMENT_UNREADABLE
@@ -28,20 +28,20 @@ def read_document(name: str, max_megabytes: int) -> Document:
     try:
         path = Path(folder_paths.get_annotated_filepath(name)).resolve()
     except ValueError:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DOCUMENT_OUTSIDE) from None
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_OUTSIDE) from None
     if not path.is_relative_to(folder) or not path.is_file():
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DOCUMENT_OUTSIDE)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_OUTSIDE)
     media_type = DOCUMENT_TYPES.get(path.suffix.lower())
     if media_type is None:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DOCUMENT_KIND)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_KIND)
     if path.stat().st_size > max_megabytes * BYTES_PER_MEBIBYTE:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DOCUMENT_SIZE.format(maximum=max_megabytes))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_SIZE.format(maximum=max_megabytes))
     if media_type == PDF_MEDIA_TYPE:
         return Document(path.name, media_type, None, text_filepath_to_data_uri(str(path)))
     try:
         return Document(path.name, media_type, path.read_text(encoding="utf-8"), None)
     except UnicodeError:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DOCUMENT_UNREADABLE) from None
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_UNREADABLE) from None
 
 
 __all__ = ["list_documents", "read_document"]

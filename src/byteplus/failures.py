@@ -5,7 +5,7 @@ from http import HTTPStatus
 from pydantic import ValidationError
 from ..types.replies import ErrorReply
 from ..config.patterns import REASON_PATTERNS
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.byteplus import CONSOLE_URLS, REASON_ENDINGS, MAX_REASON_CHARACTERS
 from ..config.messages.run import (
     NO_REASON,
@@ -150,7 +150,7 @@ def _sanitize_reason(message: str) -> str:
     return text or NO_REASON
 
 
-def build_failure(status: int | None, code: str | None, message: str) -> ByteplusError:
+def build_failure(status: int | None, code: str | None, message: str) -> BytePlusError:
     """Build the reviewed error for one ModelArk error, by its code and then its status, with the cleaned reason.
 
     The status is None for the error of a failed task, and the reply's status for an error inside a successful reply.
@@ -158,10 +158,10 @@ def build_failure(status: int | None, code: str | None, message: str) -> Byteplu
     """
     category, template = _choose_failure(status, code, message)
     text = template.format(reason=_sanitize_reason(message), status=status, **CONSOLE_URLS)
-    return ByteplusError(category, text)
+    return BytePlusError(category, text)
 
 
-def read_failure(status: int, body: bytes) -> ByteplusError:
+def read_failure(status: int, body: bytes) -> BytePlusError:
     """Read a failed reply's error document; a body that is not one gives no code and no reason."""
     try:
         error = ErrorReply.model_validate_json(body).error

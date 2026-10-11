@@ -9,7 +9,7 @@ from dataclasses import asdict, fields
 from ..types.credentials import Credential
 from ..config.settings import SETTING_RANGES
 from ..storage.files import save_file, read_file
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.security import GENERATION_TOKEN_BYTES
 from ..types.settings import Settings, Configuration
 from .schema import DEFAULT_SETTINGS, parse_settings
@@ -59,12 +59,12 @@ class ConfigurationStore:
             try:
                 settings = self.read_settings()
                 credential = read_credential(self.directory)
-            except ByteplusError:
+            except BytePlusError:
                 self._previous = None
                 raise
             except (OSError, UnicodeError):
                 self._previous = None
-                raise ByteplusError(ErrorCode.CONFIGURATION, SETTINGS_UNREADABLE) from None
+                raise BytePlusError(ErrorCode.CONFIGURATION, SETTINGS_UNREADABLE) from None
             return self._build_snapshot(settings, credential)
 
     def read_status(self) -> dict[str, Json]:
@@ -86,11 +86,11 @@ class ConfigurationStore:
     def save_settings(self, changes: dict[str, Json], revision: str) -> dict[str, Json]:
         """Apply a validated patch only to the version the editor actually read."""
         if changes.keys() - EDITABLE_SETTINGS:
-            raise ByteplusError(ErrorCode.CONFIGURATION, SETTING_READ_ONLY)
+            raise BytePlusError(ErrorCode.CONFIGURATION, SETTING_READ_ONLY)
         with self.lock:
             current = self.read_settings()
             if revision != current.revision:
-                raise ByteplusError(ErrorCode.CONFLICT, SETTINGS_CHANGED)
+                raise BytePlusError(ErrorCode.CONFLICT, SETTINGS_CHANGED)
             updated = parse_settings(asdict(current) | changes)
             save_file(self.directory / FILE_NAMES["SETTINGS"], (json.dumps(asdict(updated), indent=2) + "\n").encode())
         return self.read_status()

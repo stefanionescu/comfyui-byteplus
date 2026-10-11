@@ -153,7 +153,7 @@ class ImageSplitLayers(PaidNode):
                 prompt=prompt,
                 image=source,
                 size=size,
-                prompt_mode=None if optimize_prompt_options == MODEL_DEFAULT else optimize_prompt_options,
+                optimize_prompt_mode=None if optimize_prompt_options == MODEL_DEFAULT else optimize_prompt_options,
                 has_watermark=watermark,
                 options=options,
             )

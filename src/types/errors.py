@@ -23,7 +23,7 @@ class ErrorCode(StrEnum):
     MEDIA = "media"
 
 
-class ByteplusError(RuntimeError):
+class BytePlusError(RuntimeError):
     """Show reviewed text; BytePlus's cleaned reason, when there is one, is already part of it."""
 
     def __init__(self, code: ErrorCode, message: str) -> None:
@@ -32,8 +32,8 @@ class ByteplusError(RuntimeError):
         self.code = code
 
 
-class UnknownModelError(ByteplusError):
+class UnknownModelError(BytePlusError):
     """A model ID the bundled table does not know, which ModelArk's model listing may still list."""
 
 
-__all__ = ["ByteplusError", "ErrorCode", "UnknownModelError"]
+__all__ = ["BytePlusError", "ErrorCode", "UnknownModelError"]

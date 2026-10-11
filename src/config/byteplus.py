@@ -62,7 +62,7 @@ RESERVED_FIELDS = {
 }
 
 # The service_tier dropdown: nothing sent, or ModelArk's lower-priority, lower-cost tier.
-TIER_CHOICES = (MODEL_DEFAULT, "flex")
+SERVICE_TIER_CHOICES = (MODEL_DEFAULT, "flex")
 
 __all__ = [
     "BASE_URL",
@@ -72,5 +72,5 @@ __all__ = [
     "REASON_ENDINGS",
     "REPLY_BYTES",
     "RESERVED_FIELDS",
-    "TIER_CHOICES",
+    "SERVICE_TIER_CHOICES",
 ]

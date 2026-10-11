@@ -11,7 +11,7 @@ DOWNLOAD_LIMIT = (
 
 IMAGE_PIXELS = "The connected image holds values that are not numbers. Check the node that made it."
 
-IMAGE_SHAPE = "Connect a ComfyUI image with three or four color channels."
+IMAGE_CHANNELS = "Connect a ComfyUI image with three or four color channels."
 
 IMAGE_TOO_LARGE = (
     "A connected image is {width} by {height} pixels, more than the {maximum} pixels ModelArk reads in one image. "
@@ -31,8 +31,8 @@ __all__ = [
     "AUDIO_EMPTY",
     "AUDIO_UNWRITABLE",
     "DOWNLOAD_LIMIT",
+    "IMAGE_CHANNELS",
     "IMAGE_PIXELS",
-    "IMAGE_SHAPE",
     "IMAGE_TOO_LARGE",
     "IMAGE_UNREADABLE",
     "UPLOAD_LIMIT",

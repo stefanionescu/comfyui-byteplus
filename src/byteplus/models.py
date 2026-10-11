@@ -9,7 +9,7 @@ from typing import Literal, overload
 from ..config.generation.models import DEFAULT_MODELS
 from collections.abc import Mapping, Iterable, Sequence
 from ..config.patterns import MODEL_ID_PATTERN, MODEL_VERSION_PATTERN
-from ..types.errors import ErrorCode, ByteplusError, UnknownModelError
+from ..types.errors import ErrorCode, BytePlusError, UnknownModelError
 from ..config.models import ALIASES, KIND_NODES, MODEL_TABLE, MEDIA_LABELS, ENDPOINT_PREFIX
 from ..types.models import ChatRow, MeshRow, ImageRow, ModelRow, VideoRow, ModelMatch, MatchMethod, EmbeddingRow
 from ..config.messages.models import (
@@ -78,7 +78,7 @@ def _find_row(model_id: str, kind: Kind | None) -> tuple[ModelRow, MatchMethod]:
         raise UnknownModelError(ErrorCode.INVALID_INPUT, _describe_unknown(model_id, kind))
     row = _FAMILY_ROWS[family]
     if family == model_id:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MODEL_VERSION.format(model=model_id, newest=row.model_id))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_VERSION.format(model=model_id, newest=row.model_id))
     return row, "family"
 
 
@@ -121,24 +121,24 @@ def find_model(model_id: str, kind: Kind | None) -> ModelMatch[ModelRow]:
     """
     text = model_id.strip()
     if not text:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MODEL_EMPTY)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_EMPTY)
     if text.startswith(ENDPOINT_PREFIX):
         example = DEFAULT_MODELS[kind or "chat"]
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MODEL_ENDPOINT.format(example=example))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_ENDPOINT.format(example=example))
     row, matched = _find_row(text, kind)
     if kind is not None and kind not in row.kinds:
         nodes = " or ".join(node for row_kind, node in KIND_NODES.items() if row_kind in row.kinds)
         message = MODEL_KIND.format(model=text, node=KIND_NODES[kind], nodes=nodes)
-        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     return ModelMatch(model_id=text, row=row, matched=matched)
 
 
-def validate_model(match: ModelMatch[ModelRow], kinds: Iterable[str]) -> None:
+def validate_inputs(match: ModelMatch[ModelRow], kinds: Iterable[str]) -> None:
     """Refuse each connected kind of input the model does not read: text, image, video, audio, or pdf."""
     for kind in kinds:
         if kind not in match.row.inputs:
             message = MODEL_INPUT.format(model=match.model_id, media=MEDIA_LABELS[kind])
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, message)
 
 
 def validate_value(match: ModelMatch[ModelRow], label: str, value: str, values: Sequence[str]) -> None:
@@ -148,10 +148,10 @@ def validate_value(match: ModelMatch[ModelRow], label: str, value: str, values: 
     setting.
     """
     if not values:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field=label))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field=label))
     if value not in values:
         message = MODEL_VALUE.format(model=match.model_id, field=label, values=", ".join(values))
-        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, message)
 
 
-__all__ = ["VERSION_SUFFIX", "find_model", "validate_model", "validate_value"]
+__all__ = ["VERSION_SUFFIX", "find_model", "validate_inputs", "validate_value"]

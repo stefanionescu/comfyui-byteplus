@@ -8,9 +8,9 @@ from typing import cast, TYPE_CHECKING
 from ..config.media import IMAGE_TENSOR
 from ..types.images import EncodedImage
 from ..config.namespace import SOCKET_TYPES
-from ..config.generation.images import PROMPT_MODES
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..comfy.media import encode_audio, encode_images
+from ..config.generation.images import OPTIMIZE_PROMPT_MODES
 from ..config.messages.inputs import IMAGE_SINGLE, REFERENCE_IMAGE_SINGLE
 from ..config.generation.inputs import RUN_NUMBER, INPUT_NAMES, MODEL_DEFAULT
 
@@ -31,7 +31,7 @@ REFERENCES_INPUT = io.Custom(SOCKET_TYPES["REFERENCES"]).Input(
 OPTIMIZE_PROMPT_OPTIONS_INPUT = io.Combo.Input(
     "optimize_prompt_options",
     display_name="optimize prompt options",
-    options=list(PROMPT_MODES),
+    options=list(OPTIMIZE_PROMPT_MODES),
     default=MODEL_DEFAULT,
     advanced=True,
     tooltip="Fast answers sooner with slightly lower quality, on models that offer it.",
@@ -102,13 +102,13 @@ def read_image_socket(label: str, values: Sequence[object]) -> EncodedImage | Re
     if isinstance(values[0], torch.Tensor):
         batches = cast("list[torch.Tensor]", list(values))
         if sum(batch.shape[0] for batch in batches) > 1:
-            raise ByteplusError(ErrorCode.INVALID_INPUT, IMAGE_SINGLE.format(input=label))
+            raise BytePlusError(ErrorCode.INVALID_INPUT, IMAGE_SINGLE.format(input=label))
         return encode_sized_images(batches)[0]
     chain = cast("tuple[Reference, ...]", values[0])
     images = [reference for reference in chain if reference.kind == "image"]
     if len(images) != 1:
         message = REFERENCE_IMAGE_SINGLE.format(input=label, count=len(images))
-        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     return images[0]
 
 

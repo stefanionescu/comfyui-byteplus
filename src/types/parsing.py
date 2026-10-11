@@ -5,7 +5,7 @@ import math
 from . import Json
 from typing import cast
 from ..config.security import JSON_LIMITS
-from .errors import ErrorCode, ByteplusError
+from .errors import ErrorCode, BytePlusError
 from ..config.messages.requests import JSON_SIZE, JSON_DEPTH, JSON_MAPPING, JSON_SYNTAX, JSON_VALUES, JSON_DUPLICATE_KEY
 
 
@@ -23,7 +23,7 @@ def _build_fields(pairs: list[tuple[str, Json]]) -> dict[str, Json]:
 def _validate_json(value: object, *, max_depth: int = JSON_LIMITS["MAX_DEPTH"]) -> Json:
     """Copy JSON values within the nesting limit; reject other Python objects."""
     if max_depth < 0:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, JSON_DEPTH)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, JSON_DEPTH)
     if value is None or isinstance(value, (str, bool, int)):
         return value
     if isinstance(value, float) and math.isfinite(value):
@@ -35,7 +35,7 @@ def _validate_json(value: object, *, max_depth: int = JSON_LIMITS["MAX_DEPTH"]) 
         entries = cast("dict[object, object]", value)
         if all(isinstance(key, str) for key in entries):
             return {cast("str", key): _validate_json(item, max_depth=max_depth - 1) for key, item in entries.items()}
-    raise ByteplusError(ErrorCode.INVALID_INPUT, JSON_VALUES)
+    raise BytePlusError(ErrorCode.INVALID_INPUT, JSON_VALUES)
 
 
 def parse_json(
@@ -43,12 +43,12 @@ def parse_json(
 ) -> Json:
     """Reject oversized, nested, duplicate-key, and non-finite JSON input."""
     if len(text.encode("utf-8")) > max_bytes:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, JSON_SIZE)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, JSON_SIZE)
     try:
         value = cast("object", json.loads(text, object_pairs_hook=_build_fields))
         return _validate_json(value, max_depth=max_depth)
     except (ValueError, RecursionError) as error:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, JSON_SYNTAX) from error
+        raise BytePlusError(ErrorCode.INVALID_INPUT, JSON_SYNTAX) from error
 
 
 def parse_fields(text: str, message: str) -> dict[str, Json] | None:
@@ -61,14 +61,14 @@ def parse_fields(text: str, message: str) -> dict[str, Json] | None:
         return None
     value = parse_json(text)
     if not isinstance(value, dict):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     return value
 
 
 def validate_fields(value: Json) -> dict[str, Json]:
     """Require an object at a public JSON boundary."""
     if not isinstance(value, dict):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, JSON_MAPPING)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, JSON_MAPPING)
     return value
 
 

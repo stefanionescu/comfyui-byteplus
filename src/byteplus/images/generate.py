@@ -17,7 +17,7 @@ from ..references import validate_references
 from ..models import find_model, validate_value
 from ...config.patterns import IMAGE_SIZE_PATTERN
 from ..transport import send_json, download_output
-from ...types.errors import ErrorCode, ByteplusError
+from ...types.errors import ErrorCode, BytePlusError
 from ...config.generation.images import RESPONSE_FORMAT
 from ...config.messages.run import REPLY_EMPTY, REPLY_UNREADABLE
 from ...config.messages.inputs import (
@@ -46,38 +46,38 @@ def _validate_background(request: ImageRequest, match: ModelMatch[ImageRow], bac
     validate_value(match, "background", background, match.row.image.backgrounds)
     has_one_source = len(request.images) + len(request.references) == 1
     if not has_one_source or (request.images and not request.images[0].has_alpha):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, TRANSPARENT_SOURCE)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, TRANSPARENT_SOURCE)
     if request.output_format == "jpeg":
-        raise ByteplusError(ErrorCode.INVALID_INPUT, TRANSPARENT_FORMAT)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, TRANSPARENT_FORMAT)
 
 
 def _validate_image_request(request: ImageRequest, match: ModelMatch[ImageRow]) -> None:
     """Refuse, before anything is paid, what the model's row does not take; the first refusal stops the check.
 
-    Seedream reads no assets, which only Seedance video takes. A size is one of the model's tiers or any WIDTHxHEIGHT,
+    Seedream reads no assets, which only Seedance video takes. A size is one of the model's sizes or any WIDTHxHEIGHT,
     whose pixels ModelArk checks itself.
     """
     limits = match.row.image
     validate_references(request.references, ("image",), can_read_assets=False)
-    if request.size is not None and request.size not in limits.tiers and _PIXEL_SIZE.match(request.size) is None:
-        message = IMAGE_SIZE.format(model=match.model_id, tiers=", ".join(limits.tiers))
-        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    if request.max_images > 1 and not limits.has_series:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, IMAGE_COUNT_SINGLE.format(model=match.model_id))
+    if request.size is not None and request.size not in limits.sizes and _PIXEL_SIZE.match(request.size) is None:
+        message = IMAGE_SIZE.format(model=match.model_id, sizes=", ".join(limits.sizes))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, message)
+    if request.max_images > 1 and not limits.has_sequential_image_generation:
+        raise BytePlusError(ErrorCode.INVALID_INPUT, IMAGE_COUNT_SINGLE.format(model=match.model_id))
     if request.background is not None:
         _validate_background(request, match, request.background)
     if request.output_format is not None:
         validate_value(match, "output format", request.output_format, limits.output_formats)
-    if request.prompt_mode is not None:
-        validate_value(match, "optimize prompt options", request.prompt_mode, limits.prompt_modes)
+    if request.optimize_prompt_mode is not None:
+        validate_value(match, "optimize prompt options", request.optimize_prompt_mode, limits.optimize_prompt_modes)
 
 
-def _build_series_fields(max_images: int, limits: ImageLimits) -> dict[str, Json]:
-    """Ask a series model for up to max_images images, or turn its series off for one; other models take no field."""
+def _build_sequential_fields(max_images: int, limits: ImageLimits) -> dict[str, Json]:
+    """Ask for up to max_images images in sequence, or turn sequential generation off for one where the model has it."""
     if max_images > 1:
-        series: dict[str, Json] = {"max_images": max_images}
-        return {"sequential_image_generation": "auto", "sequential_image_generation_options": series}
-    return {"sequential_image_generation": "disabled"} if limits.has_series else {}
+        sequence: dict[str, Json] = {"max_images": max_images}
+        return {"sequential_image_generation": "auto", "sequential_image_generation_options": sequence}
+    return {"sequential_image_generation": "disabled"} if limits.has_sequential_image_generation else {}
 
 
 def _build_image_body(request: ImageRequest, match: ModelMatch[ImageRow]) -> dict[str, Json]:
@@ -91,7 +91,7 @@ def _build_image_body(request: ImageRequest, match: ModelMatch[ImageRow]) -> dic
         "prompt": request.prompt,
         "response_format": RESPONSE_FORMAT,
         "watermark": request.has_watermark,
-        **_build_series_fields(request.max_images, match.row.image),
+        **_build_sequential_fields(request.max_images, match.row.image),
     }
     if request.size is not None:
         body["size"] = request.size
@@ -103,16 +103,17 @@ def _build_image_body(request: ImageRequest, match: ModelMatch[ImageRow]) -> dic
         body["background"] = request.background
     if request.output_format is not None:
         body["output_format"] = request.output_format
-    if request.prompt_mode is not None:
-        body["optimize_prompt_options"] = {"mode": request.prompt_mode}
+    if request.optimize_prompt_mode is not None:
+        body["optimize_prompt_options"] = {"mode": request.optimize_prompt_mode}
     return build_request_body(body, request.options, "images", match.row)
 
 
 def _list_addresses(reply: ImageReply) -> list[str]:
     """List the address of every image made, in reply order.
 
-    An image moderation refused is left out; it is not billed, and a series may make fewer images than asked in any
-    case. When none was made, the first error stops the run with its own message, such as a moderation refusal.
+    An image moderation refused is left out; it is not billed, and sequential image generation may make fewer images
+    than asked in any case. When none was made, the first error stops the run with its own message, such as a
+    moderation refusal.
     """
     addresses = [item.url for item in reply.images if item.url is not None]
     if addresses:
@@ -120,7 +121,7 @@ def _list_addresses(reply: ImageReply) -> list[str]:
     errors = [reply.error, *(item.error for item in reply.images)]
     error = next((error for error in errors if error is not None), None)
     if error is None:
-        raise ByteplusError(ErrorCode.TRANSPORT, REPLY_EMPTY)
+        raise BytePlusError(ErrorCode.TRANSPORT, REPLY_EMPTY)
     raise build_failure(HTTPStatus.OK, error.code, error.message)
 
 
@@ -129,7 +130,7 @@ def parse_image_reply(document: Json) -> ImageReply:
     try:
         return ImageReply.model_validate(document)
     except ValidationError:
-        raise ByteplusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE) from None
+        raise BytePlusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE) from None
 
 
 class ImageOperation:
@@ -142,7 +143,7 @@ class ImageOperation:
     def validate(self, settings: Settings) -> None:
         """Refuse a blank prompt and more local image data than the maximum upload size."""
         if not self.request.prompt.strip():
-            raise ByteplusError(ErrorCode.INVALID_INPUT, PROMPT_EMPTY)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, PROMPT_EMPTY)
         validate_upload_size((image.url for image in self.request.images), settings)
 
     async def send(self, configuration: Configuration) -> ImageResult:

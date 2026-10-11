@@ -21,8 +21,8 @@ class VideoRequest:
         duration: The length in seconds; -1 lets the model choose.
         resolution: The resolution, always sent except to finish a draft.
         ratio: The aspect ratio, or adaptive.
-        has_sound: The generate_audio value: whether the video has sound.
-        task_type: The omni_reference_task_type: auto, reference, edit, or extend; auto sends nothing.
+        has_audio: The generate_audio value: whether the video has sound.
+        omni_reference_task_type: auto, reference, edit, or extend; auto sends nothing.
         is_draft: Whether to make a 480p draft.
         is_camera_fixed: Whether to ask the model to keep the camera still.
         output_format: mp4 or mov.
@@ -42,8 +42,8 @@ class VideoRequest:
     duration: int
     resolution: str
     ratio: str | None
-    has_sound: bool | None
-    task_type: str
+    has_audio: bool | None
+    omni_reference_task_type: str
     is_draft: bool
     is_camera_fixed: bool
     output_format: str | None

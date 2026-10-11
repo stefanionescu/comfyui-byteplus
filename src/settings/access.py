@@ -7,7 +7,7 @@ from ..types import Json
 from http import HTTPStatus
 from urllib.parse import SplitResult, urlsplit
 from collections.abc import Callable, Awaitable
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.messages.settings import STATE_UNREADABLE
 from ..config.messages.requests import LOCAL_CONNECTION_REQUIRED
 from ..config.security import (
@@ -95,7 +95,7 @@ def build_local_route(
         try:
             _validate_local_request(request, is_mutation=is_mutation, is_multi_user=is_multi_user)
             return web.json_response(await callback(request), headers=PRIVATE_HEADERS)
-        except ByteplusError as error:
+        except BytePlusError as error:
             # A stale revision is a conflict the page resolves by reloading; every other failure is a bad request.
             message, status = (
                 str(error),

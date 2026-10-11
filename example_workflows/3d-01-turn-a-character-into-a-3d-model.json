@@ -132,7 +132,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn them on, choose the task in **job**, and press **Run**. Press R to list tasks started after the page loaded."
+        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn them on, choose the task in **task**, and press **Run**. Press R to list tasks started after the page loaded."
       ],
       "title": "Note"
     },
@@ -351,11 +351,11 @@
       "mode": 4,
       "inputs": [
         {
-          "name": "job",
+          "name": "task",
           "type": "COMBO",
           "link": null,
           "widget": {
-            "name": "job"
+            "name": "task"
           }
         }
       ],

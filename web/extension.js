@@ -634,7 +634,7 @@ async function requestConfiguration(fetcher, signal, route = browserRoutes.setti
       signal,
       AbortSignal.timeout(browserLimits.requestTimeoutMilliseconds)
     ]),
-    headers: { "Content-Type": "application/json", "X-Byteplus-Comfy": "1" }
+    headers: { "Content-Type": "application/json", "X-BytePlus-Comfy": "1" }
   };
   if (body !== void 0) options.body = JSON.stringify(body);
   let response;

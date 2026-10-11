@@ -6,9 +6,9 @@ request timeout.
 
 ## Inputs
 
-| Input | What it takes                                                                    |
-| ----- | -------------------------------------------------------------------------------- |
-| `job` | A 3D task started on this server, shown as its ID, model, and start time in UTC. |
+| Input  | What it takes                                                                    |
+| ------ | -------------------------------------------------------------------------------- |
+| `task` | A 3D task started on this server, shown as its ID, model, and start time in UTC. |
 
 ## Outputs
 
@@ -18,7 +18,7 @@ request timeout.
 
 ## Use
 
-1. Choose the task in **job**. Press R to list tasks started after the page
+1. Choose the task in **task**. Press R to list tasks started after the page
    loaded.
 2. Connect **model_3d** to **Save 3D Model**.
 3. Select **Run**.

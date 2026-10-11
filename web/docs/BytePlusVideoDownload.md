@@ -6,9 +6,9 @@ request timeout.
 
 ## Inputs
 
-| Input | What it takes                                                                       |
-| ----- | ----------------------------------------------------------------------------------- |
-| `job` | A video task started on this server, shown as its ID, model, and start time in UTC. |
+| Input  | What it takes                                                                       |
+| ------ | ----------------------------------------------------------------------------------- |
+| `task` | A video task started on this server, shown as its ID, model, and start time in UTC. |
 
 ## Outputs
 
@@ -20,7 +20,7 @@ request timeout.
 
 ## Use
 
-1. Choose the task in **job**. Press R to list tasks started after the page
+1. Choose the task in **task**. Press R to list tasks started after the page
    loaded.
 2. Connect **video** to **Save Video**.
 3. Select **Run**.

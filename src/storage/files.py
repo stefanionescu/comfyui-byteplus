@@ -4,7 +4,7 @@ import os
 import sys
 import tempfile
 from pathlib import Path
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.messages.settings import STATE_FILE_SIZE, STATE_DIRECTORY_ABSOLUTE
 from ..config.storage import TEMPORARY_PREFIX, STATE_FOLDER_NAMES, PRIVATE_FOLDER_MODE, ENVIRONMENT_VARIABLES
 
@@ -15,7 +15,7 @@ def choose_state_directory() -> Path:
     if override:
         path = Path(override).expanduser()
         if not path.is_absolute():
-            raise ByteplusError(ErrorCode.CONFIGURATION, STATE_DIRECTORY_ABSOLUTE)
+            raise BytePlusError(ErrorCode.CONFIGURATION, STATE_DIRECTORY_ABSOLUTE)
         return path
     if sys.platform == "darwin":
         return Path.home() / "Library" / "Application Support" / STATE_FOLDER_NAMES["DEFAULT"]
@@ -46,7 +46,7 @@ def read_file(path: Path, *, max_bytes: int) -> bytes:
     with path.open("rb") as stream:
         content = stream.read(max_bytes + 1)
     if len(content) > max_bytes:
-        raise ByteplusError(ErrorCode.CONFIGURATION, STATE_FILE_SIZE)
+        raise BytePlusError(ErrorCode.CONFIGURATION, STATE_FILE_SIZE)
     return content
 
 

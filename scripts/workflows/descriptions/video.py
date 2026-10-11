@@ -280,7 +280,7 @@ FINISH_DRAFT = Workflow(
 RECOVER_VIDEO = Workflow(
     slug="video-05-recover-a-video",
     nodes=(
-        Node("download", f"{NODE_PREFIX}VideoDownload", {"job": ""}),
+        Node("download", f"{NODE_PREFIX}VideoDownload", {"task": ""}),
         Node("save", HostNode.SAVE_VIDEO, {"filename_prefix": "video/byteplus/recovered"}),
         Node("last_frame", HostNode.PREVIEW_IMAGE, title=SHARED_TEXTS["last_frame"]),
     ),

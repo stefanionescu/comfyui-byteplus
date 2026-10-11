@@ -145,7 +145,7 @@ WORKFLOW_TEXTS = {
     "video-03-cast-a-preset-character": {
         "input": (
             KEY_STEP + "2. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open the **Digital "
-            "characters** tab. Open a character, copy its asset ID, and paste it into **asset ID or address** on "
+            "characters** tab. Open a character, copy its asset ID, and paste it into **url** on "
             "**Reference: Add** in **Character**.\n"
             "3. Describe the product in **Product** and the shot in **Scene**.\n"
             "4. Press **Run**. The video is saved under `video/byteplus`."
@@ -195,7 +195,7 @@ WORKFLOW_TEXTS = {
             "out, or after ComfyUI restarts while a video is being made. BytePlus keeps making the video. A task that "
             "was still queued when you cancelled was cancelled, and is not listed.\n\n"
             + KEY_STEP
-            + "2. In **job**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
+            + "2. In **task**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
             "to list tasks started after the page loaded.\n"
             "3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\n"
             "A task leaves the list once its video is saved. BytePlus deletes a finished video's file after 24 hours."
@@ -240,7 +240,7 @@ WORKFLOW_TEXTS = {
         "recover": (
             "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after "
             "ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn "
-            "them on, choose the task in **job**, and press **Run**. Press R to list tasks started after the page "
+            "them on, choose the task in **task**, and press **Run**. Press R to list tasks started after the page "
             "loaded."
         ),
     },

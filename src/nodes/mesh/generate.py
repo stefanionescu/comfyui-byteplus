@@ -13,7 +13,7 @@ from ...config.messages.tasks import MESH_NOT_GLB
 from ...config.namespace import MENUS, NODE_PREFIX
 from ...byteplus.meshes import build_mesh_operation
 from ...config.messages.run import REPLY_UNREADABLE
-from ...types.errors import ErrorCode, ByteplusError
+from ...types.errors import ErrorCode, BytePlusError
 from ...config.generation.models import DEFAULT_MODELS
 from ...config.generation.inputs import INPUT_NAMES, MODEL_TOOLTIP
 from ...config.generation.meshes import FILE_FORMAT, GLB_SIGNATURE
@@ -34,9 +34,9 @@ def build_mesh_output(result: TaskResult) -> io.NodeOutput:
     """
     output = result.outputs.get("file_url")
     if output is None:
-        raise ByteplusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE)
+        raise BytePlusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE)
     if not output.content.startswith(GLB_SIGNATURE):
-        raise ByteplusError(ErrorCode.TRANSPORT, MESH_NOT_GLB)
+        raise BytePlusError(ErrorCode.TRANSPORT, MESH_NOT_GLB)
     return io.NodeOutput(Types.File3D(memory.BytesIO(output.content), FILE_FORMAT))
 
 
@@ -103,7 +103,7 @@ class MeshGenerate(PaidNode):
                 references=references or (),
                 options=options,
             )
-            operation = build_mesh_operation(request, get_runtime().jobs)
+            operation = build_mesh_operation(request, get_runtime().tasks)
             return await send_request(operation, build_mesh_output, cls.hidden.unique_id)
 
         return await wait_for_task(asyncio.create_task(send_encoded()))

@@ -5,14 +5,14 @@ from __future__ import annotations
 import asyncio
 from comfy_api.latest import io
 from ..comfy.runtime import get_runtime
-from ..byteplus.tasks.jobs import TASK_ID
+from ..byteplus.tasks.records import TASK_ID
 from ..config.messages.inputs import SINGLE_VALUE
 from ..config.generation.inputs import INPUT_NAMES
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..comfy.execution import send_request, wait_for_task
 from ..byteplus.tasks.operation import TaskDownloadOperation
 from typing import cast, Literal, ClassVar, override, TYPE_CHECKING
-from ..config.messages.tasks import TASK_KIND, TASK_NAMES, JOB_UNKNOWN, DOWNLOAD_NODES
+from ..config.messages.tasks import TASK_KIND, TASK_NAMES, TASK_UNKNOWN, DOWNLOAD_NODES
 
 if TYPE_CHECKING:
     from ..types.tasks import TaskResult
@@ -74,18 +74,18 @@ class TaskDownload(io.ComfyNode):
 
         ComfyUI skips its own list check only for inputs the validator takes as positional or extra keywords.
         """
-        return True if TASK_ID.match(str(inputs.get("job", "")).split(" ", 1)[0]) else JOB_UNKNOWN
+        return True if TASK_ID.match(str(inputs.get("task", "")).split(" ", 1)[0]) else TASK_UNKNOWN
 
     @classmethod
     @override
-    async def execute(cls, *, job: str = "") -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
+    async def execute(cls, *, task: str = "") -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
         """Read the task's record, wait for it, and download what it made."""
-        jobs = get_runtime().jobs
-        record = await asyncio.to_thread(jobs.read, job.split(" ", 1)[0])
+        tasks = get_runtime().tasks
+        record = await asyncio.to_thread(tasks.read, task.split(" ", 1)[0])
         if record.kind != cls.kind:
             message = TASK_KIND.format(task=TASK_NAMES[record.kind], node=DOWNLOAD_NODES[record.kind])
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-        operation = TaskDownloadOperation(record, jobs)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, message)
+        operation = TaskDownloadOperation(record, tasks)
         return await wait_for_task(
             asyncio.create_task(send_request(operation, cls.build_outputs, cls.hidden.unique_id))
         )
@@ -98,7 +98,7 @@ def _read_single(name: str, value: object) -> object:
         return {field: _read_single(name, item) for field, item in fields.items()}
     values = cast("list[object]", value)
     if len(values) != 1:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, SINGLE_VALUE.format(name=name.replace("_", " ")))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, SINGLE_VALUE.format(name=name.replace("_", " ")))
     return values[0]
 
 

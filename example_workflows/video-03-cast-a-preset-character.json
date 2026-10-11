@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open the **Digital characters** tab. Open a character, copy its asset ID, and paste it into **asset ID or address** on **Reference: Add** in **Character**.\n3. Describe the product in **Product** and the shot in **Scene**.\n4. Press **Run**. The video is saved under `video/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open the **Digital characters** tab. Open a character, copy its asset ID, and paste it into **url** on **Reference: Add** in **Character**.\n3. Describe the product in **Product** and the shot in **Scene**.\n4. Press **Run**. The video is saved under `video/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -295,11 +295,11 @@
           }
         },
         {
-          "name": "source",
+          "name": "url",
           "type": "STRING",
           "link": null,
           "widget": {
-            "name": "source"
+            "name": "url"
           }
         }
       ],

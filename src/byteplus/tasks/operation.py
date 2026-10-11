@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import time
 import asyncio
-from .jobs import TASK_ID
+from .records import TASK_ID
 from typing import TYPE_CHECKING
 from ..failures import build_failure
 from pydantic import ValidationError
@@ -15,9 +15,9 @@ from ...config.models import KIND_NODES
 from ...types.references import OutputFile
 from ...config.byteplus import ENDPOINT_URLS
 from datetime import UTC, datetime, timedelta
-from ...types.tasks import TaskJob, TaskResult
+from ...types.tasks import TaskRecord, TaskResult
 from ...config.messages.run import REPLY_UNREADABLE
-from ...types.errors import ErrorCode, ByteplusError
+from ...types.errors import ErrorCode, BytePlusError
 from ...types.replies import TaskReply, TaskCreateReply
 from ...config.generation.references import OUTPUT_LIFETIME_SECONDS
 from ..transport import send_json, send_lookup, download_output, send_task_cancel
@@ -40,7 +40,7 @@ from ...config.generation.videos import (
 
 if TYPE_CHECKING:
     from ...types import Json
-    from .jobs import JobStore
+    from .records import TaskStore
     from collections.abc import Mapping
     from ...types.tasks import TaskRequest
     from ...types.settings import Settings, Configuration
@@ -60,18 +60,18 @@ async def _wait_settled[T](task: asyncio.Task[T]) -> bool:
     return is_cancelled
 
 
-async def _delete_queued_task(job: TaskJob, jobs: JobStore, configuration: Configuration) -> None:
+async def _delete_queued_task(record: TaskRecord, tasks: TaskStore, configuration: Configuration) -> None:
     """Cancel a queued task, which bills nothing, and delete its record once ModelArk accepts.
 
     ModelArk refuses when the task started in the meantime. The person asked to stop, so the refusal is not raised,
     and the record stays: it is how the paid task's output is collected later.
     """
     try:
-        await send_task_cancel(job.job_id, configuration)
-    except ByteplusError:
+        await send_task_cancel(record.task_id, configuration)
+    except BytePlusError:
         return
     else:
-        await asyncio.to_thread(jobs.delete, job.job_id)
+        await asyncio.to_thread(tasks.delete, record.task_id)
 
 
 def _read_task_id(document: Json) -> str:
@@ -79,9 +79,9 @@ def _read_task_id(document: Json) -> str:
     try:
         reply = TaskCreateReply.model_validate(document)
     except ValidationError:
-        raise ByteplusError(ErrorCode.UNCERTAIN, TASK_UNRECORDED) from None
+        raise BytePlusError(ErrorCode.UNCERTAIN, TASK_UNRECORDED) from None
     if TASK_ID.match(reply.id) is None:
-        raise ByteplusError(ErrorCode.UNCERTAIN, TASK_UNRECORDED)
+        raise BytePlusError(ErrorCode.UNCERTAIN, TASK_UNRECORDED)
     return reply.id
 
 
@@ -90,10 +90,10 @@ def _parse_task_reply(document: Json) -> TaskReply:
     try:
         return TaskReply.model_validate(document)
     except ValidationError:
-        raise ByteplusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE) from None
+        raise BytePlusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE) from None
 
 
-def _build_ended_failure(job: TaskJob, reply: TaskReply) -> ByteplusError:
+def _build_ended_failure(record: TaskRecord, reply: TaskReply) -> BytePlusError:
     """Build the error of a task that ended without files: failed, cancelled, or expired, none of which is billed.
 
     A failed task's code chooses its message, such as a moderation refusal, with ModelArk's cleaned reason.
@@ -102,19 +102,21 @@ def _build_ended_failure(job: TaskJob, reply: TaskReply) -> ByteplusError:
         error = reply.error
         return build_failure(None, error.code if error else None, error.message if error else "")
     template = TASK_CANCELLED if reply.status == "cancelled" else TASK_EXPIRED
-    return ByteplusError(ErrorCode.UNAVAILABLE, template.format(task=TASK_NAMES[job.kind], node=KIND_NODES[job.kind]))
+    return BytePlusError(
+        ErrorCode.UNAVAILABLE, template.format(task=TASK_NAMES[record.kind], node=KIND_NODES[record.kind])
+    )
 
 
 class TaskDownloadOperation:
     """Wait for one recorded task and download what it made; status checks, cancels, and downloads bill nothing."""
 
-    def __init__(self, job: TaskJob, jobs: JobStore, last_status: str | None = None) -> None:
+    def __init__(self, record: TaskRecord, tasks: TaskStore, last_status: str | None = None) -> None:
         """Keep the record, the store that deletes it, and the last status seen: queued right after the create request.
 
         A recorded task's status is unknown until the first check.
         """
-        self.job = job
-        self.jobs = jobs
+        self.record = record
+        self.tasks = tasks
         self.last_status = last_status
 
     async def _wait_for_end(self, configuration: Configuration) -> TaskReply:
@@ -124,16 +126,16 @@ class TaskDownloadOperation:
         """
         seconds = configuration.settings.request_timeout_seconds
         deadline = time.monotonic() + seconds
-        url = f"{ENDPOINT_URLS['tasks']}/{self.job.job_id}"
+        url = f"{ENDPOINT_URLS['tasks']}/{self.record.task_id}"
         while True:
             reply = _parse_task_reply(await send_lookup(url, configuration))
             self.last_status = reply.status
             if reply.status in DONE_STATUSES:
                 return reply
             if time.monotonic() >= deadline:
-                kind = self.job.kind
+                kind = self.record.kind
                 message = TASK_WAIT_LIMIT.format(task=TASK_NAMES[kind], seconds=seconds, node=DOWNLOAD_NODES[kind])
-                raise ByteplusError(ErrorCode.TIMEOUT, message)
+                raise BytePlusError(ErrorCode.TIMEOUT, message)
             await asyncio.sleep(POLL_INTERVAL_SECONDS)
 
     async def _download_outputs(self, reply: TaskReply, configuration: Configuration) -> dict[str, OutputFile]:
@@ -141,7 +143,7 @@ class TaskDownloadOperation:
         content: dict[str, str | None] = reply.content.model_dump() if reply.content is not None else {}
         addresses = {field: address for field, address in content.items() if address}
         if not addresses:
-            raise ByteplusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE)
+            raise BytePlusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE)
         return {
             field: OutputFile(await download_output(address, configuration.settings), address)
             for field, address in addresses.items()
@@ -156,51 +158,51 @@ class TaskDownloadOperation:
         A cancel while the last status seen is queued cancels the task. A cancel while it runs, or before its status
         is known, sends nothing and keeps the record, since a started task runs on and is billed.
         """
-        job = self.job
-        if datetime.now(UTC) >= datetime.fromisoformat(job.submitted_at) + timedelta(seconds=TASK_RETENTION_SECONDS):
-            await asyncio.to_thread(self.jobs.delete, job.job_id)
-            raise ByteplusError(ErrorCode.UNAVAILABLE, TASK_GONE)
+        record = self.record
+        if datetime.now(UTC) >= datetime.fromisoformat(record.submitted_at) + timedelta(seconds=TASK_RETENTION_SECONDS):
+            await asyncio.to_thread(self.tasks.delete, record.task_id)
+            raise BytePlusError(ErrorCode.UNAVAILABLE, TASK_GONE)
         try:
             reply = await self._wait_for_end(configuration)
         except asyncio.CancelledError:
             if self.last_status == CANCELLABLE_STATUS:
-                await _wait_settled(asyncio.create_task(_delete_queued_task(job, self.jobs, configuration)))
+                await _wait_settled(asyncio.create_task(_delete_queued_task(record, self.tasks, configuration)))
             raise
         if reply.status != "succeeded":
-            await asyncio.to_thread(self.jobs.delete, job.job_id)
-            raise _build_ended_failure(job, reply)
+            await asyncio.to_thread(self.tasks.delete, record.task_id)
+            raise _build_ended_failure(record, reply)
         if time.time() >= reply.updated_at + OUTPUT_LIFETIME_SECONDS:
-            await asyncio.to_thread(self.jobs.delete, job.job_id)
-            raise ByteplusError(ErrorCode.UNAVAILABLE, TASK_FILES_EXPIRED)
+            await asyncio.to_thread(self.tasks.delete, record.task_id)
+            raise BytePlusError(ErrorCode.UNAVAILABLE, TASK_FILES_EXPIRED)
         outputs = await self._download_outputs(reply, configuration)
         # The record goes only after every download, so a failed download can be collected again.
-        await asyncio.to_thread(self.jobs.delete, job.job_id)
-        return TaskResult(job, outputs, reply.created_at, reply.updated_at)
+        await asyncio.to_thread(self.tasks.delete, record.task_id)
+        return TaskResult(record, outputs, reply.created_at, reply.updated_at)
 
 
 class TaskOperation:
     """One video or 3D task, sent once and recorded as soon as ModelArk accepts it."""
 
-    def __init__(self, request: TaskRequest, jobs: JobStore) -> None:
+    def __init__(self, request: TaskRequest, tasks: TaskStore) -> None:
         """Keep the request to check and send, and the store its task is recorded in."""
         self.request = request
-        self.jobs = jobs
+        self.tasks = tasks
 
-    async def _create_job(self, body: Mapping[str, Json], configuration: Configuration) -> TaskJob:
+    async def _create_record(self, body: Mapping[str, Json], configuration: Configuration) -> TaskRecord:
         """Send the create request once, and record the task before anything waits for it."""
         request = self.request
         submitted_at = datetime.now(UTC).isoformat()
-        job_id = _read_task_id(await send_json(ENDPOINT_URLS["tasks"], body, configuration))
-        job = TaskJob(
+        task_id = _read_task_id(await send_json(ENDPOINT_URLS["tasks"], body, configuration))
+        record = TaskRecord(
             version=1,
-            job_id=job_id,
+            task_id=task_id,
             kind=request.kind,
             model_id=request.model_id,
             submitted_at=submitted_at,
             is_draft=request.is_draft,
         )
-        await asyncio.to_thread(self.jobs.save, job)
-        return job
+        await asyncio.to_thread(self.tasks.save, record)
+        return record
 
     def validate(self, settings: Settings) -> None:
         """Run the checks of the task's kind that need no model row, the upload limit included."""
@@ -213,13 +215,13 @@ class TaskOperation:
         cancelled while it is still queued, rather than left running without a record.
         """
         body = self.request.build_body()
-        creating = asyncio.create_task(self._create_job(body, configuration))
+        creating = asyncio.create_task(self._create_record(body, configuration))
         is_cancelled = await _wait_settled(creating)
-        job = creating.result()
+        record = creating.result()
         if is_cancelled:
-            await _wait_settled(asyncio.create_task(_delete_queued_task(job, self.jobs, configuration)))
+            await _wait_settled(asyncio.create_task(_delete_queued_task(record, self.tasks, configuration)))
             raise asyncio.CancelledError
-        return await TaskDownloadOperation(job, self.jobs, last_status=CANCELLABLE_STATUS).send(configuration)
+        return await TaskDownloadOperation(record, self.tasks, last_status=CANCELLABLE_STATUS).send(configuration)
 
 
 __all__ = ["TaskDownloadOperation", "TaskOperation"]

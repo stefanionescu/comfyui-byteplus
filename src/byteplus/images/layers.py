@@ -13,7 +13,7 @@ from ..references import validate_references
 from ..models import find_model, validate_value
 from ..transport import send_json, download_output
 from ...config.messages.run import REPLY_UNREADABLE
-from ...types.errors import ErrorCode, ByteplusError
+from ...types.errors import ErrorCode, BytePlusError
 from ...types.references import Reference, OutputFile
 from ...config.generation.images import RESPONSE_FORMAT
 from ...types.images import Layer, LayerResult, EncodedImage
@@ -34,8 +34,10 @@ def _validate_layer_request(request: LayerRequest, match: ModelMatch[ImageRow]) 
     image = request.image
     if isinstance(image, Reference):
         validate_references((image,), ("image",), can_read_assets=False)
-    if request.prompt_mode is not None:
-        validate_value(match, "optimize prompt options", request.prompt_mode, match.row.image.prompt_modes)
+    if request.optimize_prompt_mode is not None:
+        validate_value(
+            match, "optimize prompt options", request.optimize_prompt_mode, match.row.image.optimize_prompt_modes
+        )
 
 
 def _build_layer_body(request: LayerRequest, match: ModelMatch[ImageRow]) -> dict[str, Json]:
@@ -55,8 +57,8 @@ def _build_layer_body(request: LayerRequest, match: ModelMatch[ImageRow]) -> dic
     }
     if request.prompt.strip():
         body["prompt"] = request.prompt
-    if request.prompt_mode is not None:
-        body["optimize_prompt_options"] = {"mode": request.prompt_mode}
+    if request.optimize_prompt_mode is not None:
+        body["optimize_prompt_options"] = {"mode": request.optimize_prompt_mode}
     return build_request_body(body, request.options, "layers", match.row)
 
 
@@ -76,7 +78,7 @@ def _list_layers(reply: ImageReply) -> tuple[str, list[tuple[str, tuple[int, int
         if item.url is not None and item.bounding_box is not None
     ]
     if len(bases) != 1 or bases[0] is None or len(layers) != len(items):
-        raise ByteplusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)
+        raise BytePlusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)
     return bases[0], layers
 
 

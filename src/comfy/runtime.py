@@ -1,10 +1,10 @@
 """Create the shared stores when ComfyUI loads the extension."""
 
-from ..config.storage import JOB_FILES
-from ..byteplus.tasks.jobs import JobStore
+from ..config.storage import TASK_FILES
+from ..byteplus.tasks.records import TaskStore
 from ..settings.store import ConfigurationStore
 from ..storage.files import choose_state_directory
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.messages.settings import RUNTIME_NOT_READY
 
 
@@ -13,19 +13,19 @@ class Runtime:
 
     Attributes:
         configuration: Private settings and the API key.
-        jobs: Recorded video and 3D tasks.
+        tasks: Recorded video and 3D tasks.
 
     """
 
-    __slots__ = ("configuration", "jobs")
+    __slots__ = ("configuration", "tasks")
 
     configuration: ConfigurationStore
-    jobs: JobStore
+    tasks: TaskStore
 
     def __init__(self) -> None:
         """Create the shared stores and place their state under one private directory."""
         self.configuration = ConfigurationStore(choose_state_directory())
-        self.jobs = JobStore(self.configuration.directory / JOB_FILES["FOLDER"])
+        self.tasks = TaskStore(self.configuration.directory / TASK_FILES["FOLDER"])
 
 
 _runtime: Runtime | None = None
@@ -41,7 +41,7 @@ def create_runtime() -> None:
 def get_runtime() -> Runtime:
     """Reject execution before the host has loaded the extension."""
     if _runtime is None:
-        raise ByteplusError(ErrorCode.CONFIGURATION, RUNTIME_NOT_READY)
+        raise BytePlusError(ErrorCode.CONFIGURATION, RUNTIME_NOT_READY)
     return _runtime
 
 

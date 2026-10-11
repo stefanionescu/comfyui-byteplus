@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from ..types.replies import ModelListReply
 from ..config.byteplus import ENDPOINT_URLS
 from ..types.models import ChatRow, ModelMatch
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.messages.models import MODEL_SHUT_DOWN
 from ..config.generation.chat import LISTED_SHUT_DOWN, LISTED_CHAT_DOMAINS
 
@@ -31,7 +31,7 @@ async def _read_listing(configuration: Configuration) -> Mapping[str, ListedMode
     if not _LISTED_MODELS:
         try:
             reply = ModelListReply.model_validate(await send_lookup(ENDPOINT_URLS["models"], configuration))
-        except (ByteplusError, ValidationError):
+        except (BytePlusError, ValidationError):
             return {}
         _LISTED_MODELS.update((model.id, model) for model in reply.models)
     return _LISTED_MODELS
@@ -54,7 +54,7 @@ def _build_row(listed: ListedModel) -> ChatRow:
                 "thinking": (),
                 "has_effort": False,
                 "has_temperature": True,
-                "answer_formats": tuple(name for name, is_offered in offered.items() if is_offered),
+                "response_formats": tuple(name for name, is_offered in offered.items() if is_offered),
             },
         }
     )
@@ -70,7 +70,7 @@ async def find_listed_chat_model(model_id: str, configuration: Configuration) ->
     if listed is None or listed.domain not in LISTED_CHAT_DOMAINS or "text" not in listed.modalities.output_modalities:
         return None
     if listed.status == LISTED_SHUT_DOWN:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MODEL_SHUT_DOWN.format(model=model_id))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_SHUT_DOWN.format(model=model_id))
     return ModelMatch(model_id=model_id, row=_build_row(listed), matched="listing")
 
 

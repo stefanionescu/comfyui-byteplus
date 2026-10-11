@@ -34,13 +34,13 @@ FRAMES_BESIDE_REFERENCES = (
 )
 
 IMAGE_COUNT_SINGLE = (
-    "{model} makes one image per run. Set max images to 1, or choose a model that makes image series; Model: Info "
-    "shows which do."
+    "{model} makes one image per run. Set max images to 1, or choose a model that takes sequential image generation; "
+    "Model: Info shows which do."
 )
 
 IMAGE_SINGLE = "Connect one image to {input}, not a batch or a list."
 
-IMAGE_SIZE = "{model} takes size {tiers}, or WIDTHxHEIGHT such as 2048x2048. Leave it empty for the model's default."
+IMAGE_SIZE = "{model} takes size {sizes}, or WIDTHxHEIGHT such as 2048x2048. Leave it empty for the model's default."
 
 JSON_SCHEMA_INVALID = "Write the JSON schema as a JSON object with a name and a schema."
 

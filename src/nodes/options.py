@@ -7,8 +7,8 @@ from comfy_api.latest import io
 from types import MappingProxyType
 from ..types.options import Options
 from ..types.parsing import parse_fields
-from ..config.byteplus import TIER_CHOICES
 from ..config.messages.inputs import OPTIONS_JSON
+from ..config.byteplus import SERVICE_TIER_CHOICES
 from ..config.generation.inputs import MODEL_DEFAULT
 from ..config.namespace import NODE_PREFIX, MENUS, SOCKET_TYPES
 
@@ -19,10 +19,10 @@ class RequestOptions(io.ComfyNode):
     @classmethod
     def define_schema(cls) -> io.Schema:
         """Offer the service tier, model default or flex, and the extra fields as one JSON object."""
-        tier = io.Combo.Input(
+        service_tier = io.Combo.Input(
             "service_tier",
             display_name="service tier",
-            options=list(TIER_CHOICES),
+            options=list(SERVICE_TIER_CHOICES),
             default=MODEL_DEFAULT,
             tooltip="flex asks for ModelArk's lower-cost tier, which queues requests until it has room. Only some "
             "chat and Seedance 1.x models take it; Model: Info shows which.",
@@ -42,7 +42,7 @@ class RequestOptions(io.ComfyNode):
             display_name="Request Options",
             category=MENUS["SHARED"],
             description="Choose the service tier and extra request fields for any BytePlus node.",
-            inputs=[tier, extra_fields],
+            inputs=[service_tier, extra_fields],
             outputs=[io.Custom(SOCKET_TYPES["OPTIONS"]).Output("options", display_name="options")],
         )
 
@@ -51,7 +51,7 @@ class RequestOptions(io.ComfyNode):
     def execute(cls, *, service_tier: str, extra_fields: str) -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
         """Check the extra fields before any request; a paid node checks the rest when it merges them."""
         options = Options(
-            tier=None if service_tier == MODEL_DEFAULT else service_tier,
+            service_tier=None if service_tier == MODEL_DEFAULT else service_tier,
             extra_fields=MappingProxyType(parse_fields(extra_fields, OPTIONS_JSON.format(field="extra fields")) or {}),
         )
         return io.NodeOutput(options)

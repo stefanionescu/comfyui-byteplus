@@ -34,7 +34,9 @@ _CONTROLS = (
     io.String.Input(
         "size",
         default="",
-        tooltip="A tier such as 2K, or pixels such as 2048x1152; empty leaves it to the model. Model: Info lists both.",
+        tooltip=(
+            "A size such as 2K, or pixels such as 2048x1152; empty leaves it to the model. Model: Info lists the sizes."
+        ),
     ),
     io.Int.Input(
         "max_images",
@@ -43,8 +45,8 @@ _CONTROLS = (
         min=1,
         max=MAX_IMAGES["MAX"],
         tooltip=(
-            "The most images to make. Above 1, only models that make image series take it, and the prompt must ask "
-            'for that many, such as "Generate 4 images of a lighthouse".'
+            "The most images to make. Above 1, only models with sequential image generation take it, and the prompt "
+            'must ask for that many, such as "Generate 4 images of a lighthouse".'
         ),
     ),
     io.Combo.Input(
@@ -145,7 +147,7 @@ class ImageGenerate(PaidNode):
                 max_images=max_images,
                 background=None if background == MODEL_DEFAULT else background,
                 output_format=None if output_format == MODEL_DEFAULT else output_format,
-                prompt_mode=None if optimize_prompt_options == MODEL_DEFAULT else optimize_prompt_options,
+                optimize_prompt_mode=None if optimize_prompt_options == MODEL_DEFAULT else optimize_prompt_options,
                 has_watermark=watermark,
                 options=options,
             )

@@ -30,12 +30,12 @@ from ...config.generation.videos import (
     SEED,
     RATIOS,
     DURATION,
-    TASK_TYPES,
     AUDIO_VALUES,
     AUDIO_CHOICES,
     OUTPUT_FORMATS,
     RESOLUTION_CHOICES,
     RESOLUTION_DEFAULT,
+    OMNI_REFERENCE_TASK_TYPES,
 )
 
 if TYPE_CHECKING:
@@ -77,7 +77,7 @@ _CONTROLS = (
     io.Combo.Input(
         "omni_reference_task_type",
         display_name="omni reference task type",
-        options=list(TASK_TYPES),
+        options=list(OMNI_REFERENCE_TASK_TYPES),
         default="auto",
         tooltip=(
             "What Seedance 2.5 does with reference media: follow it, edit a reference video, or extend one. Auto "
@@ -178,8 +178,8 @@ def build_video_outputs(result: TaskResult) -> io.NodeOutput:
     video = result.outputs["video_url"]
     frame = result.outputs.get("last_frame_url")
     references: tuple[Reference, ...]
-    if result.job.is_draft:
-        references = (build_output_reference("draft", result.job.job_id, result.created_at),)
+    if result.record.is_draft:
+        references = (build_output_reference("draft", result.record.task_id, result.created_at),)
     else:
         references = (build_output_reference("video", video.address, result.created_at),)
         if frame is not None:
@@ -264,8 +264,8 @@ class VideoGenerate(PaidNode):
                 duration=duration,
                 resolution=resolution,
                 ratio=None if ratio == MODEL_DEFAULT else ratio,
-                has_sound=AUDIO_VALUES.get(generate_audio),
-                task_type=omni_reference_task_type,
+                has_audio=AUDIO_VALUES.get(generate_audio),
+                omni_reference_task_type=omni_reference_task_type,
                 is_draft=draft,
                 is_camera_fixed=camera_fixed,
                 output_format=None if output_format == MODEL_DEFAULT else output_format,
@@ -278,7 +278,7 @@ class VideoGenerate(PaidNode):
                 seed=seed,
                 options=options,
             )
-            operation = build_video_operation(request, get_runtime().jobs)
+            operation = build_video_operation(request, get_runtime().tasks)
             return await send_request(operation, build_video_outputs, cls.hidden.unique_id)
 
         return await wait_for_task(asyncio.create_task(send_encoded()))

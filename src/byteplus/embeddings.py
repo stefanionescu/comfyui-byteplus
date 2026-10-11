@@ -16,7 +16,7 @@ from ..types.search import EmbeddingResult
 from ..config.byteplus import ENDPOINT_URLS
 from ..config.units import BYTES_PER_MEGABYTE
 from ..config.messages.run import REPLY_UNREADABLE
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from .operation import validate_upload_size, measure_encoded_bytes
 from ..config.generation.search import IMAGE_SHAPE, MAX_TEXT_BYTES, MAX_VIDEO_BYTES
 from ..config.messages.inputs import (
@@ -43,17 +43,17 @@ def _validate_items(request: EmbeddingRequest) -> None:
     """
     for number, text in enumerate(request.texts, 1):
         if len(text.encode()) > MAX_TEXT_BYTES:
-            raise ByteplusError(ErrorCode.INVALID_INPUT, SEARCH_TEXT_SIZE.format(number=number))
+            raise BytePlusError(ErrorCode.INVALID_INPUT, SEARCH_TEXT_SIZE.format(number=number))
     for number, image in enumerate(request.images, 1):
         short_side, long_side = sorted((image.width, image.height))
         if short_side < IMAGE_SHAPE["MIN_SIDE"] or long_side > IMAGE_SHAPE["MAX_ASPECT"] * short_side:
             message = SEARCH_IMAGE_SHAPE.format(number=number, width=image.width, height=image.height)
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     for number, url in enumerate(request.video_urls, 1):
         size = measure_encoded_bytes(url)
         if size > MAX_VIDEO_BYTES:
             shown = math.ceil(size * 10 / BYTES_PER_MEGABYTE) / 10
-            raise ByteplusError(ErrorCode.INVALID_INPUT, SEARCH_VIDEO_SIZE.format(number=number, size=shown))
+            raise BytePlusError(ErrorCode.INVALID_INPUT, SEARCH_VIDEO_SIZE.format(number=number, size=shown))
 
 
 def _validate_row(request: EmbeddingRequest, match: ModelMatch[EmbeddingRow]) -> None:
@@ -61,7 +61,7 @@ def _validate_row(request: EmbeddingRequest, match: ModelMatch[EmbeddingRow]) ->
     choices = match.row.embedding.dimensions
     if request.dimensions is not None and request.dimensions not in choices:
         listed = " or ".join(str(choice) for choice in choices)
-        raise ByteplusError(ErrorCode.INVALID_INPUT, SEARCH_DIMENSIONS.format(model=match.model_id, choices=listed))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, SEARCH_DIMENSIONS.format(model=match.model_id, choices=listed))
 
 
 def _list_items(request: EmbeddingRequest) -> tuple[Json, ...]:
@@ -97,9 +97,9 @@ def _parse_vector(document: Json, vectors: Sequence[tuple[float, ...]]) -> tuple
     try:
         vector = EmbeddingReply.model_validate(document).vector.embedding
     except ValidationError:
-        raise ByteplusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE) from None
+        raise BytePlusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE) from None
     if not vector or (vectors and len(vector) != len(vectors[0])):
-        raise ByteplusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)
+        raise BytePlusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)
     return vector
 
 
@@ -133,7 +133,7 @@ class EmbeddingOperation:
         """
         request = self.request
         if not (request.texts or request.images or request.video_urls):
-            raise ByteplusError(ErrorCode.INVALID_INPUT, SEARCH_ITEMS_EMPTY)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, SEARCH_ITEMS_EMPTY)
         _validate_items(request)
         validate_upload_size((*(image.url for image in request.images), *request.video_urls), settings)
 
@@ -152,11 +152,11 @@ class EmbeddingOperation:
             try:
                 document = await send_json(ENDPOINT_URLS["embeddings"], body, configuration)
                 vectors.append(_parse_vector(document, vectors))
-            except ByteplusError as error:
+            except BytePlusError as error:
                 if len(bodies) == 1:
                     raise
                 message = SEARCH_ITEM_STOPPED.format(number=number, count=len(bodies), message=str(error))
-                raise ByteplusError(error.code, message) from None
+                raise BytePlusError(error.code, message) from None
         return EmbeddingResult(tuple(vectors), _build_similarities(vectors))
 
 

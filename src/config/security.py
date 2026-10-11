@@ -26,7 +26,7 @@ PROXY_HEADER_PREFIX = "x-forwarded-"
 CROSS_SITE_FETCHES = ("cross-site", "same-site")
 
 # The settings dialog sends this header with every change; a plain form or link cannot.
-CHANGE_HEADER = "X-Byteplus-Comfy"
+CHANGE_HEADER = "X-BytePlus-Comfy"
 
 # Every reply is JSON.
 JSON_MEDIA_TYPE = "application/json"

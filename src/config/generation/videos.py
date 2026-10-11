@@ -34,7 +34,7 @@ AUDIO_VALUES = {"true": True, "false": False}
 
 # The omni_reference_task_type values: what Seedance 2.5 does with reference media. auto, ModelArk's default, sends
 # nothing and lets the model decide.
-TASK_TYPES = ("auto", "reference", "edit", "extend")
+OMNI_REFERENCE_TASK_TYPES = ("auto", "reference", "edit", "extend")
 
 # The task types that keep the shape of the reference video, so they take only the adaptive ratio.
 ADAPTIVE_TASK_TYPES = ("edit", "extend")
@@ -55,10 +55,10 @@ DONE_STATUSES = ("succeeded", "failed", "cancelled", "expired")
 CANCELLABLE_STATUS = "queued"
 
 # A Download node lists each recorded task as its ID, model, and submit time, joined by this separator.
-JOB_LABEL_SEPARATOR = " · "
+TASK_LABEL_SEPARATOR = " · "
 
 # The submit time to the minute, the first 16 characters of the ISO time.
-JOB_TIME_CHARACTERS = 16
+TASK_TIME_CHARACTERS = 16
 
 __all__ = [
     "ADAPTIVE_RATIO",
@@ -69,14 +69,14 @@ __all__ = [
     "DONE_STATUSES",
     "DRAFT_RESOLUTION",
     "DURATION",
-    "JOB_LABEL_SEPARATOR",
-    "JOB_TIME_CHARACTERS",
+    "OMNI_REFERENCE_TASK_TYPES",
     "OUTPUT_FORMATS",
     "POLL_INTERVAL_SECONDS",
     "RATIOS",
     "RESOLUTION_CHOICES",
     "RESOLUTION_DEFAULT",
     "SEED",
+    "TASK_LABEL_SEPARATOR",
     "TASK_RETENTION_SECONDS",
-    "TASK_TYPES",
+    "TASK_TIME_CHARACTERS",
 ]

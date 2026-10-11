@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from ...types.images import EncodedImage
 from ..operation import validate_upload_size
 from ...config.patterns import VIDEO_COMMAND_PATTERN
-from ...types.errors import ErrorCode, ByteplusError
+from ...types.errors import ErrorCode, BytePlusError
 from ...config.generation.videos import ADAPTIVE_TASK_TYPES
 from ...config.messages.inputs import (
     DRAFT_ALONE,
@@ -33,27 +33,29 @@ def _validate_draft(request: VideoRequest) -> None:
     """Refuse a draft to finish beside anything else, more than one, or with draft on; ModelArk reuses the rest."""
     drafts = [reference for reference in request.references if reference.kind == "draft"]
     if len(drafts) > 1:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DRAFT_SINGLE.format(count=len(drafts)))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DRAFT_SINGLE.format(count=len(drafts)))
     has_frames = request.first_frame is not None or request.last_frame is not None
     if request.prompt.strip() or has_frames or request.images or request.clips or len(request.references) > 1:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DRAFT_ALONE)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DRAFT_ALONE)
     if request.is_draft:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DRAFT_TWICE)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, DRAFT_TWICE)
 
 
 def _validate_sources(request: VideoRequest, mode: str) -> None:
     """Refuse a request with nothing to make a video from, frames beside reference media, and a task without them."""
     if mode == "text" and not request.prompt.strip() and request.last_frame is None:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, VIDEO_EMPTY)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, VIDEO_EMPTY)
     if request.last_frame is not None and request.first_frame is None:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, LAST_FRAME_ALONE)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, LAST_FRAME_ALONE)
     if request.first_frame is not None and (request.images or request.clips or request.references):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, FRAMES_BESIDE_REFERENCES)
-    if request.task_type != "auto" and mode != "references":
-        raise ByteplusError(ErrorCode.INVALID_INPUT, TASK_NEEDS_REFERENCES.format(task=request.task_type))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, FRAMES_BESIDE_REFERENCES)
+    if request.omni_reference_task_type != "auto" and mode != "references":
+        raise BytePlusError(
+            ErrorCode.INVALID_INPUT, TASK_NEEDS_REFERENCES.format(task=request.omni_reference_task_type)
+        )
     has_video = any(reference.kind == "video" for reference in request.references)
-    if request.task_type in ADAPTIVE_TASK_TYPES and not has_video:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, TASK_NEEDS_VIDEO.format(task=request.task_type))
+    if request.omni_reference_task_type in ADAPTIVE_TASK_TYPES and not has_video:
+        raise BytePlusError(ErrorCode.INVALID_INPUT, TASK_NEEDS_VIDEO.format(task=request.omni_reference_task_type))
 
 
 def choose_video_mode(request: VideoRequest) -> str:
@@ -71,7 +73,7 @@ def validate_video_request(request: VideoRequest, settings: Settings) -> None:
     """Refuse, before anything is sent, a request no model could take, and local media over the upload limit."""
     command = _VIDEO_COMMAND.search(request.prompt)
     if command is not None:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, PROMPT_COMMAND.format(command=command.group().strip()))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, PROMPT_COMMAND.format(command=command.group().strip()))
     mode = choose_video_mode(request)
     if mode == "draft":
         _validate_draft(request)

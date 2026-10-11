@@ -422,8 +422,8 @@
         {
             "pathRegexes": ["^web/scripts/settings/api\\.ts$"],
             "categories": ["properties", "functions"],
-            "names": ["X-Byteplus-Comfy"],
-            "allowedViolations": ["case"],
+            "names": ["X-BytePlus-Comfy"],
+            "allowedViolations": ["case", "banned-term"],
             "reason": "Local extension requests use this header name."
         },
         {

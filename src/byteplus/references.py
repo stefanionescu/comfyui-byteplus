@@ -6,14 +6,14 @@ from collections.abc import Sequence
 from ..config.units import SECONDS_PER_MINUTE
 from datetime import UTC, datetime, timedelta
 from ..config.patterns import ASSET_ID_PATTERN
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..types.references import Reference, ReferenceKind
 from ..config.messages.references import (
+    REFERENCE_URL,
     REFERENCE_KIND,
     REFERENCE_ASSET,
-    REFERENCE_SOURCE,
     REFERENCE_EXPIRED,
-    REFERENCE_SOURCE_EMPTY,
+    REFERENCE_URL_EMPTY,
     REFERENCE_DRAFT_EXPIRED,
     REFERENCE_ADDRESS_LENGTH,
 )
@@ -43,23 +43,23 @@ def _is_link(text: str) -> bool:
     return parts.scheme == LINK_SCHEME and bool(parts.hostname) and parts.username is None and parts.password is None
 
 
-def parse_reference_source(source: str, kind: ReferenceKind) -> Reference:
+def parse_reference_url(url: str, kind: ReferenceKind) -> Reference:
     """Parse what a person typed into Reference: Add: an asset ID, an asset:// URI, or a public https address.
 
     The asset ID is kept exactly as typed, since BytePlus treats IDs as opaque. Any other text, such as an http://
     or data: address, is refused.
     """
-    text = source.strip()
+    text = url.strip()
     if not text:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_SOURCE_EMPTY)
+        raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_URL_EMPTY)
     if len(text) > MAX_ADDRESS_CHARACTERS:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_ADDRESS_LENGTH.format(maximum=MAX_ADDRESS_CHARACTERS))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_ADDRESS_LENGTH.format(maximum=MAX_ADDRESS_CHARACTERS))
     match = _ASSET_ID.match(text)
     if match is not None:
         return Reference(kind, ASSET_URI_PREFIX + match.group(1), "asset", None)
     if _is_link(text):
         return Reference(kind, text, "link", None)
-    raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_SOURCE)
+    raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_URL)
 
 
 def validate_references(
@@ -77,13 +77,13 @@ def validate_references(
     for position, reference in enumerate(references, start=1):
         if reference.kind not in kinds:
             message = REFERENCE_KIND.format(kinds=", ".join(kinds), position=position, kind=reference.kind)
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, message)
         if reference.origin == "asset" and not can_read_assets:
-            raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_ASSET.format(position=position))
+            raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_ASSET.format(position=position))
         if reference.expires_at is not None and reference.expires_at < deadline:
             template = REFERENCE_DRAFT_EXPIRED if reference.kind == "draft" else REFERENCE_EXPIRED
             message = template.format(position=position, minutes=EXPIRY_MARGIN_SECONDS // SECONDS_PER_MINUTE)
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+            raise BytePlusError(ErrorCode.INVALID_INPUT, message)
 
 
 def build_output_reference(kind: ReferenceKind, address: str, created_at: int) -> Reference:
@@ -97,4 +97,4 @@ def build_output_reference(kind: ReferenceKind, address: str, created_at: int) -
     return Reference(kind, address, "output", expires_at)
 
 
-__all__ = ["build_output_reference", "parse_reference_source", "validate_references"]
+__all__ = ["build_output_reference", "parse_reference_url", "validate_references"]

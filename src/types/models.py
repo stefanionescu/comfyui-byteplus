@@ -19,7 +19,7 @@ class ChatLimits(Value):
         has_effort: Whether the model takes reasoning_effort; a model that does takes all seven values and maps some
             to others.
         has_temperature: Whether temperature takes effect; False where ModelArk fixes it and ignores the value.
-        answer_formats: The structured output modes: json_schema, json_object, both, or none.
+        response_formats: The structured output modes: json_schema, json_object, both, or none.
 
     """
 
@@ -28,28 +28,28 @@ class ChatLimits(Value):
     thinking: tuple[str, ...]
     has_effort: bool
     has_temperature: bool
-    answer_formats: tuple[str, ...]
+    response_formats: tuple[str, ...]
 
 
 class ImageLimits(Value):
     """The image controls one Seedream model takes.
 
     Attributes:
-        tiers: The size tiers the model takes.
-        has_series: Whether the model takes sequential_image_generation and max_images, so one request makes
-            several images.
+        sizes: The sizes the model takes by name, such as 2K; it takes any WIDTHxHEIGHT besides.
+        has_sequential_image_generation: Whether the model takes sequential_image_generation and max_images, so one
+            request makes several images.
         backgrounds: The background values the model takes beyond its default: transparent, or none.
         output_formats: The output_format values the model takes; empty when it always makes JPEG and takes no
             format.
-        prompt_modes: The optimize_prompt_options.mode values the model takes.
+        optimize_prompt_modes: The optimize_prompt_options.mode values the model takes.
 
     """
 
-    tiers: tuple[str, ...]
-    has_series: bool
+    sizes: tuple[str, ...]
+    has_sequential_image_generation: bool
     backgrounds: tuple[str, ...]
     output_formats: tuple[str, ...]
-    prompt_modes: tuple[str, ...]
+    optimize_prompt_modes: tuple[str, ...]
 
 
 class VideoLimits(Value):
@@ -66,8 +66,8 @@ class VideoLimits(Value):
         has_seed: Whether the model takes seed (-1 to 2,147,483,647).
         has_fixed_camera: Whether the model takes camera_fixed.
         output_formats: The output_format values the model takes; empty when it always makes MP4 and takes no format.
-        task_types: The omni_reference_task_type values the model takes; empty when it takes none.
-        draft_finishes: The resolutions a draft can be finished at; empty when the model makes no drafts.
+        omni_reference_task_types: The omni_reference_task_type values the model takes; empty when it takes none.
+        draft_resolutions: The resolutions a draft can be finished at; empty when the model makes no drafts.
 
     """
 
@@ -81,8 +81,8 @@ class VideoLimits(Value):
     has_seed: bool
     has_fixed_camera: bool
     output_formats: tuple[str, ...]
-    task_types: tuple[str, ...]
-    draft_finishes: tuple[str, ...]
+    omni_reference_task_types: tuple[str, ...]
+    draft_resolutions: tuple[str, ...]
 
 
 class EmbeddingLimits(Value):

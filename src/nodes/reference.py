@@ -5,9 +5,9 @@ from __future__ import annotations
 from comfy_api.latest import io
 from .inputs import REFERENCES_INPUT
 from typing import override, TYPE_CHECKING
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
+from ..byteplus.references import parse_reference_url
 from ..config.generation.references import ADDED_KINDS
-from ..byteplus.references import parse_reference_source
 from ..config.messages.references import REFERENCE_REPEATED
 from ..config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
 
@@ -20,7 +20,7 @@ class ReferenceAdd(io.ComfyNode):
 
     @classmethod
     def define_schema(cls) -> io.Schema:
-        """List the earlier references, the file's kind, and the asset ID or address."""
+        """List the earlier references, the file's kind, and its asset ID or address."""
         return io.Schema(
             node_id=f"{NODE_PREFIX}{cls.__name__}",
             display_name="Reference: Add",
@@ -38,14 +38,9 @@ class ReferenceAdd(io.ComfyNode):
                     tooltip="What the file is. A preset character is an image.",
                 ),
                 io.String.Input(
-                    "source",
-                    display_name="asset ID or address",
+                    "url",
                     default="",
-                    tooltip=(
-                        "A preset character's asset ID from the ModelArk Playground (Seedance 2.5, Digital characters "
-                        "tab), any asset:// URI, or a public https:// address. BytePlus allows content made with "
-                        "preset characters only for trying the models and internal use."
-                    ),
+                    tooltip="An asset ID, such as a preset character's, an asset:// URI, or a public https:// address.",
                 ),
             ],
             outputs=[io.Custom(SOCKET_TYPES["REFERENCES"]).Output("references", display_name="references")],
@@ -54,7 +49,7 @@ class ReferenceAdd(io.ComfyNode):
     @classmethod
     @override
     def execute(  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
-        cls, *, kind: ReferenceKind, source: str, references: tuple[Reference, ...] | None = None
+        cls, *, kind: ReferenceKind, url: str, references: tuple[Reference, ...] | None = None
     ) -> io.NodeOutput:
         """Parse the asset ID or address and add it after the earlier references.
 
@@ -62,10 +57,10 @@ class ReferenceAdd(io.ComfyNode):
         Expiry is checked by the paid node that sends the chain, when it sends it.
         """
         earlier = references or ()
-        reference = parse_reference_source(source, kind)
+        reference = parse_reference_url(url, kind)
         for position, known in enumerate(earlier, start=1):
             if known.kind == reference.kind and known.address == reference.address:
-                raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_REPEATED.format(position=position))
+                raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_REPEATED.format(position=position))
         return io.NodeOutput((*earlier, reference))
 
 

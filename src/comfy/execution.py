@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from comfy_api.latest import ComfyAPI
 from ..config.byteplus import CONSOLE_URLS
 from ..config.messages.run import REQUEST_TIMEOUT
-from ..types.errors import ErrorCode, ByteplusError
+from ..types.errors import ErrorCode, BytePlusError
 from ..config.execution import PROGRESS_STEPS, CANCELLATION_POLL_SECONDS
 from comfy.model_management import InterruptProcessingException, throw_exception_if_processing_interrupted
 
@@ -75,13 +75,13 @@ async def send_request[Result](
         outputs = await wait_for_thread(lambda: build_outputs(result))
         if node_id is not None:
             await progress.set_progress(PROGRESS_STEPS, PROGRESS_STEPS, node_id=node_id)
-    except ByteplusError as error:
+    except BytePlusError as error:
         if error.code is ErrorCode.INTERRUPTED:
             raise InterruptProcessingException from None
         raise
     except TimeoutError:
         seconds = configuration.settings.request_timeout_seconds
-        raise ByteplusError(ErrorCode.TIMEOUT, REQUEST_TIMEOUT.format(seconds=seconds, **CONSOLE_URLS)) from None
+        raise BytePlusError(ErrorCode.TIMEOUT, REQUEST_TIMEOUT.format(seconds=seconds, **CONSOLE_URLS)) from None
     return outputs
 
 

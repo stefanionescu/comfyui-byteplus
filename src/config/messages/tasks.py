@@ -4,7 +4,7 @@
 is the request timeout in BytePlus settings.
 """
 
-JOB_UNKNOWN = "Choose an unfinished task from the list. Press R in ComfyUI to refresh the list."
+TASK_UNKNOWN = "Choose an unfinished task from the list. Press R in ComfyUI to refresh the list."
 
 MESH_NOT_GLB = (
     "ModelArk returned a file that is not a GLB model, so ComfyUI cannot open it. The task finished and may be "
@@ -45,7 +45,6 @@ DOWNLOAD_NODES = {"videos": "Video: Download", "meshes": "3D: Download"}
 
 __all__ = [
     "DOWNLOAD_NODES",
-    "JOB_UNKNOWN",
     "MESH_NOT_GLB",
     "TASK_CANCELLED",
     "TASK_EXPIRED",
@@ -53,6 +52,7 @@ __all__ = [
     "TASK_GONE",
     "TASK_KIND",
     "TASK_NAMES",
+    "TASK_UNKNOWN",
     "TASK_UNRECORDED",
     "TASK_WAIT_LIMIT",
 ]

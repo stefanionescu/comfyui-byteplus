@@ -13,12 +13,12 @@ if TYPE_CHECKING:
     from collections.abc import Mapping, Callable
 
 
-class TaskJob(Value):
+class TaskRecord(Value):
     """One task ModelArk accepted, recorded before the first wait so a task that keeps running can be collected.
 
     Attributes:
         version: File format version; any other is refused.
-        job_id: ModelArk's task ID, which also names the record's file.
+        task_id: ModelArk's task ID, which also names the record's file.
         kind: The kind of node that made it, videos or meshes, which lists and collects it.
         model_id: The model ID as typed.
         submitted_at: When the create request was sent, in ISO 8601 and UTC.
@@ -27,7 +27,7 @@ class TaskJob(Value):
     """
 
     version: Literal[1]
-    job_id: str
+    task_id: str
     kind: Literal["videos", "meshes"]
     model_id: str
     submitted_at: str
@@ -59,17 +59,17 @@ class TaskResult:
     """What one finished task made.
 
     Attributes:
-        job: The task's record.
+        record: The task's record.
         outputs: Each downloaded file, keyed by its reply field: video_url, last_frame_url, or file_url.
         created_at: When ModelArk accepted the task, in Unix seconds.
         updated_at: When the task last changed status, in Unix seconds.
 
     """
 
-    job: TaskJob
+    record: TaskRecord
     outputs: Mapping[str, OutputFile]
     created_at: int
     updated_at: int
 
 
-__all__ = ["TaskJob", "TaskRequest", "TaskResult"]
+__all__ = ["TaskRecord", "TaskRequest", "TaskResult"]

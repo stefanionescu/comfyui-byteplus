@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Use this after you cancel a run of **Video: Generate** once its task has started, after the run times out, or after ComfyUI restarts while a video is being made. BytePlus keeps making the video. A task that was still queued when you cancelled was cancelled, and is not listed.\n\n1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. In **job**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R to list tasks started after the page loaded.\n3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\nA task leaves the list once its video is saved. BytePlus deletes a finished video's file after 24 hours."
+        "Use this after you cancel a run of **Video: Generate** once its task has started, after the run times out, or after ComfyUI restarts while a video is being made. BytePlus keeps making the video. A task that was still queued when you cancelled was cancelled, and is not listed.\n\n1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. In **task**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R to list tasks started after the page loaded.\n3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\nA task leaves the list once its video is saved. BytePlus deletes a finished video's file after 24 hours."
       ],
       "title": "Start Here"
     },
@@ -53,11 +53,11 @@
       "mode": 0,
       "inputs": [
         {
-          "name": "job",
+          "name": "task",
           "type": "COMBO",
           "link": null,
           "widget": {
-            "name": "job"
+            "name": "task"
           }
         }
       ],

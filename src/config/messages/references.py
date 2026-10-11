@@ -24,14 +24,12 @@ REFERENCE_KIND = "This node takes {kinds} references; reference {position} is {k
 
 REFERENCE_REPEATED = "This file is already reference {position} in the chain."
 
-REFERENCE_SOURCE = (
+REFERENCE_URL = (
     "Enter an asset ID (asset- then 14 digits, a dash, and 5 letters or digits), the same ID after asset://, or an "
     "address that starts with https://."
 )
 
-REFERENCE_SOURCE_EMPTY = (
-    "Paste a preset character's asset ID, an asset:// URI, or an https:// address into asset ID or address."
-)
+REFERENCE_URL_EMPTY = "Paste a preset character's asset ID, an asset:// URI, or an https:// address into url."
 
 __all__ = [
     "REFERENCE_ADDRESS_LENGTH",
@@ -40,6 +38,6 @@ __all__ = [
     "REFERENCE_EXPIRED",
     "REFERENCE_KIND",
     "REFERENCE_REPEATED",
-    "REFERENCE_SOURCE",
-    "REFERENCE_SOURCE_EMPTY",
+    "REFERENCE_URL",
+    "REFERENCE_URL_EMPTY",
 ]
