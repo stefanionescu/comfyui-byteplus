@@ -63,8 +63,8 @@ CHAT_ROWS = {
             "has_temperature": True,
             "answer_formats": SCHEMAS,
         },
-        "sources": (*CHAT_PAGES, "document-understanding", "online-inference-flex"),
-        "has_flex": True,
+        # The flex page lists this model, but ModelArk refused service_tier=flex for it on 2026-10-11.
+        "sources": (*CHAT_PAGES, "document-understanding"),
     },
     "seed-2-0-lite-260428": {
         "kinds": ("chat",),

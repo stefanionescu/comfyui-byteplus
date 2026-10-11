@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Upload a voice note in **Voice Note**: a recording of up to a few minutes.\n3. Press **Run**. The transcript and the action items are saved under `text/byteplus`.\n\nModels: Seed 2.0 mini, which reads audio, and Dola Seed 2.1 turbo. Activate them on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Upload a voice note in **Voice Note**: a recording of up to a few minutes.\n3. Press **Run**. The transcript and the action items are saved under `text/byteplus`.\n\nModels: Seed 2.0 mini, which reads audio, and DeepSeek V4 flash. Activate them on ModelArk's **Model activation** page."
       ],
       "title": "Start Here"
     },
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Dola Seed 2.1 turbo continues the same conversation: **conversation** carries the transcript, so the audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the list.\n\n**Request Options** sends this request at the flex tier, which BytePlus runs in a low-priority queue at a lower rate, so the answer can take several minutes. Only a few models take flex; **Model: Info** shows `\"flex\": true` for them."
+        "DeepSeek V4 flash continues the same conversation: **conversation** carries the transcript, so the audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the list.\n\n**Request Options** sends this request at the flex tier, which BytePlus runs in a low-priority queue at a lower rate, so the answer can take several minutes. Only a few models take flex; **Model: Info** shows `\"flex\": true` for them."
       ],
       "title": "Note"
     },
@@ -879,7 +879,7 @@
               "Node name for S&R": "BytePlusChatAsk"
             },
             "widgets_values": [
-              "dola-seed-2-1-turbo-260628",
+              "deepseek-v4-flash-ga-260731",
               "model default",
               "model default",
               0,

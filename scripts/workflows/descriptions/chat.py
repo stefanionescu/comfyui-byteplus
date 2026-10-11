@@ -12,7 +12,7 @@ from scripts.workflows.page.config import STAGE_COLOUR, TEXT_PREVIEW, IMAGE_PREV
 
 ASK = f"{NODE_PREFIX}ChatAsk"
 MINI = "seed-2-0-mini-260428"
-TURBO = "dola-seed-2-1-turbo-260628"
+DEEPSEEK = "deepseek-v4-flash-ga-260731"
 LISTING_SCHEMA = json.dumps(
     {
         "type": "object",
@@ -127,7 +127,7 @@ TRANSCRIBE = Subgraph(
 ACTIONS = Subgraph(
     name=SHARED_TEXTS["actions"],
     nodes=(
-        Node("ask", ASK, {"model": TURBO, "prompt": ACTIONS_PROMPT}, is_paid=True),
+        Node("ask", ASK, {"model": DEEPSEEK, "prompt": ACTIONS_PROMPT}, is_paid=True),
         Node("save", HostNode.SAVE_TEXT, {"filename_prefix": "text/byteplus/voice-note-actions", "format": "md"}),
     ),
     links=(("ask.text", "save.text"),),
