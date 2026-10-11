@@ -29,7 +29,7 @@ with the first.
 2. Connect **similarities** to **Preview as Text**.
 3. Select **Run**.
 
-Each item is its own request, sent one after another; if one fails, the rest
+Each item is its own request, sent one after another. If one fails, the rest
 are not sent.
 Example: **search-01-choose-a-hero-image**.
 

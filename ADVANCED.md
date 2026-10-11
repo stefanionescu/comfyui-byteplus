@@ -89,10 +89,10 @@ Change these in **BytePlus settings**. New requests use the saved values.
 
 ## Models
 
-ModelArk's model list gives an API key none of the settings an image, video,
-or 3D model takes, so the extension bundles a table of every model it knows:
-what each reads, and the settings and limits it takes. Before it sends, a paid
-node finds its model in the table and stops, before anything is paid, when:
+The extension bundles a table of every model it knows: what each model reads,
+and the settings and limits it takes. ModelArk's model list does not give these
+for image, video, or 3D models. Before it sends, a paid node finds its model in
+the table and stops, before anything is paid, when:
 
 - the ID is empty, is an endpoint ID (`ep-…`), belongs to no family in the
   table, or names a family without its six-digit version;
@@ -102,12 +102,15 @@ node finds its model in the table and stops, before anything is paid, when:
 - a setting is one the model does not take, or a value outside what it takes;
 - **Request Options** asks for flex on a model that does not take it.
 
-The message names what the model does take. A newer version of a known model,
-such as a future `seed-2-0-lite-261201`, is checked against the newest row of
-its family and sent as typed. A chat model newer than the extension still
-works: the node reads ModelArk's model list once per session and uses what it
-says the model reads, without **thinking**, **reasoning effort**, or PDFs.
-**Model: Info** returns the row a node uses, as JSON, for free.
+The message names what the model takes. A newer version of a known model,
+such as a future `seed-2-0-lite-261201`, is checked against its family's newest
+row and sent as typed. **Model: Info** returns the row a node uses, as JSON,
+for free.
+
+**Chat: Ask** also takes a chat model newer than the table. The node reads
+ModelArk's model list once per ComfyUI session and checks the media against
+what the list says the model reads. Such a model takes no **thinking**,
+**reasoning effort**, or PDFs.
 
 | Node                | Default model                       |
 | ------------------- | ----------------------------------- |
@@ -126,9 +129,9 @@ accepts these characters:
 - A preset character from ModelArk's digital character library, added with
   **Reference: Add**.
 - An image Seedream 5.0 drew from a prompt alone, or a Seedance 2.x video or
-  its last frame, for 30 days. Seedance trusts only the original file made
-  with your account, so connect the **references** output, not the decoded
-  image.
+  its last frame, made with your account in the last 30 days. Seedance trusts
+  only the original file, so connect the **references** output, not the
+  decoded image.
 - An asset from your ModelArk asset library, added by its ID with
   **Reference: Add**.
 
@@ -139,7 +142,7 @@ an asset (`asset://asset-…`); or a public `https://` address added with
 
 **Video: Generate** numbers media by kind, in the order it sends them: Image
 1, Image 2, Video 1, Audio 1. Images connected to **reference image** come
-first, then image references in chain order; audio works the same way, and
+first, then image references in chain order. Audio works the same way, and
 videos come only from references. **Reference: Add** puts its reference after
 the ones it receives. Name each file in the prompt by its place, such as "the
 person in Image 2".
@@ -150,29 +153,29 @@ person in Image 2".
 | Draft                                            | 7 days                                |
 | Asset                                            | Until it is deleted from your library |
 
-ModelArk takes a reference video only as a public address or an asset, so to
-edit or extend your own video, put it at a public address and add it with
+ModelArk takes a reference video only as a public address or an asset. To edit
+or extend your own video, put it at a public address and add it with
 **Reference: Add** as a video.
 
 ## Caching and reruns
 
 - Change **run number** to send the same request again.
-- **Video: Generate**'s **seed** starts **fixed**; set **control after
+- **Video: Generate**'s **seed** starts **fixed**. Set **control after
   generate** to **randomize** to send a new request each run.
 - Saving a different key invalidates the cached results; changing settings
   does not.
 - Every request is sent once.
-- Cancelling stops the wait only: a chat model still bills the tokens it
-  produced, and a video or 3D task keeps running.
+- Cancelling stops the wait. A chat model still bills the tokens it produced,
+  and a video or 3D task that has started keeps running.
 
 ## Recover a video or 3D task
 
 **Video: Generate** and **3D: Generate** record each task as soon as ModelArk
-accepts it. ModelArk usually starts a task at once, and the task runs to
-completion and is billed even when you cancel, ComfyUI restarts, or the
-**request timeout** passes. Collect it with **Video: Download** or **3D:
-Download** (press R to list new tasks). A task leaves the list once its file
-is downloaded, or when it fails, is cancelled, or expires.
+accepts it. ModelArk usually starts a task at once. The task then runs to the
+end and is billed even if you cancel, ComfyUI restarts, or the **request
+timeout** passes. Collect it with **Video: Download** or **3D: Download**
+(press R to list new tasks). A task leaves the list once its file is
+downloaded, or when it fails, is cancelled, or expires.
 
 ## Limits
 
@@ -184,41 +187,54 @@ reports. ModelArk refuses a request outside the model's limits.
 ## When a node stops
 
 Paid nodes check these before sending, along with the [model checks](#models).
+Every paid node stops when:
 
-**Chat: Ask** stops when the prompt is empty, the media are over the upload
-limit, the JSON schema is not a JSON object, or a reference is an asset,
-which only video takes.
+- Its media are over the upload limit.
+- A reference has expired, or is a kind the node does not take. Only
+  **Video: Generate** takes assets and drafts, and never as a frame.
+- An input other than its media receives a list of several values.
 
-**Chat: Attach Document** stops when no file is chosen or the file is outside
-the input folder, or when the file is not a PDF or text file, is over the
-upload limit, or is not UTF-8 text.
+**Chat: Ask** stops when the prompt is empty, or the JSON schema is not a JSON
+object.
 
-**Image: Generate** stops when the prompt is empty, a reference is an asset or
-has expired, an image is too large, or a transparent background asks for JPEG
-or lacks one reference image with transparency.
+**Chat: Attach Document** stops when:
+
+- No file is chosen, or the file is outside the input folder.
+- The file is not a PDF or text file, is over the upload limit, or is not UTF-8
+  text.
+
+**Image: Generate** stops when the prompt is empty, or a transparent background
+asks for JPEG or lacks exactly one reference image with transparency.
 
 **Image: Split Layers** stops when the image input holds no image or more than
 one.
 
-**Video: Generate** stops when there is no prompt, frame, or reference; frames
-and reference media are both connected; a frame holds more than one image; a
-reference has expired; or a draft is combined with other media.
+**Video: Generate** stops when:
 
-**Video: Download** stops when the chosen task is not recorded on this server.
+- There is no prompt, frame, or reference media.
+- A last frame is connected without a first frame.
+- Frames and reference media are both connected, or a frame holds more than one
+  image.
+- The prompt holds a setting the node's inputs set, such as `--duration 5`.
+- **omni reference task type** is `edit` or `extend` without a reference
+  video, or `reference` without reference media.
+- A draft to finish comes with a prompt, other media, or **draft** turned on.
 
-**Reference: Add** stops when **url** is empty, or is not an asset ID, an
-`asset://` URI, or an `https://` address.
+**Reference: Add** stops when **url** is empty, is not an asset ID, an
+`asset://` URI, or an `https://` address, or is already in the chain.
 
-**Search: Embed** stops when there are no items.
+**Search: Embed** stops when there are no items, or a line, image, or video is
+outside the sizes ModelArk embeds.
 
 **3D: Generate** stops when there is no prompt and no image, Hitem3D gets no
-image, or the prompt asks for a file format other than GLB.
+image, or the prompt is longer than Hyper3D reads or asks for a file format
+other than GLB.
 
-**3D: Download** stops when the chosen task is not recorded on this server.
+**Video: Download** and **3D: Download** stop when the chosen task is not
+recorded on this server.
 
 **Request Options** stops when **extra fields** is not a JSON object. A paid
-node stops when the options set a field the node sets itself, or flex for a
-model that does not take it.
+node stops when the options set a field the node sets itself.
 
 **Model: Info** stops on the IDs the [model checks](#models) refuse.
 
@@ -236,8 +252,8 @@ row = json.loads(output.args[0])
 
 - Call a node by its ID on a class clone with an empty hidden holder, as above.
   A called node leaves the calling node's progress bar alone.
-- Model: Info runs without an event loop; the paid nodes are coroutines and
-  are awaited.
+- **Model: Info**, **Reference: Add**, and **Request Options** return at once,
+  as above; await every other node.
 - A node that takes input lists, such as **Chat: Ask**, takes every input as a
   one-item list; only its media inputs hold several items.
 - Read a dropdown's choices from the node's schema, such as
@@ -409,7 +425,7 @@ checks all four.
 
 The README's and this guide's images are in `docs/images/`:
 
-- `banner.jpg` is generated artwork; replace it as a whole image in the same
+- `banner.jpg` is generated artwork. Replace it as a whole image in the same
   colors.
 - `node-map.svg` and the four `badge-*.svg` files are SVG files; edit them as
   text. They use ComfyUI's ink `#211927`, panels `#312C34`, edges `#413B45`,
@@ -502,8 +518,8 @@ starts and restart.
 
 ### This model is not activated on your BytePlus account
 
-Activate it on **Model activation**. Seedance 2.x needs at least 30 US dollars
-in credits, an AI Savings Plan, or a Seedance resource pack first.
+Activate it on **Model activation**. For Seedance 2.x, first meet the condition
+in the [requirements](README.md#requirements).
 
 ### ModelArk refused a reference that may show a real person
 

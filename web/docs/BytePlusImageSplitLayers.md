@@ -8,7 +8,7 @@ each person, object, and block of text, with Seedream 5.0 pro or flash.
 | Input                     | What it takes                                                                                                                                                                  |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `model`                   | A Seedream 5.0 pro or flash model ID; the default is `dola-seedream-5-0-flash-260915`.                                                                                         |
-| `size`                    | `1K`, `1.5K`, `2K`, or `auto`, which keeps each part near its own size, from 1K to 2K.                                                                                         |
+| `size`                    | `1K`, `1.5K`, `2K`, or `auto`, which keeps the input image's size, within 1K to 2K.                                                                                            |
 | `optimize_prompt_options` | `standard` or `fast`, sent as `optimize_prompt_options.mode`, on models that offer it.                                                                                         |
 | `watermark`               | Adds an AI-generated mark in the lower right corner.                                                                                                                           |
 | `image`                   | One image to split, or references that hold one, such as the **references** of **Image: Generate**.                                                                            |

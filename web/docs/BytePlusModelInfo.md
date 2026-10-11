@@ -1,6 +1,6 @@
 # Model: Info
 
-Shows what the extension knows about a BytePlus model ID: what the model
+Shows what the extension knows about a ModelArk model ID: what the model
 reads, makes, and takes, as JSON. It reads the model table bundled with the
 extension, so it is free and needs no key.
 
@@ -26,7 +26,7 @@ The paid nodes check each request against the same row before paying, so
 | matched      | `exact`, or `family`: a newer version than the table knows, checked against its family's newest row.                     |
 | kinds        | The nodes that take the model: `chat`, `image`, `layers`, `video`, `3d`, `embedding`.                                    |
 | family       | The model ID without its six-digit version, such as `seed-2-0-lite`.                                                     |
-| status       | `current`; `deprecated`, replaced by a newer version; or `retiring`, ending without one.                                 |
+| status       | `current`; `deprecated`, when a newer version replaces it; or `retiring`, when BytePlus stops it with no newer version.  |
 | deactivation | The date BytePlus stops serving the model, or `null`.                                                                    |
 | replacement  | The model BytePlus recommends instead, or `null`.                                                                        |
 | inputs       | What the model reads: `text`, `image`, `video`, `audio`, `pdf`.                                                          |

@@ -24,8 +24,8 @@ cancelled it, ComfyUI restarted, or it waited too long.
 2. Connect **video** to **Save Video**.
 3. Select **Run**.
 
-A task leaves the list once its video is downloaded, or when it failed, was
-cancelled, or expired. ModelArk deletes the files 24 hours after the task
+A task leaves the list once its video is downloaded, or when it fails, is
+cancelled, or expires. ModelArk deletes the files 24 hours after the task
 finishes. Example: **video-05-recover-a-video**.
 
 [ModelArk video task documentation](https://docs.byteplus.com/en/docs/modelark/get-video-generation-task-api)

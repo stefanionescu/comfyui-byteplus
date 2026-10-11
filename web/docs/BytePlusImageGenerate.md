@@ -5,24 +5,24 @@ outputs each image's ModelArk address as a reference.
 
 ## Inputs
 
-| Input                     | What it takes                                                                                                                                                                        |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `model`                   | Any Seedream model ID from the ModelArk model list; the default is `dola-seedream-5-0-flash-260915`.                                                                                 |
-| `size`                    | A size such as `2K`, or pixels such as `2048x1152`. Each model takes some sizes by name; **Model: Info** lists them. Empty leaves it to the model.                                   |
-| `max_images`              | The most images to make, 1 to 15. Above 1, only models with sequential image generation take it; ask for that many in the prompt, such as "Generate 4 images of …", or it makes one. |
-| `background`              | `transparent` keeps the transparency of one reference image that has it, such as one from **Join Image with Alpha**, and makes a PNG.                                                |
-| `output_format`           | `png` or `jpeg`. **model default** is JPEG. Seedream 4.5 and 4.0 always make JPEG.                                                                                                   |
-| `optimize_prompt_options` | `standard` or `fast`, sent as `optimize_prompt_options.mode`. Fast answers sooner with slightly lower quality, on models that offer it.                                              |
-| `watermark`               | Adds an AI-generated mark in the lower right corner.                                                                                                                                 |
-| `image`                   | Images to edit or combine: one, a batch, or a list, each at its own size. They are Image 1, Image 2, and so on, before any **references**.                                           |
-| `references`              | Image references from **Image: Generate**, **Video: Generate**, or **Reference: Add**. Assets are refused.                                                                           |
-| `run_number`              | Change it to send the same request again.                                                                                                                                            |
-| `prompt`                  | What to draw or change. Name references as Image 1, Image 2, and so on.                                                                                                              |
-| `options`                 | Settings from **Request Options**.                                                                                                                                                   |
+| Input                     | What it takes                                                                                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `model`                   | Any Seedream model ID from the ModelArk model list; the default is `dola-seedream-5-0-flash-260915`.                                                                                        |
+| `size`                    | A size such as `2K`, or pixels such as `2048x1152`. Each model takes some sizes by name; **Model: Info** lists them. Empty leaves it to the model.                                          |
+| `max_images`              | The most images to make, 1 to 15. Above 1, only models with sequential image generation take it. Ask for that many in the prompt, such as "Generate 4 images of …", or the model makes one. |
+| `background`              | `transparent` keeps the transparency of one reference image that has it, such as one from **Join Image with Alpha**, and makes a PNG.                                                       |
+| `output_format`           | `png` or `jpeg`. **model default** is JPEG. Seedream 4.5 and 4.0 always make JPEG.                                                                                                          |
+| `optimize_prompt_options` | `standard` or `fast`, sent as `optimize_prompt_options.mode`. Fast makes images sooner at slightly lower quality, on models that offer it.                                                  |
+| `watermark`               | Adds an AI-generated mark in the lower right corner.                                                                                                                                        |
+| `image`                   | Images to edit or combine: one, a batch, or a list, each at its own size. They are Image 1, Image 2, and so on, before any **references**.                                                  |
+| `references`              | Image references from **Image: Generate**, **Video: Generate**, or **Reference: Add**. Assets are refused.                                                                                  |
+| `run_number`              | Change it to send the same request again.                                                                                                                                                   |
+| `prompt`                  | What to draw or change. Name each image by its place, such as Image 1 or Image 2.                                                                                                           |
+| `options`                 | Settings from **Request Options**.                                                                                                                                                          |
 
-**model default** and an empty **size** send nothing. Before anything is paid,
-the node refuses a size, max images, background, or format the model does not
-take, naming what it does take.
+**model default** sends nothing. Before anything is paid, the node refuses a
+size, max images, background, or format the model does not take, naming what
+it does take.
 
 ## Outputs
 
