@@ -1,9 +1,9 @@
-# ![comfyui-byteplus: a ComfyUI extension that runs BytePlus ModelArk models](docs/images/banner.svg)
+# ![comfyui-byteplus: a ComfyUI extension that runs BytePlus ModelArk models](docs/images/brand/banner.svg)
 
-[![ComfyUI 0.37.2 or later](docs/images/badge-comfyui.svg)](#requirements)
-[![Frontend 1.52.7 or later](docs/images/badge-frontend.svg)](#requirements)
-[![Python 3.12 or later](docs/images/badge-python.svg)](#requirements)
-[![MIT license](docs/images/badge-license.svg)](LICENSE.md)
+[![ComfyUI 0.37.2 or later](docs/images/badges/comfyui.svg)](#requirements)
+[![Frontend 1.52.7 or later](docs/images/badges/frontend.svg)](#requirements)
+[![Python 3.12 or later](docs/images/badges/python.svg)](#requirements)
+[![MIT license](docs/images/badges/license.svg)](LICENSE.md)
 
 Run any BytePlus ModelArk model in ComfyUI with your own API key.
 
@@ -113,7 +113,7 @@ They are in **Browse Templates → comfyui-byteplus**. Start with each
 workflow's **Start Here** note. Most steps are subgraphs. Media inputs start
 empty, and most workflows draw their own inputs with Seedream.
 
-![Screenshot of video-01: the Start Here note and a note for each step sit above three groups. Input holds the Character and Scene prompts, Portrait holds the Portrait subgraph, which draws the character, and Animate holds the Animate subgraph, which starts the video on that character.](docs/images/workflow-animate-a-character.png)
+![Screenshot of video-01: the Start Here note and a note for each step sit above three groups. Input holds the Character and Scene prompts, Portrait holds the Portrait subgraph, which draws the character, and Animate holds the Animate subgraph, which starts the video on that character.](docs/images/screenshots/video-01-workflow.png)
 
 After an update, open the examples in a new tab to get the new versions.
 
@@ -121,7 +121,7 @@ After an update, open the examples in a new tab to get the new versions.
 
 The nodes are under **BytePlus** in the node menu, and each has a help page.
 
-![Node map: one card for each kind of node. Chat: Attach Document feeds Chat: Ask, and Image: Generate feeds Image: Split Layers. Reference: Add adds files to the references of the chat, image, video, and 3D nodes. Video: Download and 3D: Download collect tasks left running. Request Options and Model: Info are shared. A blue square marks a node that sends a paid request, and a hollow square one that bills nothing.](docs/images/node-map.svg)
+![Node map: one card for each kind of node. Chat: Attach Document feeds Chat: Ask, and Image: Generate feeds Image: Split Layers. Reference: Add adds files to the references of the chat, image, video, and 3D nodes. Video: Download and 3D: Download collect tasks left running. Request Options and Model: Info are shared. A blue square marks a node that sends a paid request, and a hollow square one that bills nothing.](docs/images/diagrams/node-map.svg)
 
 | Node                                                            | What it does                                                                                | Paid |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---- |
@@ -145,7 +145,7 @@ Each paid node takes any model ID from the
 including newer versions of the models the extension knows. **Model: Info**
 shows what a known model takes, for free and without a key.
 
-![Video: Generate on the canvas: sockets for first_frame, last_frame, reference_image, reference_audio, references, and options; model set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate_audio, omni_reference_task_type, draft, camera_fixed, output_format, watermark, seed, and run_number; and a prompt about a red fox in the snow.](docs/images/video-generate-node.png)
+![Video: Generate on the canvas: sockets for first_frame, last_frame, reference_image, reference_audio, references, and options; model set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate_audio, omni_reference_task_type, draft, camera_fixed, output_format, watermark, seed, and run_number; and a prompt about a red fox in the snow.](docs/images/screenshots/video-generate-node.png)
 
 Before sending, the node checks your request against the extension's own
 table of ModelArk models, and stops before anything is paid if the model

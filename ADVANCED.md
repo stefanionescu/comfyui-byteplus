@@ -80,7 +80,7 @@ owner-only permissions.
 
 Change these in **BytePlus Settings**. New requests use the saved values.
 
-![The BytePlus Settings dialog: Credentials with the ModelArk API key field, Save Key, and Clear Saved Key, and Request limits with Request timeout (seconds), Maximum upload size (MB), Maximum download size (MB), and Save Limits.](docs/images/settings-dialog.png)
+![The BytePlus Settings dialog: Credentials with the ModelArk API key field, Save Key, and Clear Saved Key, and Request limits with Request timeout (seconds), Maximum upload size (MB), Maximum download size (MB), and Save Limits.](docs/images/screenshots/settings-dialog.png)
 
 | Setting                        | Default | Range      | What it limits                                                         |
 | ------------------------------ | ------- | ---------- | ---------------------------------------------------------------------- |
@@ -428,27 +428,28 @@ checks all four.
 
 The README's and this guide's images are in `docs/images/`:
 
-- `banner.svg`, `node-map.svg`, and the four `badge-*.svg` files are SVG files;
-  edit them as text. They use black `#06080D`, surfaces `#10141B`, hairlines
-  `#232A35`, light text `#EEF3FF`, muted text `#8A93A3`, accent `#5C9DFF`, and
-  the blue gradient `#9CC4FF` to `#2F80FF`. Headings use Helvetica Neue with
-  tight spacing; labels use a monospace font in wide-spaced capitals.
-- `logo.png` is the extension's mark: a rounded node tile in BytePlus blue
+- `brand/banner.svg`, `diagrams/node-map.svg`, and the four `badges/*.svg`
+  files are SVG files; edit them as text. They use black `#06080D`, surfaces
+  `#10141B`, hairlines `#232A35`, light text `#EEF3FF`, muted text `#8A93A3`,
+  accent `#5C9DFF`, and the blue gradient `#9CC4FF` to `#2F80FF`. Headings use
+  Helvetica Neue with tight spacing; labels use a monospace font in wide-spaced
+  capitals.
+- `brand/logo.png` is the extension's mark: a rounded node tile in BytePlus blue
   `#0066FC`, with a plus cut out and an output socket on its right edge, at 400
   × 400 pixels on a transparent background. The banner draws the same mark, and
-  `pyproject.toml` names `logo.png` as the Registry icon.
+  `pyproject.toml` names `brand/logo.png` as the Registry icon.
 - The node map has one card for each kind of node. A blue square marks a node
   that sends a paid request and a hollow square one that bills nothing. A blue
   arrow runs from an output to the input it feeds.
 - The badges under the banner name the ComfyUI, frontend, and Python versions
   and the license, as black pills with a blue value; update them when those
   change.
-- `workflow-animate-a-character.png` is video-01 at 100% zoom, with link
+- `screenshots/video-01-workflow.png` is video-01 at 100% zoom, with link
   midpoint markers off.
-- `video-generate-node.png` is a new **Video: Generate** node, 420 pixels wide,
-  at 100% zoom, with a prompt typed in.
-- `settings-dialog.png` is the **BytePlus Settings** dialog with default
-  settings and a saved key.
+- `screenshots/video-generate-node.png` is a new **Video: Generate** node, 420
+  pixels wide, at 100% zoom, with a prompt typed in.
+- `screenshots/settings-dialog.png` is the **BytePlus Settings** dialog with
+  default settings and a saved key.
 
 Keep each image under 100 KB, and give it alt text.
 
