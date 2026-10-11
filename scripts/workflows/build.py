@@ -17,6 +17,7 @@ from scripts.workflows.descriptions.chat import CHAT_WORKFLOWS
 from scripts.workflows.page.sizes import measure, measure_note
 from scripts.workflows.descriptions.image import IMAGE_WORKFLOWS
 from scripts.workflows.descriptions.video import VIDEO_WORKFLOWS
+from scripts.workflows.descriptions.search import SEARCH_WORKFLOWS
 from scripts.workflows.page.layout import place_stacks, place_columns
 from scripts.workflows.page.serialize import (
     encode_links,
@@ -35,6 +36,7 @@ WORKFLOWS = (
     *CHAT_WORKFLOWS,
     *IMAGE_WORKFLOWS,
     *VIDEO_WORKFLOWS,
+    *SEARCH_WORKFLOWS,
 )
 
 

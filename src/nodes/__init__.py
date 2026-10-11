@@ -2,6 +2,7 @@
 
 from .model import ModelInfo
 from .chat.ask import ChatAsk
+from .search import SearchEmbed
 from comfy_api.latest import io
 from .options import RequestOptions
 from .reference import ReferenceAdd
@@ -19,6 +20,7 @@ NODE_TYPES: tuple[type[io.ComfyNode], ...] = (
     VideoGenerate,
     VideoDownload,
     ReferenceAdd,
+    SearchEmbed,
     RequestOptions,
     ModelInfo,
 )

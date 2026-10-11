@@ -210,6 +210,27 @@ WORKFLOW_TEXTS = {
             "A task leaves the list once its video is saved. BytePlus deletes a finished video's file after 24 hours."
         ),
     },
+    "search-01-choose-a-hero-image": {
+        "input": (
+            KEY_STEP + "2. Describe the product and the picture you need in **Brief**, in one line.\n"
+            "3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`.\n\n"
+            "Models: Seedream 4.0 and Skylark embedding vision. Activate them on ModelArk's **Model activation** page."
+        ),
+        "draw": "Seedream 4.0 draws a series of options from the brief, up to the four **count** allows.",
+        "draw_description": "Draws up to four options from the brief.",
+        "score": (
+            "Skylark embedding vision turns the brief and each option into an embedding, one request per item, and "
+            "compares each with the brief. **Scores** lists the brief first, compared with itself, then each option "
+            "in order; the highest after the first is the best match."
+        ),
+        "score_description": "Embeds the brief and the options, and compares each option with the brief.",
+        "choose": (
+            "**Choose** picks the best match with ComfyUI's own nodes: **Extract Text** reads each option's score, "
+            "**Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes "
+            "that option, which is saved under `image/byteplus`. A missing option scores -2, so it is never chosen."
+        ),
+        "choose_description": "Picks the option with the highest score and saves it.",
+    },
 }
 
 __all__ = ["WORKFLOW_TEXTS"]

@@ -90,6 +90,7 @@ From the folder that holds `ComfyUI` and `python_embeded`, in PowerShell:
 | [Video: Cast a Preset Character](example_workflows/video-03-cast-a-preset-character.json)       | A preset character's asset ID |
 | [Video: Draft, Then Finish](example_workflows/video-04-draft-then-finish.json)                  | A video description           |
 | [Video: Recover a Video](example_workflows/video-05-recover-a-video.json)                       | A video task left running     |
+| [Search: Choose a Hero Image](example_workflows/search-01-choose-a-hero-image.json)             | A brief                       |
 
 They are in **Browse Templates → comfyui-byteplus**. Start with each
 workflow's **Start Here** note; each step is a subgraph. Media inputs start
@@ -110,6 +111,7 @@ The nodes are under **BytePlus** in the node menu, and each has a help page.
 | [Video: Generate](web/docs/BytePlusVideoGenerate.md)            | Makes a video with Seedance from a prompt, frames, references, or a draft.        | Yes  |
 | [Video: Download](web/docs/BytePlusVideoDownload.md)            | Downloads a video that ModelArk kept making after a run stopped.                  | No   |
 | [Reference: Add](web/docs/BytePlusReferenceAdd.md)              | Adds a preset character, an asset, or a public file address to a reference chain. | No   |
+| [Search: Embed](web/docs/BytePlusSearchEmbed.md)                | Turns text, images, and videos into embeddings and compares them.                 | Yes  |
 | [Request Options](web/docs/BytePlusRequestOptions.md)           | Sets the service tier and extra request fields for paid nodes.                    | No   |
 | [Model: Info](web/docs/BytePlusModelInfo.md)                    | Shows what a model reads, makes, and takes, as JSON.                              | No   |
 

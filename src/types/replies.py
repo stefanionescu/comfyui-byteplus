@@ -156,6 +156,28 @@ class ChatReply(Reply):
     choices: tuple[ChatChoice, ...] = ()
 
 
+class EmbeddingVector(Reply):
+    """The vector of one embedding request.
+
+    Attributes:
+        embedding: The vector's values.
+
+    """
+
+    embedding: tuple[float, ...] = ()
+
+
+class EmbeddingReply(Reply):
+    """The multimodal embedding endpoint's reply: one vector for everything in the request.
+
+    Attributes:
+        vector: The vector, under ModelArk's name data.
+
+    """
+
+    vector: EmbeddingVector = Field(alias="data")
+
+
 class ListedModalities(Reply):
     """What a listed model reads and makes.
 
@@ -246,6 +268,8 @@ __all__ = [
     "ChatChoice",
     "ChatMessage",
     "ChatReply",
+    "EmbeddingReply",
+    "EmbeddingVector",
     "ErrorBody",
     "ErrorReply",
     "ImageItemReply",

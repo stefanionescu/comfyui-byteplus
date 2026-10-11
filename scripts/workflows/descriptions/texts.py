@@ -35,6 +35,9 @@ SHARED_TEXTS = {
     "finish": "Finish",
     "recover": "Recover",
     "last_frame": "Last Frame",
+    "score": "Score",
+    "scores": "Scores",
+    "choose": "Choose",
 }
 
 __all__ = ["SHARED_TEXTS"]

@@ -146,6 +146,30 @@ SCHEMA_UNSUPPORTED = (
     "seed-2-0-lite-260428."
 )
 
+SEARCH_DIMENSIONS = "{model} makes vectors of {choices} values. Set dimensions to one of them, or to model default."
+
+SEARCH_IMAGE_SHAPE = (
+    "Image {number} is {width} by {height} pixels. ModelArk needs each side above 14 pixels and the long side at "
+    "most 100 times the short side. Crop or resize it."
+)
+
+SEARCH_ITEMS_EMPTY = "Enter at least one line of text, or connect an image or a video."
+
+SEARCH_ITEM_STOPPED = (
+    "Search: Embed stopped at item {number} of {count}; the items before it were sent and the rest were not. {message}"
+)
+
+SEARCH_TASK_EMPTY = "Write the task for the instructions, or set instructions to model default."
+
+SEARCH_TEXT_SIZE = (
+    "Line {number} is longer than the 100,000 bytes ModelArk embeds as one text. Shorten it, or split it over "
+    "several lines."
+)
+
+SEARCH_VIDEO_SIZE = (
+    "Video {number} is {size} MB as MP4, and ModelArk embeds videos of at most 50 MB. Trim or shrink it."
+)
+
 SINGLE_VALUE = "Connect one value to {name}, not a list."
 
 TASK_NEEDS_REFERENCES = (
@@ -234,6 +258,13 @@ __all__ = [
     "REFERENCE_IMAGE_SINGLE",
     "SCHEMA_JSON_ONLY",
     "SCHEMA_UNSUPPORTED",
+    "SEARCH_DIMENSIONS",
+    "SEARCH_IMAGE_SHAPE",
+    "SEARCH_ITEMS_EMPTY",
+    "SEARCH_ITEM_STOPPED",
+    "SEARCH_TASK_EMPTY",
+    "SEARCH_TEXT_SIZE",
+    "SEARCH_VIDEO_SIZE",
     "SINGLE_VALUE",
     "TASK_NEEDS_REFERENCES",
     "TASK_NEEDS_VIDEO",

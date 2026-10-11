@@ -1,0 +1,1971 @@
+{
+  "id": "84fd61b6-0b46-5989-9337-f148df399ecf",
+  "revision": 0,
+  "last_node_id": 9,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        30,
+        140
+      ],
+      "size": [
+        340,
+        132
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the product and the picture you need in **Brief**, in one line.\n3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`.\n\nModels: Seedream 4.0 and Skylark embedding vision. Activate them on ModelArk's **Model activation** page."
+      ],
+      "title": "Start Here"
+    },
+    {
+      "id": 2,
+      "type": "MarkdownNote",
+      "pos": [
+        460,
+        140
+      ],
+      "size": [
+        340,
+        132
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "Seedream 4.0 draws a series of options from the brief, up to the four **count** allows."
+      ],
+      "title": "Note"
+    },
+    {
+      "id": 3,
+      "type": "MarkdownNote",
+      "pos": [
+        890,
+        140
+      ],
+      "size": [
+        720,
+        132
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "Skylark embedding vision turns the brief and each option into an embedding, one request per item, and compares each with the brief. **Scores** lists the brief first, compared with itself, then each option in order; the highest after the first is the best match."
+      ],
+      "title": "Note"
+    },
+    {
+      "id": 4,
+      "type": "MarkdownNote",
+      "pos": [
+        1700,
+        140
+      ],
+      "size": [
+        340,
+        132
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "**Choose** picks the best match with ComfyUI's own nodes: **Extract Text** reads each option's score, **Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes that option, which is saved under `image/byteplus`. A missing option scores -2, so it is never chosen."
+      ],
+      "title": "Note"
+    },
+    {
+      "id": 5,
+      "type": "PrimitiveString",
+      "pos": [
+        30,
+        336
+      ],
+      "size": [
+        340,
+        58
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "value"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1,
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveString"
+      },
+      "widgets_values": [
+        "Trail running shoes in bright orange on a rocky mountain path at sunrise, wide shot, open sky on the left for a headline."
+      ],
+      "title": "Brief"
+    },
+    {
+      "id": 6,
+      "type": "dcbea73d-39e8-5d32-aac0-4c2c5076cae0",
+      "pos": [
+        460,
+        336
+      ],
+      "size": [
+        340,
+        26
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "brief",
+          "type": "*",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "shape": 6,
+          "links": [
+            3,
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "previewExposures": [
+          {
+            "name": "$$canvas-image-preview",
+            "sourceNodeId": "103",
+            "sourcePreviewName": "$$canvas-image-preview"
+          }
+        ]
+      },
+      "widgets_values": [],
+      "title": "Draw"
+    },
+    {
+      "id": 7,
+      "type": "d1c4dccf-ea93-5c53-b161-1da9b97f2322",
+      "pos": [
+        890,
+        336
+      ],
+      "size": [
+        340,
+        88
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "brief",
+          "type": "STRING",
+          "link": 2,
+          "widget": {
+            "name": "brief"
+          }
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "similarities",
+          "type": "STRING",
+          "links": [
+            4,
+            5
+          ]
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        ""
+      ],
+      "title": "Score"
+    },
+    {
+      "id": 8,
+      "type": "PreviewAny",
+      "pos": [
+        1270,
+        336
+      ],
+      "size": [
+        340,
+        240
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewAny"
+      },
+      "widgets_values": [],
+      "title": "Scores"
+    },
+    {
+      "id": 9,
+      "type": "39f8ef38-8dd5-524b-9006-745e1566ae2f",
+      "pos": [
+        1700,
+        336
+      ],
+      "size": [
+        340,
+        46
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "similarities",
+          "type": "*",
+          "link": 5
+        },
+        {
+          "name": "images",
+          "type": "*",
+          "link": 6
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "previewExposures": [
+          {
+            "name": "$$canvas-image-preview",
+            "sourceNodeId": "312",
+            "sourcePreviewName": "$$canvas-image-preview"
+          }
+        ]
+      },
+      "widgets_values": [],
+      "title": "Choose"
+    }
+  ],
+  "links": [
+    [
+      1,
+      5,
+      0,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      5,
+      0,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      6,
+      0,
+      7,
+      1,
+      "IMAGE"
+    ],
+    [
+      4,
+      7,
+      0,
+      8,
+      0,
+      "STRING"
+    ],
+    [
+      5,
+      7,
+      0,
+      9,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      6,
+      0,
+      9,
+      1,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Input",
+      "bounding": [
+        0,
+        30,
+        400,
+        394
+      ],
+      "color": "#55746b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Draw",
+      "bounding": [
+        430,
+        30,
+        400,
+        362
+      ],
+      "color": "#68688c",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Score",
+      "bounding": [
+        860,
+        30,
+        780,
+        576
+      ],
+      "color": "#68688c",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Choose",
+      "bounding": [
+        1670,
+        30,
+        400,
+        382
+      ],
+      "color": "#68688c",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5,
+      "offset": [
+        30,
+        30
+      ]
+    }
+  },
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "dcbea73d-39e8-5d32-aac0-4c2c5076cae0",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 103,
+          "lastLinkId": 4,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Draw",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            20
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            1390,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "c4879ff7-94b2-56e1-925d-b6015f82348f",
+            "name": "brief",
+            "type": "*",
+            "linkIds": [
+              3
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "7fc44682-7fef-5f0f-9913-188363c67cf4",
+            "name": "images",
+            "type": "IMAGE",
+            "linkIds": [
+              4
+            ],
+            "pos": [
+              1390,
+              140
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 101,
+            "type": "StringFormat",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              128
+            ],
+            "flags": {},
+            "order": 100,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "name": "values.a",
+                "type": "*",
+                "link": 3,
+                "shape": 7
+              },
+              {
+                "label": "b",
+                "name": "values.b",
+                "type": "*",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "f_string",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "f_string"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  1
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "StringFormat"
+            },
+            "widgets_values": [
+              "Four different hero photos for an online shop's home page, each with a new camera angle and composition: {a}"
+            ]
+          },
+          {
+            "id": 102,
+            "type": "BytePlusImageGenerate",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              344
+            ],
+            "flags": {},
+            "order": 101,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "model"
+                }
+              },
+              {
+                "name": "size",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "size"
+                }
+              },
+              {
+                "name": "aspect_ratio",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "aspect_ratio"
+                }
+              },
+              {
+                "name": "count",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "count"
+                }
+              },
+              {
+                "name": "background",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "background"
+                }
+              },
+              {
+                "name": "output_format",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "output_format"
+                }
+              },
+              {
+                "name": "prompt_optimization",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "prompt_optimization"
+                }
+              },
+              {
+                "name": "watermark",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "watermark"
+                }
+              },
+              {
+                "name": "reference_images",
+                "type": "IMAGE",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "run_number",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "run_number"
+                }
+              },
+              {
+                "name": "options",
+                "type": "BYTEPLUS_OPTIONS",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "prompt",
+                "type": "STRING",
+                "link": 1,
+                "widget": {
+                  "name": "prompt"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "shape": 6,
+                "links": [
+                  2,
+                  4
+                ]
+              },
+              {
+                "name": "masks",
+                "type": "MASK",
+                "shape": 6,
+                "links": []
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "BytePlusImageGenerate"
+            },
+            "widgets_values": [
+              "seedream-4-0-250828",
+              "model default",
+              "16:9",
+              4,
+              "model default",
+              "model default",
+              "model default",
+              false,
+              0,
+              ""
+            ],
+            "color": "#432",
+            "bgcolor": "#653"
+          },
+          {
+            "id": 103,
+            "type": "PreviewImage",
+            "pos": [
+              960,
+              140
+            ],
+            "size": [
+              340,
+              290
+            ],
+            "flags": {},
+            "order": 102,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": 2
+              }
+            ],
+            "outputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PreviewImage"
+            },
+            "widgets_values": []
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 102,
+            "target_slot": 12,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": 102,
+            "origin_slot": 0,
+            "target_id": 103,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 3,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 101,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 4,
+            "origin_id": 102,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "IMAGE"
+          }
+        ],
+        "extra": {
+          "description": "Draws up to four options from the brief."
+        }
+      },
+      {
+        "id": "d1c4dccf-ea93-5c53-b161-1da9b97f2322",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 201,
+          "lastLinkId": 3,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Score",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            40
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            630,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "01ef89a7-7536-5586-99ed-90d73a03099c",
+            "name": "brief",
+            "type": "STRING",
+            "linkIds": [
+              1
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          },
+          {
+            "id": "78758eb5-266e-537f-a1d7-8ca37a3868c3",
+            "name": "images",
+            "type": "IMAGE",
+            "linkIds": [
+              2
+            ],
+            "pos": [
+              110,
+              160
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "c6886a67-9114-5a4c-84dd-f3ca8a6570ca",
+            "name": "similarities",
+            "type": "STRING",
+            "linkIds": [
+              3
+            ],
+            "pos": [
+              630,
+              140
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 201,
+            "type": "BytePlusSearchEmbed",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              248
+            ],
+            "flags": {},
+            "order": 200,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "model"
+                }
+              },
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": 2,
+                "shape": 7
+              },
+              {
+                "name": "videos",
+                "type": "VIDEO",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "dimensions",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "dimensions"
+                }
+              },
+              {
+                "name": "instructions",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "instructions"
+                }
+              },
+              {
+                "name": "run_number",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "run_number"
+                }
+              },
+              {
+                "name": "options",
+                "type": "BYTEPLUS_OPTIONS",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "texts",
+                "type": "STRING",
+                "link": 1,
+                "widget": {
+                  "name": "texts"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "vectors",
+                "type": "STRING",
+                "links": []
+              },
+              {
+                "name": "similarities",
+                "type": "STRING",
+                "links": [
+                  3
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "BytePlusSearchEmbed"
+            },
+            "widgets_values": [
+              "skylark-embedding-vision-251215",
+              "model default",
+              "search",
+              "Find the image that best matches this product description",
+              0,
+              ""
+            ],
+            "color": "#432",
+            "bgcolor": "#653"
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 201,
+            "target_slot": 7,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 201,
+            "target_slot": 1,
+            "type": "IMAGE"
+          },
+          {
+            "id": 3,
+            "origin_id": 201,
+            "origin_slot": 1,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "STRING"
+          }
+        ],
+        "extra": {
+          "description": "Embeds the brief and the options, and compares each option with the brief."
+        }
+      },
+      {
+        "id": "39f8ef38-8dd5-524b-9006-745e1566ae2f",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 312,
+          "lastLinkId": 16,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Choose",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            40
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            2150,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "b817d99f-37b0-5094-91c1-abc1e125ef37",
+            "name": "similarities",
+            "type": "*",
+            "linkIds": [
+              15
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          },
+          {
+            "id": "936bc2ba-081c-5d94-a53d-8a9f24c6b1ab",
+            "name": "images",
+            "type": "*",
+            "linkIds": [
+              16
+            ],
+            "pos": [
+              110,
+              160
+            ]
+          }
+        ],
+        "outputs": [],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 301,
+            "type": "StringFormat",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              128
+            ],
+            "flags": {},
+            "order": 300,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "name": "values.a",
+                "type": "*",
+                "link": 15,
+                "shape": 7
+              },
+              {
+                "label": "b",
+                "name": "values.b",
+                "type": "*",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "f_string",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "f_string"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "StringFormat"
+            },
+            "widgets_values": [
+              "{a} [-2, -2, -2, -2]"
+            ]
+          },
+          {
+            "id": 302,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 301,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 1,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  5
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              2
+            ]
+          },
+          {
+            "id": 303,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              466
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 302,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 2,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  6
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              3
+            ]
+          },
+          {
+            "id": 304,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              792
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 303,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 3,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  7
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              4
+            ]
+          },
+          {
+            "id": 305,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              1118
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 304,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 4,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  8
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              5
+            ]
+          },
+          {
+            "id": 306,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              140
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 305,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 5
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  9
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 307,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              250
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 306,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 6
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  10
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 308,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              360
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 307,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 7
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  11
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 309,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              470
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 308,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 8
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  12
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 310,
+            "type": "ComfyMathExpression",
+            "pos": [
+              1340,
+              140
+            ],
+            "size": [
+              340,
+              188
+            ],
+            "flags": {},
+            "order": 309,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "expression",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "expression"
+                }
+              },
+              {
+                "label": "a",
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 9,
+                "shape": 7
+              },
+              {
+                "label": "b",
+                "name": "values.b",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 10,
+                "shape": 7
+              },
+              {
+                "label": "c",
+                "name": "values.c",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 11,
+                "shape": 7
+              },
+              {
+                "label": "d",
+                "name": "values.d",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 12,
+                "shape": 7
+              },
+              {
+                "label": "e",
+                "name": "values.e",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": null,
+                "shape": 7
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  13
+                ]
+              },
+              {
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "values.index(max(values))"
+            ]
+          },
+          {
+            "id": 311,
+            "type": "GetItemFromList",
+            "pos": [
+              1340,
+              392
+            ],
+            "size": [
+              340,
+              58
+            ],
+            "flags": {},
+            "order": 310,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "list",
+                "type": "*",
+                "link": 16
+              },
+              {
+                "name": "index",
+                "type": "INT",
+                "link": 13,
+                "widget": {
+                  "name": "index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "*",
+                "type": "*",
+                "links": [
+                  14
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "GetItemFromList"
+            },
+            "widgets_values": [
+              0
+            ]
+          },
+          {
+            "id": 312,
+            "type": "SaveImage",
+            "pos": [
+              1720,
+              140
+            ],
+            "size": [
+              340,
+              290
+            ],
+            "flags": {},
+            "order": 311,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": 14
+              },
+              {
+                "name": "filename_prefix",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "filename_prefix"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "SaveImage"
+            },
+            "widgets_values": [
+              "image/byteplus/hero"
+            ]
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 301,
+            "origin_slot": 0,
+            "target_id": 302,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": 301,
+            "origin_slot": 0,
+            "target_id": 303,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 3,
+            "origin_id": 301,
+            "origin_slot": 0,
+            "target_id": 304,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 4,
+            "origin_id": 301,
+            "origin_slot": 0,
+            "target_id": 305,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 5,
+            "origin_id": 302,
+            "origin_slot": 0,
+            "target_id": 306,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 6,
+            "origin_id": 303,
+            "origin_slot": 0,
+            "target_id": 307,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 7,
+            "origin_id": 304,
+            "origin_slot": 0,
+            "target_id": 308,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 8,
+            "origin_id": 305,
+            "origin_slot": 0,
+            "target_id": 309,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 9,
+            "origin_id": 306,
+            "origin_slot": 0,
+            "target_id": 310,
+            "target_slot": 1,
+            "type": "FLOAT"
+          },
+          {
+            "id": 10,
+            "origin_id": 307,
+            "origin_slot": 0,
+            "target_id": 310,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 11,
+            "origin_id": 308,
+            "origin_slot": 0,
+            "target_id": 310,
+            "target_slot": 3,
+            "type": "FLOAT"
+          },
+          {
+            "id": 12,
+            "origin_id": 309,
+            "origin_slot": 0,
+            "target_id": 310,
+            "target_slot": 4,
+            "type": "FLOAT"
+          },
+          {
+            "id": 13,
+            "origin_id": 310,
+            "origin_slot": 1,
+            "target_id": 311,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 14,
+            "origin_id": 311,
+            "origin_slot": 0,
+            "target_id": 312,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 15,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 301,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 16,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 311,
+            "target_slot": 0,
+            "type": "*"
+          }
+        ],
+        "extra": {
+          "description": "Picks the option with the highest score and saves it."
+        }
+      }
+    ]
+  }
+}
