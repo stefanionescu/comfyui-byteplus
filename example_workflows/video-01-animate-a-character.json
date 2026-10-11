@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**, and what they do and say in **Scene**. Put spoken words in double quotation marks.\n3. Press **Run**. The video is saved under `video/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Describe your character in **Character**, and what they do and say in **Scene**. Put spoken words in double quotation marks.\n3. Press **Run**. The video is saved under `video/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 5.0 flash draws the character, which becomes the video's first frame. **references** carries the image's original file, so Seedance accepts its real-looking face."
+        "Seedream 5.0 flash draws the character, which becomes the video's first frame. `references` carries the image's original file, so Seedance accepts its real-looking face."
       ],
       "title": "Note"
     },

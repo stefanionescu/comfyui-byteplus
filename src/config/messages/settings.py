@@ -2,9 +2,9 @@
 
 KEY_EMPTY = "Enter a ModelArk API key of 1 to {maximum} characters without spaces at either end."
 
-KEY_REQUIRED = "Set your ModelArk API key in BytePlus settings or in the server's ARK_API_KEY before running."
+KEY_REQUIRED = "Set your ModelArk API key in BytePlus Settings or in the server's ARK_API_KEY before running."
 
-KEY_UNREADABLE = "The saved ModelArk API key could not be read. Save the key again in BytePlus settings."
+KEY_UNREADABLE = "The saved ModelArk API key could not be read. Save the key again in BytePlus Settings."
 
 KEY_WHITESPACE = "Remove spaces and line breaks from the ModelArk API key."
 

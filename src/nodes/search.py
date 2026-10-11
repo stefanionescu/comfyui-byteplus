@@ -62,7 +62,6 @@ class SearchEmbed(PaidNode):
                     "instructions",
                     multiline=True,
                     default="",
-                    placeholder="instructions",
                     tooltip=(
                         "Sent as ModelArk's instructions field with every item; write it in ModelArk's form, such as "
                         "Target_modality: image.\nInstruction:…\nQuery:"
@@ -72,7 +71,6 @@ class SearchEmbed(PaidNode):
                     "texts",
                     multiline=True,
                     default="",
-                    placeholder="texts",
                     tooltip="One item per line; blank lines are skipped. Put the query first.",
                 ),
             ],

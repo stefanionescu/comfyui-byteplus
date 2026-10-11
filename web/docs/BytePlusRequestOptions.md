@@ -11,19 +11,19 @@ Sets the service tier and extra request fields for any number of paid nodes.
 
 ## Outputs
 
-| Output    | What it carries                              |
-| --------- | -------------------------------------------- |
-| `options` | The settings, for a paid node's **options**. |
+| Output    | What it carries                            |
+| --------- | ------------------------------------------ |
+| `options` | The settings, for a paid node's `options`. |
 
 ## Use
 
-1. Choose a service tier or write extra fields, and leave the rest at their
+1. Choose `service_tier` or write `extra_fields`, and leave the rest at their
    defaults.
-2. Connect **options** to the **options** input of one or more paid nodes.
+2. Connect `options` to the `options` input of one or more paid nodes.
 
-A paid node stops before sending when **service tier** is `flex` and its model
+A paid node stops before sending when `service_tier` is `flex` and its model
 does not take flex. **Model: Info** shows `"flex": true` for each model that
-takes flex. A paid node also stops when **extra fields** sets a field the node
+takes flex. A paid node also stops when `extra_fields` sets a field the node
 sets itself, such as `model` or `prompt`.
 
 Example: **chat-02-summarize-a-voice-note**.

@@ -1,7 +1,7 @@
 """Messages for node inputs the extension refuses before sending anything.
 
-{input} is an image input's label as the node shows it, such as image or first frame. {size} is in MB of 1,000,000
-bytes, rounded up to one decimal. {mode} is what a video starts from, in the words of VIDEO_MODE_LABELS.
+{input} is an image input's ID, such as image or first_frame. {size} is in MB of 1,000,000 bytes, rounded up to
+one decimal. {mode} is what a video starts from, in the words of VIDEO_MODE_LABELS.
 """
 
 DOCUMENT_KIND = "Choose a PDF, text, Markdown, CSV, or JSON document."
@@ -10,7 +10,7 @@ DOCUMENT_MISSING = "Put a PDF or text file in ComfyUI's input folder, press R, a
 
 DOCUMENT_OUTSIDE = "Choose a document inside ComfyUI's input folder."
 
-DOCUMENT_SIZE = "The document is larger than the maximum upload size of {maximum} MB in BytePlus settings."
+DOCUMENT_SIZE = "The document is larger than {maximum} MB, the Maximum upload size (MB) in BytePlus Settings."
 
 DOCUMENT_UNREADABLE = "The document could not be read as UTF-8 text. Save it as UTF-8 or as a PDF."
 
@@ -26,15 +26,15 @@ DRAFT_SINGLE = "Connect one draft to finish; the references hold {count}."
 
 DRAFT_TWICE = "Turn off draft to finish a draft."
 
-EFFORT_UNSUPPORTED = "{model} does not take a reasoning effort. Set reasoning effort to model default."
+EFFORT_UNSUPPORTED = "{model} does not take reasoning_effort. Set reasoning_effort to model default."
 
 FRAMES_BESIDE_REFERENCES = (
-    "A video starts from frames or follows reference media, not both. Disconnect one, or name a reference image as "
-    "the first frame in the prompt."
+    "A video starts from first_frame or follows reference media, not both. Disconnect one, or name a reference "
+    "image as the first frame in the prompt."
 )
 
 IMAGE_COUNT_SINGLE = (
-    "{model} makes one image per run. Set max images to 1, or choose a model that takes sequential image generation; "
+    "{model} makes one image per run. Set max_images to 1, or choose a model that takes sequential image generation; "
     "Model: Info shows which do."
 )
 
@@ -42,9 +42,9 @@ IMAGE_SINGLE = "Connect one image to {input}, not a batch or a list."
 
 IMAGE_SIZE = "{model} takes size {sizes}, or WIDTHxHEIGHT such as 2048x2048. Leave it empty for the model's default."
 
-JSON_SCHEMA_INVALID = "Write the JSON schema as a JSON object with a name and a schema."
+JSON_SCHEMA_INVALID = "Write json_schema as a JSON object with a name and a schema."
 
-LAST_FRAME_ALONE = "Connect a first frame with the last frame."
+LAST_FRAME_ALONE = "Connect first_frame with last_frame."
 
 MESH_FORMAT_COMMAND = (
     "The prompt asks for file format {value}, and the node returns GLB. Remove the format command, or write {command}."
@@ -62,11 +62,11 @@ MESH_PROMPT_LENGTH = (
 OPTIONS_JSON = "Write {field} as a JSON object, or leave it empty."
 
 OPTION_FLEX = (
-    "{model} does not take the flex tier. Set service tier to model default in Request Options, or choose a model "
+    "{model} does not take the flex tier. Set service_tier to model default in Request Options, or choose a model "
     'that takes flex; Model: Info shows "flex": true for them.'
 )
 
-OPTION_RESERVED_FIELD = "The node sets {field} itself. Remove it from the extra fields in Request Options."
+OPTION_RESERVED_FIELD = "The node sets {field} itself. Remove it from extra_fields in Request Options."
 
 PROMPT_COMMAND = (
     "Remove {command} from the prompt. ModelArk reads it as a setting; set the video's settings with the node's inputs."
@@ -83,13 +83,12 @@ RATIO_FIXED_ONLY = "{model} cannot choose the shape of a video from {mode}. Set 
 REFERENCE_IMAGE_SINGLE = "Connect references that hold exactly one image to {input}; they hold {count}."
 
 SCHEMA_JSON_ONLY = (
-    "{model} can answer in JSON but cannot follow a schema. Clear the JSON schema and ask for JSON in the prompt, "
+    "{model} can answer in JSON but cannot follow a schema. Clear json_schema and ask for JSON in the prompt, "
     "or choose a model such as seed-2-0-lite-260428."
 )
 
 SCHEMA_UNSUPPORTED = (
-    "{model} cannot follow a JSON schema. Clear the JSON schema, or choose a model that can, such as "
-    "seed-2-0-lite-260428."
+    "{model} cannot follow a JSON schema. Clear json_schema, or choose a model that can, such as seed-2-0-lite-260428."
 )
 
 SEARCH_DIMENSIONS = "{model} makes vectors of {choices} values. Set dimensions to one of them, or to model default."
@@ -117,27 +116,27 @@ SEARCH_VIDEO_SIZE = (
 SINGLE_VALUE = "Connect one value to {name}, not a list."
 
 TASK_NEEDS_REFERENCES = (
-    "Omni reference task type {task} needs reference media. Connect references or reference image, or set omni "
-    "reference task type to auto."
+    "With omni_reference_task_type set to {task}, the video needs reference media. Connect references or "
+    "reference_image, or set omni_reference_task_type to auto."
 )
 
 TASK_NEEDS_VIDEO = (
-    "Omni reference task type {task} needs a reference video. Add one to references, or set omni reference task type "
-    "to reference or auto."
+    "With omni_reference_task_type set to {task}, the video needs a reference video. Add one to references, or set "
+    "omni_reference_task_type to reference or auto."
 )
 
 TEMPERATURE_FIXED = (
     "{model} always uses its own temperature. Set temperature to model default, or choose another model."
 )
 
-TRANSPARENT_FORMAT = "A transparent background needs a PNG. Set output format to png or model default."
+TRANSPARENT_FORMAT = "A transparent background needs a PNG. Set output_format to png or model default."
 
 TRANSPARENT_SOURCE = (
     "A transparent background needs exactly one reference image with transparency. Add a mask to an image with Join "
     "Image with Alpha."
 )
 
-VIDEO_EMPTY = "Write a prompt, or connect a first frame or references."
+VIDEO_EMPTY = "Write a prompt, or connect first_frame or references."
 
 # The modes of a video request, and the edit and extend task types, as {mode} names them.
 VIDEO_MODE_LABELS = {

@@ -1,6 +1,6 @@
 """The group notes and subgraph descriptions of the shipped workflows, in plain language."""
 
-KEY_STEP = "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n"
+KEY_STEP = "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n"
 RECOVER_NOTE = (
     "ModelArk usually starts the task at once, so a cancelled run's video is still made and billed. Collect it with "
     "**video-05-recover-a-video**."
@@ -16,13 +16,13 @@ WORKFLOW_TEXTS = {
         ),
         "photo": (
             "Seedream 5.0 flash draws a square product photo from **Product**. To use your own photo, add **Load "
-            "Image** and connect it to **Write**'s **image** instead."
+            "Image** and connect it to **Write**'s `image` instead."
         ),
         "photo_description": "Draws the product photo.",
         "write": (
-            "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking disabled, and writes the "
-            "listing as JSON: a title, five bullet points, and a short description. **Write** shows the listing and "
-            "saves it.\n\n"
+            "Seed 2.0 lite reads the photo and the spec sheet in one request, with `thinking` set to `disabled`, and "
+            "writes the listing as JSON: a title, five bullet points, and a short description. **Write** shows the "
+            "listing and saves it.\n\n"
             "Open **Write** to change the instructions or the schema."
         ),
         "write_description": "Writes the listing from the photo and the spec sheet, as JSON, and saves it.",
@@ -33,15 +33,16 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. The transcript and the action items are saved under `text/byteplus`."
         ),
         "transcribe": (
-            "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with thinking disabled. "
+            "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with `thinking` set to "
+            "`disabled`. "
             "**Transcribe** shows the transcript and saves it."
         ),
         "transcribe_description": "Transcribes the voice note and saves the transcript.",
         "actions": (
-            "DeepSeek V4 flash GA continues the same conversation: **conversation** carries the transcript, so the "
+            "DeepSeek V4 flash GA continues the same conversation: `conversation` carries the transcript, so the "
             "audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the "
             "list.\n\n"
-            "**Request Options** sends this request at the flex tier, which costs less but can take several minutes."
+            "**Request Options** sets `service_tier` to `flex`, which costs less but can take several minutes."
         ),
         "actions_description": "Lists the action items from the transcript and saves them.",
     },
@@ -52,7 +53,7 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. Both images are saved under `image/byteplus`."
         ),
         "design": (
-            "Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its **references** carry the "
+            "Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its `references` carry the "
             "image's own ModelArk address on to **Wave**."
         ),
         "design_description": "Draws the character and saves the image.",
@@ -70,12 +71,12 @@ WORKFLOW_TEXTS = {
         "model": (
             "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for "
             "free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes several related images in "
-            "one request, so **max images** can be 4. The default, Seedream 5.0 flash, makes one image per request, "
+            "one request, so `max_images` can be 4. The default, Seedream 5.0 flash, makes one image per request, "
             "so the node refuses 4 for it before sending anything."
         ),
         "series": (
             "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It makes as many as "
-            "**Brief** asks for, up to the four **max images** allows."
+            "**Brief** asks for, up to the four `max_images` allows."
         ),
         "series_description": "Draws the poster series and saves it.",
     },
@@ -85,7 +86,7 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. The poster and each layer are saved under `image/byteplus`."
         ),
         "draw": (
-            "Seedream 5.0 flash draws the poster at 3:4 as a PNG. Its **references** carry the poster's own address "
+            "Seedream 5.0 flash draws the poster at 3:4 as a PNG. Its `references` carry the poster's own address "
             "on to **Split**."
         ),
         "draw_description": "Draws the poster and saves it.",
@@ -103,7 +104,7 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. The video is saved under `video/byteplus`."
         ),
         "design": (
-            "Seedream 5.0 flash draws the character, which becomes the video's first frame. **references** carries "
+            "Seedream 5.0 flash draws the character, which becomes the video's first frame. `references` carries "
             "the image's original file, so Seedance accepts its real-looking face."
         ),
         "design_description": "Draws the character.",
@@ -119,16 +120,16 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`."
         ),
         "shot_1": (
-            "Seedance 2.0 mini makes the first five-second shot at 480p. Its **references** carry the shot's video "
+            "Seedance 2.0 mini makes the first five-second shot at 480p. Its `references` carry the shot's video "
             "and its last frame on, as ModelArk's own files.\n\n" + RECOVER_NOTE
         ),
         "shot_1_description": "Makes the first shot and saves it.",
         "shot_2": (
             "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same "
             "way, each connected to the one before.\n\n"
-            "To continue the clip itself rather than start from its last frame, use Seedance 2.5, set **omni reference "
-            "task type** to **extend**, and connect the first shot's **references** to **references** instead of "
-            "**first frame**."
+            "To continue the clip itself rather than start from its last frame, use Seedance 2.5, set "
+            "`omni_reference_task_type` to `extend`, and connect the first shot's `references` to `references` "
+            "instead of `first_frame`."
         ),
         "shot_2_description": "Makes the next shot from the first shot's last frame and saves it.",
         "join": "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.",
@@ -137,14 +138,13 @@ WORKFLOW_TEXTS = {
     "video-03-cast-a-preset-character": {
         "input": (
             KEY_STEP + "2. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open the **Digital "
-            "characters** tab. Open a character, copy its asset ID, and paste it into **url** on "
+            "characters** tab. Open a character, copy its asset ID, and paste it into `url` on "
             "**Reference: Add** in **Character**.\n"
             "3. Describe the product in **Product** and the shot in **Scene**.\n"
             "4. Press **Run**. The video is saved under `video/byteplus`."
         ),
         "draw": (
-            "Seedream 5.0 flash draws the product. Its **references** carry the image's address on to **Reference: "
-            "Add**."
+            "Seedream 5.0 flash draws the product. Its `references` carry the image's address on to **Reference: Add**."
         ),
         "draw_description": "Draws the product.",
         "character": (
@@ -162,7 +162,7 @@ WORKFLOW_TEXTS = {
             "Only the finish runs. ComfyUI reuses the draft."
         ),
         "draft": (
-            "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which ModelArk "
+            "Seedance 2.5 makes a quick 480p draft. Its `references` carry the draft's task ID, which ModelArk "
             "keeps for 7 days."
         ),
         "draft_description": "Makes a four-second 480p draft and saves it.",
@@ -180,7 +180,7 @@ WORKFLOW_TEXTS = {
             "Use this after you cancel a run of **Video: Generate**, after it times out, or after ComfyUI restarts "
             "while a video is being made. ModelArk still makes the video.\n\n"
             + KEY_STEP
-            + "2. In **task**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
+            + "2. In `task`, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
             "to list tasks started after the page loaded.\n"
             "3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\n"
             "A task leaves the list once its video is downloaded."
@@ -226,7 +226,7 @@ WORKFLOW_TEXTS = {
             "1. Select **Design**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so "
             "they do not run and bill again.\n"
             "2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n"
-            "3. In **task**, choose the task, and press **Run** (press R to list tasks started after the page "
+            "3. In `task`, choose the task, and press **Run** (press R to list tasks started after the page "
             "loaded)."
         ),
     },

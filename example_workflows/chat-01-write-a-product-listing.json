@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your product in **Product**.\n3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input folder.\n4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Describe your product in **Product**.\n3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input folder.\n4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 5.0 flash draws a square product photo from **Product**. To use your own photo, add **Load Image** and connect it to **Write**'s **image** instead."
+        "Seedream 5.0 flash draws a square product photo from **Product**. To use your own photo, add **Load Image** and connect it to **Write**'s `image` instead."
       ],
       "title": "Note"
     },
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking disabled, and writes the listing as JSON: a title, five bullet points, and a short description. **Write** shows the listing and saves it.\n\nOpen **Write** to change the instructions or the schema."
+        "Seed 2.0 lite reads the photo and the spec sheet in one request, with `thinking` set to `disabled`, and writes the listing as JSON: a title, five bullet points, and a short description. **Write** shows the listing and saves it.\n\nOpen **Write** to change the instructions or the schema."
       ],
       "title": "Note"
     },

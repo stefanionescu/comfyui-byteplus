@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the series in **Brief**, starting with how many, such as \"Generate 4 posters\".\n3. Press **Run**. Up to four posters are saved under `image/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Describe the series in **Brief**, starting with how many, such as \"Generate 4 posters\".\n3. Press **Run**. Up to four posters are saved under `image/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes several related images in one request, so **max images** can be 4. The default, Seedream 5.0 flash, makes one image per request, so the node refuses 4 for it before sending anything."
+        "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes several related images in one request, so `max_images` can be 4. The default, Seedream 5.0 flash, makes one image per request, so the node refuses 4 for it before sending anything."
       ],
       "title": "Note"
     },
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It makes as many as **Brief** asks for, up to the four **max images** allows."
+        "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It makes as many as **Brief** asks for, up to the four `max_images` allows."
       ],
       "title": "Note"
     },

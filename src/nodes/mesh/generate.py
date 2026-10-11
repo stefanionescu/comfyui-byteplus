@@ -69,7 +69,6 @@ class MeshGenerate(PaidNode):
                     "prompt",
                     multiline=True,
                     default="",
-                    placeholder="prompt",
                     tooltip=(
                         "What to make, in English, for Hyper3D, then any of the model's commands, such as --material "
                         "PBR. It may be empty when images or image references are connected."

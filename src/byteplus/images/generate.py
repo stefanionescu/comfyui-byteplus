@@ -67,9 +67,9 @@ def _validate_image_request(request: ImageRequest, match: ModelMatch[ImageRow]) 
     if request.background is not None:
         _validate_background(request, match, request.background)
     if request.output_format is not None:
-        validate_value(match, "output format", request.output_format, limits.output_formats)
+        validate_value(match, "output_format", request.output_format, limits.output_formats)
     if request.optimize_prompt_mode is not None:
-        validate_value(match, "optimize prompt options", request.optimize_prompt_mode, limits.optimize_prompt_modes)
+        validate_value(match, "optimize_prompt_options", request.optimize_prompt_mode, limits.optimize_prompt_modes)
 
 
 def _build_sequential_fields(max_images: int, limits: ImageLimits) -> dict[str, Json]:

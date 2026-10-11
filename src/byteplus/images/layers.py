@@ -36,7 +36,7 @@ def _validate_layer_request(request: LayerRequest, match: ModelMatch[ImageRow]) 
         validate_references((image,), ("image",), can_read_assets=False)
     if request.optimize_prompt_mode is not None:
         validate_value(
-            match, "optimize prompt options", request.optimize_prompt_mode, match.row.image.optimize_prompt_modes
+            match, "optimize_prompt_options", request.optimize_prompt_mode, match.row.image.optimize_prompt_modes
         )
 
 

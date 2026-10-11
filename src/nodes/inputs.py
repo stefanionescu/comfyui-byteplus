@@ -30,11 +30,10 @@ REFERENCES_INPUT = io.Custom(SOCKET_TYPES["REFERENCES"]).Input(
 # The optimize_prompt_options input of the Seedream nodes.
 OPTIMIZE_PROMPT_OPTIONS_INPUT = io.Combo.Input(
     "optimize_prompt_options",
-    display_name="optimize prompt options",
     options=list(OPTIMIZE_PROMPT_MODES),
     default=MODEL_DEFAULT,
     advanced=True,
-    tooltip="Fast makes images sooner at slightly lower quality, on models that offer it.",
+    tooltip="With fast, images come sooner at slightly lower quality, on models that offer it.",
 )
 # The watermark input of the image and video nodes.
 WATERMARK_INPUT = io.Boolean.Input(
@@ -51,7 +50,6 @@ def build_request_inputs() -> list[io.Input]:
     """Build the run number and options inputs that follow a paid node's own inputs."""
     run_number = io.Int.Input(
         INPUT_NAMES["RUN_NUMBER"],
-        display_name="run number",
         tooltip="Change this number to send the same request again.",
         default=RUN_NUMBER["DEFAULT"],
         min=RUN_NUMBER["MIN"],
@@ -60,7 +58,7 @@ def build_request_inputs() -> list[io.Input]:
     options = io.Custom(SOCKET_TYPES["OPTIONS"]).Input(
         INPUT_NAMES["OPTIONS"],
         optional=True,
-        tooltip="Connect Request Options to choose the service tier or pass extra request fields.",
+        tooltip="Connect Request Options to choose service_tier or add extra_fields.",
     )
     return [run_number, options]
 

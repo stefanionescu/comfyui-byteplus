@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Upload a voice note in **Voice Note**: a recording of up to a few minutes.\n3. Press **Run**. The transcript and the action items are saved under `text/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Upload a voice note in **Voice Note**: a recording of up to a few minutes.\n3. Press **Run**. The transcript and the action items are saved under `text/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with thinking disabled. **Transcribe** shows the transcript and saves it."
+        "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with `thinking` set to `disabled`. **Transcribe** shows the transcript and saves it."
       ],
       "title": "Note"
     },
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "DeepSeek V4 flash GA continues the same conversation: **conversation** carries the transcript, so the audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the list.\n\n**Request Options** sends this request at the flex tier, which costs less but can take several minutes."
+        "DeepSeek V4 flash GA continues the same conversation: `conversation` carries the transcript, so the audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the list.\n\n**Request Options** sets `service_tier` to `flex`, which costs less but can take several minutes."
       ],
       "title": "Note"
     },

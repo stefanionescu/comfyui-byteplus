@@ -71,23 +71,21 @@ _CONTROLS = (
         "ratio",
         options=list(RATIOS),
         default=MODEL_DEFAULT,
-        tooltip="The video's shape. Adaptive follows the first frame, the video being edited, or the prompt.",
+        tooltip="The video's shape. With adaptive, it follows first_frame, the video being edited, or the prompt.",
     ),
     io.Combo.Input(
         "generate_audio",
-        display_name="generate audio",
         options=list(AUDIO_CHOICES),
         default=MODEL_DEFAULT,
         tooltip="Whether the video has sound. Models that make sound make it unless this is false.",
     ),
     io.Combo.Input(
         "omni_reference_task_type",
-        display_name="omni reference task type",
         options=list(OMNI_REFERENCE_TASK_TYPES),
         default="auto",
         tooltip=(
-            "What Seedance 2.5 does with reference media: follow it, edit a reference video, or extend one. Auto "
-            "lets the model decide."
+            "What Seedance 2.5 does with reference media: follow it, edit a reference video, or extend one. With "
+            "auto, the model decides."
         ),
     ),
     io.Boolean.Input(
@@ -100,14 +98,12 @@ _CONTROLS = (
     ),
     io.Boolean.Input(
         "camera_fixed",
-        display_name="camera fixed",
         default=False,
         advanced=True,
         tooltip="Asks the model to keep the camera still, on models that take it.",
     ),
     io.Combo.Input(
         "output_format",
-        display_name="output format",
         options=list(OUTPUT_FORMATS),
         default=MODEL_DEFAULT,
         advanced=True,
@@ -121,26 +117,22 @@ _MEDIA = (
     io.MultiType.Input(
         "first_frame",
         types=list(IMAGE_SOCKET_TYPES),
-        display_name="first frame",
         optional=True,
         tooltip="The image the video starts from: one image, or references that hold one image.",
     ),
     io.MultiType.Input(
         "last_frame",
         types=list(IMAGE_SOCKET_TYPES),
-        display_name="last frame",
         optional=True,
-        tooltip="The image the video ends on, with a first frame.",
+        tooltip="The image the video ends on. Connect first_frame too.",
     ),
     io.Image.Input(
         "reference_image",
-        display_name="reference image",
         optional=True,
         tooltip="Images the video follows: one, a batch, or a list. They come first, as Image 1, Image 2.",
     ),
     io.Audio.Input(
         "reference_audio",
-        display_name="reference audio",
         optional=True,
         tooltip="Audio the video follows: one clip, a batch, or a list.",
     ),
@@ -149,7 +141,6 @@ _MEDIA = (
 # The seed starts fixed, so queueing a workflow again never sends a new paid request by itself.
 _SEED = io.Int.Input(
     "seed",
-    display_name="seed",
     tooltip="Number the model uses to vary its output. Results can change after model updates.",
     default=SEED["DEFAULT"],
     min=0,
@@ -168,8 +159,8 @@ def _encode_media(
     reference_audio: list[Input.Audio] | None,
 ) -> tuple[_Frame, _Frame, tuple[EncodedImage, ...], tuple[str, ...]]:
     """Read each connected frame socket, and encode the reference images and clips, in one worker thread."""
-    first = read_image_socket("first frame", first_frame) if first_frame else None
-    last = read_image_socket("last frame", last_frame) if last_frame else None
+    first = read_image_socket("first_frame", first_frame) if first_frame else None
+    last = read_image_socket("last_frame", last_frame) if last_frame else None
     return first, last, encode_sized_images(reference_image or ()), encode_audio_clips(reference_audio or ())
 
 
@@ -215,7 +206,6 @@ class VideoGenerate(PaidNode):
                     "prompt",
                     multiline=True,
                     default="",
-                    placeholder="prompt",
                     tooltip=(
                         "What the video shows. Name media as Image 1, Video 1, Audio 1. Leave it empty to finish a "
                         "draft."

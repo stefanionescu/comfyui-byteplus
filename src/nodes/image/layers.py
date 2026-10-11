@@ -100,7 +100,8 @@ class ImageSplitLayers(PaidNode):
                     options=list(LAYER_SIZES),
                     default=LAYER_SIZE_DEFAULT,
                     tooltip=(
-                        "The size of the base image and layers. Auto keeps the input image's size, within 1K to 2K."
+                        "The size of the base image and layers. With auto, it keeps the input image's size, within "
+                        "1K to 2K."
                     ),
                 ),
                 OPTIMIZE_PROMPT_OPTIONS_INPUT,
@@ -115,7 +116,6 @@ class ImageSplitLayers(PaidNode):
                     "prompt",
                     multiline=True,
                     default="",
-                    placeholder="prompt",
                     tooltip=(
                         "What to split out. Leave it empty to split every main part. Mark a region with "
                         "<bbox>left top right bottom</bbox>, each from 0 to 999."

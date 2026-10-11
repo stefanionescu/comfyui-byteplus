@@ -12,12 +12,12 @@ REFERENCE_ASSET = (
 
 REFERENCE_DRAFT_EXPIRED = (
     "Reference {position} is a draft that is 7 days old or nearly so, and ModelArk finishes drafts only within 7 "
-    "days. Change run number on the Video: Generate node that made the draft to make a new one."
+    "days. Change run_number on the Video: Generate node that made the draft to make a new one."
 )
 
 REFERENCE_EXPIRED = (
     "Reference {position} is a ModelArk output address that has expired or expires within {minutes} minutes. Output "
-    "addresses last 24 hours. Change run number on the node that made it to make it again."
+    "addresses last 24 hours. Change run_number on the node that made it to make it again."
 )
 
 REFERENCE_KIND = "This node takes {kinds} references; reference {position} is {kind}."

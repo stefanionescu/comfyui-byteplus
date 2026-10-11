@@ -5,7 +5,7 @@ const TEXT = {
   close: 'Close',
   settings: {
     clearKey: 'Clear Saved Key',
-    close: 'Close BytePlus settings',
+    close: 'Close BytePlus Settings',
     credentialLabel: 'ModelArk API key',
     credentials: 'Credentials',
     environmentKey: 'Set by ARK_API_KEY',
@@ -33,16 +33,16 @@ const TEXT = {
     updateFailed: 'BytePlus settings could not be saved.',
     readFailed: 'ComfyUI could not read BytePlus settings.',
     removeFailed: 'ComfyUI could not clear the saved ModelArk API key.',
-    menu: 'BytePlus settings',
+    menu: 'BytePlus Settings',
   },
   working: 'Working...',
 } as const;
 
 /** Labels of the server's execution limits, keyed by setting name. */
 export const LIMIT_LABELS = new Map<string, string>([
-  ['max_download_megabytes', 'maximum download size (MB)'],
-  ['max_upload_megabytes', 'maximum upload size (MB)'],
-  ['request_timeout_seconds', 'request timeout (seconds)'],
+  ['max_download_megabytes', 'Maximum download size (MB)'],
+  ['max_upload_megabytes', 'Maximum upload size (MB)'],
+  ['request_timeout_seconds', 'Request timeout (seconds)'],
 ]);
 
 type MessagePaths<Messages> = {

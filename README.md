@@ -7,16 +7,6 @@
 
 Run any BytePlus ModelArk model in ComfyUI with your own API key.
 
-- **Chat:** ask with images, video, audio, or documents; get text or JSON.
-- **Image:** generate and edit images with Seedream, and split an image into
-  layers.
-- **Video:** make a video with Seedance from a prompt, frames, references, or
-  preset characters; extend a clip or finish a draft.
-- **Search:** embed and compare text, images, and video.
-- **3D:** turn images or a prompt into a GLB 3D model.
-- **Request Options:** extra request fields for any paid node, and the flex
-  tier on models that take it.
-
 ## Contents
 
 - [Requirements](#requirements)
@@ -94,7 +84,7 @@ To update or remove the extension, see the
 ## First run
 
 1. Save your ModelArk API key in **ComfyUI menu → Extensions → BytePlus →
-   BytePlus settings**.
+   BytePlus Settings**.
 2. Activate Seedream 5.0 flash (`dola-seedream-5-0-flash-260915`) on the
    ModelArk console's **Model activation** page.
 3. Open **Browse Templates → comfyui-byteplus →
@@ -102,7 +92,7 @@ To update or remove the extension, see the
 4. See your character, then the same character waving, in **Design** and
    **Wave**.
 
-To send the same request again, change **run number**.
+To send the same request again, change `run_number`.
 
 ## Example workflows
 
@@ -135,20 +125,20 @@ The nodes are under **BytePlus** in the node menu, and each has a help page.
 
 ![Node map: one card for each kind of node. Chat: Attach Document feeds Chat: Ask, and Image: Generate feeds Image: Split Layers. Reference: Add adds files to the references of the chat, image, video, and 3D nodes. Video: Download and 3D: Download collect tasks left running. Request Options and Model: Info are shared. A blue square marks a node that sends a paid request, and a hollow square one that bills nothing.](docs/images/node-map.svg)
 
-| Node                                                            | What it does                                                                          | Paid |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ---- |
-| [Chat: Ask](web/docs/BytePlusChatAsk.md)                        | Asks a model a question, with images, video, audio, or documents.                     | Yes  |
-| [Chat: Attach Document](web/docs/BytePlusChatAttachDocument.md) | Attaches a PDF or text file from ComfyUI's input folder.                              | No   |
-| [Image: Generate](web/docs/BytePlusImageGenerate.md)            | Generates or edits images with Seedream, and outputs their addresses as references.   | Yes  |
-| [Image: Split Layers](web/docs/BytePlusImageSplitLayers.md)     | Splits an image into a base image and transparent layers.                             | Yes  |
-| [Video: Generate](web/docs/BytePlusVideoGenerate.md)            | Makes a video with Seedance from a prompt, frames, references, or a draft.            | Yes  |
-| [Video: Download](web/docs/BytePlusVideoDownload.md)            | Downloads a video that ModelArk kept making after a run stopped.                      | No   |
-| [Reference: Add](web/docs/BytePlusReferenceAdd.md)              | Adds a preset character, an asset, or a public file address to a chain of references. | No   |
-| [Search: Embed](web/docs/BytePlusSearchEmbed.md)                | Turns text, images, and videos into embeddings and compares them.                     | Yes  |
-| [3D: Generate](web/docs/BytePlusMeshGenerate.md)                | Makes a GLB 3D model from a prompt or images.                                         | Yes  |
-| [3D: Download](web/docs/BytePlusMeshDownload.md)                | Downloads a 3D model that ModelArk kept making after a run stopped.                   | No   |
-| [Request Options](web/docs/BytePlusRequestOptions.md)           | Sets the service tier and extra request fields for paid nodes.                        | No   |
-| [Model: Info](web/docs/BytePlusModelInfo.md)                    | Shows what a model reads, makes, and takes, as JSON.                                  | No   |
+| Node                                                            | What it does                                                                                | Paid |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---- |
+| [Chat: Ask](web/docs/BytePlusChatAsk.md)                        | Asks a model a question, with images, video, audio, or documents, and returns text or JSON. | Yes  |
+| [Chat: Attach Document](web/docs/BytePlusChatAttachDocument.md) | Attaches a PDF or text file from ComfyUI's input folder.                                    | No   |
+| [Image: Generate](web/docs/BytePlusImageGenerate.md)            | Generates or edits images with Seedream, and outputs their addresses as references.         | Yes  |
+| [Image: Split Layers](web/docs/BytePlusImageSplitLayers.md)     | Splits an image into a base image and transparent layers.                                   | Yes  |
+| [Video: Generate](web/docs/BytePlusVideoGenerate.md)            | Makes or extends a video with Seedance, from a prompt, frames, references, or a draft.      | Yes  |
+| [Video: Download](web/docs/BytePlusVideoDownload.md)            | Downloads a video that ModelArk kept making after a run stopped.                            | No   |
+| [Reference: Add](web/docs/BytePlusReferenceAdd.md)              | Adds a preset character, an asset, or a public file address to a chain of references.       | No   |
+| [Search: Embed](web/docs/BytePlusSearchEmbed.md)                | Turns text, images, and videos into embeddings and compares them.                           | Yes  |
+| [3D: Generate](web/docs/BytePlusMeshGenerate.md)                | Makes a GLB 3D model from a prompt or images.                                               | Yes  |
+| [3D: Download](web/docs/BytePlusMeshDownload.md)                | Downloads a 3D model that ModelArk kept making after a run stopped.                         | No   |
+| [Request Options](web/docs/BytePlusRequestOptions.md)           | Sets the flex service tier and extra request fields for paid nodes.                         | No   |
+| [Model: Info](web/docs/BytePlusModelInfo.md)                    | Shows what a model reads, makes, and takes, as JSON.                                        | No   |
 
 ## Models
 
@@ -157,7 +147,7 @@ Each paid node takes any model ID from the
 A newer version of a model the extension knows also works. **Model: Info**
 shows what a model the extension knows takes, for free and without a key.
 
-![Video: Generate on the canvas: sockets for the first frame, last frame, reference image, reference audio, references, and options; the model field set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate audio, omni reference task type, draft, camera fixed, output format, watermark, seed, and run number; and a prompt about a red fox in the snow.](docs/images/video-generate-node.png)
+![Video: Generate on the canvas: sockets for first_frame, last_frame, reference_image, reference_audio, references, and options; model set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate_audio, omni_reference_task_type, draft, camera_fixed, output_format, watermark, seed, and run_number; and a prompt about a red fox in the snow.](docs/images/video-generate-node.png)
 
 Before sending, the node checks your request against the extension's own
 table of ModelArk models, and stops before anything is paid if the model

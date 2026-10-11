@@ -1,7 +1,7 @@
 """Messages for video and 3D tasks: recording, waiting, cancelling, and collecting them.
 
 {task} is the kind of task in the words of TASK_NAMES, {node} is the node that starts it or collects it, and {seconds}
-is the request timeout in BytePlus settings.
+is the Request timeout (seconds) in BytePlus Settings.
 """
 
 TASK_UNKNOWN = "Choose an unfinished task from the list. Press R in ComfyUI to refresh the list."
@@ -35,8 +35,8 @@ TASK_UNRECORDED = (
 )
 
 TASK_WAIT_LIMIT = (
-    "The {task} task was not ready within the request timeout of {seconds} seconds in BytePlus settings. ModelArk "
-    "keeps running it; collect it with {node}."
+    "The {task} task was not ready within {seconds} seconds, the Request timeout (seconds) in BytePlus Settings. "
+    "ModelArk keeps running it; collect it with {node}."
 )
 
 # Each kind of task as {task} names it, and the node that collects it.

@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**.\n3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Describe your character in **Character**.\n3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -132,7 +132,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or after ComfyUI restarts while one runs.\n\n1. Select **Design**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so they do not run and bill again.\n2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n3. In **task**, choose the task, and press **Run** (press R to list tasks started after the page loaded)."
+        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or after ComfyUI restarts while one runs.\n\n1. Select **Design**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so they do not run and bill again.\n2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n3. In `task`, choose the task, and press **Run** (press R to list tasks started after the page loaded)."
       ],
       "title": "Note"
     },

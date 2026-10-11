@@ -45,7 +45,7 @@ def _validate_draft_finish(request: VideoRequest, match: ModelMatch[VideoRow]) -
         message = DRAFT_FINISH_SIZE.format(model=match.model_id, resolutions=", ".join(limits.draft_resolutions))
         raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     if request.output_format is not None:
-        validate_value(match, "output format", request.output_format, limits.output_formats)
+        validate_value(match, "output_format", request.output_format, limits.output_formats)
 
 
 def _validate_media(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> None:
@@ -87,7 +87,7 @@ def _choose_task_fields(request: VideoRequest, match: ModelMatch[VideoRow]) -> d
     fields: dict[str, Json] = {}
     if request.omni_reference_task_type != "auto":
         validate_value(
-            match, "omni reference task type", request.omni_reference_task_type, limits.omni_reference_task_types
+            match, "omni_reference_task_type", request.omni_reference_task_type, limits.omni_reference_task_types
         )
         fields["omni_reference_task_type"] = request.omni_reference_task_type
     if request.is_draft:
@@ -131,15 +131,15 @@ def _choose_controls(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict
     if request.has_audio is not None:
         if not limits.has_audio:
             raise BytePlusError(
-                ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field="generate audio")
+                ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field="generate_audio")
             )
         fields["generate_audio"] = request.has_audio
     if request.is_camera_fixed:
         if not limits.has_fixed_camera:
-            raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field="camera fixed"))
+            raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field="camera_fixed"))
         fields["camera_fixed"] = True
     if request.output_format is not None:
-        validate_value(match, "output format", request.output_format, limits.output_formats)
+        validate_value(match, "output_format", request.output_format, limits.output_formats)
         fields["output_format"] = request.output_format
     if not request.is_draft:
         fields["return_last_frame"] = True

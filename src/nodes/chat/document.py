@@ -31,7 +31,6 @@ class ChatAttachDocument(io.ComfyNode):
             inputs=[
                 io.Combo.Input(
                     "file",
-                    display_name="document",
                     options=list_documents(),
                     tooltip="A PDF, text, Markdown, CSV, or JSON file at the top of ComfyUI's input folder.",
                 ),

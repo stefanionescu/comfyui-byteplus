@@ -17,9 +17,9 @@ cancelled it, ComfyUI restarted, or it waited too long.
 
 ## Use
 
-1. Choose the task in **task**. Press R to list tasks started after the page
+1. Choose the task in `task`. Press R to list tasks started after the page
    loaded.
-2. Connect **model_3d** to **Save 3D Model**.
+2. Connect `model_3d` to **Save 3D Model**.
 3. Select **Run**.
 
 A task leaves the list once its 3D model is downloaded, or when it fails, is

@@ -21,16 +21,13 @@ class RequestOptions(io.ComfyNode):
         """Offer the service tier, model default or flex, and the extra fields as one JSON object."""
         service_tier = io.Combo.Input(
             "service_tier",
-            display_name="service tier",
             options=list(SERVICE_TIER_CHOICES),
             default=MODEL_DEFAULT,
-            tooltip="flex asks for ModelArk's lower-cost tier, which queues requests until it has room. Only some "
+            tooltip="Choose flex for ModelArk's lower-cost tier, which queues requests until it has room. Only some "
             "chat and Seedance 1.x models take it; Model: Info shows which.",
         )
         extra_fields = io.String.Input(
             "extra_fields",
-            display_name="extra fields",
-            placeholder="extra fields",
             multiline=True,
             default="",
             advanced=True,
@@ -52,7 +49,7 @@ class RequestOptions(io.ComfyNode):
         """Check the extra fields before any request; a paid node checks the rest when it merges them."""
         options = Options(
             service_tier=None if service_tier == MODEL_DEFAULT else service_tier,
-            extra_fields=MappingProxyType(parse_fields(extra_fields, OPTIONS_JSON.format(field="extra fields")) or {}),
+            extra_fields=MappingProxyType(parse_fields(extra_fields, OPTIONS_JSON.format(field="extra_fields")) or {}),
         )
         return io.NodeOutput(options)
 

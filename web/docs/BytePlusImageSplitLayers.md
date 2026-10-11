@@ -11,7 +11,7 @@ each person, object, and block of text, with Seedream 5.0 pro or flash.
 | `size`                    | `1K`, `1.5K`, `2K`, or `auto`, which keeps the input image's size, within 1K to 2K.                                                                                            |
 | `optimize_prompt_options` | `standard` or `fast`, sent as `optimize_prompt_options.mode`, on models that offer it.                                                                                         |
 | `watermark`               | Adds an AI-generated mark in the lower right corner.                                                                                                                           |
-| `image`                   | One image to split, or references that hold one, such as the **references** of **Image: Generate**.                                                                            |
+| `image`                   | One image to split, or references that hold one, such as the `references` of **Image: Generate**.                                                                              |
 | `run_number`              | Change it to send the same request again.                                                                                                                                      |
 | `prompt`                  | What to split out. Leave it empty to split every main part, or mark a region as `<bbox>left top right bottom</bbox>`, from 0 0 at the top left to 999 999 at the bottom right. |
 | `options`                 | Settings from **Request Options**.                                                                                                                                             |
@@ -30,7 +30,7 @@ the prompt to make fewer layers.
 ## Use
 
 1. Connect the image and type the model ID.
-2. Connect **layers** and **masks** to **Join Image with Alpha**, and its
+2. Connect `layers` and `masks` to **Join Image with Alpha**, and its
    image to **Save Image**, to save each layer as a transparent PNG.
 3. Select **Run**.
 

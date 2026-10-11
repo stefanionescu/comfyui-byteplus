@@ -19,9 +19,9 @@ cancelled it, ComfyUI restarted, or it waited too long.
 
 ## Use
 
-1. Choose the task in **task**. Press R to list tasks started after the page
+1. Choose the task in `task`. Press R to list tasks started after the page
    loaded.
-2. Connect **video** to **Save Video**.
+2. Connect `video` to **Save Video**.
 3. Select **Run**.
 
 A task leaves the list once its video is downloaded, or when it fails, is

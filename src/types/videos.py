@@ -29,8 +29,8 @@ class VideoRequest:
         has_watermark: Whether ModelArk marks the video as AI-generated.
         first_frame: The image the video starts from: encoded here, or a reference ModelArk reads by address.
         last_frame: The image the video ends on, in the same forms.
-        images: The images connected to reference image, in list order and then batch order.
-        clips: The clips connected to reference audio as base64 WAV, in list order and then batch order.
+        images: The images connected to reference_image, in list order and then batch order.
+        clips: The clips connected to reference_audio as base64 WAV, in list order and then batch order.
         references: The references chain, in chain order.
         seed: The seed, sent only to models that take one.
         options: The service tier and extra fields from Request Options.

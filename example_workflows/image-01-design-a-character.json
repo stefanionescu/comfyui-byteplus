@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**: who they are, what they wear, and what they carry.\n3. Press **Run**. Both images are saved under `image/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Describe your character in **Character**: who they are, what they wear, and what they carry.\n3. Press **Run**. Both images are saved under `image/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its **references** carry the image's own ModelArk address on to **Wave**."
+        "Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its `references` carry the image's own ModelArk address on to **Wave**."
       ],
       "title": "Note"
     },

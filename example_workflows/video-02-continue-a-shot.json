@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the first shot in **Opening** and the next in **Next**.\n3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Describe the first shot in **Opening** and the next in **Next**.\n3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedance 2.0 mini makes the first five-second shot at 480p. Its **references** carry the shot's video and its last frame on, as ModelArk's own files.\n\nModelArk usually starts the task at once, so a cancelled run's video is still made and billed. Collect it with **video-05-recover-a-video**."
+        "Seedance 2.0 mini makes the first five-second shot at 480p. Its `references` carry the shot's video and its last frame on, as ModelArk's own files.\n\nModelArk usually starts the task at once, so a cancelled run's video is still made and billed. Collect it with **video-05-recover-a-video**."
       ],
       "title": "Note"
     },
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same way, each connected to the one before.\n\nTo continue the clip itself rather than start from its last frame, use Seedance 2.5, set **omni reference task type** to **extend**, and connect the first shot's **references** to **references** instead of **first frame**."
+        "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same way, each connected to the one before.\n\nTo continue the clip itself rather than start from its last frame, use Seedance 2.5, set `omni_reference_task_type` to `extend`, and connect the first shot's `references` to `references` instead of `first_frame`."
       ],
       "title": "Note"
     },

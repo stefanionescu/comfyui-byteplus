@@ -40,7 +40,6 @@ _CONTROLS = (
     ),
     io.Int.Input(
         "max_images",
-        display_name="max images",
         default=MAX_IMAGES["DEFAULT"],
         min=1,
         max=MAX_IMAGES["MAX"],
@@ -53,14 +52,14 @@ _CONTROLS = (
         "background",
         options=list(BACKGROUNDS),
         default=MODEL_DEFAULT,
-        tooltip="Transparent keeps the transparency of one reference image that has it, and makes a PNG.",
+        tooltip="With transparent, the node keeps the transparency of one reference image that has it, and makes "
+        "a PNG.",
     ),
     io.Combo.Input(
         "output_format",
-        display_name="output format",
         options=list(OUTPUT_FORMATS),
         default=MODEL_DEFAULT,
-        tooltip="PNG or JPEG. Model default is JPEG.",
+        tooltip="PNG or JPEG. With model default, the model makes JPEG.",
     ),
     OPTIMIZE_PROMPT_OPTIONS_INPUT,
     WATERMARK_INPUT,
@@ -104,7 +103,6 @@ class ImageGenerate(PaidNode):
                     "prompt",
                     multiline=True,
                     default="",
-                    placeholder="prompt",
                     tooltip="What to draw or change. Name references as Image 1, Image 2, and so on.",
                 ),
             ],

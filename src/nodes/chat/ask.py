@@ -51,20 +51,19 @@ _CONTROLS = (
         options=list(THINKING_CHOICES),
         default=MODEL_DEFAULT,
         tooltip=(
-            "Whether the model reasons before answering. Disabled is faster and costs less; some models always think."
+            "Whether the model reasons before answering. It answers faster and costs less when disabled; some "
+            "models always think."
         ),
     ),
     io.Combo.Input(
         "reasoning_effort",
-        display_name="reasoning effort",
         options=list(EFFORTS),
         default=MODEL_DEFAULT,
         advanced=True,
-        tooltip="How much the model reasons before answering. With thinking disabled, only minimal is allowed.",
+        tooltip="How much the model reasons before answering. With thinking set to disabled, only minimal is allowed.",
     ),
     io.Int.Input(
         "max_completion_tokens",
-        display_name="max completion tokens",
         default=0,
         min=0,
         max=MAX_COMPLETION_TOKENS,
@@ -83,7 +82,6 @@ _CONTROLS = (
                 [
                     io.Float.Input(
                         TEMPERATURE_CHOICE["VALUE"],
-                        display_name="value",
                         default=TEMPERATURE["DEFAULT"],
                         min=0,
                         max=TEMPERATURE["MAX"],
@@ -94,7 +92,7 @@ _CONTROLS = (
                 ],
             ),
         ],
-        tooltip="How much the answer varies. Set sends a value to models that take a temperature.",
+        tooltip="How much the answer varies. Choose set to send a value to models that take a temperature.",
         extra_dict={"advanced": True},
     ),
 )
@@ -147,8 +145,6 @@ class ChatAsk(PaidNode):
                 *build_request_inputs(),
                 io.String.Input(
                     "json_schema",
-                    display_name="JSON schema",
-                    placeholder="JSON schema",
                     default="",
                     multiline=True,
                     advanced=True,
@@ -157,13 +153,9 @@ class ChatAsk(PaidNode):
                         "for free text."
                     ),
                 ),
-                io.String.Input(
-                    "prompt", multiline=True, default="", placeholder="prompt", tooltip="The question or instruction."
-                ),
+                io.String.Input("prompt", multiline=True, default="", tooltip="The question or instruction."),
                 io.String.Input(
                     "system_prompt",
-                    display_name="system prompt",
-                    placeholder="system prompt",
                     multiline=True,
                     default="",
                     optional=True,

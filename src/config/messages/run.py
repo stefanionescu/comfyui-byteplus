@@ -19,8 +19,8 @@ ACCOUNT_STATUS = (
 )
 
 ANSWER_CUT = (
-    "The model reached its token limit before it began the answer. Raise max completion tokens or set it to 0, or "
-    "lower the reasoning effort or set thinking to disabled."
+    "The model reached its token limit before it began the answer. Raise max_completion_tokens or set it to 0, or "
+    "lower reasoning_effort or set thinking to disabled."
 )
 
 ANSWER_FILTERED = "ModelArk's content moderation stopped the answer. Change the prompt or the media, and run again."
@@ -37,7 +37,7 @@ FREE_QUOTA_USED = (
 INPUT_REFUSED = "ModelArk's content check refused an input: {reason} Change the prompt or the media, then run again."
 
 KEY_REJECTED = (
-    "ModelArk did not accept the API key. Check the key in BytePlus settings, and that it was made in the Asia "
+    "ModelArk did not accept the API key. Check the key in BytePlus Settings, and that it was made in the Asia "
     "Pacific (Johor) region."
 )
 
@@ -92,8 +92,8 @@ REQUEST_FAILED = "ModelArk returned HTTP {status}. Try again later."
 REQUEST_REJECTED = "ModelArk refused the request: {reason}"
 
 REQUEST_TIMEOUT = (
-    "The request took longer than the request timeout of {seconds} seconds in BytePlus settings. It may still have "
-    "run and been billed; check the Usage page at {usage_page} before running again."
+    "The request took longer than {seconds} seconds, the Request timeout (seconds) in BytePlus Settings. It may "
+    "still have run and been billed; check the Usage page at {usage_page} before running again."
 )
 
 REQUEST_UNCERTAIN = (
@@ -116,7 +116,7 @@ TASK_QUEUE_FULL = (
 
 TASK_TYPE_REFUSED = (
     "Seedance read the inputs as a different kind of video task than the request allows: {reason} Change the "
-    "references, the prompt, or the omni reference task type, then run again."
+    "references, the prompt, or omni_reference_task_type, then run again."
 )
 
 __all__ = [

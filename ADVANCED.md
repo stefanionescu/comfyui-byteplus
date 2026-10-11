@@ -22,19 +22,20 @@
 - **Chat: Ask** sends, in this order, the documents, the images as PNG, image
   references, the videos as MP4, video references, the audio as WAV, and audio
   references, then the prompt. PDF files go as files and text files as text.
-  Earlier turns come from **conversation**. It returns the answer, the
+  Earlier turns come from `conversation`. It returns the answer, the
   reasoning when the model shares it, and the conversation.
-- **Image: Generate** sends the prompt, the chosen settings, each reference
-  image as PNG, and image references as their addresses. Above a **max
-  images** of 1 it asks for sequential image generation of up to that many
+- **Image: Generate** sends the prompt, the chosen settings, each image in
+  `image` as PNG, and image references as their addresses. When `max_images`
+  is above 1, it asks for sequential image generation of up to that many
   images. It returns the images, their masks (white is transparent), and their
   addresses as references.
 - **Image: Split Layers** sends one image or image reference. It returns the
   base image, each layer, and each layer's mask.
 - **Video: Generate** sends the prompt, the length, the resolution, the chosen
-  settings, the frames, the reference images and audio, and the references. It
-  records the task as soon as ModelArk accepts it, checks it every 10 seconds,
-  and downloads the video and its last frame when it is ready.
+  settings, the frames, `reference_image`, `reference_audio`, and
+  `references`. It records the task as soon as ModelArk accepts it, checks it
+  every 10 seconds, and downloads the video and its last frame when it is
+  ready.
 - **Video: Download** checks one recorded task and downloads its video. Status
   checks and downloads are free.
 - **Reference: Add** adds an asset ID or a public address to a chain of
@@ -45,7 +46,7 @@
   format command, the images as PNG, and the image references, as one task. It
   records the task, checks it every 10 seconds, and downloads the GLB file.
   **3D: Download** collects a recorded 3D task.
-- **Request Options** adds the service tier and its extra fields to each
+- **Request Options** adds `service_tier` and `extra_fields` to each
   connected paid node's request.
 - **Model: Info** reads the model table bundled with the extension and returns
   one row as JSON. It sends nothing.
@@ -55,7 +56,7 @@ key.
 
 ## Keys and access
 
-Save the key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.
+Save the key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.
 It is stored in the private folder and checked by the first request that uses
 it. `ARK_API_KEY`, set where ComfyUI starts, takes precedence.
 
@@ -77,15 +78,15 @@ owner-only permissions.
 
 ## Settings
 
-Change these in **BytePlus settings**. New requests use the saved values.
+Change these in **BytePlus Settings**. New requests use the saved values.
 
-![The BytePlus Settings dialog: the ModelArk API key field with Save Key and Clear Saved Key, and the request timeout, maximum upload size, and maximum download size with Save Limits.](docs/images/settings-dialog.png)
+![The BytePlus Settings dialog: Credentials with the ModelArk API key field, Save Key, and Clear Saved Key, and Request limits with Request timeout (seconds), Maximum upload size (MB), Maximum download size (MB), and Save Limits.](docs/images/settings-dialog.png)
 
-| Setting                    | Default | Range      | What it limits                                                         |
-| -------------------------- | ------- | ---------- | ---------------------------------------------------------------------- |
-| request timeout (seconds)  | 1800    | 10 to 3600 | How long one request may take; for a video or 3D task, the whole wait. |
-| maximum upload size (MB)   | 64      | 1 to 64    | The media and documents in one request.                                |
-| maximum download size (MB) | 512     | 16 to 4096 | The largest reply, image, video, or 3D file accepted.                  |
+| Setting                        | Default | Range      | What it limits                                                         |
+| ------------------------------ | ------- | ---------- | ---------------------------------------------------------------------- |
+| **Request timeout (seconds)**  | 1800    | 10 to 3600 | How long one request may take; for a video or 3D task, the whole wait. |
+| **Maximum upload size (MB)**   | 64      | 1 to 64    | The media and documents in one request.                                |
+| **Maximum download size (MB)** | 512     | 16 to 4096 | The largest reply, image, video, or 3D file accepted.                  |
 
 ## Models
 
@@ -100,7 +101,8 @@ the table and stops, before anything is paid, when:
   **Image: Generate**;
 - connected images, video, audio, or PDFs are media the model does not read;
 - a setting is one the model does not take, or a value outside what it takes;
-- **Request Options** asks for flex on a model that does not take it.
+- **Request Options** sets `service_tier` to `flex` on a model that does not
+  take it.
 
 The message names what the model takes. A newer version of a known model,
 such as a future `seed-2-0-lite-261201`, is checked against its family's newest
@@ -109,8 +111,8 @@ for free.
 
 **Chat: Ask** also takes a chat model newer than the table. The node reads
 ModelArk's model list once per ComfyUI session and checks the media against
-what the list says the model reads. Such a model takes no **thinking**,
-**reasoning effort**, or PDFs.
+what the list says the model reads. Such a model takes no `thinking`,
+`reasoning_effort`, or PDFs.
 
 | Node                | Default model                       |
 | ------------------- | ----------------------------------- |
@@ -130,7 +132,7 @@ accepts these characters:
   **Reference: Add**.
 - An image Seedream 5.0 drew from a prompt alone, or a Seedance 2.x video or
   its last frame, made with your account in the last 30 days. Seedance trusts
-  only the original file, so connect the **references** output, not the
+  only the original file, so connect the `references` output, not the
   decoded image.
 - An asset from your ModelArk asset library, added by its ID with
   **Reference: Add**.
@@ -141,7 +143,7 @@ an asset (`asset://asset-…`); or a public `https://` address added with
 **Reference: Add**.
 
 **Video: Generate** numbers media by kind, in the order it sends them: Image
-1, Image 2, Video 1, Audio 1. Images connected to **reference image** come
+1, Image 2, Video 1, Audio 1. Images connected to `reference_image` come
 first, then image references in chain order. Audio works the same way, and
 videos come only from references. **Reference: Add** puts its reference after
 the ones it receives. Name each file in the prompt by its place, such as "the
@@ -159,9 +161,9 @@ or extend your own video, put it at a public address and add it with
 
 ## Caching and reruns
 
-- Change **run number** to send the same request again.
-- **Video: Generate**'s **seed** starts **fixed**. Set **control after
-  generate** to **randomize** to send a new request each run.
+- Change `run_number` to send the same request again.
+- **Video: Generate**'s `seed` starts at `fixed`. Set **control after
+  generate** to `randomize` to send a new request each run.
 - Saving a different key invalidates the cached results; changing settings
   does not.
 - Every request is sent once.
@@ -172,17 +174,17 @@ or extend your own video, put it at a public address and add it with
 
 **Video: Generate** and **3D: Generate** record each task as soon as ModelArk
 accepts it. ModelArk usually starts a task at once. The task then runs to the
-end and is billed even if you cancel, ComfyUI restarts, or the **request
-timeout** passes. Collect it with **Video: Download** or **3D: Download**
-(press R to list new tasks). A task leaves the list once its file is
-downloaded, or when it fails, is cancelled, or expires.
+end and is billed even if you cancel, ComfyUI restarts, or the **Request
+timeout (seconds)** passes. Collect it with **Video: Download** or **3D:
+Download** (press R to list new tasks). A task leaves the list once its file
+is downloaded, or when it fails, is cancelled, or expires.
 
 ## Limits
 
 The extension adds no limits of its own to what a request holds. Only your
-settings and the model's limits apply: the upload and download sizes and the
-request timeout in **BytePlus settings**, and the limits **Model: Info**
-reports. ModelArk refuses a request outside the model's limits.
+settings and the model's limits apply: the **Request limits** in **BytePlus
+Settings**, and the limits **Model: Info** reports. ModelArk refuses a request
+outside the model's limits.
 
 ## When a node stops
 
@@ -194,7 +196,7 @@ Every paid node stops when:
   **Video: Generate** takes assets and drafts, and never as a frame.
 - An input other than its media receives a list of several values.
 
-**Chat: Ask** stops when the prompt is empty, or the JSON schema is not a JSON
+**Chat: Ask** stops when the prompt is empty, or `json_schema` is not a JSON
 object.
 
 **Chat: Attach Document** stops when:
@@ -206,21 +208,20 @@ object.
 **Image: Generate** stops when the prompt is empty, or a transparent background
 asks for JPEG or lacks exactly one reference image with transparency.
 
-**Image: Split Layers** stops when the image input holds no image or more than
-one.
+**Image: Split Layers** stops when `image` holds no image or more than one.
 
 **Video: Generate** stops when:
 
 - There is no prompt, frame, or reference media.
-- A last frame is connected without a first frame.
+- `last_frame` is connected without `first_frame`.
 - Frames and reference media are both connected, or a frame holds more than one
   image.
 - The prompt holds a setting the node's inputs set, such as `--duration 5`.
-- **omni reference task type** is `edit` or `extend` without a reference
+- `omni_reference_task_type` is `edit` or `extend` without a reference
   video, or `reference` without reference media.
-- A draft to finish comes with a prompt, other media, or **draft** turned on.
+- A draft to finish comes with a prompt, other media, or `draft` turned on.
 
-**Reference: Add** stops when **url** is empty, is not an asset ID, an
+**Reference: Add** stops when `url` is empty, is not an asset ID, an
 `asset://` URI, or an `https://` address, or is already in the chain.
 
 **Search: Embed** stops when there are no items, or a line, image, or video is
@@ -233,7 +234,7 @@ other than GLB.
 **Video: Download** and **3D: Download** stop when the chosen task is not
 recorded on this server.
 
-**Request Options** stops when **extra fields** is not a JSON object. A paid
+**Request Options** stops when `extra_fields` is not a JSON object. A paid
 node stops when the options set a field the node sets itself.
 
 **Model: Info** stops on the IDs the [model checks](#models) refuse.
@@ -512,9 +513,9 @@ you packaged.
 
 Most messages say what to do. These need more.
 
-### Set your ModelArk API key in BytePlus settings
+### Set your ModelArk API key in BytePlus Settings
 
-Save the key in **BytePlus settings**, or set `ARK_API_KEY` where ComfyUI
+Save the key in **BytePlus Settings**, or set `ARK_API_KEY` where ComfyUI
 starts and restart.
 
 ### ModelArk did not accept the API key

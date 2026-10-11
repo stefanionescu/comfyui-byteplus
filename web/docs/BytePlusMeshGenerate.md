@@ -26,13 +26,13 @@ GLB, or no image for Hitem3D.
 ## Use
 
 1. Connect images of the subject, or write a prompt.
-2. Connect **model_3d** to **Save 3D Model**.
+2. Connect `model_3d` to **Save 3D Model**.
 3. Select **Run**.
 
 Example: **3d-01-turn-a-character-into-a-3d-model**.
 
 ModelArk usually starts a task at once. The task then runs to the end and is
-billed even if you cancel, ComfyUI restarts, or the request timeout passes.
-Collect it with **3D: Download**.
+billed even if you cancel, ComfyUI restarts, or the **Request timeout
+(seconds)** passes. Collect it with **3D: Download**.
 
 [ModelArk 3D generation documentation](https://docs.byteplus.com/en/docs/modelark/shadoweye-create-3d-generation-task-api)

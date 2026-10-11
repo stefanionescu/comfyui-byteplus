@@ -4,7 +4,7 @@ var TEXT = {
   close: "Close",
   settings: {
     clearKey: "Clear Saved Key",
-    close: "Close BytePlus settings",
+    close: "Close BytePlus Settings",
     credentialLabel: "ModelArk API key",
     credentials: "Credentials",
     environmentKey: "Set by ARK_API_KEY",
@@ -31,14 +31,14 @@ var TEXT = {
     updateFailed: "BytePlus settings could not be saved.",
     readFailed: "ComfyUI could not read BytePlus settings.",
     removeFailed: "ComfyUI could not clear the saved ModelArk API key.",
-    menu: "BytePlus settings"
+    menu: "BytePlus Settings"
   },
   working: "Working..."
 };
 var LIMIT_LABELS = /* @__PURE__ */ new Map([
-  ["max_download_megabytes", "maximum download size (MB)"],
-  ["max_upload_megabytes", "maximum upload size (MB)"],
-  ["request_timeout_seconds", "request timeout (seconds)"]
+  ["max_download_megabytes", "Maximum download size (MB)"],
+  ["max_upload_megabytes", "Maximum upload size (MB)"],
+  ["request_timeout_seconds", "Request timeout (seconds)"]
 ]);
 function message(key) {
   let value = TEXT;

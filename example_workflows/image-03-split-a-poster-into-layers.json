@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the poster in **Poster**. Put any words it shows in quotation marks.\n3. Press **Run**. The poster and each layer are saved under `image/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n2. Describe the poster in **Poster**. Put any words it shows in quotation marks.\n3. Press **Run**. The poster and each layer are saved under `image/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 5.0 flash draws the poster at 3:4 as a PNG. Its **references** carry the poster's own address on to **Split**."
+        "Seedream 5.0 flash draws the poster at 3:4 as a PNG. Its `references` carry the poster's own address on to **Split**."
       ],
       "title": "Note"
     },

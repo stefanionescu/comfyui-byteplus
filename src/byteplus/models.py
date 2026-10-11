@@ -135,8 +135,8 @@ def find_model(model_id: str, kind: Kind | None) -> ModelMatch[ModelRow]:
 def validate_value(match: ModelMatch[ModelRow], label: str, value: str, values: Sequence[str]) -> None:
     """Refuse a setting the model does not take at all, or a value it does not list.
 
-    The label is the control's label as the node shows it, such as output format. An empty list of values means the
-    model takes no such setting.
+    The label is the input's ID, such as output_format. An empty list of values means the model takes no such
+    setting.
     """
     if not values:
         raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field=label))
