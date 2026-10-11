@@ -38,6 +38,7 @@ SHARED_TEXTS = {
     "score": "Score",
     "scores": "Scores",
     "choose": "Choose",
+    "build": "Build",
 }
 
 __all__ = ["SHARED_TEXTS"]

@@ -1,0 +1,914 @@
+{
+  "id": "49282fc7-3500-5d7a-9445-e65b640e9768",
+  "revision": 0,
+  "last_node_id": 10,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        30,
+        140
+      ],
+      "size": [
+        340,
+        132
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**.\n3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`.\n\nBytePlus offers 3D generation only to accounts in some countries. Models: Seedream 5.0 flash and Hyper3D Gen2. Activate them on ModelArk's **Model activation** page."
+      ],
+      "title": "Start Here"
+    },
+    {
+      "id": 2,
+      "type": "MarkdownNote",
+      "pos": [
+        460,
+        140
+      ],
+      "size": [
+        340,
+        132
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "Seedream 5.0 flash draws the character standing in a T-pose, from the front, on a plain white background, which Hyper3D turns into a clean model."
+      ],
+      "title": "Note"
+    },
+    {
+      "id": 3,
+      "type": "MarkdownNote",
+      "pos": [
+        890,
+        140
+      ],
+      "size": [
+        780,
+        132
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "Hyper3D Gen2 turns the image into a 3D model with PBR textures, in a pose ready for rigging. **Save 3D Model** saves it and shows it.\n\nIf you cancel while the task is queued, it is cancelled and nothing is billed. Once it has started, it runs to the end; collect it in **Recover**."
+      ],
+      "title": "Note"
+    },
+    {
+      "id": 4,
+      "type": "MarkdownNote",
+      "pos": [
+        890,
+        1056
+      ],
+      "size": [
+        780,
+        132
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn them on, choose the task in **job**, and press **Run**. Press R to list tasks started after the page loaded."
+      ],
+      "title": "Note"
+    },
+    {
+      "id": 5,
+      "type": "PrimitiveStringMultiline",
+      "pos": [
+        30,
+        336
+      ],
+      "size": [
+        340,
+        88
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "value"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "A friendly robot gardener with a round body, a watering can for one hand, and green moss on its shoulders."
+      ],
+      "title": "Character"
+    },
+    {
+      "id": 6,
+      "type": "b04e8c4d-a88e-5a40-add1-0d1495141ae3",
+      "pos": [
+        460,
+        336
+      ],
+      "size": [
+        340,
+        26
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "character",
+          "type": "*",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "shape": 6,
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "previewExposures": [
+          {
+            "name": "$$canvas-image-preview",
+            "sourceNodeId": "103",
+            "sourcePreviewName": "$$canvas-image-preview"
+          }
+        ]
+      },
+      "widgets_values": [],
+      "title": "Design"
+    },
+    {
+      "id": 7,
+      "type": "BytePlusMeshGenerate",
+      "pos": [
+        890,
+        336
+      ],
+      "size": [
+        340,
+        320
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "model"
+          }
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2,
+          "shape": 7
+        },
+        {
+          "name": "references",
+          "type": "BYTEPLUS_REFERENCES",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "texture",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "texture"
+          }
+        },
+        {
+          "name": "topology",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "topology"
+          }
+        },
+        {
+          "name": "faces",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "faces"
+          }
+        },
+        {
+          "name": "precision",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "precision"
+          }
+        },
+        {
+          "name": "pose",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "pose"
+          }
+        },
+        {
+          "name": "views",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "views"
+          }
+        },
+        {
+          "name": "run_number",
+          "type": "INT",
+          "link": null,
+          "widget": {
+            "name": "run_number"
+          }
+        },
+        {
+          "name": "options",
+          "type": "BYTEPLUS_OPTIONS",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BytePlusMeshGenerate"
+      },
+      "widgets_values": [
+        "hyper3d-gen2-260112",
+        "PBR",
+        "model default",
+        0,
+        "model default",
+        "T or A pose",
+        "",
+        0,
+        ""
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 8,
+      "type": "SaveGLB",
+      "pos": [
+        1270,
+        336
+      ],
+      "size": [
+        400,
+        550
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 3
+        },
+        {
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "filename_prefix"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveGLB"
+      },
+      "widgets_values": [
+        "3d/byteplus/character"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "BytePlusMeshDownload",
+      "pos": [
+        890,
+        1252
+      ],
+      "size": [
+        340,
+        58
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "job",
+          "type": "COMBO",
+          "link": null,
+          "widget": {
+            "name": "job"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BytePlusMeshDownload"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 10,
+      "type": "SaveGLB",
+      "pos": [
+        1270,
+        1252
+      ],
+      "size": [
+        400,
+        550
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 4
+        },
+        {
+          "name": "filename_prefix",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "filename_prefix"
+          }
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveGLB"
+      },
+      "widgets_values": [
+        "3d/byteplus/recovered"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      5,
+      0,
+      6,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      6,
+      0,
+      7,
+      1,
+      "IMAGE"
+    ],
+    [
+      3,
+      7,
+      0,
+      8,
+      0,
+      "FILE_3D_GLB"
+    ],
+    [
+      4,
+      9,
+      0,
+      10,
+      0,
+      "FILE_3D_GLB"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Input",
+      "bounding": [
+        0,
+        30,
+        400,
+        424
+      ],
+      "color": "#55746b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Design",
+      "bounding": [
+        430,
+        30,
+        400,
+        362
+      ],
+      "color": "#68688c",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Build",
+      "bounding": [
+        860,
+        30,
+        840,
+        886
+      ],
+      "color": "#68688c",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Recover",
+      "bounding": [
+        860,
+        946,
+        840,
+        886
+      ],
+      "color": "#68688c",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5,
+      "offset": [
+        30,
+        30
+      ]
+    }
+  },
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "b04e8c4d-a88e-5a40-add1-0d1495141ae3",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 103,
+          "lastLinkId": 4,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Design",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            20
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            1390,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "b11439d9-d0f8-51c0-b6fb-bad843da5810",
+            "name": "character",
+            "type": "*",
+            "linkIds": [
+              3
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "f9e1cbeb-2fec-5c40-a300-680a857866a0",
+            "name": "image",
+            "type": "IMAGE",
+            "linkIds": [
+              4
+            ],
+            "pos": [
+              1390,
+              140
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 101,
+            "type": "StringFormat",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              128
+            ],
+            "flags": {},
+            "order": 100,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "name": "values.a",
+                "type": "*",
+                "link": 3,
+                "shape": 7
+              },
+              {
+                "label": "b",
+                "name": "values.b",
+                "type": "*",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "f_string",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "f_string"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  1
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "StringFormat"
+            },
+            "widgets_values": [
+              "Full-body game character, standing in a T-pose, front view, plain white background, soft even light, no shadows. {a}"
+            ]
+          },
+          {
+            "id": 102,
+            "type": "BytePlusImageGenerate",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              344
+            ],
+            "flags": {},
+            "order": 101,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "model"
+                }
+              },
+              {
+                "name": "size",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "size"
+                }
+              },
+              {
+                "name": "aspect_ratio",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "aspect_ratio"
+                }
+              },
+              {
+                "name": "count",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "count"
+                }
+              },
+              {
+                "name": "background",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "background"
+                }
+              },
+              {
+                "name": "output_format",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "output_format"
+                }
+              },
+              {
+                "name": "prompt_optimization",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "prompt_optimization"
+                }
+              },
+              {
+                "name": "watermark",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "watermark"
+                }
+              },
+              {
+                "name": "reference_images",
+                "type": "IMAGE",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "run_number",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "run_number"
+                }
+              },
+              {
+                "name": "options",
+                "type": "BYTEPLUS_OPTIONS",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "prompt",
+                "type": "STRING",
+                "link": 1,
+                "widget": {
+                  "name": "prompt"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "shape": 6,
+                "links": [
+                  2,
+                  4
+                ]
+              },
+              {
+                "name": "masks",
+                "type": "MASK",
+                "shape": 6,
+                "links": []
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "BytePlusImageGenerate"
+            },
+            "widgets_values": [
+              "dola-seedream-5-0-flash-260915",
+              "model default",
+              "model default",
+              1,
+              "model default",
+              "model default",
+              "model default",
+              false,
+              0,
+              ""
+            ],
+            "color": "#432",
+            "bgcolor": "#653"
+          },
+          {
+            "id": 103,
+            "type": "PreviewImage",
+            "pos": [
+              960,
+              140
+            ],
+            "size": [
+              340,
+              290
+            ],
+            "flags": {},
+            "order": 102,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": 2
+              }
+            ],
+            "outputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "PreviewImage"
+            },
+            "widgets_values": []
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 102,
+            "target_slot": 12,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": 102,
+            "origin_slot": 0,
+            "target_id": 103,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 3,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 101,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 4,
+            "origin_id": 102,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "IMAGE"
+          }
+        ],
+        "extra": {
+          "description": "Draws the character in a T-pose."
+        }
+      }
+    ]
+  }
+}

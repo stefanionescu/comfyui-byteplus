@@ -231,6 +231,31 @@ WORKFLOW_TEXTS = {
         ),
         "choose_description": "Picks the option with the highest score and saves it.",
     },
+    "3d-01-turn-a-character-into-a-3d-model": {
+        "input": (
+            KEY_STEP + "2. Describe your character in **Character**.\n"
+            "3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`.\n\n"
+            "BytePlus offers 3D generation only to accounts in some countries. Models: Seedream 5.0 flash and Hyper3D "
+            "Gen2. Activate them on ModelArk's **Model activation** page."
+        ),
+        "design": (
+            "Seedream 5.0 flash draws the character standing in a T-pose, from the front, on a plain white "
+            "background, which Hyper3D turns into a clean model."
+        ),
+        "design_description": "Draws the character in a T-pose.",
+        "build": (
+            "Hyper3D Gen2 turns the image into a 3D model with PBR textures, in a pose ready for rigging. **Save 3D "
+            "Model** saves it and shows it.\n\n"
+            "If you cancel while the task is queued, it is cancelled and nothing is billed. Once it has started, it "
+            "runs to the end; collect it in **Recover**."
+        ),
+        "recover": (
+            "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after "
+            "ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn "
+            "them on, choose the task in **job**, and press **Run**. Press R to list tasks started after the page "
+            "loaded."
+        ),
+    },
 }
 
 __all__ = ["WORKFLOW_TEXTS"]

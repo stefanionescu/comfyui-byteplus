@@ -71,6 +71,8 @@ DOM_SIZES: dict[str, tuple[int, int]] = {
     HostNode.SAVE_IMAGE: (340, 290),
     HostNode.PREVIEW_IMAGE: (340, 290),
     HostNode.SAVE_VIDEO: (340, 106),
+    # The page makes a new Save 3D Model node at least 400 by 550, the room its 3D viewer needs.
+    HostNode.SAVE_MESH: (400, 550),
 }
 
 __all__ = [

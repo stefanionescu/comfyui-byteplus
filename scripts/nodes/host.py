@@ -21,6 +21,7 @@ class HostNode(StrEnum):
     JOIN_ALPHA = "JoinImageWithAlpha"
     SAVE_TEXT = "SaveText"
     SAVE_VIDEO = "SaveVideo"
+    SAVE_MESH = "SaveGLB"
     JOIN_VIDEOS = "ConcatenateVideo"
 
 

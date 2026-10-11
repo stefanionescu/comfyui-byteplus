@@ -14,6 +14,7 @@ from scripts.workflows.page.graph import Node, NAMESPACE
 from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.paths import REPO_ROOT, README_PATH, EXAMPLES_DIR
 from scripts.workflows.descriptions.chat import CHAT_WORKFLOWS
+from scripts.workflows.descriptions.mesh import MESH_WORKFLOWS
 from scripts.workflows.page.sizes import measure, measure_note
 from scripts.workflows.descriptions.image import IMAGE_WORKFLOWS
 from scripts.workflows.descriptions.video import VIDEO_WORKFLOWS
@@ -37,6 +38,7 @@ WORKFLOWS = (
     *IMAGE_WORKFLOWS,
     *VIDEO_WORKFLOWS,
     *SEARCH_WORKFLOWS,
+    *MESH_WORKFLOWS,
 )
 
 

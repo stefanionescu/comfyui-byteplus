@@ -6,6 +6,8 @@ from .search import SearchEmbed
 from comfy_api.latest import io
 from .options import RequestOptions
 from .reference import ReferenceAdd
+from .mesh.download import MeshDownload
+from .mesh.generate import MeshGenerate
 from .image.generate import ImageGenerate
 from .video.download import VideoDownload
 from .video.generate import VideoGenerate
@@ -21,6 +23,8 @@ NODE_TYPES: tuple[type[io.ComfyNode], ...] = (
     VideoDownload,
     ReferenceAdd,
     SearchEmbed,
+    MeshGenerate,
+    MeshDownload,
     RequestOptions,
     ModelInfo,
 )

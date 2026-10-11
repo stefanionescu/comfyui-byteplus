@@ -103,6 +103,44 @@ LAYER_IMAGE_SIZE = (
     "and its long side at most 16 times the short side. Resize it with Scale Image to Total Pixels."
 )
 
+MESH_IMAGES_ADDRESS_ONLY = (
+    "{model} reads images only from public addresses. Connect them to references instead, for example Image: "
+    "Generate's references output or Reference: Add."
+)
+
+MESH_IMAGE_COUNT = (
+    "{model} takes at most {maximum} images, and {count} are connected. Connect fewer images and image references."
+)
+
+MESH_IMAGE_PIXELS = (
+    "Image {number} is {width} by {height} pixels, and ModelArk takes 3D source images of fewer than 4096 by 4096 "
+    "pixels. Shrink it with ComfyUI's Scale Image to Total Pixels."
+)
+
+MESH_IMAGE_REQUIRED = "{model} needs at least one image. Connect an image reference."
+
+MESH_IMAGE_SIZE = (
+    "Image {number} is {size} MB as PNG, and ModelArk takes 3D source images under 30 MB. Shrink it with ComfyUI's "
+    "Scale Image to Total Pixels."
+)
+
+MESH_INPUT_EMPTY = "Write a prompt, or connect images or image references to make the 3D model from."
+
+MESH_PROMPT_COMMAND = "The prompt holds a ModelArk 3D command (--{name}). Remove it; the node's inputs set these."
+
+MESH_PROMPT_LENGTH = "{model} reads at most {maximum} characters of prompt with these settings. Shorten the prompt."
+
+MESH_PROMPT_UNSUPPORTED = "{model} makes 3D models from images only. Clear the prompt."
+
+MESH_VIEWS = (
+    "Write views as the side each image shows, separated by commas, in the order front, back, left, right, such as: "
+    "front, left."
+)
+
+MESH_VIEWS_COUNT = (
+    "Views lists {views} sides, and {count} images are connected. Name one side for each image, or leave views empty."
+)
+
 OPTIONS_JSON = "Write {field} as a JSON object, or leave it empty."
 
 OPTION_FLEX = (
@@ -245,6 +283,17 @@ __all__ = [
     "IMAGE_SINGLE",
     "LAST_FRAME_ALONE",
     "LAYER_IMAGE_SIZE",
+    "MESH_IMAGES_ADDRESS_ONLY",
+    "MESH_IMAGE_COUNT",
+    "MESH_IMAGE_PIXELS",
+    "MESH_IMAGE_REQUIRED",
+    "MESH_IMAGE_SIZE",
+    "MESH_INPUT_EMPTY",
+    "MESH_PROMPT_COMMAND",
+    "MESH_PROMPT_LENGTH",
+    "MESH_PROMPT_UNSUPPORTED",
+    "MESH_VIEWS",
+    "MESH_VIEWS_COUNT",
     "OPTIONS_JSON",
     "OPTION_FLEX",
     "OPTION_RESERVED_FIELD",
