@@ -24,12 +24,10 @@ Run any BytePlus ModelArk model in ComfyUI with your own API key.
 
 - Python 3.12 or later.
 - ComfyUI 0.37.2 or later, with frontend 1.52.7 or later in the 1.x series.
-- A BytePlus account with ModelArk in the Asia Pacific (Johor) region, and a
-  ModelArk API key.
-- Each model you use, activated on the ModelArk console's **Model activation**
-  page. BytePlus activates the Seedance 2.x video models only for an account
-  with a balance over 30 US dollars, an AI Savings Plan at the 30-US-dollar
-  tier or above, or a prepaid Seedance resource pack.
+- A ModelArk API key for the Asia Pacific (Johor) region.
+
+Activate each model you plan to use on the **Model activation** page of the
+ModelArk console.
 
 ## Install
 
@@ -86,7 +84,7 @@ To update or remove the extension, see the
 1. Save your ModelArk API key in **ComfyUI menu → Extensions → BytePlus →
    BytePlus Settings**.
 2. Activate Seedream 5.0 flash (`dola-seedream-5-0-flash-260915`) on the
-   ModelArk console's **Model activation** page.
+   **Model activation** page of the ModelArk console.
 3. Open **Browse Templates → comfyui-byteplus →
    image-01-design-a-character** and select **Run**.
 4. See your character, then the same character waving, in **Design** and
@@ -143,9 +141,9 @@ The nodes are under **BytePlus** in the node menu, and each has a help page.
 ## Models
 
 Each paid node takes any model ID from the
-[ModelArk model list](https://docs.byteplus.com/en/docs/modelark/model-list).
-A newer version of a model the extension knows also works. **Model: Info**
-shows what a model the extension knows takes, for free and without a key.
+[ModelArk model list](https://docs.byteplus.com/en/docs/modelark/model-list),
+including newer versions of the models the extension knows. **Model: Info**
+shows what a known model takes, for free and without a key.
 
 ![Video: Generate on the canvas: sockets for first_frame, last_frame, reference_image, reference_audio, references, and options; model set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate_audio, omni_reference_task_type, draft, camera_fixed, output_format, watermark, seed, and run_number; and a prompt about a red fox in the snow.](docs/images/video-generate-node.png)
 
@@ -162,8 +160,9 @@ model.
 2. It sends the request with your key, straight to ModelArk. Nothing is sent
    twice. A video or 3D task is recorded, checked until ready, and
    downloaded.
-3. Outputs keep the address of each file ModelArk made, so the next node can
-   send ModelArk's own file. Nodes connected to an empty output are skipped.
+3. Outputs also carry the ModelArk address of each file, so the next node
+   sends that address instead of uploading the file again. Nodes connected to
+   an empty output are skipped.
 
 The [advanced guide](ADVANCED.md#what-each-node-sends) lists what each node
 sends and returns.

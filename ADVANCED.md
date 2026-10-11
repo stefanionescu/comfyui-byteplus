@@ -527,8 +527,7 @@ starts and restart.
 
 ### This model is not activated on your BytePlus account
 
-Activate it on **Model activation**. For Seedance 2.x, first meet the condition
-in the [requirements](README.md#requirements).
+Activate it on the **Model activation** page of the ModelArk console.
 
 ### ModelArk refused a reference that may show a real person
 

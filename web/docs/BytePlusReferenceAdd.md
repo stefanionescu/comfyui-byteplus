@@ -28,7 +28,6 @@ Chain several of these nodes to add several files. It sends nothing.
 
 Asset IDs work only in **Video: Generate** with Seedance 2.5 and 2.0-series
 models. Every other node takes `https://` addresses and ModelArk outputs.
-BytePlus allows content made with preset characters only for trying the models
-and internal use. Example: **video-03-cast-a-preset-character**.
+Example: **video-03-cast-a-preset-character**.
 
 [BytePlus digital character library](https://docs.byteplus.com/en/docs/modelark/avatar-library)
