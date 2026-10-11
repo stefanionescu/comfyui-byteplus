@@ -425,20 +425,25 @@ checks all four.
 
 The README's and this guide's images are in `docs/images/`:
 
-- `banner.jpg` is generated artwork. Replace it as a whole image in the same
-  colors.
-- `node-map.svg` and the four `badge-*.svg` files are SVG files; edit them as
-  text. They use ComfyUI's ink `#211927`, panels `#312C34`, edges `#413B45`,
-  text `#C2BFB9`, and yellow `#F0FF41`, and BytePlus's blue `#0066FC`.
-- In the node map, a paid node has a blue bar and a free one a grey bar. An
-  arrow is a solid yellow line from an output to the input it feeds; nodes that
-  share no link have no arrow.
+- `banner.svg`, `node-map.svg`, and the four `badge-*.svg` files are SVG files;
+  edit them as text. They use black `#06080D`, surfaces `#10141B`, hairlines
+  `#232A35`, light text `#EEF3FF`, muted text `#8A93A3`, accent `#5C9DFF`, and
+  the blue gradient `#9CC4FF` to `#2F80FF`. Headings use Helvetica Neue with
+  tight spacing; labels use a monospace font in wide-spaced capitals.
+- `logo.png` is the extension's mark: a rounded node tile in BytePlus blue
+  `#0066FC`, with a plus cut out and an output socket on its right edge, at 400
+  × 400 pixels on a transparent background. The banner draws the same mark, and
+  `pyproject.toml` names `logo.png` as the Registry icon.
+- The node map has one card for each kind of node. A blue square marks a node
+  that sends a paid request and a hollow square one that bills nothing. A blue
+  arrow runs from an output to the input it feeds.
 - The badges under the banner name the ComfyUI, frontend, and Python versions
-  and the license, on ink and grey; update them when those change.
-- `workflow-cast-group.png` is the **Character** group of video-03 at 100%
-  zoom, with link midpoint markers off.
+  and the license, as black pills with a blue value; update them when those
+  change.
+- `workflow-animate-a-character.png` is video-01 at 100% zoom, with link
+  midpoint markers off.
 - `video-generate-node.png` is a new **Video: Generate** node, 420 pixels wide,
-  at 100% zoom.
+  at 100% zoom, with a prompt typed in.
 - `settings-dialog.png` is the **BytePlus Settings** dialog with default
   settings and a saved key.
 

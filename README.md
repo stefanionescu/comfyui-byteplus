@@ -1,4 +1,4 @@
-# ![comfyui-byteplus: run any BytePlus ModelArk model in ComfyUI](docs/images/banner.jpg)
+# ![comfyui-byteplus: a ComfyUI extension that runs BytePlus ModelArk models](docs/images/banner.svg)
 
 [![ComfyUI 0.37.2 or later](docs/images/badge-comfyui.svg)](#requirements)
 [![Frontend 1.52.7 or later](docs/images/badge-frontend.svg)](#requirements)
@@ -125,7 +125,7 @@ They are in **Browse Templates → comfyui-byteplus**. Start with each
 workflow's **Start Here** note. Most steps are subgraphs. Media inputs start
 empty, and most workflows draw their own inputs with Seedream.
 
-![Screenshot of the Character group in video-03: a note explains that Reference: Add adds the preset character after the product, so the product is Image 1 and the character Image 2, and the Reference: Add node shows its kind set to image and an empty url field.](docs/images/workflow-cast-group.png)
+![Screenshot of video-01 in three groups: Input holds the Start Here note and the Character and Scene prompts, Design holds a note and the Design subgraph, which draws the character, and Animate holds a note and the Animate subgraph, which starts the video on that character.](docs/images/workflow-animate-a-character.png)
 
 After an update, open the examples in a new tab to get the new versions.
 
@@ -133,7 +133,7 @@ After an update, open the examples in a new tab to get the new versions.
 
 The nodes are under **BytePlus** in the node menu, and each has a help page.
 
-![Node map. Chat: Attach Document feeds Chat: Ask. Image: Generate feeds Image: Split Layers. Image: Generate and Reference: Add feed references into Video: Generate, and Video: Generate feeds its own references into the next Video: Generate. Request Options feeds any paid node. Model: Info stands alone and needs no key. Video: Download and 3D: Download collect tasks left running, so no link joins them. Paid nodes have a blue bar.](docs/images/node-map.svg)
+![Node map: one card for each kind of node. Chat: Attach Document feeds Chat: Ask, and Image: Generate feeds Image: Split Layers. Reference: Add adds files to the references of the chat, image, video, and 3D nodes. Video: Download and 3D: Download collect tasks left running. Request Options and Model: Info are shared. A blue square marks a node that sends a paid request, and a hollow square one that bills nothing.](docs/images/node-map.svg)
 
 | Node                                                            | What it does                                                                          | Paid |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ---- |
@@ -157,7 +157,7 @@ Each paid node takes any model ID from the
 A newer version of a model the extension knows also works. **Model: Info**
 shows what a model the extension knows takes, for free and without a key.
 
-![Video: Generate on the canvas: sockets for the first frame, last frame, reference image, reference audio, references, and options; the model field set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate audio, omni reference task type, draft, camera fixed, output format, watermark, seed, and run number; and the prompt box at the bottom.](docs/images/video-generate-node.png)
+![Video: Generate on the canvas: sockets for the first frame, last frame, reference image, reference audio, references, and options; the model field set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate audio, omni reference task type, draft, camera fixed, output format, watermark, seed, and run number; and a prompt about a red fox in the snow.](docs/images/video-generate-node.png)
 
 Before sending, the node checks your request against the extension's own
 table of ModelArk models, and stops before anything is paid if the model

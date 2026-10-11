@@ -161,6 +161,7 @@ exclude_dirs = [ ".artifacts", ".git", ".venv", "node_modules", "web" ]
 
 [tool.comfy]
 DisplayName = "BytePlus"
+Icon = "https://raw.githubusercontent.com/stefanionescu/comfyui-byteplus/main/docs/images/logo.png"
 requires-comfyui = ">=0.37.2"
 
 [tool.importlinter]
