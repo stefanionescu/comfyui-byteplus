@@ -8,11 +8,11 @@
       "id": 1,
       "type": "MarkdownNote",
       "pos": [
-        30,
-        140
+        0,
+        60
       ],
       "size": [
-        340,
+        400,
         88
       ],
       "flags": {},
@@ -41,11 +41,11 @@
       "id": 2,
       "type": "MarkdownNote",
       "pos": [
-        460,
-        140
+        430,
+        60
       ],
       "size": [
-        340,
+        400,
         88
       ],
       "flags": {},
@@ -74,11 +74,11 @@
       "id": 3,
       "type": "MarkdownNote",
       "pos": [
-        890,
-        140
+        860,
+        60
       ],
       "size": [
-        780,
+        840,
         88
       ],
       "flags": {},
@@ -107,11 +107,11 @@
       "id": 4,
       "type": "MarkdownNote",
       "pos": [
-        890,
-        1012
+        860,
+        928
       ],
       "size": [
-        780,
+        840,
         88
       ],
       "flags": {},
@@ -141,7 +141,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        292
+        288
       ],
       "size": [
         340,
@@ -182,7 +182,7 @@
       "type": "b04e8c4d-a88e-5a40-add1-0d1495141ae3",
       "pos": [
         460,
-        292
+        288
       ],
       "size": [
         340,
@@ -225,7 +225,7 @@
       "type": "BytePlusMeshGenerate",
       "pos": [
         890,
-        292
+        288
       ],
       "size": [
         340,
@@ -303,7 +303,7 @@
       "type": "SaveGLB",
       "pos": [
         1270,
-        292
+        288
       ],
       "size": [
         400,
@@ -340,7 +340,7 @@
       "type": "BytePlusMeshDownload",
       "pos": [
         890,
-        1164
+        1156
       ],
       "size": [
         340,
@@ -380,7 +380,7 @@
       "type": "SaveGLB",
       "pos": [
         1270,
-        1164
+        1156
       ],
       "size": [
         400,
@@ -453,9 +453,9 @@
       "title": "Input",
       "bounding": [
         0,
-        30,
+        178,
         400,
-        380
+        228
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -466,9 +466,9 @@
       "title": "Design",
       "bounding": [
         430,
-        30,
+        178,
         400,
-        318
+        166
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -479,9 +479,9 @@
       "title": "Build",
       "bounding": [
         860,
-        30,
+        178,
         840,
-        842
+        690
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -492,9 +492,9 @@
       "title": "Recover",
       "bounding": [
         860,
-        902,
+        1046,
         840,
-        842
+        690
       ],
       "color": "#68688c",
       "font_size": 24,

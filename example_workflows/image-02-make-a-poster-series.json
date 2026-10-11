@@ -8,11 +8,11 @@
       "id": 1,
       "type": "MarkdownNote",
       "pos": [
-        30,
-        140
+        0,
+        60
       ],
       "size": [
-        340,
+        400,
         98
       ],
       "flags": {},
@@ -41,11 +41,11 @@
       "id": 2,
       "type": "MarkdownNote",
       "pos": [
-        30,
-        560
+        0,
+        476
       ],
       "size": [
-        720,
+        780,
         98
       ],
       "flags": {},
@@ -74,11 +74,11 @@
       "id": 3,
       "type": "MarkdownNote",
       "pos": [
-        840,
-        140
+        810,
+        60
       ],
       "size": [
-        340,
+        400,
         98
       ],
       "flags": {},
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        302
+        298
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "PrimitiveString",
       "pos": [
         30,
-        722
+        714
       ],
       "size": [
         340,
@@ -191,7 +191,7 @@
       "type": "BytePlusModelInfo",
       "pos": [
         30,
-        844
+        836
       ],
       "size": [
         340,
@@ -231,7 +231,7 @@
       "type": "PreviewAny",
       "pos": [
         410,
-        722
+        714
       ],
       "size": [
         340,
@@ -265,7 +265,7 @@
       "type": "2e30d73f-38c4-5ba2-a361-52084ca6a9fa",
       "pos": [
         840,
-        302
+        298
       ],
       "size": [
         340,
@@ -349,9 +349,9 @@
       "title": "Input",
       "bounding": [
         0,
-        30,
+        188,
         400,
-        390
+        228
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -362,9 +362,9 @@
       "title": "Model",
       "bounding": [
         0,
-        450,
+        604,
         780,
-        482
+        320
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -375,9 +375,9 @@
       "title": "Series",
       "bounding": [
         810,
-        30,
+        188,
         400,
-        414
+        252
       ],
       "color": "#68688c",
       "font_size": 24,

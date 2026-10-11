@@ -8,11 +8,11 @@
       "id": 1,
       "type": "MarkdownNote",
       "pos": [
-        30,
-        140
+        0,
+        60
       ],
       "size": [
-        340,
+        400,
         98
       ],
       "flags": {},
@@ -41,11 +41,11 @@
       "id": 2,
       "type": "MarkdownNote",
       "pos": [
-        460,
-        140
+        430,
+        60
       ],
       "size": [
-        340,
+        400,
         98
       ],
       "flags": {},
@@ -74,11 +74,11 @@
       "id": 3,
       "type": "MarkdownNote",
       "pos": [
-        890,
-        140
+        860,
+        60
       ],
       "size": [
-        720,
+        780,
         98
       ],
       "flags": {},
@@ -108,7 +108,7 @@
       "type": "LoadAudio",
       "pos": [
         30,
-        302
+        298
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "6de8b681-674d-562b-921f-3c73cb46df32",
       "pos": [
         460,
-        302
+        298
       ],
       "size": [
         340,
@@ -191,7 +191,7 @@
       "type": "BytePlusRequestOptions",
       "pos": [
         890,
-        302
+        298
       ],
       "size": [
         340,
@@ -240,7 +240,7 @@
       "type": "bf72e86d-96b9-522a-b164-a6c205e7c430",
       "pos": [
         1270,
-        302
+        298
       ],
       "size": [
         340,
@@ -307,9 +307,9 @@
       "title": "Input",
       "bounding": [
         0,
-        30,
+        188,
         400,
-        438
+        276
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -320,9 +320,9 @@
       "title": "Transcribe",
       "bounding": [
         430,
-        30,
+        188,
         400,
-        328
+        166
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -333,9 +333,9 @@
       "title": "Action Items",
       "bounding": [
         860,
-        30,
+        188,
         780,
-        414
+        252
       ],
       "color": "#68688c",
       "font_size": 24,

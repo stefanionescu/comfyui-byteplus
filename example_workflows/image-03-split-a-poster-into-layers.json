@@ -8,11 +8,11 @@
       "id": 1,
       "type": "MarkdownNote",
       "pos": [
-        30,
-        140
+        0,
+        60
       ],
       "size": [
-        340,
+        400,
         98
       ],
       "flags": {},
@@ -41,11 +41,11 @@
       "id": 2,
       "type": "MarkdownNote",
       "pos": [
-        460,
-        140
+        430,
+        60
       ],
       "size": [
-        340,
+        400,
         98
       ],
       "flags": {},
@@ -74,11 +74,11 @@
       "id": 3,
       "type": "MarkdownNote",
       "pos": [
-        890,
-        140
+        860,
+        60
       ],
       "size": [
-        340,
+        400,
         98
       ],
       "flags": {},
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        302
+        298
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "915fcaee-bdc0-5d05-8b2c-9121e26ccdf8",
       "pos": [
         460,
-        302
+        298
       ],
       "size": [
         340,
@@ -196,7 +196,7 @@
       "type": "43d5c621-dad1-5f47-a7f6-a444d513666e",
       "pos": [
         890,
-        302
+        298
       ],
       "size": [
         340,
@@ -250,9 +250,9 @@
       "title": "Input",
       "bounding": [
         0,
-        30,
+        188,
         400,
-        390
+        228
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -263,9 +263,9 @@
       "title": "Draw",
       "bounding": [
         430,
-        30,
+        188,
         400,
-        390
+        228
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -276,9 +276,9 @@
       "title": "Split",
       "bounding": [
         860,
-        30,
+        188,
         400,
-        328
+        166
       ],
       "color": "#68688c",
       "font_size": 24,

@@ -8,11 +8,11 @@
       "id": 1,
       "type": "MarkdownNote",
       "pos": [
-        30,
-        140
+        0,
+        60
       ],
       "size": [
-        340,
+        400,
         122
       ],
       "flags": {},
@@ -41,11 +41,11 @@
       "id": 2,
       "type": "MarkdownNote",
       "pos": [
-        460,
-        140
+        430,
+        60
       ],
       "size": [
-        340,
+        400,
         122
       ],
       "flags": {},
@@ -74,11 +74,11 @@
       "id": 3,
       "type": "MarkdownNote",
       "pos": [
-        890,
-        140
+        860,
+        60
       ],
       "size": [
-        340,
+        400,
         122
       ],
       "flags": {},
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        326
+        322
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "7a33b4f6-7329-5836-bd0c-943cee887178",
       "pos": [
         460,
-        326
+        322
       ],
       "size": [
         340,
@@ -196,7 +196,7 @@
       "type": "e2f7b8b7-70ec-59dd-b5a4-af37cab7d296",
       "pos": [
         890,
-        326
+        322
       ],
       "size": [
         340,
@@ -250,9 +250,9 @@
       "title": "Input",
       "bounding": [
         0,
-        30,
+        212,
         400,
-        414
+        228
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -263,9 +263,9 @@
       "title": "Draft",
       "bounding": [
         430,
-        30,
+        212,
         400,
-        414
+        228
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -276,9 +276,9 @@
       "title": "Finish",
       "bounding": [
         860,
-        30,
+        212,
         400,
-        352
+        166
       ],
       "color": "#68688c",
       "font_size": 24,

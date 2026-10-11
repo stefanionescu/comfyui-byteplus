@@ -1,0 +1,382 @@
+{
+  "id": "d61d39f3-d40f-5d1c-8c6f-87b5ff1965bc",
+  "revision": 0,
+  "last_node_id": 1,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "e2f7b8b7-70ec-59dd-b5a4-af37cab7d296",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        26
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "references",
+          "type": "BYTEPLUS_REFERENCES",
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "previewExposures": [
+          {
+            "name": "video-preview",
+            "sourceNodeId": "102",
+            "sourcePreviewName": "video-preview"
+          }
+        ]
+      },
+      "widgets_values": [],
+      "title": "Finish"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "e2f7b8b7-70ec-59dd-b5a4-af37cab7d296",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 102,
+          "lastLinkId": 2,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Finish",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            20
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            1010,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "7434a51c-09d3-5f5f-8fd8-eaadce15cb35",
+            "name": "references",
+            "type": "BYTEPLUS_REFERENCES",
+            "linkIds": [
+              2
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          }
+        ],
+        "outputs": [],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 101,
+            "type": "BytePlusVideoGenerate",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              500
+            ],
+            "flags": {},
+            "order": 100,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "model"
+                }
+              },
+              {
+                "name": "duration",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "duration"
+                }
+              },
+              {
+                "name": "resolution",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "resolution"
+                }
+              },
+              {
+                "name": "ratio",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "ratio"
+                }
+              },
+              {
+                "name": "generate_audio",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "generate_audio"
+                }
+              },
+              {
+                "name": "omni_reference_task_type",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "omni_reference_task_type"
+                }
+              },
+              {
+                "name": "draft",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "draft"
+                }
+              },
+              {
+                "name": "camera_fixed",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "camera_fixed"
+                }
+              },
+              {
+                "name": "output_format",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "output_format"
+                }
+              },
+              {
+                "name": "watermark",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "watermark"
+                }
+              },
+              {
+                "name": "first_frame",
+                "type": "IMAGE,BYTEPLUS_REFERENCES",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "last_frame",
+                "type": "IMAGE,BYTEPLUS_REFERENCES",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "reference_image",
+                "type": "IMAGE",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "reference_audio",
+                "type": "AUDIO",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "link": 2,
+                "shape": 7
+              },
+              {
+                "name": "seed",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "seed"
+                }
+              },
+              {
+                "name": "run_number",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "run_number"
+                }
+              },
+              {
+                "name": "options",
+                "type": "BYTEPLUS_OPTIONS",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "prompt",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "prompt"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "video",
+                "type": "VIDEO",
+                "links": [
+                  1
+                ]
+              },
+              {
+                "name": "last_frame",
+                "type": "IMAGE",
+                "links": []
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "BytePlusVideoGenerate"
+            },
+            "widgets_values": [
+              "dreamina-seedance-2-5-260628",
+              5,
+              "1080p",
+              "model default",
+              "model default",
+              "auto",
+              false,
+              false,
+              "model default",
+              false,
+              42,
+              "fixed",
+              0,
+              ""
+            ],
+            "color": "#432",
+            "bgcolor": "#653"
+          },
+          {
+            "id": 102,
+            "type": "SaveVideo",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              106
+            ],
+            "flags": {},
+            "order": 101,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "video",
+                "type": "VIDEO",
+                "link": 1
+              },
+              {
+                "name": "filename_prefix",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "filename_prefix"
+                }
+              },
+              {
+                "name": "format",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "format"
+                }
+              },
+              {
+                "name": "codec",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "codec"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "video",
+                "type": "VIDEO",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "SaveVideo"
+            },
+            "widgets_values": [
+              "video/byteplus/final",
+              "auto",
+              "auto"
+            ]
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 102,
+            "target_slot": 0,
+            "type": "VIDEO"
+          },
+          {
+            "id": 2,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 101,
+            "target_slot": 14,
+            "type": "BYTEPLUS_REFERENCES"
+          }
+        ],
+        "extra": {
+          "description": "Finishes the draft at 1080p and saves it."
+        },
+        "category": "BytePlus/Video",
+        "description": "Finishes the draft at 1080p and saves it."
+      }
+    ]
+  }
+}

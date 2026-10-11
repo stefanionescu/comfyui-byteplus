@@ -8,12 +8,12 @@
       "id": 1,
       "type": "MarkdownNote",
       "pos": [
-        30,
-        140
+        0,
+        60
       ],
       "size": [
-        720,
-        130
+        780,
+        118
       ],
       "flags": {},
       "order": 0,
@@ -42,7 +42,7 @@
       "type": "BytePlusVideoDownload",
       "pos": [
         30,
-        334
+        318
       ],
       "size": [
         340,
@@ -94,7 +94,7 @@
       "type": "SaveVideo",
       "pos": [
         410,
-        334
+        318
       ],
       "size": [
         340,
@@ -155,7 +155,7 @@
       "type": "PreviewImage",
       "pos": [
         410,
-        504
+        488
       ],
       "size": [
         340,
@@ -209,9 +209,9 @@
       "title": "Recover",
       "bounding": [
         0,
-        30,
+        208,
         780,
-        530
+        336
       ],
       "color": "#68688c",
       "font_size": 24,

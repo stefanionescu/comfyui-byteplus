@@ -1,0 +1,1019 @@
+{
+  "id": "634d04c0-82c1-57fb-8cdc-2b828c37590e",
+  "revision": 0,
+  "last_node_id": 1,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "39f8ef38-8dd5-524b-9006-745e1566ae2f",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        46
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "similarities",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "images",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "previewExposures": [
+          {
+            "name": "$$canvas-image-preview",
+            "sourceNodeId": "112",
+            "sourcePreviewName": "$$canvas-image-preview"
+          }
+        ]
+      },
+      "widgets_values": [],
+      "title": "Choose"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "39f8ef38-8dd5-524b-9006-745e1566ae2f",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 112,
+          "lastLinkId": 16,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Choose",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            40
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            2150,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "b817d99f-37b0-5094-91c1-abc1e125ef37",
+            "name": "similarities",
+            "type": "*",
+            "linkIds": [
+              15
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          },
+          {
+            "id": "936bc2ba-081c-5d94-a53d-8a9f24c6b1ab",
+            "name": "images",
+            "type": "*",
+            "linkIds": [
+              16
+            ],
+            "pos": [
+              110,
+              160
+            ]
+          }
+        ],
+        "outputs": [],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 101,
+            "type": "StringFormat",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              128
+            ],
+            "flags": {},
+            "order": 100,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "name": "values.a",
+                "type": "*",
+                "link": 15,
+                "shape": 7
+              },
+              {
+                "label": "b",
+                "name": "values.b",
+                "type": "*",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "f_string",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "f_string"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  1,
+                  2,
+                  3,
+                  4
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "StringFormat"
+            },
+            "widgets_values": [
+              "{a} [-2, -2, -2, -2]"
+            ]
+          },
+          {
+            "id": 102,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 101,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 1,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  5
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              2
+            ]
+          },
+          {
+            "id": 103,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              466
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 102,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 2,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  6
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              3
+            ]
+          },
+          {
+            "id": 104,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              792
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 103,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 3,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  7
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              4
+            ]
+          },
+          {
+            "id": 105,
+            "type": "RegexExtract",
+            "pos": [
+              580,
+              1118
+            ],
+            "size": [
+              340,
+              262
+            ],
+            "flags": {},
+            "order": 104,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "string",
+                "type": "STRING",
+                "link": 4,
+                "widget": {
+                  "name": "string"
+                }
+              },
+              {
+                "name": "regex_pattern",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "regex_pattern"
+                }
+              },
+              {
+                "name": "mode",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "mode"
+                }
+              },
+              {
+                "name": "case_insensitive",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "case_insensitive"
+                }
+              },
+              {
+                "name": "multiline",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "multiline"
+                }
+              },
+              {
+                "name": "dotall",
+                "type": "BOOLEAN",
+                "link": null,
+                "widget": {
+                  "name": "dotall"
+                }
+              },
+              {
+                "name": "group_index",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "group_index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  8
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "RegexExtract"
+            },
+            "widgets_values": [
+              "",
+              "(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)[^-\\d]+(-?\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?)",
+              "First Group",
+              true,
+              false,
+              false,
+              5
+            ]
+          },
+          {
+            "id": 106,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              140
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 105,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 5
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  9
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 107,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              250
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 106,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 6
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  10
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 108,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              360
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 107,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 7
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  11
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 109,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              960,
+              470
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 108,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 8
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  12
+                ]
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyNumberConvert"
+            },
+            "widgets_values": []
+          },
+          {
+            "id": 110,
+            "type": "ComfyMathExpression",
+            "pos": [
+              1340,
+              140
+            ],
+            "size": [
+              340,
+              188
+            ],
+            "flags": {},
+            "order": 109,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "expression",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "expression"
+                }
+              },
+              {
+                "label": "a",
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 9,
+                "shape": 7
+              },
+              {
+                "label": "b",
+                "name": "values.b",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 10,
+                "shape": 7
+              },
+              {
+                "label": "c",
+                "name": "values.c",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 11,
+                "shape": 7
+              },
+              {
+                "label": "d",
+                "name": "values.d",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 12,
+                "shape": 7
+              },
+              {
+                "label": "e",
+                "name": "values.e",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": null,
+                "shape": 7
+              }
+            ],
+            "outputs": [
+              {
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  13
+                ]
+              },
+              {
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "values.index(max(values))"
+            ]
+          },
+          {
+            "id": 111,
+            "type": "GetItemFromList",
+            "pos": [
+              1340,
+              392
+            ],
+            "size": [
+              340,
+              58
+            ],
+            "flags": {},
+            "order": 110,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "list",
+                "type": "*",
+                "link": 16
+              },
+              {
+                "name": "index",
+                "type": "INT",
+                "link": 13,
+                "widget": {
+                  "name": "index"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "*",
+                "type": "*",
+                "links": [
+                  14
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "GetItemFromList"
+            },
+            "widgets_values": [
+              0
+            ]
+          },
+          {
+            "id": 112,
+            "type": "SaveImage",
+            "pos": [
+              1720,
+              140
+            ],
+            "size": [
+              340,
+              58
+            ],
+            "flags": {},
+            "order": 111,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": 14
+              },
+              {
+                "name": "filename_prefix",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "filename_prefix"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "SaveImage"
+            },
+            "widgets_values": [
+              "image/byteplus/hero"
+            ]
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 102,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 103,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 3,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 104,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 4,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 105,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 5,
+            "origin_id": 102,
+            "origin_slot": 0,
+            "target_id": 106,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 6,
+            "origin_id": 103,
+            "origin_slot": 0,
+            "target_id": 107,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 7,
+            "origin_id": 104,
+            "origin_slot": 0,
+            "target_id": 108,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 8,
+            "origin_id": 105,
+            "origin_slot": 0,
+            "target_id": 109,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 9,
+            "origin_id": 106,
+            "origin_slot": 0,
+            "target_id": 110,
+            "target_slot": 1,
+            "type": "FLOAT"
+          },
+          {
+            "id": 10,
+            "origin_id": 107,
+            "origin_slot": 0,
+            "target_id": 110,
+            "target_slot": 2,
+            "type": "FLOAT"
+          },
+          {
+            "id": 11,
+            "origin_id": 108,
+            "origin_slot": 0,
+            "target_id": 110,
+            "target_slot": 3,
+            "type": "FLOAT"
+          },
+          {
+            "id": 12,
+            "origin_id": 109,
+            "origin_slot": 0,
+            "target_id": 110,
+            "target_slot": 4,
+            "type": "FLOAT"
+          },
+          {
+            "id": 13,
+            "origin_id": 110,
+            "origin_slot": 1,
+            "target_id": 111,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 14,
+            "origin_id": 111,
+            "origin_slot": 0,
+            "target_id": 112,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 15,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 101,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 16,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 111,
+            "target_slot": 0,
+            "type": "*"
+          }
+        ],
+        "extra": {
+          "description": "Picks the option with the highest score and saves it."
+        },
+        "category": "BytePlus/Search",
+        "description": "Picks the option with the highest score and saves it."
+      }
+    ]
+  }
+}

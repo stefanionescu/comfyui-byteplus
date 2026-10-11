@@ -1,0 +1,371 @@
+{
+  "id": "770f0ecd-6ddd-5604-b7e4-ffbd406b1127",
+  "revision": 0,
+  "last_node_id": 1,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "6de8b681-674d-562b-921f-3c73cb46df32",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        26
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "conversation",
+          "type": "BYTEPLUS_CONVERSATION",
+          "links": []
+        }
+      ],
+      "properties": {
+        "previewExposures": [
+          {
+            "name": "preview_text",
+            "sourceNodeId": "102",
+            "sourcePreviewName": "preview_text"
+          }
+        ]
+      },
+      "widgets_values": [],
+      "title": "Transcribe"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "6de8b681-674d-562b-921f-3c73cb46df32",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 102,
+          "lastLinkId": 3,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Transcribe",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            20
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            1010,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "8385836a-c74e-555d-b28d-aae5bc57e424",
+            "name": "audio",
+            "type": "AUDIO",
+            "linkIds": [
+              2
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "c4d763f7-48cc-5708-bfae-24365dfefd56",
+            "name": "conversation",
+            "type": "BYTEPLUS_CONVERSATION",
+            "linkIds": [
+              3
+            ],
+            "pos": [
+              1010,
+              140
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 101,
+            "type": "BytePlusChatAsk",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              460
+            ],
+            "flags": {},
+            "order": 100,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "model"
+                }
+              },
+              {
+                "name": "conversation",
+                "type": "BYTEPLUS_CONVERSATION",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "documents",
+                "type": "BYTEPLUS_DOCUMENTS",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "videos",
+                "type": "VIDEO",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "audio",
+                "type": "AUDIO",
+                "link": 2,
+                "shape": 7
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "thinking",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "thinking"
+                }
+              },
+              {
+                "name": "reasoning_effort",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "reasoning_effort"
+                }
+              },
+              {
+                "name": "max_completion_tokens",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "max_completion_tokens"
+                }
+              },
+              {
+                "name": "temperature",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "temperature"
+                }
+              },
+              {
+                "name": "run_number",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "run_number"
+                }
+              },
+              {
+                "name": "options",
+                "type": "BYTEPLUS_OPTIONS",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "json_schema",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "json_schema"
+                }
+              },
+              {
+                "name": "prompt",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "prompt"
+                }
+              },
+              {
+                "name": "system_prompt",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "system_prompt"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "links": [
+                  1
+                ]
+              },
+              {
+                "name": "reasoning",
+                "type": "STRING",
+                "links": []
+              },
+              {
+                "name": "conversation",
+                "type": "BYTEPLUS_CONVERSATION",
+                "links": [
+                  3
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "BytePlusChatAsk"
+            },
+            "widgets_values": [
+              "seed-2-0-mini-260428",
+              "disabled",
+              "model default",
+              0,
+              "model default",
+              0,
+              "",
+              "Transcribe this voice note word for word. Write only what is said.",
+              ""
+            ],
+            "color": "#432",
+            "bgcolor": "#653"
+          },
+          {
+            "id": 102,
+            "type": "SaveText",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              170
+            ],
+            "flags": {},
+            "order": 101,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "link": 1
+              },
+              {
+                "name": "filename_prefix",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "filename_prefix"
+                }
+              },
+              {
+                "name": "format",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "format"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "SaveText"
+            },
+            "widgets_values": [
+              "text/byteplus/voice-note-transcript",
+              "txt"
+            ]
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 102,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 101,
+            "target_slot": 5,
+            "type": "AUDIO"
+          },
+          {
+            "id": 3,
+            "origin_id": 101,
+            "origin_slot": 2,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "BYTEPLUS_CONVERSATION"
+          }
+        ],
+        "extra": {
+          "description": "Transcribes the voice note and saves the transcript."
+        },
+        "category": "BytePlus/Chat",
+        "description": "Transcribes the voice note and saves the transcript."
+      }
+    ]
+  }
+}

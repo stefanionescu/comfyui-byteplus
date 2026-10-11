@@ -1,0 +1,367 @@
+{
+  "id": "095ea34d-8d53-5a68-b77f-a09306fef702",
+  "revision": 0,
+  "last_node_id": 1,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "8b353114-e641-533a-9d96-9976c64e554d",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        46
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "documents",
+          "type": "BYTEPLUS_DOCUMENTS",
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "previewExposures": [
+          {
+            "name": "preview_text",
+            "sourceNodeId": "102",
+            "sourcePreviewName": "preview_text"
+          }
+        ]
+      },
+      "widgets_values": [],
+      "title": "Write"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4,
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "8b353114-e641-533a-9d96-9976c64e554d",
+        "version": 1,
+        "state": {
+          "lastGroupId": 0,
+          "lastNodeId": 102,
+          "lastLinkId": 3,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Write",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -10,
+            140,
+            120,
+            40
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            1010,
+            140,
+            120,
+            20
+          ]
+        },
+        "inputs": [
+          {
+            "id": "41a3605b-c773-516a-90d8-3af462574de3",
+            "name": "image",
+            "type": "IMAGE",
+            "linkIds": [
+              2
+            ],
+            "pos": [
+              110,
+              140
+            ]
+          },
+          {
+            "id": "0cfcb52e-187a-53f2-bb4c-30c21638bc27",
+            "name": "documents",
+            "type": "BYTEPLUS_DOCUMENTS",
+            "linkIds": [
+              3
+            ],
+            "pos": [
+              110,
+              160
+            ]
+          }
+        ],
+        "outputs": [],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 101,
+            "type": "BytePlusChatAsk",
+            "pos": [
+              200,
+              140
+            ],
+            "size": [
+              340,
+              460
+            ],
+            "flags": {},
+            "order": 100,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "model",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "model"
+                }
+              },
+              {
+                "name": "conversation",
+                "type": "BYTEPLUS_CONVERSATION",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "documents",
+                "type": "BYTEPLUS_DOCUMENTS",
+                "link": 3,
+                "shape": 7
+              },
+              {
+                "name": "images",
+                "type": "IMAGE",
+                "link": 2,
+                "shape": 7
+              },
+              {
+                "name": "videos",
+                "type": "VIDEO",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "audio",
+                "type": "AUDIO",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "references",
+                "type": "BYTEPLUS_REFERENCES",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "thinking",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "thinking"
+                }
+              },
+              {
+                "name": "reasoning_effort",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "reasoning_effort"
+                }
+              },
+              {
+                "name": "max_completion_tokens",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "max_completion_tokens"
+                }
+              },
+              {
+                "name": "temperature",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "temperature"
+                }
+              },
+              {
+                "name": "run_number",
+                "type": "INT",
+                "link": null,
+                "widget": {
+                  "name": "run_number"
+                }
+              },
+              {
+                "name": "options",
+                "type": "BYTEPLUS_OPTIONS",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "json_schema",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "json_schema"
+                }
+              },
+              {
+                "name": "prompt",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "prompt"
+                }
+              },
+              {
+                "name": "system_prompt",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "system_prompt"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "links": [
+                  1
+                ]
+              },
+              {
+                "name": "reasoning",
+                "type": "STRING",
+                "links": []
+              },
+              {
+                "name": "conversation",
+                "type": "BYTEPLUS_CONVERSATION",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "BytePlusChatAsk"
+            },
+            "widgets_values": [
+              "seed-2-0-lite-260428",
+              "disabled",
+              "model default",
+              0,
+              "model default",
+              0,
+              "{\n  \"name\": \"listing\",\n  \"schema\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"title\": {\n        \"type\": \"string\"\n      },\n      \"bullets\": {\n        \"type\": \"array\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"description\": {\n        \"type\": \"string\"\n      }\n    },\n    \"required\": [\n      \"title\",\n      \"bullets\",\n      \"description\"\n    ],\n    \"additionalProperties\": false\n  },\n  \"strict\": true\n}",
+              "Write a marketplace listing for this product from the photo and the spec sheet. Use only facts you can see in the photo or read in the spec sheet. Keep the title under 80 characters, write five bullet points, and keep the description under 60 words.",
+              ""
+            ],
+            "color": "#432",
+            "bgcolor": "#653"
+          },
+          {
+            "id": 102,
+            "type": "SaveText",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              170
+            ],
+            "flags": {},
+            "order": 101,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "link": 1
+              },
+              {
+                "name": "filename_prefix",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "filename_prefix"
+                }
+              },
+              {
+                "name": "format",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "format"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "text",
+                "type": "STRING",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "SaveText"
+            },
+            "widgets_values": [
+              "text/byteplus/product-listing",
+              "json"
+            ]
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1,
+            "origin_id": 101,
+            "origin_slot": 0,
+            "target_id": 102,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 2,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 101,
+            "target_slot": 3,
+            "type": "IMAGE"
+          },
+          {
+            "id": 3,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 101,
+            "target_slot": 2,
+            "type": "BYTEPLUS_DOCUMENTS"
+          }
+        ],
+        "extra": {
+          "description": "Writes the listing from the photo and the spec sheet, as JSON, and saves it."
+        },
+        "category": "BytePlus/Chat",
+        "description": "Writes the listing from the photo and the spec sheet, as JSON, and saves it."
+      }
+    ]
+  }
+}
