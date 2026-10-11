@@ -200,7 +200,7 @@ class TaskOperation[Row: ModelRow]:
         """
         request = self.request
         # find_model returns the row type of the kind it is given, which is the row type the request's checks take.
-        match = cast("ModelMatch[Row]", find_model(request.model_id, request.kind))
+        match: ModelMatch[Row] = cast("ModelMatch[Row]", find_model(request.model_id, request.kind))
         body = request.build_body(match)
         creating = asyncio.create_task(self._create_job(body, configuration))
         is_cancelled = await _wait_settled(creating)

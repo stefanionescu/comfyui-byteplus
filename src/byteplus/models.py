@@ -80,18 +80,37 @@ def _find_row(model_id: str, kind: Kind | None) -> tuple[ModelRow, MatchMethod]:
     return row, "family"
 
 
+# Each overload stub's body is pass: CodeQL reports an ellipsis body as a statement with no effect.
 @overload
-def find_model(model_id: str, kind: Literal["chat"]) -> ModelMatch[ChatRow]: ...
+def find_model(model_id: str, kind: Literal["chat"]) -> ModelMatch[ChatRow]:
+    pass
+
+
 @overload
-def find_model(model_id: str, kind: Literal["images", "layers"]) -> ModelMatch[ImageRow]: ...
+def find_model(model_id: str, kind: Literal["images", "layers"]) -> ModelMatch[ImageRow]:
+    pass
+
+
 @overload
-def find_model(model_id: str, kind: Literal["videos"]) -> ModelMatch[VideoRow]: ...
+def find_model(model_id: str, kind: Literal["videos"]) -> ModelMatch[VideoRow]:
+    pass
+
+
 @overload
-def find_model(model_id: str, kind: Literal["embeddings"]) -> ModelMatch[EmbeddingRow]: ...
+def find_model(model_id: str, kind: Literal["embeddings"]) -> ModelMatch[EmbeddingRow]:
+    pass
+
+
 @overload
-def find_model(model_id: str, kind: Literal["meshes"]) -> ModelMatch[MeshRow]: ...
+def find_model(model_id: str, kind: Literal["meshes"]) -> ModelMatch[MeshRow]:
+    pass
+
+
 @overload
-def find_model(model_id: str, kind: None) -> ModelMatch[ModelRow]: ...
+def find_model(model_id: str, kind: None) -> ModelMatch[ModelRow]:
+    pass
+
+
 def find_model(model_id: str, kind: Kind | None) -> ModelMatch[ModelRow]:
     """Find the row that checks a typed model ID for one kind of node, refusing an ID the table cannot check.
 
