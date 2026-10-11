@@ -9,10 +9,8 @@ from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.workflows.descriptions.notes import WORKFLOW_TEXTS
 from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
 from scripts.workflows.page.config import STAGE_COLOUR, TEXT_PREVIEW, IMAGE_PREVIEW
+from scripts.workflows.descriptions.nodes import CHAT_ASK, SEED_MINI, DEEPSEEK_FLASH, IMAGE_GENERATE
 
-ASK = f"{NODE_PREFIX}ChatAsk"
-MINI = "seed-2-0-mini-260428"
-DEEPSEEK = "deepseek-v4-flash-ga-260731"
 LISTING_SCHEMA = json.dumps(
     {
         "name": "listing",
@@ -45,7 +43,7 @@ VOICE_TEXTS = WORKFLOW_TEXTS["chat-02-summarize-a-voice-note"]
 PHOTO = Subgraph(
     name=SHARED_TEXTS["photo"],
     nodes=(
-        Node("draw", f"{NODE_PREFIX}ImageGenerate", {"size": "2048x2048"}, is_paid=True),
+        Node("draw", IMAGE_GENERATE, {"size": "2048x2048"}, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
     ),
     links=(("draw.images", "look.images"),),
@@ -61,7 +59,7 @@ WRITE = Subgraph(
     nodes=(
         Node(
             "ask",
-            ASK,
+            CHAT_ASK,
             {"thinking": "disabled", "json_schema": LISTING_SCHEMA, "prompt": LISTING_PROMPT},
             is_paid=True,
         ),
@@ -110,9 +108,9 @@ TRANSCRIBE = Subgraph(
     nodes=(
         Node(
             "ask",
-            ASK,
+            CHAT_ASK,
             {
-                "model": MINI,
+                "model": SEED_MINI,
                 "thinking": "disabled",
                 "prompt": "Transcribe this voice note word for word. Write only what is said.",
             },
@@ -131,7 +129,7 @@ TRANSCRIBE = Subgraph(
 ACTIONS = Subgraph(
     name=SHARED_TEXTS["actions"],
     nodes=(
-        Node("ask", ASK, {"model": DEEPSEEK, "prompt": ACTIONS_PROMPT}, is_paid=True),
+        Node("ask", CHAT_ASK, {"model": DEEPSEEK_FLASH, "prompt": ACTIONS_PROMPT}, is_paid=True),
         Node("save", HostNode.SAVE_TEXT, {"filename_prefix": "text/byteplus/voice-note-actions", "format": "md"}),
     ),
     links=(("ask.text", "save.text"),),

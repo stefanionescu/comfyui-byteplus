@@ -8,9 +8,8 @@ from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.workflows.descriptions.notes import WORKFLOW_TEXTS
 from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
 from scripts.workflows.page.config import STAGE_COLOUR, IMAGE_PREVIEW, VIDEO_PREVIEW
+from scripts.workflows.descriptions.nodes import SEEDANCE_25, IMAGE_GENERATE, VIDEO_GENERATE
 
-GENERATE = f"{NODE_PREFIX}VideoGenerate"
-SEEDANCE_25 = "dreamina-seedance-2-5-260628"
 SCENE_PROMPT = 'She smiles, waves, and says: "Welcome to the night market." Handheld camera, warm light.'
 ANIMATE_TEXTS = WORKFLOW_TEXTS["video-01-animate-a-character"]
 CONTINUE_TEXTS = WORKFLOW_TEXTS["video-02-continue-a-shot"]
@@ -21,7 +20,7 @@ RECOVER_TEXTS = WORKFLOW_TEXTS["video-05-recover-a-video"]
 DESIGN = Subgraph(
     name=SHARED_TEXTS["design"],
     nodes=(
-        Node("draw", f"{NODE_PREFIX}ImageGenerate", {"size": "2048x1152"}, is_paid=True),
+        Node("draw", IMAGE_GENERATE, {"size": "2048x1152"}, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
     ),
     links=(("draw.images", "look.images"),),
@@ -35,7 +34,7 @@ DESIGN = Subgraph(
 ANIMATE = Subgraph(
     name=SHARED_TEXTS["animate"],
     nodes=(
-        Node("video", GENERATE, {"resolution": "480p"}, is_paid=True),
+        Node("video", VIDEO_GENERATE, {"resolution": "480p"}, is_paid=True),
         Node("save", HostNode.SAVE_VIDEO, {"filename_prefix": "video/byteplus/character"}),
     ),
     links=(("video.video", "save.video"),),
@@ -80,7 +79,7 @@ ANIMATE_CHARACTER = Workflow(
 FIRST_SHOT = Subgraph(
     name=SHARED_TEXTS["shot_1"],
     nodes=(
-        Node("video", GENERATE, {"resolution": "480p"}, is_paid=True),
+        Node("video", VIDEO_GENERATE, {"resolution": "480p"}, is_paid=True),
         Node("save", HostNode.SAVE_VIDEO, {"filename_prefix": "video/byteplus/shot-1"}),
     ),
     links=(("video.video", "save.video"),),
@@ -94,7 +93,7 @@ FIRST_SHOT = Subgraph(
 NEXT_SHOT = Subgraph(
     name=SHARED_TEXTS["shot_2"],
     nodes=(
-        Node("video", GENERATE, {"resolution": "480p"}, is_paid=True),
+        Node("video", VIDEO_GENERATE, {"resolution": "480p"}, is_paid=True),
         Node("save", HostNode.SAVE_VIDEO, {"filename_prefix": "video/byteplus/shot-2"}),
     ),
     links=(("video.video", "save.video"),),
@@ -156,7 +155,7 @@ CONTINUE_SHOT = Workflow(
 DRAW = Subgraph(
     name=SHARED_TEXTS["draw"],
     nodes=(
-        Node("draw", f"{NODE_PREFIX}ImageGenerate", is_paid=True),
+        Node("draw", IMAGE_GENERATE, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
     ),
     links=(("draw.images", "look.images"),),
@@ -170,7 +169,7 @@ DRAW = Subgraph(
 FILM = Subgraph(
     name=SHARED_TEXTS["film"],
     nodes=(
-        Node("video", GENERATE, is_paid=True),
+        Node("video", VIDEO_GENERATE, is_paid=True),
         Node("save", HostNode.SAVE_VIDEO, {"filename_prefix": "video/byteplus/preset-character"}),
     ),
     links=(("video.video", "save.video"),),
@@ -224,7 +223,7 @@ DRAFT = Subgraph(
     nodes=(
         Node(
             "video",
-            GENERATE,
+            VIDEO_GENERATE,
             {"model": SEEDANCE_25, "duration": 4, "resolution": "480p", "draft": True},
             is_paid=True,
         ),
@@ -241,7 +240,7 @@ DRAFT = Subgraph(
 FINISH = Subgraph(
     name=SHARED_TEXTS["finish"],
     nodes=(
-        Node("video", GENERATE, {"model": SEEDANCE_25, "resolution": "1080p"}, is_paid=True),
+        Node("video", VIDEO_GENERATE, {"model": SEEDANCE_25, "resolution": "1080p"}, is_paid=True),
         Node("save", HostNode.SAVE_VIDEO, {"filename_prefix": "video/byteplus/final"}),
     ),
     links=(("video.video", "save.video"),),

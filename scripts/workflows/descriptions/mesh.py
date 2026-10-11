@@ -5,6 +5,7 @@ from __future__ import annotations
 from scripts.nodes.host import HostNode
 from src.config.namespace import NODE_PREFIX
 from scripts.workflows.descriptions.texts import SHARED_TEXTS
+from scripts.workflows.descriptions.nodes import IMAGE_GENERATE
 from scripts.workflows.descriptions.notes import WORKFLOW_TEXTS
 from scripts.workflows.page.config import STAGE_COLOUR, IMAGE_PREVIEW
 from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
@@ -24,7 +25,7 @@ DESIGN = Subgraph(
                 )
             },
         ),
-        Node("draw", f"{NODE_PREFIX}ImageGenerate", is_paid=True),
+        Node("draw", IMAGE_GENERATE, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
     ),
     links=(("prompt.STRING", "draw.prompt"), ("draw.images", "look.images")),

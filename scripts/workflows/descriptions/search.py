@@ -8,6 +8,7 @@ from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.workflows.descriptions.notes import WORKFLOW_TEXTS
 from scripts.workflows.page.config import STAGE_COLOUR, IMAGE_PREVIEW
 from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
+from scripts.workflows.descriptions.nodes import SEEDREAM_4, IMAGE_GENERATE
 
 # One similarity as JSON writes it: a signed number, with a fraction or an exponent when it has one.
 SCORE = r"(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)"
@@ -30,8 +31,8 @@ DRAW = Subgraph(
         ),
         Node(
             "draw",
-            f"{NODE_PREFIX}ImageGenerate",
-            {"model": "seedream-4-0-250828", "size": "2848x1600", "max_images": 4},
+            IMAGE_GENERATE,
+            {"model": SEEDREAM_4, "size": "2848x1600", "max_images": 4},
             is_paid=True,
         ),
         Node("look", HostNode.PREVIEW_IMAGE),

@@ -8,9 +8,8 @@ from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.workflows.descriptions.notes import WORKFLOW_TEXTS
 from scripts.workflows.page.config import STAGE_COLOUR, IMAGE_PREVIEW
 from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
+from scripts.workflows.descriptions.nodes import SEEDREAM_4, IMAGE_GENERATE
 
-GENERATE = f"{NODE_PREFIX}ImageGenerate"
-SEEDREAM_4 = "seedream-4-0-250828"
 POSTER_PROMPT = (
     'A poster for a summer night market: the title "Night Market" in bold hand-lettered type at the top, paper '
     'lanterns and food stalls in silhouette, and the date "August 14" at the bottom. Flat illustration in deep blue '
@@ -28,7 +27,7 @@ DESIGN = Subgraph(
             HostNode.FORMAT,
             {"f_string": "Character sheet: {a} Full body, front view, standing, plain light gray background."},
         ),
-        Node("draw", GENERATE, {"size": "1344x1792"}, is_paid=True),
+        Node("draw", IMAGE_GENERATE, {"size": "1344x1792"}, is_paid=True),
         Node("save", HostNode.SAVE_IMAGE, {"filename_prefix": "image/byteplus/character"}),
     ),
     links=(("prompt.STRING", "draw.prompt"), ("draw.images", "save.images")),
@@ -44,7 +43,7 @@ WAVE = Subgraph(
     nodes=(
         Node(
             "edit",
-            GENERATE,
+            IMAGE_GENERATE,
             {"size": "1344x1792", "prompt": "The character in Image 1, waving, same outfit"},
             is_paid=True,
         ),
@@ -88,7 +87,7 @@ SERIES = Subgraph(
     nodes=(
         Node(
             "draw",
-            GENERATE,
+            IMAGE_GENERATE,
             {"model": SEEDREAM_4, "size": "2848x1600", "max_images": 4},
             is_paid=True,
         ),
@@ -141,7 +140,7 @@ DRAW = Subgraph(
     nodes=(
         Node(
             "draw",
-            GENERATE,
+            IMAGE_GENERATE,
             {"size": "1344x1792", "output_format": "png"},
             is_paid=True,
         ),
