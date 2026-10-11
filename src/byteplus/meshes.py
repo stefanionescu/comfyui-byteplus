@@ -7,25 +7,19 @@ prompt; the node only asks for GLB, the file its model_3d output carries.
 from __future__ import annotations
 
 import re
-import math
 from typing import TYPE_CHECKING
 from datetime import UTC, datetime
 from .options import build_request_body
+from .operation import validate_upload_size
 from .references import validate_references
-from ..config.units import BYTES_PER_MEGABYTE
 from ..types.errors import ErrorCode, ByteplusError
 from ..config.patterns import MESH_FORMAT_COMMAND_PATTERN
-from .operation import validate_upload_size, measure_encoded_bytes
-from ..config.generation.meshes import GLB_FORMATS, FORMAT_COMMANDS, IMAGE_BYTES_BELOW, IMAGE_PIXELS_BELOW
+from ..config.generation.meshes import GLB_FORMATS, FORMAT_COMMANDS
 from ..config.messages.inputs import (
-    MESH_IMAGE_SIZE,
-    MESH_IMAGE_COUNT,
     MESH_INPUT_EMPTY,
-    MESH_IMAGE_PIXELS,
     MESH_PROMPT_LENGTH,
     MESH_FORMAT_COMMAND,
     MESH_IMAGE_REQUIRED,
-    MESH_IMAGES_ADDRESS_ONLY,
 )
 
 if TYPE_CHECKING:
@@ -36,38 +30,6 @@ if TYPE_CHECKING:
 
 # A file format command in prompt text, such as "--fileformat obj", whose value must name GLB.
 _FORMAT_COMMAND = re.compile(MESH_FORMAT_COMMAND_PATTERN, re.IGNORECASE)
-
-
-def _validate_images(request: MeshRequest) -> None:
-    """Refuse a local image with as many pixels as 4096 by 4096, or as large as 30 MB as PNG; each is numbered.
-
-    ModelArk's size limit counts the file, not its base64 text.
-    """
-    for number, image in enumerate(request.images, 1):
-        if image.width * image.height >= IMAGE_PIXELS_BELOW:
-            message = MESH_IMAGE_PIXELS.format(number=number, width=image.width, height=image.height)
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-        size = measure_encoded_bytes(image.url)
-        if size >= IMAGE_BYTES_BELOW:
-            shown = math.ceil(size * 10 / BYTES_PER_MEGABYTE) / 10
-            raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_IMAGE_SIZE.format(number=number, size=shown))
-
-
-def _validate_sources(request: MeshRequest, match: ModelMatch[MeshRow]) -> None:
-    """Refuse local images to a model that reads only addresses, no image for a model that reads no text, and too many.
-
-    Images and image references count together, since each becomes one image item. A model that reads no text, such
-    as Hitem3D, takes its commands in the text item but still needs an image to work from.
-    """
-    limits = match.row.mesh
-    if request.images and not limits.has_inline_images:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_IMAGES_ADDRESS_ONLY.format(model=match.model_id))
-    count = len(request.images) + len(request.references)
-    if count == 0 and "text" not in match.row.inputs:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_IMAGE_REQUIRED.format(model=match.model_id))
-    if count > limits.max_images:
-        message = MESH_IMAGE_COUNT.format(model=match.model_id, maximum=limits.max_images, count=count)
-        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
 
 
 def _build_text(request: MeshRequest, dialect: str) -> str:
@@ -93,18 +55,19 @@ def validate_mesh_request(request: MeshRequest, settings: Settings) -> None:
     """
     if not request.prompt and not request.images and not request.references:
         raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_INPUT_EMPTY)
-    _validate_images(request)
     validate_upload_size([image.url for image in request.images], settings)
-    validate_references(request.references, frozenset({"image"}), can_read_assets=False, now=datetime.now(UTC))
+    validate_references(request.references, ("image",), can_read_assets=False, now=datetime.now(UTC))
 
 
 def build_mesh_body(request: MeshRequest, match: ModelMatch[MeshRow]) -> dict[str, Json]:
     """Refuse, before anything is paid, what the model's row does not take, then build the body with Request Options.
 
-    The text item comes first, then the images, then the image references. ModelArk cuts a longer text without an
-    error, which could drop the format command the node adds, so a prompt that leaves it too little room is refused.
+    A model that reads no text, such as Hitem3D, takes its commands in the text item but still needs an image to work
+    from. The text item comes first, then the images, then the image references. ModelArk cuts a longer text without
+    an error, which could drop the format command the node adds, so a prompt that leaves it too little room is refused.
     """
-    _validate_sources(request, match)
+    if not request.images and not request.references and "text" not in match.row.inputs:
+        raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_IMAGE_REQUIRED.format(model=match.model_id))
     limits = match.row.mesh
     text = _build_text(request, limits.dialect)
     if 0 < limits.max_prompt_characters < len(text):

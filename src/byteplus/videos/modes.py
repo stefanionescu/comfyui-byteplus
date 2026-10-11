@@ -79,7 +79,7 @@ def validate_video_request(request: VideoRequest, settings: Settings) -> None:
         _validate_sources(request, mode)
     frames = [frame.url for frame in (request.first_frame, request.last_frame) if isinstance(frame, EncodedImage)]
     images = [image.url for image in request.images]
-    validate_upload_size((*frames, *images, *(clip.url for clip in request.clips)), settings)
+    validate_upload_size((*frames, *images, *request.clips), settings)
 
 
 __all__ = ["choose_video_mode", "validate_video_request"]

@@ -36,14 +36,6 @@ ADAPTIVE_TASK_TYPES = ("edit", "extend")
 # The output_format choices.
 OUTPUT_FORMATS = (MODEL_DEFAULT, "mp4", "mov")
 
-# A local frame or reference image every Seedance model reads: each side in pixels, and width over height.
-IMAGE_BOUNDS = {
-    "MIN_SIDE": 300,
-    "MAX_SIDE": 6000,
-    "MIN_ASPECT": 0.4,
-    "MAX_ASPECT": 2.5,
-}
-
 # The time between a video task's status checks; the first check is immediate.
 POLL_INTERVAL_SECONDS = 10
 
@@ -55,9 +47,6 @@ DONE_STATUSES = ("succeeded", "failed", "cancelled", "expired")
 
 # The one status ModelArk can cancel; a task that started runs to the end.
 CANCELLABLE_STATUS = "queued"
-
-# The output addresses a finished task may hold, in download order: a video, its last frame, and a 3D file.
-CONTENT_FIELDS = ("video_url", "last_frame_url", "file_url")
 
 # A Download node lists each recorded task as its ID, model, and submit time, joined by this separator.
 JOB_LABEL_SEPARATOR = " · "
@@ -71,10 +60,8 @@ __all__ = [
     "AUDIO_CHOICES",
     "AUDIO_VALUES",
     "CANCELLABLE_STATUS",
-    "CONTENT_FIELDS",
     "DONE_STATUSES",
     "DURATION",
-    "IMAGE_BOUNDS",
     "JOB_LABEL_SEPARATOR",
     "JOB_TIME_CHARACTERS",
     "OUTPUT_FORMATS",

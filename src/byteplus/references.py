@@ -3,10 +3,10 @@
 import re
 from ..types import Json
 from urllib.parse import urlsplit
+from collections.abc import Sequence
 from datetime import datetime, timedelta
 from ..config.units import SECONDS_PER_MINUTE
 from ..config.patterns import ASSET_ID_PATTERN
-from collections.abc import Sequence, Collection
 from ..types.errors import ErrorCode, ByteplusError
 from ..types.references import Reference, ReferenceKind
 from ..config.messages.references import (
@@ -21,7 +21,6 @@ from ..config.messages.references import (
 from ..config.generation.references import (
     PART_TYPES,
     LINK_SCHEME,
-    REFERENCE_KINDS,
     REFERENCE_ROLES,
     ASSET_URI_PREFIX,
     EXPIRY_MARGIN_SECONDS,
@@ -67,7 +66,7 @@ def parse_reference_source(source: str, kind: ReferenceKind) -> Reference:
 
 def validate_references(
     references: Sequence[Reference],
-    kinds: Collection[ReferenceKind],
+    kinds: Sequence[ReferenceKind],
     *,
     can_read_assets: bool,
     now: datetime,
@@ -81,8 +80,7 @@ def validate_references(
     deadline = now + timedelta(seconds=EXPIRY_MARGIN_SECONDS)
     for position, reference in enumerate(references, start=1):
         if reference.kind not in kinds:
-            names = ", ".join(kind for kind in REFERENCE_KINDS if kind in kinds)
-            message = REFERENCE_KIND.format(kinds=names, position=position, kind=reference.kind)
+            message = REFERENCE_KIND.format(kinds=", ".join(kinds), position=position, kind=reference.kind)
             raise ByteplusError(ErrorCode.INVALID_INPUT, message)
         if reference.origin == "asset" and not can_read_assets:
             raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_ASSET.format(position=position))

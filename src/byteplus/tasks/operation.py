@@ -12,16 +12,16 @@ from ..models import find_model
 from ..failures import build_failure
 from pydantic import ValidationError
 from typing import cast, TYPE_CHECKING
+from ...config.byteplus import ENDPOINT_URLS
 from datetime import UTC, datetime, timedelta
 from ...config.messages.run import REPLY_UNREADABLE
 from ...types.errors import ErrorCode, ByteplusError
-from ...config.byteplus import TASK_URL, ENDPOINT_URLS
 from ...types.replies import TaskReply, TaskCreateReply
 from ...types.tasks import TaskJob, TaskOutput, TaskResult
 from ...config.generation.references import OUTPUT_LIFETIME_SECONDS
 from ..transport import send_json, send_lookup, download_output, send_task_cancel
+from ...config.generation.videos import DONE_STATUSES, CANCELLABLE_STATUS, TASK_RETENTION_SECONDS
 from ...config.messages.tasks import TASK_GONE, TASK_OUTCOMES, TASK_UNRECORDED, TASK_FILES_EXPIRED
-from ...config.generation.videos import CONTENT_FIELDS, DONE_STATUSES, CANCELLABLE_STATUS, TASK_RETENTION_SECONDS
 
 if TYPE_CHECKING:
     from ...types import Json
@@ -111,7 +111,7 @@ class TaskDownloadOperation:
         """
         seconds = configuration.settings.request_timeout_seconds
         deadline = time.monotonic() + seconds
-        url = TASK_URL.format(task_id=self.job.job_id)
+        url = f"{ENDPOINT_URLS['tasks']}/{self.job.job_id}"
         while True:
             reply = _parse_task_reply(await send_lookup(url, configuration))
             self.last_status = reply.status
@@ -123,9 +123,9 @@ class TaskDownloadOperation:
             await asyncio.sleep(self.poll_seconds)
 
     async def _download_outputs(self, reply: TaskReply, configuration: Configuration) -> dict[str, TaskOutput]:
-        """Download each address the finished task holds once, in content field order, without the key."""
-        content = reply.content.model_dump() if reply.content is not None else {}
-        addresses: dict[str, str] = {field: content[field] for field in CONTENT_FIELDS if content.get(field)}
+        """Download each address the finished task holds once, in reply field order, without the key."""
+        content: dict[str, str | None] = reply.content.model_dump() if reply.content is not None else {}
+        addresses = {field: address for field, address in content.items() if address}
         if not addresses:
             raise ByteplusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE)
         return {

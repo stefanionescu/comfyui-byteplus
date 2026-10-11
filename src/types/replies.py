@@ -220,16 +220,12 @@ class ListedTokenLimits(Reply):
 
     Attributes:
         context_window: Tokens the model holds: prompt, reasoning, and answer.
-        max_input_token_length: The longest prompt.
         max_output_token_length: The longest answer, reasoning included.
-        max_reasoning_token_length: The longest reasoning.
 
     """
 
     context_window: int = 0
-    max_input_token_length: int = 0
     max_output_token_length: int = 0
-    max_reasoning_token_length: int = 0
 
 
 class ListedModel(Reply):

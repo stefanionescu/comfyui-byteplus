@@ -6,7 +6,8 @@ It also holds the request fields each kind of request reserves, and the service 
 # Every ModelArk request goes to Asia Pacific (Johor), the one region that serves every model the pack takes.
 BASE_URL = "https://ark.ap-southeast.bytepluses.com/api/v3"
 
-# The endpoints; layer splitting shares images, and videos and 3D share tasks. The model listing bills nothing.
+# The endpoints; layer splitting shares images, and videos and 3D share tasks, each task at its ID after the tasks
+# address. The model listing bills nothing.
 ENDPOINT_URLS = {
     "chat": BASE_URL + "/chat/completions",
     "images": BASE_URL + "/images/generations",
@@ -14,9 +15,6 @@ ENDPOINT_URLS = {
     "embeddings": BASE_URL + "/embeddings/multimodal",
     "models": BASE_URL + "/models",
 }
-
-# One video or 3D task: GET checks it, and DELETE cancels it while it is queued.
-TASK_URL = BASE_URL + "/contents/generations/tasks/{task_id}"
 
 # A reply is read in chunks, and a failed one only this far.
 REPLY_BYTES = {
@@ -38,31 +36,24 @@ CONSOLE_URLS = {
     "billing_page": "console.byteplus.com/finance/overview",
 }
 
+# The body fields an image request sets itself, whether it makes images or splits layers.
+IMAGE_FIELDS = (
+    "model",
+    "prompt",
+    "image",
+    "response_format",
+    "stream",
+    "layer_decomposition",
+    "sequential_image_generation",
+    "sequential_image_generation_options",
+    "service_tier",
+)
+
 # The body fields each kind of request sets itself, which extra fields may not replace.
 RESERVED_FIELDS = {
     "chat": ("model", "messages", "stream", "stream_options", "service_tier"),
-    "images": (
-        "model",
-        "prompt",
-        "image",
-        "response_format",
-        "stream",
-        "layer_decomposition",
-        "sequential_image_generation",
-        "sequential_image_generation_options",
-        "service_tier",
-    ),
-    "layers": (
-        "model",
-        "prompt",
-        "image",
-        "response_format",
-        "stream",
-        "layer_decomposition",
-        "sequential_image_generation",
-        "sequential_image_generation_options",
-        "service_tier",
-    ),
+    "images": IMAGE_FIELDS,
+    "layers": IMAGE_FIELDS,
     "videos": ("model", "content", "callback_url", "return_last_frame", "service_tier"),
     "meshes": ("model", "content", "callback_url", "service_tier"),
     "embeddings": ("model", "input", "encoding_format", "service_tier"),
@@ -82,6 +73,5 @@ __all__ = [
     "REASON_ENDINGS",
     "REPLY_BYTES",
     "RESERVED_FIELDS",
-    "TASK_URL",
     "TIERS",
 ]

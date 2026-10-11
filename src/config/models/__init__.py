@@ -39,7 +39,7 @@ KIND_NODES = {
 }
 
 # How a refusal names each kind of input.
-MEDIA_LABELS = {"text": "text", "image": "images", "video": "video", "audio": "audio", "pdf": "PDF documents"}
+MEDIA_LABELS = {"image": "images", "video": "video", "audio": "audio", "pdf": "PDF documents"}
 
 # Each family, the model ID without its six-digit version, mapped to its newest row, which takes another version.
 # A family with a current row maps to the newest current one.

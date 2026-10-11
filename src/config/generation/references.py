@@ -1,13 +1,7 @@
 """The kinds, origins, addresses, and lifetimes of the files ModelArk reads by address."""
 
-# Every kind a reference can be.
-REFERENCE_KINDS = ("image", "video", "audio", "draft")
-
 # The kinds Reference: Add offers; drafts come only from video nodes.
 ADDED_KINDS = ("image", "video", "audio")
-
-# Made by ModelArk, in an asset library, or given by the person.
-REFERENCE_ORIGINS = ("output", "asset", "link")
 
 # The scheme ModelArk reads asset IDs with.
 ASSET_URI_PREFIX = "asset://"
@@ -51,7 +45,5 @@ __all__ = [
     "MAX_ADDRESS_CHARACTERS",
     "OUTPUT_LIFETIME_SECONDS",
     "PART_TYPES",
-    "REFERENCE_KINDS",
-    "REFERENCE_ORIGINS",
     "REFERENCE_ROLES",
 ]

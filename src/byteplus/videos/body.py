@@ -5,29 +5,23 @@ The mode decides the content items and their fixed order, and the row decides th
 
 from __future__ import annotations
 
-from collections import Counter
+from ...config.media import WAV
 from datetime import UTC, datetime
 from .modes import choose_video_mode
 from typing import cast, TYPE_CHECKING
 from ...types.images import EncodedImage
 from ..options import build_request_body
 from ...types.references import Reference
+from ..models import validate_range, validate_value
 from ...types.errors import ErrorCode, ByteplusError
-from ..models import validate_model, validate_range, validate_value
 from ..references import validate_references, build_reference_parts
 from ...config.generation.references import PART_TYPES, REFERENCE_ROLES
-from ...config.generation.videos import DURATION, IMAGE_BOUNDS, RESOLUTIONS, ADAPTIVE_RATIO, ADAPTIVE_TASK_TYPES
+from ...config.generation.videos import DURATION, RESOLUTIONS, ADAPTIVE_RATIO, ADAPTIVE_TASK_TYPES
 from ...config.messages.inputs import (
-    AUDIO_TOTAL,
-    AUDIO_LENGTH,
-    DRAFT_REUSED,
     RATIO_FIXED_ONLY,
-    VIDEO_IMAGE_SIZE,
-    AUDIO_NEEDS_MEDIA,
     DRAFT_FINISH_SIZE,
     VIDEO_MODE_LABELS,
     RATIO_ADAPTIVE_ONLY,
-    VIDEO_REFERENCE_LIMIT,
     VIDEO_MODE_UNSUPPORTED,
     DRAFT_FINISH_UNSUPPORTED,
 )
@@ -40,96 +34,31 @@ if TYPE_CHECKING:
 
 
 def _validate_draft_finish(request: VideoRequest, match: ModelMatch[VideoRow]) -> None:
-    """Refuse a draft the model cannot finish, at a size it does not finish at, or with settings the draft keeps."""
+    """Refuse a draft the model cannot finish, or at a size it does not finish at."""
     limits = match.row.video
     if not limits.draft_finishes:
         raise ByteplusError(ErrorCode.INVALID_INPUT, DRAFT_FINISH_UNSUPPORTED.format(model=match.model_id))
-    validate_references(request.references, frozenset({"draft"}), can_read_assets=False, now=datetime.now(UTC))
+    validate_references(request.references, ("draft",), can_read_assets=False, now=datetime.now(UTC))
     if request.resolution not in limits.draft_finishes:
         message = DRAFT_FINISH_SIZE.format(model=match.model_id, resolutions=", ".join(limits.draft_finishes))
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    is_changed = request.ratio is not None or request.has_sound is not None
-    if is_changed or request.task_type != "auto" or request.is_camera_fixed:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, DRAFT_REUSED)
     if request.output_format is not None:
         validate_value(match, "output format", request.output_format, limits.output_formats)
 
 
 def _validate_media(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> None:
-    """Refuse media the model does not read, a mode it does not take, references it cannot read, and too many.
+    """Refuse a mode the model does not take, and references it cannot read or that expire too soon.
 
-    Only Seedance 2.5 and the 2.0 series take reference media, and they are the models that read assets. A frame
-    that is a reference is checked for its expiry; an asset frame was refused when the socket was read.
+    Only Seedance 2.5 and the 2.0 series take reference media, so past the mode check references reach only models
+    that read every kind of them, assets included. A frame may be an output or a link, not an asset.
     """
-    limits = match.row.video
-    chain = Counter(reference.kind for reference in request.references)
-    counts: dict[ReferenceKind, int] = {
-        "image": len(request.images) + chain["image"],
-        "video": chain["video"],
-        "audio": len(request.clips) + chain["audio"],
-    }
-    frames = [frame for frame in (request.first_frame, request.last_frame) if frame is not None]
-    has_frames = bool(frames)
-    validate_model(match, [kind for kind, count in counts.items() if count or (kind == "image" and has_frames)])
-    if mode not in limits.modes:
+    if mode not in match.row.video.modes:
         message = VIDEO_MODE_UNSUPPORTED.format(model=match.model_id, mode=VIDEO_MODE_LABELS[mode])
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    maximums: dict[ReferenceKind, int] = {
-        "image": limits.reference_images,
-        "video": limits.reference_videos,
-        "audio": limits.reference_audio,
-    }
-    kinds: frozenset[ReferenceKind] = frozenset(kind for kind, maximum in maximums.items() if maximum > 0)
     now = datetime.now(UTC)
-    validate_references(request.references, kinds, can_read_assets=limits.reference_images > 0, now=now)
-    linked = [frame for frame in frames if isinstance(frame, Reference)]
-    validate_references(linked, frozenset({"image"}), can_read_assets=False, now=now)
-    for kind, count in counts.items():
-        if count > maximums[kind]:
-            message = VIDEO_REFERENCE_LIMIT.format(model=match.model_id, maximum=maximums[kind], kind=kind, count=count)
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    if counts["audio"] and counts["image"] + counts["video"] == 0 and not limits.can_use_audio_alone:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, AUDIO_NEEDS_MEDIA.format(model=match.model_id))
-
-
-def _validate_images(request: VideoRequest) -> None:
-    """Refuse a local image outside the sizes and shapes every Seedance model reads, frames first.
-
-    Linked and output images are not measured; ModelArk checks them when it reads them.
-    """
-    labelled: list[tuple[str, EncodedImage | Reference | None]] = [
-        ("first frame", request.first_frame),
-        ("last frame", request.last_frame),
-    ]
-    labelled.extend(("reference image", image) for image in request.images)
-    for label, image in labelled:
-        if not isinstance(image, EncodedImage):
-            continue
-        short_side, long_side = sorted((image.width, image.height))
-        is_sized = IMAGE_BOUNDS["MIN_SIDE"] <= short_side and long_side <= IMAGE_BOUNDS["MAX_SIDE"]
-        if not is_sized or not IMAGE_BOUNDS["MIN_ASPECT"] <= image.width / image.height <= IMAGE_BOUNDS["MAX_ASPECT"]:
-            message = VIDEO_IMAGE_SIZE.format(input=label, width=image.width, height=image.height)
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-
-
-def _validate_clips(request: VideoRequest, match: ModelMatch[VideoRow]) -> None:
-    """Refuse a local clip outside the model's clip lengths, and clips longer in all than the model takes."""
-    limits = match.row.video
-    bounds, maximum_total = limits.reference_seconds, limits.reference_total_seconds
-    # Only a model that takes reference audio has clip limits, and the media check refused clips for any other.
-    if bounds is None or maximum_total is None:
-        return
-    minimum, maximum = bounds
-    for clip in request.clips:
-        if not minimum <= clip.seconds <= maximum:
-            message = AUDIO_LENGTH.format(
-                model=match.model_id, minimum=minimum, maximum=maximum, seconds=f"{clip.seconds:.1f}"
-            )
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    total = sum(clip.seconds for clip in request.clips)
-    if total > maximum_total:
-        message = AUDIO_TOTAL.format(model=match.model_id, maximum=maximum_total, seconds=f"{total:.1f}")
-        raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+    validate_references(request.references, ("image", "video", "audio"), can_read_assets=True, now=now)
+    frames = [frame for frame in (request.first_frame, request.last_frame) if isinstance(frame, Reference)]
+    validate_references(frames, ("image",), can_read_assets=False, now=now)
 
 
 def _choose_length(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict[str, Json]:
@@ -215,7 +144,7 @@ def _build_content(request: VideoRequest) -> list[Json]:
     local: dict[ReferenceKind, list[str]] = {
         "image": [image.url for image in request.images],
         "video": [],
-        "audio": [clip.url for clip in request.clips],
+        "audio": [WAV["URL_PREFIX"] + clip for clip in request.clips],
     }
     for kind, urls in local.items():
         part = PART_TYPES[kind]
@@ -244,8 +173,6 @@ def build_video_body(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict
             body["output_format"] = request.output_format
     else:
         _validate_media(request, match, mode)
-        _validate_images(request)
-        _validate_clips(request, match)
         body = {"model": match.model_id, "content": _build_content(request), **_choose_length(request, match)}
         ratio = _choose_ratio(request, match, mode)
         if ratio is not None:

@@ -32,4 +32,8 @@ class ByteplusError(RuntimeError):
         self.code = code
 
 
-__all__ = ["ByteplusError", "ErrorCode"]
+class UnknownModelError(ByteplusError):
+    """A model ID the bundled table does not know, which ModelArk's model listing may still list."""
+
+
+__all__ = ["ByteplusError", "ErrorCode", "UnknownModelError"]

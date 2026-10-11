@@ -23,16 +23,9 @@ SERIES_VIDEO = {
     "can_choose_duration": True,
     "adaptive_modes": (),
     "fixed_ratio_modes": (),
-    "reference_images": 9,
-    "reference_videos": 3,
-    "reference_audio": 3,
-    "reference_seconds": (2, 15),
-    "reference_total_seconds": 15,
-    "can_use_audio_alone": False,
     "has_audio": True,
     "has_seed": False,
     "has_fixed_camera": False,
-    "has_priority": True,
     "output_formats": (),
     "task_types": (),
     "draft_finishes": (),
@@ -46,16 +39,9 @@ PRO_VIDEO = {
     "can_choose_duration": False,
     "adaptive_modes": (),
     "fixed_ratio_modes": ("text",),
-    "reference_images": 0,
-    "reference_videos": 0,
-    "reference_audio": 0,
-    "reference_seconds": None,
-    "reference_total_seconds": None,
-    "can_use_audio_alone": False,
     "has_audio": False,
     "has_seed": True,
     "has_fixed_camera": True,
-    "has_priority": False,
     "output_formats": (),
     "task_types": (),
     "draft_finishes": (),
@@ -65,7 +51,6 @@ VIDEO_ROWS = {
     "dreamina-seedance-2-5-260628": {
         "kinds": ("videos",),
         "inputs": REFERENCE_INPUTS,
-        "outputs": ("video",),
         # The console's schema says Seedance 2.5 makes no drafts; the row follows the API page, which finishes a
         # draft at 1080p only.
         "video": {
@@ -75,16 +60,9 @@ VIDEO_ROWS = {
             "can_choose_duration": True,
             "adaptive_modes": ("first_frame", "first_last_frame"),
             "fixed_ratio_modes": (),
-            "reference_images": 30,
-            "reference_videos": 10,
-            "reference_audio": 10,
-            "reference_seconds": (2, 30),
-            "reference_total_seconds": 30,
-            "can_use_audio_alone": True,
             "has_audio": True,
             "has_seed": False,
             "has_fixed_camera": False,
-            "has_priority": True,
             "output_formats": ("mp4", "mov"),
             "task_types": ("auto", "reference", "edit", "extend"),
             "draft_finishes": ("1080p",),
@@ -94,7 +72,6 @@ VIDEO_ROWS = {
     "dreamina-seedance-2-0-260128": {
         "kinds": ("videos",),
         "inputs": REFERENCE_INPUTS,
-        "outputs": ("video",),
         # ModelArk spells 4K in lowercase.
         "video": {**SERIES_VIDEO, "resolutions": ("480p", "720p", "1080p", "4k")},
         "sources": (*VIDEO_PAGES, "seedance-2-0"),
@@ -102,21 +79,18 @@ VIDEO_ROWS = {
     "dreamina-seedance-2-0-fast-260128": {
         "kinds": ("videos",),
         "inputs": REFERENCE_INPUTS,
-        "outputs": ("video",),
         "video": {**SERIES_VIDEO, "resolutions": ("480p", "720p")},
         "sources": (*VIDEO_PAGES, "seedance-2-0"),
     },
     "dreamina-seedance-2-0-mini-260615": {
         "kinds": ("videos",),
         "inputs": REFERENCE_INPUTS,
-        "outputs": ("video",),
         "video": {**SERIES_VIDEO, "resolutions": ("480p", "720p")},
         "sources": (*VIDEO_PAGES, "seedance-2-0"),
     },
     "seedance-1-5-pro-251215": {
         "kinds": ("videos",),
         "inputs": FRAME_INPUTS,
-        "outputs": ("video",),
         "video": {
             **PRO_VIDEO,
             "durations": (4, 12),
@@ -127,7 +101,6 @@ VIDEO_ROWS = {
         },
         "sources": (*VIDEO_PAGES, "seedance-1-5-pro", "model-deprecation-notice"),
         "has_flex": True,
-        # It stops at 17:00 UTC+8 that day, and ModelArk moves no task to another model.
         "status": "retiring",
         "deactivation": "2026-11-11",
         "replacement": "dreamina-seedance-2-0-mini-260615",
@@ -135,7 +108,6 @@ VIDEO_ROWS = {
     "seedance-1-0-pro-250528": {
         "kinds": ("videos",),
         "inputs": FRAME_INPUTS,
-        "outputs": ("video",),
         "video": PRO_VIDEO,
         "sources": (*VIDEO_PAGES, "seedance-1-0-pro-pro-fast"),
         "has_flex": True,
@@ -143,7 +115,6 @@ VIDEO_ROWS = {
     "seedance-1-0-pro-fast-251015": {
         "kinds": ("videos",),
         "inputs": FRAME_INPUTS,
-        "outputs": ("video",),
         "video": {**PRO_VIDEO, "modes": ("text", "first_frame")},
         "sources": (*VIDEO_PAGES, "seedance-1-0-pro-pro-fast"),
         "has_flex": True,

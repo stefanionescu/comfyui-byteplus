@@ -6,6 +6,7 @@ import asyncio
 from ..base import PaidNode
 from comfy_api.latest import io
 from typing import cast, TYPE_CHECKING
+from ...comfy.media import encode_video
 from ...types.parsing import parse_json
 from comfy_execution.graph import ExecutionBlocker
 from ...byteplus.chat.operation import ChatOperation
@@ -14,9 +15,9 @@ from ...config.generation.models import DEFAULT_MODELS
 from ...config.messages.inputs import JSON_SCHEMA_INVALID
 from ...types.chat import Turn, ChatRequest, Conversation
 from ...config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
-from ..inputs import encode_media, REFERENCES_INPUT, build_request_inputs
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
 from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
+from ..inputs import REFERENCES_INPUT, encode_audio_clips, encode_sized_images, build_request_inputs
 from ...config.generation.chat import EFFORTS, TEMPERATURE, THINKING_CHOICES, TEMPERATURE_CHOICE, MAX_COMPLETION_TOKENS
 
 if TYPE_CHECKING:
@@ -220,7 +221,13 @@ class ChatAsk(PaidNode):
 
         async def send_encoded() -> io.NodeOutput:
             """Encode the media inside the owned task, then send the request."""
-            image_urls, video_urls, clips = await wait_for_thread(lambda: encode_media(images, videos, audio))
+            image_urls, video_urls, clips = await wait_for_thread(
+                lambda: (
+                    tuple(image.url for image in encode_sized_images(images or ())),
+                    tuple(encode_video(video) for video in videos or ()),
+                    encode_audio_clips(audio or ()),
+                )
+            )
             # A dropdown left at model default sends nothing.
             request = ChatRequest(
                 model_id=model.strip(),

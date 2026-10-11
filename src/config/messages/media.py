@@ -1,7 +1,5 @@
 """Messages for media that cannot be sent or read."""
 
-AUDIO_BATCH = "Connect one audio clip, not a batch of several."
-
 AUDIO_EMPTY = "The connected audio has no samples."
 
 AUDIO_UNWRITABLE = "The connected audio could not be written as WAV. Use mono or stereo audio."
@@ -30,7 +28,6 @@ UPLOAD_LIMIT = (
 VIDEO_UNWRITABLE = "The connected video could not be written as MP4."
 
 __all__ = [
-    "AUDIO_BATCH",
     "AUDIO_EMPTY",
     "AUDIO_UNWRITABLE",
     "DOWNLOAD_LIMIT",

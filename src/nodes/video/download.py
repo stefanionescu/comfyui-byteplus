@@ -59,11 +59,8 @@ class VideoDownload(io.ComfyNode):
     @override
     async def execute(cls, *, job: str = "") -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
         """Read the task's record, wait for it, and download what it made."""
-        job_id = job.split(" ", 1)[0]
-        if TASK_ID.match(job_id) is None:
-            raise ByteplusError(ErrorCode.INVALID_INPUT, JOB_UNKNOWN)
         jobs = get_runtime().jobs
-        record = await asyncio.to_thread(jobs.read, job_id)
+        record = await asyncio.to_thread(jobs.read, job.split(" ", 1)[0])
         if record.kind != "videos":
             raise ByteplusError(ErrorCode.INVALID_INPUT, VIDEO_JOB_KIND)
         operation = TaskDownloadOperation(record, jobs, POLL_INTERVAL_SECONDS)

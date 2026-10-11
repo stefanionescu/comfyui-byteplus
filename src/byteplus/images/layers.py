@@ -12,12 +12,11 @@ from ...types.references import Reference
 from ...config.byteplus import ENDPOINT_URLS
 from ..operation import validate_upload_size
 from ..references import validate_references
+from ..models import find_model, validate_value
 from ..transport import send_json, download_output
 from ...config.messages.run import REPLY_UNREADABLE
 from ...types.errors import ErrorCode, ByteplusError
-from ...config.messages.inputs import LAYER_IMAGE_SIZE
-from ..models import find_model, validate_model, validate_value
-from ...config.generation.images import LAYER_SHAPE, RESPONSE_FORMAT
+from ...config.generation.images import RESPONSE_FORMAT
 from ...types.images import Layer, ImageOutput, LayerResult, EncodedImage
 
 if TYPE_CHECKING:
@@ -29,19 +28,13 @@ if TYPE_CHECKING:
 
 
 def _validate_layer_request(request: LayerRequest, match: ModelMatch[ImageRow]) -> None:
-    """Refuse, before anything is paid, an image the model cannot split; every layer model takes every size.
+    """Refuse, before anything is paid, a reference the model cannot read and a mode it does not take.
 
-    Larger images than ModelArk reads were refused when the image was encoded.
+    Every layer model takes every size, and ModelArk checks the image's own size itself.
     """
-    validate_model(match, ("image",))
     image = request.image
     if isinstance(image, Reference):
-        validate_references((image,), frozenset({"image"}), can_read_assets=False, now=datetime.now(UTC))
-    else:
-        short_side, long_side = sorted((image.width, image.height))
-        if image.width * image.height < LAYER_SHAPE["MIN_PIXELS"] or long_side > LAYER_SHAPE["MAX_ASPECT"] * short_side:
-            message = LAYER_IMAGE_SIZE.format(width=image.width, height=image.height)
-            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+        validate_references((image,), ("image",), can_read_assets=False, now=datetime.now(UTC))
     if request.prompt_mode is not None:
         validate_value(match, "optimize prompt options", request.prompt_mode, match.row.image.prompt_modes)
 

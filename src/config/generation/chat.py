@@ -19,35 +19,11 @@ TEMPERATURE = {
 # The thinking.type values; a model's row lists the ones it takes, and only some models take auto.
 THINKING_CHOICES = (MODEL_DEFAULT, "enabled", "disabled", "auto")
 
-# The thinking.type that turns reasoning off, with which ModelArk takes only the minimal effort.
-THINKING_OFF = "disabled"
-
 # How much a reasoning model thinks; a model that takes an effort takes all seven and maps them to its own levels.
 EFFORTS = (MODEL_DEFAULT, "none", "minimal", "low", "medium", "high", "xhigh", "max")
 
-# The only effort ModelArk takes with thinking off.
-THINKING_OFF_EFFORT = "minimal"
-
-# The input_audio format of a base64 WAV clip.
-AUDIO_FORMAT = "wav"
-
-# ModelArk's largest file of each kind in a chat request, counted in the file's bytes, not its base64 text. BytePlus
-# writes MB; 1,000,000 bytes is the smaller reading, so a file sent is never above its limit.
-MEDIA_BYTES = {
-    "image": 10_000_000,
-    "video": 50_000_000,
-    "audio": 25_000_000,
-    "pdf": 50_000_000,
-}
-
-# ModelArk's largest request body.
-MAX_BODY_BYTES = 64_000_000
-
 # The chat reference's upper bound for max_completion_tokens, below the model list's longest outputs.
 MAX_COMPLETION_TOKENS = 65_536
-
-# ModelArk's answer limit when a request sets none; reasoning is not counted.
-DEFAULT_ANSWER_TOKENS = 4_096
 
 # A text document goes to the model as text, under its name.
 DOCUMENT_TEXT = "Document {name}:\n\n{text}"
@@ -68,27 +44,18 @@ DOCUMENT_TYPES = {
 # nodes check.
 LISTED_CHAT_DOMAINS = ("LLM", "VLM")
 
-# The model listing's status of a model that no longer answers, and of one that is ending; a current model has none.
-LISTED_STATUSES = {
-    "SHUT_DOWN": "Shutdown",
-    "RETIRING": "Retiring",
-}
+# The model listing's status of a model that no longer answers.
+LISTED_SHUT_DOWN = "Shutdown"
 
 __all__ = [
-    "AUDIO_FORMAT",
-    "DEFAULT_ANSWER_TOKENS",
     "DOCUMENT_TEXT",
     "DOCUMENT_TYPES",
     "EFFORTS",
     "LISTED_CHAT_DOMAINS",
-    "LISTED_STATUSES",
-    "MAX_BODY_BYTES",
+    "LISTED_SHUT_DOWN",
     "MAX_COMPLETION_TOKENS",
-    "MEDIA_BYTES",
     "PDF_MEDIA_TYPE",
     "TEMPERATURE",
     "TEMPERATURE_CHOICE",
     "THINKING_CHOICES",
-    "THINKING_OFF",
-    "THINKING_OFF_EFFORT",
 ]

@@ -6,6 +6,7 @@ ModelArk embeds everything in one request as a single vector, so each text, imag
 from __future__ import annotations
 
 import math
+from .models import find_model
 from .transport import send_json
 from typing import TYPE_CHECKING
 from pydantic import ValidationError
@@ -14,7 +15,6 @@ from ..types.replies import EmbeddingReply
 from ..types.search import EmbeddingResult
 from ..config.byteplus import ENDPOINT_URLS
 from ..config.units import BYTES_PER_MEGABYTE
-from .models import find_model, validate_model
 from ..config.messages.run import REPLY_UNREADABLE
 from ..types.errors import ErrorCode, ByteplusError
 from .operation import validate_upload_size, measure_encoded_bytes
@@ -57,9 +57,7 @@ def _validate_items(request: EmbeddingRequest) -> None:
 
 
 def _validate_row(request: EmbeddingRequest, match: ModelMatch[EmbeddingRow]) -> None:
-    """Refuse media the model does not read and a vector length it does not make."""
-    connected = (("image", request.images), ("video", request.video_urls))
-    validate_model(match, [kind for kind, items in connected if items])
+    """Refuse a vector length the model does not make."""
     choices = match.row.embedding.dimensions
     if request.dimensions is not None and request.dimensions not in choices:
         listed = " or ".join(str(choice) for choice in choices)

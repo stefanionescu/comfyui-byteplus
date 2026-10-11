@@ -10,9 +10,8 @@ import torch
 from typing import TYPE_CHECKING
 from comfy_api.latest import Types
 from ..types.errors import ErrorCode, ByteplusError
-from ..config.media import WAV, IMAGE_TENSOR, MAX_IMAGE_PIXELS
+from ..config.media import WAV, IMAGE_TENSOR, MP4_URL_PREFIX, MAX_IMAGE_PIXELS
 from ..config.messages.media import (
-    AUDIO_BATCH,
     AUDIO_EMPTY,
     IMAGE_SHAPE,
     IMAGE_PIXELS,
@@ -33,7 +32,7 @@ if TYPE_CHECKING:
 
 
 def encode_images(image: torch.Tensor) -> tuple[str, ...]:
-    """Send every image of a batch as a PNG data URL, never shrinking it; an image ModelArk cannot read is refused.
+    """Encode every image of a batch as a PNG data URL, never shrinking it; an image ModelArk cannot read is refused.
 
     Every frame of a batch has the same size, so one pixel count covers the batch.
     """
@@ -66,11 +65,8 @@ def decode_image(content: bytes) -> tuple[torch.Tensor, torch.Tensor]:
 
 
 def encode_audio(audio: Input.Audio) -> str:
-    """Send one audio clip as base64 WAV without a data: prefix."""
-    waveform = audio["waveform"]
-    if waveform.shape[0] != 1:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, AUDIO_BATCH)
-    if waveform.shape[-1] == 0:
+    """Encode one audio clip as base64 WAV, without a data: prefix."""
+    if audio["waveform"].shape[-1] == 0:
         raise ByteplusError(ErrorCode.INVALID_INPUT, AUDIO_EMPTY)
     try:
         return audio_to_base64_string(audio, container_format=WAV["FORMAT"], codec_name=WAV["CODEC"])
@@ -79,9 +75,9 @@ def encode_audio(audio: Input.Audio) -> str:
 
 
 def encode_video(video: Input.Video) -> str:
-    """Send a ComfyUI video as base64 H.264 MP4."""
+    """Encode a ComfyUI video as an H.264 MP4 data URL."""
     try:
-        return video_to_base64_string(video, Types.VideoContainer.MP4, Types.VideoCodec.H264)
+        return MP4_URL_PREFIX + video_to_base64_string(video, Types.VideoContainer.MP4, Types.VideoCodec.H264)
     except Exception:  # noqa: BLE001 -- reason: ComfyUI's helper raises unrelated exception types; one reviewed message replaces them.
         raise ByteplusError(ErrorCode.MEDIA, VIDEO_UNWRITABLE) from None
 

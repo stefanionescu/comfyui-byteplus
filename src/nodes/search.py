@@ -7,13 +7,14 @@ import asyncio
 from .base import PaidNode
 from comfy_api.latest import io
 from typing import TYPE_CHECKING
+from ..comfy.media import encode_video
 from ..types.search import EmbeddingRequest
 from ..config.generation.search import DIMENSIONS
 from ..config.namespace import MENUS, NODE_PREFIX
 from ..byteplus.embeddings import EmbeddingOperation
 from ..config.generation.models import DEFAULT_MODELS
+from .inputs import encode_sized_images, build_request_inputs
 from ..comfy.execution import send_request, wait_for_task, wait_for_thread
-from .inputs import encode_media, encode_sized_images, build_request_inputs
 from ..config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
 
 if TYPE_CHECKING:
@@ -100,8 +101,9 @@ class SearchEmbed(PaidNode):
 
         async def send_encoded() -> io.NodeOutput:
             """Encode the media inside the owned task, then send the requests."""
-            encoded_images = await wait_for_thread(lambda: encode_sized_images(images or ()))
-            _image_urls, video_urls, _clips = await wait_for_thread(lambda: encode_media(None, videos, None))
+            encoded_images, video_urls = await wait_for_thread(
+                lambda: (encode_sized_images(images or ()), tuple(encode_video(video) for video in videos or ()))
+            )
             # A dropdown left at model default sends nothing.
             request = EmbeddingRequest(
                 model_id=model.strip(),

@@ -48,7 +48,6 @@ if TYPE_CHECKING:
     from ...types.options import Options
     from ...types.tasks import TaskResult
     from ...types.images import EncodedImage
-    from ...types.videos import EncodedAudio
 
 # The video controls; a dropdown left at model default sends nothing, except resolution and duration, always sent.
 _CONTROLS = (
@@ -162,7 +161,7 @@ def _encode_media(
     last_frame: list[object] | None,
     reference_image: list[torch.Tensor] | None,
     reference_audio: list[Input.Audio] | None,
-) -> tuple[_Frame, _Frame, tuple[EncodedImage, ...], tuple[EncodedAudio, ...]]:
+) -> tuple[_Frame, _Frame, tuple[EncodedImage, ...], tuple[str, ...]]:
     """Read each connected frame socket, and encode the reference images and clips, in one worker thread."""
     first = read_image_socket("first frame", first_frame) if first_frame else None
     last = read_image_socket("last frame", last_frame) if last_frame else None

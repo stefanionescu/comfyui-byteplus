@@ -6,10 +6,10 @@ Nothing here sends a request or needs the key.
 import re
 from ..types import Kind
 from typing import Literal, overload
-from ..types.errors import ErrorCode, ByteplusError
 from ..config.generation.models import DEFAULT_MODELS
 from collections.abc import Mapping, Iterable, Sequence
 from ..config.patterns import MODEL_ID_PATTERN, MODEL_VERSION_PATTERN
+from ..types.errors import ErrorCode, ByteplusError, UnknownModelError
 from ..config.models import ALIASES, FAMILIES, KIND_NODES, MODEL_TABLE, MEDIA_LABELS, ENDPOINT_PREFIX
 from ..types.models import ChatRow, MeshRow, ImageRow, ModelRow, VideoRow, ModelMatch, MatchMethod, EmbeddingRow
 from ..config.messages.models import (
@@ -27,7 +27,7 @@ from ..config.messages.models import (
 )
 
 _MODEL_ID = re.compile(MODEL_ID_PATTERN)
-_MODEL_VERSION = re.compile(MODEL_VERSION_PATTERN)
+VERSION_SUFFIX = re.compile(MODEL_VERSION_PATTERN)
 # The limits key a row literal holds names the row record it becomes.
 _ROW_TYPES: dict[str, type[ModelRow]] = {
     "chat": ChatRow,
@@ -38,18 +38,20 @@ _ROW_TYPES: dict[str, type[ModelRow]] = {
 }
 
 
-def _parse_row(model_id: str, literal: Mapping[str, object]) -> ModelRow:
-    """Build the row record of one table literal, refusing a misspelled key or a wrong value.
+def _parse_rows(table: Mapping[str, Mapping[str, object]]) -> dict[str, ModelRow]:
+    """Build the row record of each table literal, refusing a misspelled key or a wrong value.
 
     A literal holds exactly one limits key; unpacking refuses a literal with none or several.
     """
-    family = _MODEL_VERSION.sub("", model_id)
-    (row_type,) = (record for key, record in _ROW_TYPES.items() if key in literal)
-    return row_type.model_validate({**literal, "model_id": model_id, "family": family})
+    rows: dict[str, ModelRow] = {}
+    for model_id, literal in table.items():
+        (row_type,) = (record for key, record in _ROW_TYPES.items() if key in literal)
+        rows[model_id] = row_type.model_validate({**literal, "model_id": model_id})
+    return rows
 
 
 # The table is parsed once, when ComfyUI imports the extension, so a mistake in it stops loading and names the key.
-_ROWS = {model_id: _parse_row(model_id, literal) for model_id, literal in MODEL_TABLE.items()}
+_ROWS = _parse_rows(MODEL_TABLE)
 _EXACT_ROWS = {**_ROWS, **{alias: _ROWS[target] for alias, target in ALIASES.items()}}
 _FAMILY_ROWS = {family: _ROWS[newest] for family, newest in FAMILIES.items()}
 
@@ -68,12 +70,12 @@ def _find_row(model_id: str, kind: Kind | None) -> tuple[ModelRow, MatchMethod]:
     ModelArk needs the six-digit version, and the ID is sent as typed, so a family name alone is refused.
     """
     if not _MODEL_ID.match(model_id):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, _describe_unknown(model_id, kind))
+        raise UnknownModelError(ErrorCode.INVALID_INPUT, _describe_unknown(model_id, kind))
     if model_id in _EXACT_ROWS:
         return _EXACT_ROWS[model_id], "exact"
-    family = _MODEL_VERSION.sub("", model_id)
+    family = VERSION_SUFFIX.sub("", model_id)
     if family not in _FAMILY_ROWS:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, _describe_unknown(model_id, kind))
+        raise UnknownModelError(ErrorCode.INVALID_INPUT, _describe_unknown(model_id, kind))
     row = _FAMILY_ROWS[family]
     if family == model_id:
         raise ByteplusError(ErrorCode.INVALID_INPUT, MODEL_VERSION.format(model=model_id, newest=row.model_id))
@@ -128,7 +130,7 @@ def find_model(model_id: str, kind: Kind | None) -> ModelMatch[ModelRow]:
         nodes = " or ".join(node for row_kind, node in KIND_NODES.items() if row_kind in row.kinds)
         message = MODEL_KIND.format(model=text, node=KIND_NODES[kind], nodes=nodes)
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    return ModelMatch(model_id=text, row=row, matched=matched, kind=kind)
+    return ModelMatch(model_id=text, row=row, matched=matched)
 
 
 def validate_model(match: ModelMatch[ModelRow], kinds: Iterable[str]) -> None:
@@ -167,4 +169,4 @@ def validate_range(
     raise ByteplusError(ErrorCode.INVALID_INPUT, message)
 
 
-__all__ = ["find_model", "validate_model", "validate_range", "validate_value"]
+__all__ = ["VERSION_SUFFIX", "find_model", "validate_model", "validate_range", "validate_value"]

@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from ...config.media import WAV
 from typing import TYPE_CHECKING
 from ..options import build_request_body
-from ...config.generation.chat import AUDIO_FORMAT, DOCUMENT_TEXT
+from ...config.generation.chat import DOCUMENT_TEXT
 
 if TYPE_CHECKING:
     from ...types import Json
@@ -36,7 +37,7 @@ def _build_parts(request: ChatRequest) -> list[Json]:
         {"type": "video_url", "video_url": {"url": url}} for url in (*request.video_urls, *linked["video"])
     ]
     clips: list[Json] = [
-        {"type": "input_audio", "input_audio": {"data": clip, "format": AUDIO_FORMAT}} for clip in request.audio_clips
+        {"type": "input_audio", "input_audio": {"data": clip, "format": WAV["FORMAT"]}} for clip in request.audio_clips
     ]
     linked_clips: list[Json] = [{"type": "input_audio", "input_audio": {"url": url}} for url in linked["audio"]]
     return [*documents, *images, *videos, *clips, *linked_clips, {"type": "text", "text": request.prompt}]

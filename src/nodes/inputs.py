@@ -5,14 +5,13 @@ from __future__ import annotations
 import torch
 from comfy_api.latest import io, Input
 from typing import cast, TYPE_CHECKING
+from ..config.media import IMAGE_TENSOR
 from ..types.images import EncodedImage
-from ..types.videos import EncodedAudio
 from ..config.namespace import SOCKET_TYPES
 from ..types.errors import ErrorCode, ByteplusError
-from ..config.media import WAV, IMAGE_TENSOR, MP4_URL_PREFIX
-from ..comfy.media import encode_audio, encode_video, encode_images
+from ..comfy.media import encode_audio, encode_images
 from ..config.generation.inputs import SEED, RUN_NUMBER, INPUT_NAMES
-from ..config.messages.inputs import IMAGE_SINGLE, REFERENCE_IMAGE_ASSET, REFERENCE_IMAGE_SINGLE
+from ..config.messages.inputs import IMAGE_SINGLE, REFERENCE_IMAGE_SINGLE
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -61,24 +60,6 @@ def build_request_inputs(*, has_seed: bool) -> list[io.Input]:
     return [seed, run_number, options] if has_seed else [run_number, options]
 
 
-def encode_media(
-    images: Sequence[torch.Tensor] | None, videos: Sequence[Input.Video] | None, audio: Sequence[Input.Audio] | None
-) -> tuple[tuple[str, ...], tuple[str, ...], tuple[str, ...]]:
-    """Encode every image, video, and audio clip that reached the list sockets, in order.
-
-    Every image of a batch becomes a PNG data URL and every clip of an audio batch a base64 WAV; videos are MP4 data
-    URLs.
-    """
-    clips = [
-        Input.Audio(waveform=clip["waveform"][index : index + 1], sample_rate=clip["sample_rate"])
-        for clip in audio or ()
-        for index in range(clip["waveform"].shape[0])
-    ]
-    image_urls = tuple(url for batch in images or () for url in encode_images(batch))
-    video_urls = tuple(MP4_URL_PREFIX + encode_video(video) for video in videos or ())
-    return image_urls, video_urls, tuple(encode_audio(clip) for clip in clips)
-
-
 def encode_sized_images(batches: Sequence[torch.Tensor]) -> tuple[EncodedImage, ...]:
     """Encode every image of every batch, in list order and then batch order, with its size and transparency.
 
@@ -93,16 +74,17 @@ def encode_sized_images(batches: Sequence[torch.Tensor]) -> tuple[EncodedImage, 
     return tuple(encoded)
 
 
-def encode_audio_clips(clips: Sequence[Input.Audio]) -> tuple[EncodedAudio, ...]:
-    """Encode every clip of every batch as a WAV data URL with its length, in list order and then batch order."""
-    _image_urls, _video_urls, encoded = encode_media(None, None, clips)
-    lengths: list[float] = []
+def encode_audio_clips(clips: Sequence[Input.Audio]) -> tuple[str, ...]:
+    """Encode every clip of every batch as base64 WAV, in list order and then batch order."""
+    encoded: list[str] = []
     for clip in clips:
         waveform = clip["waveform"]
-        lengths.extend([waveform.shape[-1] / clip["sample_rate"]] * waveform.shape[0])
-    return tuple(
-        EncodedAudio(WAV["URL_PREFIX"] + text, seconds) for text, seconds in zip(encoded, lengths, strict=True)
-    )
+        singles = (
+            Input.Audio(waveform=waveform[index : index + 1], sample_rate=clip["sample_rate"])
+            for index in range(waveform.shape[0])
+        )
+        encoded.extend(encode_audio(single) for single in singles)
+    return tuple(encoded)
 
 
 def read_image_socket(label: str, values: Sequence[object]) -> EncodedImage | Reference:
@@ -122,8 +104,6 @@ def read_image_socket(label: str, values: Sequence[object]) -> EncodedImage | Re
     if len(images) != 1:
         message = REFERENCE_IMAGE_SINGLE.format(input=label, count=len(images))
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    if images[0].origin == "asset":
-        raise ByteplusError(ErrorCode.INVALID_INPUT, REFERENCE_IMAGE_ASSET.format(input=label))
     return images[0]
 
 
@@ -132,7 +112,6 @@ __all__ = [
     "REFERENCES_INPUT",
     "build_request_inputs",
     "encode_audio_clips",
-    "encode_media",
     "encode_sized_images",
     "read_image_socket",
 ]

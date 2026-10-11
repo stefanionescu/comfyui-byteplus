@@ -55,11 +55,8 @@ class MeshDownload(io.ComfyNode):
     @override
     async def execute(cls, *, job: str = "") -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
         """Read the task's record, wait for it, and download its 3D file."""
-        job_id = job.split(" ", 1)[0]
-        if TASK_ID.match(job_id) is None:
-            raise ByteplusError(ErrorCode.INVALID_INPUT, JOB_UNKNOWN)
         jobs = get_runtime().jobs
-        record = await asyncio.to_thread(jobs.read, job_id)
+        record = await asyncio.to_thread(jobs.read, job.split(" ", 1)[0])
         if record.kind != JOB_KIND:
             raise ByteplusError(ErrorCode.INVALID_INPUT, MESH_JOB_KIND)
         operation = TaskDownloadOperation(record, jobs, POLL_INTERVAL_SECONDS)

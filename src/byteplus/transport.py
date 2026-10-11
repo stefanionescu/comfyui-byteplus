@@ -16,7 +16,7 @@ from contextlib import asynccontextmanager
 from ..config.units import BYTES_PER_MEBIBYTE
 from ..config.messages.media import DOWNLOAD_LIMIT
 from ..types.errors import ErrorCode, ByteplusError
-from ..config.byteplus import TASK_URL, REPLY_BYTES, CONSOLE_URLS
+from ..config.byteplus import REPLY_BYTES, CONSOLE_URLS, ENDPOINT_URLS
 from ..config.messages.run import (
     REQUEST_TIMEOUT,
     REPLY_UNREADABLE,
@@ -139,7 +139,7 @@ async def send_task_cancel(task_id: str, configuration: Configuration) -> None:
     The task ID has already matched the task ID pattern, so it cannot change the address's path. A successful cancel
     has an empty body, which is not read.
     """
-    url = TASK_URL.format(task_id=task_id)
+    url = f"{ENDPOINT_URLS['tasks']}/{task_id}"
     async with (
         _validate_free_request(),
         _create_session(configuration.settings, configuration.credential) as session,

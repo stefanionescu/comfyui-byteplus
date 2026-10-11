@@ -1,4 +1,4 @@
-"""Video requests and the audio clips they carry."""
+"""Video requests."""
 
 from __future__ import annotations
 
@@ -9,20 +9,6 @@ if TYPE_CHECKING:
     from .options import Options
     from .images import EncodedImage
     from .references import Reference
-
-
-@dataclass(frozen=True, slots=True)
-class EncodedAudio:
-    """One ComfyUI audio clip, encoded to send.
-
-    Attributes:
-        url: The clip as a WAV data URL.
-        seconds: Its length.
-
-    """
-
-    url: str
-    seconds: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -44,7 +30,7 @@ class VideoRequest:
         first_frame: The image the video starts from: encoded here, or a reference ModelArk reads by address.
         last_frame: The image the video ends on, in the same forms.
         images: The images connected to reference image, in list order and then batch order.
-        clips: The clips connected to reference audio, in list order and then batch order.
+        clips: The clips connected to reference audio as base64 WAV, in list order and then batch order.
         references: The references chain, in chain order.
         seed: The seed, sent only to models that take one.
         options: The service tier and extra fields from Request Options.
@@ -65,10 +51,10 @@ class VideoRequest:
     first_frame: EncodedImage | Reference | None
     last_frame: EncodedImage | Reference | None
     images: tuple[EncodedImage, ...]
-    clips: tuple[EncodedAudio, ...]
+    clips: tuple[str, ...]
     references: tuple[Reference, ...]
     seed: int
     options: Options | None
 
 
-__all__ = ["EncodedAudio", "VideoRequest"]
+__all__ = ["VideoRequest"]
