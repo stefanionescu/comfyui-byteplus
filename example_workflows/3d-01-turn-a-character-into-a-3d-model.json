@@ -132,7 +132,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or after ComfyUI restarts while one runs.\n\n1. Select **Design**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so they do not run and bill again.\n2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n3. In `task`, choose the task, and press **Run** (press R to list tasks started after the page loaded)."
+        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or after ComfyUI restarts while one runs.\n\n1. Select **Pose**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so they do not run and bill again.\n2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n3. In `task`, choose the task, and press **Run** (press R to list tasks started after the page loaded)."
       ],
       "title": "Note"
     },
@@ -179,7 +179,7 @@
     },
     {
       "id": 6,
-      "type": "b04e8c4d-a88e-5a40-add1-0d1495141ae3",
+      "type": "d6c59466-c507-506b-9ed9-61e793207136",
       "pos": [
         460,
         288
@@ -218,7 +218,7 @@
         ]
       },
       "widgets_values": [],
-      "title": "Design"
+      "title": "Pose"
     },
     {
       "id": 7,
@@ -463,7 +463,7 @@
     },
     {
       "id": 2,
-      "title": "Design",
+      "title": "Pose",
       "bounding": [
         430,
         178,
@@ -515,7 +515,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "b04e8c4d-a88e-5a40-add1-0d1495141ae3",
+        "id": "d6c59466-c507-506b-9ed9-61e793207136",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -525,7 +525,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Design",
+        "name": "Pose",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -546,7 +546,7 @@
         },
         "inputs": [
           {
-            "id": "b11439d9-d0f8-51c0-b6fb-bad843da5810",
+            "id": "56400ecd-d9e2-536a-9948-c6ad3eb7058c",
             "name": "character",
             "type": "*",
             "linkIds": [
@@ -560,7 +560,7 @@
         ],
         "outputs": [
           {
-            "id": "f9e1cbeb-2fec-5c40-a300-680a857866a0",
+            "id": "1b5f2b87-d843-5856-980f-5a7c9f85e285",
             "name": "image",
             "type": "IMAGE",
             "linkIds": [

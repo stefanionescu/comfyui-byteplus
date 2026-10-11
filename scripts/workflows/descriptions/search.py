@@ -18,7 +18,7 @@ SCORES_PATTERN = r"[^-\d]+".join([SCORE] * 5)
 HERO_TEXTS = WORKFLOW_TEXTS["search-01-choose-a-hero-image"]
 
 DRAW = Subgraph(
-    name=SHARED_TEXTS["draw"],
+    name=SHARED_TEXTS["options"],
     nodes=(
         Node(
             "prompt",
@@ -141,7 +141,7 @@ CHOOSE_HERO_IMAGE = Workflow(
     ),
     stacks=(
         (Group(SHARED_TEXTS["input"], (("brief",),), note=HERO_TEXTS["input"]),),
-        (Group(SHARED_TEXTS["draw"], (("draw",),), STAGE_COLOUR, HERO_TEXTS["draw"]),),
+        (Group(SHARED_TEXTS["options"], (("draw",),), STAGE_COLOUR, HERO_TEXTS["draw"]),),
         (Group(SHARED_TEXTS["score"], (("score",), ("scores",)), STAGE_COLOUR, HERO_TEXTS["score"]),),
         (Group(SHARED_TEXTS["choose"], (("choose",),), STAGE_COLOUR, HERO_TEXTS["choose"]),),
     ),

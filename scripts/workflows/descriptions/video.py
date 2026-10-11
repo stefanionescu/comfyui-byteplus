@@ -19,7 +19,7 @@ DRAFT_TEXTS = WORKFLOW_TEXTS["video-04-draft-then-finish"]
 RECOVER_TEXTS = WORKFLOW_TEXTS["video-05-recover-a-video"]
 
 DESIGN = Subgraph(
-    name=SHARED_TEXTS["design"],
+    name=SHARED_TEXTS["portrait"],
     nodes=(
         Node("draw", IMAGE_GENERATE, {"size": "2048x1152"}, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
@@ -71,7 +71,7 @@ ANIMATE_CHARACTER = Workflow(
     ),
     stacks=(
         (Group(SHARED_TEXTS["input"], (("character", "scene"),), note=ANIMATE_TEXTS["input"]),),
-        (Group(SHARED_TEXTS["design"], (("design",),), STAGE_COLOUR, ANIMATE_TEXTS["design"]),),
+        (Group(SHARED_TEXTS["portrait"], (("design",),), STAGE_COLOUR, ANIMATE_TEXTS["design"]),),
         (Group(SHARED_TEXTS["animate"], (("animate",),), STAGE_COLOUR, ANIMATE_TEXTS["animate"]),),
     ),
     subgraphs=(DESIGN, ANIMATE),
@@ -154,7 +154,7 @@ CONTINUE_SHOT = Workflow(
 )
 
 DRAW = Subgraph(
-    name=SHARED_TEXTS["draw"],
+    name=SHARED_TEXTS["packshot"],
     nodes=(
         Node("draw", IMAGE_GENERATE, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
@@ -212,7 +212,7 @@ CAST_CHARACTER = Workflow(
     ),
     stacks=(
         (Group(SHARED_TEXTS["input"], (("product", "scene"),), note=CAST_TEXTS["input"]),),
-        (Group(SHARED_TEXTS["draw"], (("draw",),), STAGE_COLOUR, CAST_TEXTS["draw"]),),
+        (Group(SHARED_TEXTS["packshot"], (("draw",),), STAGE_COLOUR, CAST_TEXTS["draw"]),),
         (Group(SHARED_TEXTS["character"], (("cast",),), STAGE_COLOUR, CAST_TEXTS["character"]),),
         (Group(SHARED_TEXTS["film"], (("film",),), STAGE_COLOUR, CAST_TEXTS["film"]),),
     ),

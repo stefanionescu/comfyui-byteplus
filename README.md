@@ -113,7 +113,7 @@ They are in **Browse Templates → comfyui-byteplus**. Start with each
 workflow's **Start Here** note. Most steps are subgraphs. Media inputs start
 empty, and most workflows draw their own inputs with Seedream.
 
-![Screenshot of video-01: the Start Here note and a note for each step sit above three groups. Input holds the Character and Scene prompts, Design holds the Design subgraph, which draws the character, and Animate holds the Animate subgraph, which starts the video on that character.](docs/images/workflow-animate-a-character.png)
+![Screenshot of video-01: the Start Here note and a note for each step sit above three groups. Input holds the Character and Scene prompts, Portrait holds the Portrait subgraph, which draws the character, and Animate holds the Animate subgraph, which starts the video on that character.](docs/images/workflow-animate-a-character.png)
 
 After an update, open the examples in a new tab to get the new versions.
 

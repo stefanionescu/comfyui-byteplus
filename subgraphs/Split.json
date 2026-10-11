@@ -1,12 +1,12 @@
 {
-  "id": "dc30e6be-e02e-5b19-964f-467989fac138",
+  "id": "52b9b339-3d3c-5bd1-9437-bc8c6388bc46",
   "revision": 0,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
     {
       "id": 1,
-      "type": "dcbea73d-39e8-5d32-aac0-4c2c5076cae0",
+      "type": "43d5c621-dad1-5f47-a7f6-a444d513666e",
       "pos": [
         0,
         0
@@ -20,19 +20,12 @@
       "mode": 0,
       "inputs": [
         {
-          "name": "brief",
-          "type": "*",
+          "name": "poster",
+          "type": "IMAGE,BYTEPLUS_REFERENCES",
           "link": null
         }
       ],
-      "outputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "shape": 6,
-          "links": []
-        }
-      ],
+      "outputs": [],
       "properties": {
         "previewExposures": [
           {
@@ -43,7 +36,7 @@
         ]
       },
       "widgets_values": [],
-      "title": "Draw"
+      "title": "Split"
     }
   ],
   "links": [],
@@ -54,7 +47,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "dcbea73d-39e8-5d32-aac0-4c2c5076cae0",
+        "id": "43d5c621-dad1-5f47-a7f6-a444d513666e",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -64,7 +57,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Draw",
+        "name": "Split",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -85,11 +78,11 @@
         },
         "inputs": [
           {
-            "id": "c4879ff7-94b2-56e1-925d-b6015f82348f",
-            "name": "brief",
-            "type": "*",
+            "id": "0ad1d3f2-9af4-5550-996a-cdb6bd3ed8fe",
+            "name": "poster",
+            "type": "IMAGE,BYTEPLUS_REFERENCES",
             "linkIds": [
-              3
+              4
             ],
             "pos": [
               110,
@@ -97,89 +90,22 @@
             ]
           }
         ],
-        "outputs": [
-          {
-            "id": "7fc44682-7fef-5f0f-9913-188363c67cf4",
-            "name": "images",
-            "type": "IMAGE",
-            "linkIds": [
-              4
-            ],
-            "pos": [
-              1390,
-              140
-            ]
-          }
-        ],
+        "outputs": [],
         "widgets": [],
         "nodes": [
           {
             "id": 101,
-            "type": "StringFormat",
+            "type": "BytePlusImageSplitLayers",
             "pos": [
               200,
               140
             ],
             "size": [
               340,
-              128
+              248
             ],
             "flags": {},
             "order": 100,
-            "mode": 0,
-            "inputs": [
-              {
-                "label": "a",
-                "name": "values.a",
-                "type": "*",
-                "link": 3,
-                "shape": 7
-              },
-              {
-                "label": "b",
-                "name": "values.b",
-                "type": "*",
-                "link": null,
-                "shape": 7
-              },
-              {
-                "name": "f_string",
-                "type": "STRING",
-                "link": null,
-                "widget": {
-                  "name": "f_string"
-                }
-              }
-            ],
-            "outputs": [
-              {
-                "name": "STRING",
-                "type": "STRING",
-                "links": [
-                  1
-                ]
-              }
-            ],
-            "properties": {
-              "Node name for S&R": "StringFormat"
-            },
-            "widgets_values": [
-              "Generate 4 different hero photos for an online shop's home page, each with a new camera angle and composition: {a}"
-            ]
-          },
-          {
-            "id": 102,
-            "type": "BytePlusImageGenerate",
-            "pos": [
-              580,
-              140
-            ],
-            "size": [
-              340,
-              320
-            ],
-            "flags": {},
-            "order": 101,
             "mode": 0,
             "inputs": [
               {
@@ -192,34 +118,10 @@
               },
               {
                 "name": "size",
-                "type": "STRING",
+                "type": "COMBO",
                 "link": null,
                 "widget": {
                   "name": "size"
-                }
-              },
-              {
-                "name": "max_images",
-                "type": "INT",
-                "link": null,
-                "widget": {
-                  "name": "max_images"
-                }
-              },
-              {
-                "name": "background",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "background"
-                }
-              },
-              {
-                "name": "output_format",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "output_format"
                 }
               },
               {
@@ -240,15 +142,8 @@
               },
               {
                 "name": "image",
-                "type": "IMAGE",
-                "link": null,
-                "shape": 7
-              },
-              {
-                "name": "references",
-                "type": "BYTEPLUS_REFERENCES",
-                "link": null,
-                "shape": 7
+                "type": "IMAGE,BYTEPLUS_REFERENCES",
+                "link": 4
               },
               {
                 "name": "run_number",
@@ -267,7 +162,7 @@
               {
                 "name": "prompt",
                 "type": "STRING",
-                "link": 1,
+                "link": null,
                 "widget": {
                   "name": "prompt"
                 }
@@ -275,35 +170,33 @@
             ],
             "outputs": [
               {
-                "name": "images",
+                "name": "base",
+                "type": "IMAGE",
+                "links": []
+              },
+              {
+                "name": "layers",
                 "type": "IMAGE",
                 "shape": 6,
                 "links": [
-                  2,
-                  4
+                  1
                 ]
               },
               {
                 "name": "masks",
                 "type": "MASK",
                 "shape": 6,
-                "links": []
-              },
-              {
-                "name": "references",
-                "type": "BYTEPLUS_REFERENCES",
-                "links": []
+                "links": [
+                  2
+                ]
               }
             ],
             "properties": {
-              "Node name for S&R": "BytePlusImageGenerate"
+              "Node name for S&R": "BytePlusImageSplitLayers"
             },
             "widgets_values": [
-              "seedream-4-0-250828",
-              "2848x1600",
-              4,
-              "model default",
-              "model default",
+              "dola-seedream-5-0-flash-260915",
+              "1.5K",
               "model default",
               false,
               0,
@@ -313,15 +206,55 @@
             "bgcolor": "#653"
           },
           {
+            "id": 102,
+            "type": "JoinImageWithAlpha",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              46
+            ],
+            "flags": {},
+            "order": 101,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "image",
+                "type": "IMAGE",
+                "link": 1
+              },
+              {
+                "name": "alpha",
+                "type": "MASK",
+                "link": 2
+              }
+            ],
+            "outputs": [
+              {
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  3
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "JoinImageWithAlpha"
+            },
+            "widgets_values": []
+          },
+          {
             "id": 103,
-            "type": "PreviewImage",
+            "type": "SaveImage",
             "pos": [
               960,
               140
             ],
             "size": [
               340,
-              26
+              58
             ],
             "flags": {},
             "order": 102,
@@ -330,7 +263,15 @@
               {
                 "name": "images",
                 "type": "IMAGE",
-                "link": 2
+                "link": 3
+              },
+              {
+                "name": "filename_prefix",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "filename_prefix"
+                }
               }
             ],
             "outputs": [
@@ -341,9 +282,11 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "PreviewImage"
+              "Node name for S&R": "SaveImage"
             },
-            "widgets_values": []
+            "widgets_values": [
+              "image/byteplus/poster-layers"
+            ]
           }
         ],
         "groups": [],
@@ -351,13 +294,21 @@
           {
             "id": 1,
             "origin_id": 101,
-            "origin_slot": 0,
+            "origin_slot": 1,
             "target_id": 102,
-            "target_slot": 11,
-            "type": "STRING"
+            "target_slot": 0,
+            "type": "IMAGE"
           },
           {
             "id": 2,
+            "origin_id": 101,
+            "origin_slot": 2,
+            "target_id": 102,
+            "target_slot": 1,
+            "type": "MASK"
+          },
+          {
+            "id": 3,
             "origin_id": 102,
             "origin_slot": 0,
             "target_id": 103,
@@ -365,27 +316,19 @@
             "type": "IMAGE"
           },
           {
-            "id": 3,
+            "id": 4,
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 101,
-            "target_slot": 0,
-            "type": "*"
-          },
-          {
-            "id": 4,
-            "origin_id": 102,
-            "origin_slot": 0,
-            "target_id": -20,
-            "target_slot": 0,
-            "type": "IMAGE"
+            "target_slot": 4,
+            "type": "IMAGE,BYTEPLUS_REFERENCES"
           }
         ],
         "extra": {
-          "description": "Draws four options from the brief."
+          "description": "Splits the poster into transparent layers and saves them."
         },
-        "category": "BytePlus/Search",
-        "description": "Draws four options from the brief."
+        "category": "BytePlus/Image",
+        "description": "Splits the poster into transparent layers and saves them."
       }
     ]
   }

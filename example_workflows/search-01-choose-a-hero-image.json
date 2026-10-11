@@ -180,7 +180,7 @@
     },
     {
       "id": 6,
-      "type": "dcbea73d-39e8-5d32-aac0-4c2c5076cae0",
+      "type": "70b012f2-dcbb-5fb7-96e4-be88fd8fedf0",
       "pos": [
         460,
         298
@@ -220,7 +220,7 @@
         ]
       },
       "widgets_values": [],
-      "title": "Draw"
+      "title": "Options"
     },
     {
       "id": 7,
@@ -407,7 +407,7 @@
     },
     {
       "id": 2,
-      "title": "Draw",
+      "title": "Options",
       "bounding": [
         430,
         188,
@@ -459,7 +459,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "dcbea73d-39e8-5d32-aac0-4c2c5076cae0",
+        "id": "70b012f2-dcbb-5fb7-96e4-be88fd8fedf0",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -469,7 +469,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Draw",
+        "name": "Options",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -490,7 +490,7 @@
         },
         "inputs": [
           {
-            "id": "c4879ff7-94b2-56e1-925d-b6015f82348f",
+            "id": "017ee937-9a5a-590f-bbfd-43f82cad07d5",
             "name": "brief",
             "type": "*",
             "linkIds": [
@@ -504,7 +504,7 @@
         ],
         "outputs": [
           {
-            "id": "7fc44682-7fef-5f0f-9913-188363c67cf4",
+            "id": "6c578822-8b3a-5968-8152-d31c3122d73b",
             "name": "images",
             "type": "IMAGE",
             "linkIds": [

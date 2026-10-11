@@ -223,7 +223,7 @@ WORKFLOW_TEXTS = {
         "recover": (
             "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or "
             "after ComfyUI restarts while one runs.\n\n"
-            "1. Select **Design**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so "
+            "1. Select **Pose**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so "
             "they do not run and bill again.\n"
             "2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n"
             "3. In `task`, choose the task, and press **Run** (press R to list tasks started after the page "

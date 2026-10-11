@@ -220,7 +220,7 @@
     },
     {
       "id": 7,
-      "type": "6fdd0d63-b751-53e1-9e57-cabf154c1922",
+      "type": "2ca0a93e-b78e-5da3-94f7-cf07c8e35ffb",
       "pos": [
         460,
         310
@@ -263,7 +263,7 @@
       "widgets_values": [
         ""
       ],
-      "title": "Draw"
+      "title": "Packshot"
     },
     {
       "id": 8,
@@ -415,7 +415,7 @@
     },
     {
       "id": 2,
-      "title": "Draw",
+      "title": "Packshot",
       "bounding": [
         430,
         200,
@@ -467,7 +467,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "6fdd0d63-b751-53e1-9e57-cabf154c1922",
+        "id": "2ca0a93e-b78e-5da3-94f7-cf07c8e35ffb",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -477,7 +477,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Draw",
+        "name": "Packshot",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -498,7 +498,7 @@
         },
         "inputs": [
           {
-            "id": "d27c659a-96bf-5612-bbbc-506675731147",
+            "id": "5d4eb94f-d1be-57af-86ba-0d375fb06963",
             "name": "product",
             "type": "STRING",
             "linkIds": [
@@ -512,7 +512,7 @@
         ],
         "outputs": [
           {
-            "id": "6d46f163-6f5f-5459-9a61-a5eff392c07b",
+            "id": "09d44ad6-df94-5c3a-afab-31e9cfd983d8",
             "name": "references",
             "type": "BYTEPLUS_REFERENCES",
             "linkIds": [

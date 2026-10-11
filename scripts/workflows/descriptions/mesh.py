@@ -13,7 +13,7 @@ from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
 CHARACTER_TEXTS = WORKFLOW_TEXTS["3d-01-turn-a-character-into-a-3d-model"]
 
 DESIGN = Subgraph(
-    name=SHARED_TEXTS["design"],
+    name=SHARED_TEXTS["pose"],
     nodes=(
         Node(
             "prompt",
@@ -64,7 +64,7 @@ CHARACTER_MODEL = Workflow(
     ),
     stacks=(
         (Group(SHARED_TEXTS["input"], (("character",),), note=CHARACTER_TEXTS["input"]),),
-        (Group(SHARED_TEXTS["design"], (("design",),), STAGE_COLOUR, CHARACTER_TEXTS["design"]),),
+        (Group(SHARED_TEXTS["pose"], (("design",),), STAGE_COLOUR, CHARACTER_TEXTS["design"]),),
         (
             Group(SHARED_TEXTS["build"], (("mesh",), ("save",)), STAGE_COLOUR, CHARACTER_TEXTS["build"]),
             Group(SHARED_TEXTS["recover"], (("download",), ("recovered",)), STAGE_COLOUR, CHARACTER_TEXTS["recover"]),

@@ -1,53 +1,49 @@
 {
-  "id": "edab55f3-cb83-5b82-8597-b4a037b5c4a8",
+  "id": "b49f9073-b5d4-56ab-8de3-df3111996d60",
   "revision": 0,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
     {
       "id": 1,
-      "type": "7a33b4f6-7329-5836-bd0c-943cee887178",
+      "type": "d6c59466-c507-506b-9ed9-61e793207136",
       "pos": [
         0,
         0
       ],
       "size": [
         340,
-        88
+        26
       ],
       "flags": {},
       "order": 0,
       "mode": 0,
       "inputs": [
         {
-          "name": "prompt",
-          "type": "STRING",
-          "link": null,
-          "widget": {
-            "name": "prompt"
-          }
+          "name": "character",
+          "type": "*",
+          "link": null
         }
       ],
       "outputs": [
         {
-          "name": "references",
-          "type": "BYTEPLUS_REFERENCES",
+          "name": "image",
+          "type": "IMAGE",
+          "shape": 6,
           "links": []
         }
       ],
       "properties": {
         "previewExposures": [
           {
-            "name": "video-preview",
-            "sourceNodeId": "102",
-            "sourcePreviewName": "video-preview"
+            "name": "$$canvas-image-preview",
+            "sourceNodeId": "103",
+            "sourcePreviewName": "$$canvas-image-preview"
           }
         ]
       },
-      "widgets_values": [
-        ""
-      ],
-      "title": "Draft"
+      "widgets_values": [],
+      "title": "Pose"
     }
   ],
   "links": [],
@@ -58,17 +54,17 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "7a33b4f6-7329-5836-bd0c-943cee887178",
+        "id": "d6c59466-c507-506b-9ed9-61e793207136",
         "version": 1,
         "state": {
           "lastGroupId": 0,
-          "lastNodeId": 102,
-          "lastLinkId": 3,
+          "lastNodeId": 103,
+          "lastLinkId": 4,
           "lastRerouteId": 0
         },
         "revision": 0,
         "config": {},
-        "name": "Draft",
+        "name": "Pose",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -81,7 +77,7 @@
         "outputNode": {
           "id": -20,
           "bounding": [
-            1010,
+            1390,
             140,
             120,
             20
@@ -89,11 +85,11 @@
         },
         "inputs": [
           {
-            "id": "293e80a2-7d0a-52d5-bbbf-12e98e6da1be",
-            "name": "prompt",
-            "type": "STRING",
+            "id": "56400ecd-d9e2-536a-9948-c6ad3eb7058c",
+            "name": "character",
+            "type": "*",
             "linkIds": [
-              2
+              3
             ],
             "pos": [
               110,
@@ -103,14 +99,14 @@
         ],
         "outputs": [
           {
-            "id": "49a654a1-b5b9-5148-beb1-3f2545509ee1",
-            "name": "references",
-            "type": "BYTEPLUS_REFERENCES",
+            "id": "1b5f2b87-d843-5856-980f-5a7c9f85e285",
+            "name": "image",
+            "type": "IMAGE",
             "linkIds": [
-              3
+              4
             ],
             "pos": [
-              1010,
+              1390,
               140
             ]
           }
@@ -119,17 +115,71 @@
         "nodes": [
           {
             "id": 101,
-            "type": "BytePlusVideoGenerate",
+            "type": "StringFormat",
             "pos": [
               200,
               140
             ],
             "size": [
               340,
-              500
+              128
             ],
             "flags": {},
             "order": 100,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "name": "values.a",
+                "type": "*",
+                "link": 3,
+                "shape": 7
+              },
+              {
+                "label": "b",
+                "name": "values.b",
+                "type": "*",
+                "link": null,
+                "shape": 7
+              },
+              {
+                "name": "f_string",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "f_string"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  1
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "StringFormat"
+            },
+            "widgets_values": [
+              "Full-body game character, standing in a T-pose, front view, plain white background, soft even light, no shadows. {a}"
+            ]
+          },
+          {
+            "id": 102,
+            "type": "BytePlusImageGenerate",
+            "pos": [
+              580,
+              140
+            ],
+            "size": [
+              340,
+              320
+            ],
+            "flags": {},
+            "order": 101,
             "mode": 0,
             "inputs": [
               {
@@ -141,59 +191,27 @@
                 }
               },
               {
-                "name": "duration",
+                "name": "size",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "size"
+                }
+              },
+              {
+                "name": "max_images",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "duration"
+                  "name": "max_images"
                 }
               },
               {
-                "name": "resolution",
+                "name": "background",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "resolution"
-                }
-              },
-              {
-                "name": "ratio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "ratio"
-                }
-              },
-              {
-                "name": "generate_audio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "generate_audio"
-                }
-              },
-              {
-                "name": "omni_reference_task_type",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "omni_reference_task_type"
-                }
-              },
-              {
-                "name": "draft",
-                "type": "BOOLEAN",
-                "link": null,
-                "widget": {
-                  "name": "draft"
-                }
-              },
-              {
-                "name": "camera_fixed",
-                "type": "BOOLEAN",
-                "link": null,
-                "widget": {
-                  "name": "camera_fixed"
+                  "name": "background"
                 }
               },
               {
@@ -205,6 +223,14 @@
                 }
               },
               {
+                "name": "optimize_prompt_options",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "optimize_prompt_options"
+                }
+              },
+              {
                 "name": "watermark",
                 "type": "BOOLEAN",
                 "link": null,
@@ -213,26 +239,8 @@
                 }
               },
               {
-                "name": "first_frame",
-                "type": "IMAGE,BYTEPLUS_REFERENCES",
-                "link": null,
-                "shape": 7
-              },
-              {
-                "name": "last_frame",
-                "type": "IMAGE,BYTEPLUS_REFERENCES",
-                "link": null,
-                "shape": 7
-              },
-              {
-                "name": "reference_image",
+                "name": "image",
                 "type": "IMAGE",
-                "link": null,
-                "shape": 7
-              },
-              {
-                "name": "reference_audio",
-                "type": "AUDIO",
                 "link": null,
                 "shape": 7
               },
@@ -241,14 +249,6 @@
                 "type": "BYTEPLUS_REFERENCES",
                 "link": null,
                 "shape": 7
-              },
-              {
-                "name": "seed",
-                "type": "INT",
-                "link": null,
-                "widget": {
-                  "name": "seed"
-                }
               },
               {
                 "name": "run_number",
@@ -267,7 +267,7 @@
               {
                 "name": "prompt",
                 "type": "STRING",
-                "link": 2,
+                "link": 1,
                 "widget": {
                   "name": "prompt"
                 }
@@ -275,41 +275,37 @@
             ],
             "outputs": [
               {
-                "name": "video",
-                "type": "VIDEO",
+                "name": "images",
+                "type": "IMAGE",
+                "shape": 6,
                 "links": [
-                  1
+                  2,
+                  4
                 ]
               },
               {
-                "name": "last_frame",
-                "type": "IMAGE",
+                "name": "masks",
+                "type": "MASK",
+                "shape": 6,
                 "links": []
               },
               {
                 "name": "references",
                 "type": "BYTEPLUS_REFERENCES",
-                "links": [
-                  3
-                ]
+                "links": []
               }
             ],
             "properties": {
-              "Node name for S&R": "BytePlusVideoGenerate"
+              "Node name for S&R": "BytePlusImageGenerate"
             },
             "widgets_values": [
-              "dreamina-seedance-2-5-260628",
-              4,
-              "480p",
+              "dola-seedream-5-0-flash-260915",
+              "",
+              1,
               "model default",
               "model default",
-              "auto",
-              true,
-              false,
               "model default",
               false,
-              42,
-              "fixed",
               0,
               ""
             ],
@@ -317,65 +313,37 @@
             "bgcolor": "#653"
           },
           {
-            "id": 102,
-            "type": "SaveVideo",
+            "id": 103,
+            "type": "PreviewImage",
             "pos": [
-              580,
+              960,
               140
             ],
             "size": [
               340,
-              106
+              26
             ],
             "flags": {},
-            "order": 101,
+            "order": 102,
             "mode": 0,
             "inputs": [
               {
-                "name": "video",
-                "type": "VIDEO",
-                "link": 1
-              },
-              {
-                "name": "filename_prefix",
-                "type": "STRING",
-                "link": null,
-                "widget": {
-                  "name": "filename_prefix"
-                }
-              },
-              {
-                "name": "format",
-                "type": "COMFY_DYNAMICCOMBO_V3",
-                "link": null,
-                "widget": {
-                  "name": "format"
-                }
-              },
-              {
-                "name": "codec",
-                "type": "COMFY_DYNAMICCOMBO_V3",
-                "link": null,
-                "widget": {
-                  "name": "codec"
-                }
+                "name": "images",
+                "type": "IMAGE",
+                "link": 2
               }
             ],
             "outputs": [
               {
-                "name": "video",
-                "type": "VIDEO",
+                "name": "images",
+                "type": "IMAGE",
                 "links": []
               }
             ],
             "properties": {
-              "Node name for S&R": "SaveVideo"
+              "Node name for S&R": "PreviewImage"
             },
-            "widgets_values": [
-              "video/byteplus/draft",
-              "auto",
-              "auto"
-            ]
+            "widgets_values": []
           }
         ],
         "groups": [],
@@ -385,31 +353,39 @@
             "origin_id": 101,
             "origin_slot": 0,
             "target_id": 102,
-            "target_slot": 0,
-            "type": "VIDEO"
-          },
-          {
-            "id": 2,
-            "origin_id": -10,
-            "origin_slot": 0,
-            "target_id": 101,
-            "target_slot": 18,
+            "target_slot": 11,
             "type": "STRING"
           },
           {
+            "id": 2,
+            "origin_id": 102,
+            "origin_slot": 0,
+            "target_id": 103,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
             "id": 3,
-            "origin_id": 101,
-            "origin_slot": 2,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 101,
+            "target_slot": 0,
+            "type": "*"
+          },
+          {
+            "id": 4,
+            "origin_id": 102,
+            "origin_slot": 0,
             "target_id": -20,
             "target_slot": 0,
-            "type": "BYTEPLUS_REFERENCES"
+            "type": "IMAGE"
           }
         ],
         "extra": {
-          "description": "Makes a four-second 480p draft and saves it."
+          "description": "Draws the character in a T-pose."
         },
-        "category": "BytePlus/Video",
-        "description": "Makes a four-second 480p draft and saves it."
+        "category": "BytePlus/3D",
+        "description": "Draws the character in a T-pose."
       }
     ]
   }

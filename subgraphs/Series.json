@@ -1,35 +1,38 @@
 {
-  "id": "3a850b2e-c0f8-5c53-8bb9-3f2e1d9b0974",
+  "id": "a8ed26b9-d081-5b93-95d2-fe47c9ad4e4d",
   "revision": 0,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
     {
       "id": 1,
-      "type": "14781347-4f8d-5b8a-acca-76df89bbc0ab",
+      "type": "2e30d73f-38c4-5ba2-a361-52084ca6a9fa",
       "pos": [
         0,
         0
       ],
       "size": [
         340,
-        88
+        112
       ],
       "flags": {},
       "order": 0,
       "mode": 0,
       "inputs": [
         {
-          "name": "frame",
-          "type": "IMAGE,BYTEPLUS_REFERENCES",
-          "link": null
-        },
-        {
-          "name": "scene",
+          "name": "brief",
           "type": "STRING",
           "link": null,
           "widget": {
-            "name": "scene"
+            "name": "brief"
+          }
+        },
+        {
+          "name": "model",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "model"
           }
         }
       ],
@@ -37,16 +40,17 @@
       "properties": {
         "previewExposures": [
           {
-            "name": "video-preview",
+            "name": "$$canvas-image-preview",
             "sourceNodeId": "102",
-            "sourcePreviewName": "video-preview"
+            "sourcePreviewName": "$$canvas-image-preview"
           }
         ]
       },
       "widgets_values": [
-        ""
+        "",
+        "seedream-4-0-250828"
       ],
-      "title": "Animate"
+      "title": "Series"
     }
   ],
   "links": [],
@@ -57,7 +61,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "14781347-4f8d-5b8a-acca-76df89bbc0ab",
+        "id": "2e30d73f-38c4-5ba2-a361-52084ca6a9fa",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -67,7 +71,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Animate",
+        "name": "Series",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -88,9 +92,9 @@
         },
         "inputs": [
           {
-            "id": "60a2866f-58df-5ede-87c8-0da38d990a08",
-            "name": "frame",
-            "type": "IMAGE,BYTEPLUS_REFERENCES",
+            "id": "c674596c-ae52-5230-bb6f-82af8eff591a",
+            "name": "brief",
+            "type": "STRING",
             "linkIds": [
               2
             ],
@@ -100,8 +104,8 @@
             ]
           },
           {
-            "id": "0ef0f92b-4352-57de-a5cf-8e4bc51030c7",
-            "name": "scene",
+            "id": "841dc077-8462-5be2-a8b0-a6c247653fd6",
+            "name": "model",
             "type": "STRING",
             "linkIds": [
               3
@@ -117,14 +121,14 @@
         "nodes": [
           {
             "id": 101,
-            "type": "BytePlusVideoGenerate",
+            "type": "BytePlusImageGenerate",
             "pos": [
               200,
               140
             ],
             "size": [
               340,
-              500
+              320
             ],
             "flags": {},
             "order": 100,
@@ -133,65 +137,33 @@
               {
                 "name": "model",
                 "type": "STRING",
-                "link": null,
+                "link": 3,
                 "widget": {
                   "name": "model"
                 }
               },
               {
-                "name": "duration",
+                "name": "size",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "size"
+                }
+              },
+              {
+                "name": "max_images",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "duration"
+                  "name": "max_images"
                 }
               },
               {
-                "name": "resolution",
+                "name": "background",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "resolution"
-                }
-              },
-              {
-                "name": "ratio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "ratio"
-                }
-              },
-              {
-                "name": "generate_audio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "generate_audio"
-                }
-              },
-              {
-                "name": "omni_reference_task_type",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "omni_reference_task_type"
-                }
-              },
-              {
-                "name": "draft",
-                "type": "BOOLEAN",
-                "link": null,
-                "widget": {
-                  "name": "draft"
-                }
-              },
-              {
-                "name": "camera_fixed",
-                "type": "BOOLEAN",
-                "link": null,
-                "widget": {
-                  "name": "camera_fixed"
+                  "name": "background"
                 }
               },
               {
@@ -203,6 +175,14 @@
                 }
               },
               {
+                "name": "optimize_prompt_options",
+                "type": "COMBO",
+                "link": null,
+                "widget": {
+                  "name": "optimize_prompt_options"
+                }
+              },
+              {
                 "name": "watermark",
                 "type": "BOOLEAN",
                 "link": null,
@@ -211,26 +191,8 @@
                 }
               },
               {
-                "name": "first_frame",
-                "type": "IMAGE,BYTEPLUS_REFERENCES",
-                "link": 2,
-                "shape": 7
-              },
-              {
-                "name": "last_frame",
-                "type": "IMAGE,BYTEPLUS_REFERENCES",
-                "link": null,
-                "shape": 7
-              },
-              {
-                "name": "reference_image",
+                "name": "image",
                 "type": "IMAGE",
-                "link": null,
-                "shape": 7
-              },
-              {
-                "name": "reference_audio",
-                "type": "AUDIO",
                 "link": null,
                 "shape": 7
               },
@@ -239,14 +201,6 @@
                 "type": "BYTEPLUS_REFERENCES",
                 "link": null,
                 "shape": 7
-              },
-              {
-                "name": "seed",
-                "type": "INT",
-                "link": null,
-                "widget": {
-                  "name": "seed"
-                }
               },
               {
                 "name": "run_number",
@@ -265,7 +219,7 @@
               {
                 "name": "prompt",
                 "type": "STRING",
-                "link": 3,
+                "link": 2,
                 "widget": {
                   "name": "prompt"
                 }
@@ -273,15 +227,17 @@
             ],
             "outputs": [
               {
-                "name": "video",
-                "type": "VIDEO",
+                "name": "images",
+                "type": "IMAGE",
+                "shape": 6,
                 "links": [
                   1
                 ]
               },
               {
-                "name": "last_frame",
-                "type": "IMAGE",
+                "name": "masks",
+                "type": "MASK",
+                "shape": 6,
                 "links": []
               },
               {
@@ -291,21 +247,16 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "BytePlusVideoGenerate"
+              "Node name for S&R": "BytePlusImageGenerate"
             },
             "widgets_values": [
-              "dreamina-seedance-2-0-mini-260615",
-              5,
-              "480p",
+              "seedream-4-0-250828",
+              "2848x1600",
+              4,
               "model default",
               "model default",
-              "auto",
-              false,
-              false,
               "model default",
               false,
-              42,
-              "fixed",
               0,
               ""
             ],
@@ -314,22 +265,22 @@
           },
           {
             "id": 102,
-            "type": "SaveVideo",
+            "type": "SaveImage",
             "pos": [
               580,
               140
             ],
             "size": [
               340,
-              106
+              58
             ],
             "flags": {},
             "order": 101,
             "mode": 0,
             "inputs": [
               {
-                "name": "video",
-                "type": "VIDEO",
+                "name": "images",
+                "type": "IMAGE",
                 "link": 1
               },
               {
@@ -339,38 +290,20 @@
                 "widget": {
                   "name": "filename_prefix"
                 }
-              },
-              {
-                "name": "format",
-                "type": "COMFY_DYNAMICCOMBO_V3",
-                "link": null,
-                "widget": {
-                  "name": "format"
-                }
-              },
-              {
-                "name": "codec",
-                "type": "COMFY_DYNAMICCOMBO_V3",
-                "link": null,
-                "widget": {
-                  "name": "codec"
-                }
               }
             ],
             "outputs": [
               {
-                "name": "video",
-                "type": "VIDEO",
+                "name": "images",
+                "type": "IMAGE",
                 "links": []
               }
             ],
             "properties": {
-              "Node name for S&R": "SaveVideo"
+              "Node name for S&R": "SaveImage"
             },
             "widgets_values": [
-              "video/byteplus/character",
-              "auto",
-              "auto"
+              "image/byteplus/poster-series"
             ]
           }
         ],
@@ -382,30 +315,30 @@
             "origin_slot": 0,
             "target_id": 102,
             "target_slot": 0,
-            "type": "VIDEO"
+            "type": "IMAGE"
           },
           {
             "id": 2,
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 101,
-            "target_slot": 10,
-            "type": "IMAGE,BYTEPLUS_REFERENCES"
+            "target_slot": 11,
+            "type": "STRING"
           },
           {
             "id": 3,
             "origin_id": -10,
             "origin_slot": 1,
             "target_id": 101,
-            "target_slot": 18,
+            "target_slot": 0,
             "type": "STRING"
           }
         ],
         "extra": {
-          "description": "Turns the character into a video and saves it."
+          "description": "Draws the poster series and saves it."
         },
-        "category": "BytePlus/Video",
-        "description": "Turns the character into a video and saves it."
+        "category": "BytePlus/Image",
+        "description": "Draws the poster series and saves it."
       }
     ]
   }

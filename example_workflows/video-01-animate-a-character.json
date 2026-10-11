@@ -187,7 +187,7 @@
     },
     {
       "id": 6,
-      "type": "a2febba3-7063-5c5e-92e6-867afab643df",
+      "type": "8ce31b7b-ad9b-50d9-8098-0b90958a33e7",
       "pos": [
         460,
         288
@@ -230,7 +230,7 @@
       "widgets_values": [
         ""
       ],
-      "title": "Design"
+      "title": "Portrait"
     },
     {
       "id": 7,
@@ -319,7 +319,7 @@
     },
     {
       "id": 2,
-      "title": "Design",
+      "title": "Portrait",
       "bounding": [
         430,
         178,
@@ -358,7 +358,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "a2febba3-7063-5c5e-92e6-867afab643df",
+        "id": "8ce31b7b-ad9b-50d9-8098-0b90958a33e7",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -368,7 +368,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Design",
+        "name": "Portrait",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -389,7 +389,7 @@
         },
         "inputs": [
           {
-            "id": "ad050e87-8c25-57b8-ae07-03f33779d32f",
+            "id": "553732e7-8547-5de0-a73b-032ef965be10",
             "name": "character",
             "type": "STRING",
             "linkIds": [
@@ -403,7 +403,7 @@
         ],
         "outputs": [
           {
-            "id": "5c4ec748-e283-5577-b3d9-68c4d24ca7f5",
+            "id": "91e1a24c-b765-5c2d-b2b2-0a6628aea9e5",
             "name": "references",
             "type": "BYTEPLUS_REFERENCES",
             "linkIds": [

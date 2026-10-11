@@ -1,12 +1,12 @@
 {
-  "id": "e7557361-93db-5f73-be9b-262f600d70f7",
+  "id": "3b0145ad-d9d9-5b4d-9ef4-4bb8a3ef289c",
   "revision": 0,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
     {
       "id": 1,
-      "type": "915fcaee-bdc0-5d05-8b2c-9121e26ccdf8",
+      "type": "2ca0a93e-b78e-5da3-94f7-cf07c8e35ffb",
       "pos": [
         0,
         0
@@ -20,11 +20,11 @@
       "mode": 0,
       "inputs": [
         {
-          "name": "poster",
+          "name": "product",
           "type": "STRING",
           "link": null,
           "widget": {
-            "name": "poster"
+            "name": "product"
           }
         }
       ],
@@ -47,7 +47,7 @@
       "widgets_values": [
         ""
       ],
-      "title": "Draw"
+      "title": "Packshot"
     }
   ],
   "links": [],
@@ -58,7 +58,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "915fcaee-bdc0-5d05-8b2c-9121e26ccdf8",
+        "id": "2ca0a93e-b78e-5da3-94f7-cf07c8e35ffb",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -68,7 +68,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Draw",
+        "name": "Packshot",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -89,8 +89,8 @@
         },
         "inputs": [
           {
-            "id": "18452761-2566-5804-a9e2-b1fa855d5e31",
-            "name": "poster",
+            "id": "5d4eb94f-d1be-57af-86ba-0d375fb06963",
+            "name": "product",
             "type": "STRING",
             "linkIds": [
               2
@@ -103,7 +103,7 @@
         ],
         "outputs": [
           {
-            "id": "8a6aefd0-48d4-587a-ae9f-4ebf6fbfd3f9",
+            "id": "09d44ad6-df94-5c3a-afab-31e9cfd983d8",
             "name": "references",
             "type": "BYTEPLUS_REFERENCES",
             "linkIds": [
@@ -251,10 +251,10 @@
             },
             "widgets_values": [
               "dola-seedream-5-0-flash-260915",
-              "1344x1792",
+              "",
               1,
               "model default",
-              "png",
+              "model default",
               "model default",
               false,
               0,
@@ -265,14 +265,14 @@
           },
           {
             "id": 102,
-            "type": "SaveImage",
+            "type": "PreviewImage",
             "pos": [
               580,
               140
             ],
             "size": [
               340,
-              58
+              26
             ],
             "flags": {},
             "order": 101,
@@ -282,14 +282,6 @@
                 "name": "images",
                 "type": "IMAGE",
                 "link": 1
-              },
-              {
-                "name": "filename_prefix",
-                "type": "STRING",
-                "link": null,
-                "widget": {
-                  "name": "filename_prefix"
-                }
               }
             ],
             "outputs": [
@@ -300,11 +292,9 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "SaveImage"
+              "Node name for S&R": "PreviewImage"
             },
-            "widgets_values": [
-              "image/byteplus/poster"
-            ]
+            "widgets_values": []
           }
         ],
         "groups": [],
@@ -335,10 +325,10 @@
           }
         ],
         "extra": {
-          "description": "Draws the poster and saves it."
+          "description": "Draws the product."
         },
-        "category": "BytePlus/Image",
-        "description": "Draws the poster and saves it."
+        "category": "BytePlus/Video",
+        "description": "Draws the product."
       }
     ]
   }
