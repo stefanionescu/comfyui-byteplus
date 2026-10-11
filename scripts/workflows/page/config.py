@@ -4,10 +4,8 @@ from scripts.nodes.host import HostNode
 
 # The note node the page draws each group's text in.
 NOTE = "MarkdownNote"
-# The previews a save node draws, which a placed subgraph can show: an image, an audio player, a text, and a
-# video player.
+# The previews a save node draws, which a placed subgraph can show: an image, a text, and a video player.
 IMAGE_PREVIEW = "$$canvas-image-preview"
-AUDIO_PREVIEW = "audioUI"
 TEXT_PREVIEW = "preview_text"
 VIDEO_PREVIEW = "video-preview"
 # Page layout: distances in page pixels.
@@ -57,14 +55,11 @@ NOTE_CODE_CHARACTER_WIDTH = 7
 # A dropdown whose options add widgets, and a row of sockets that grows by one as its last socket is linked.
 DROPDOWN_TYPE = "COMFY_DYNAMICCOMBO_V3"
 AUTOGROW_TYPE = "COMFY_AUTOGROW_V3"
-# A switch's sockets, which take the type of the values linked into them, and a socket that takes any type,
-# such as Format Text's.
-MATCH_TYPE = "COMFY_MATCHTYPE_V3"
+# A socket that takes any type, such as Format Text's.
 ANY_TYPE = "*"
 # Nodes that draw their own panel, measured in the page. The save nodes are sized for their empty state;
 # ComfyUI grows them as their viewers fill.
 DOM_SIZES: dict[str, tuple[int, int]] = {
-    HostNode.IMAGE: (340, 314),
     HostNode.AUDIO: (340, 136),
     HostNode.PREVIEW: (340, 122),
     HostNode.SAVE_TEXT: (340, 170),
@@ -77,7 +72,6 @@ DOM_SIZES: dict[str, tuple[int, int]] = {
 
 __all__ = [
     "ANY_TYPE",
-    "AUDIO_PREVIEW",
     "AUTOGROW_TYPE",
     "BYPASS_MODE",
     "CANVAS_ORIGIN",
@@ -88,7 +82,6 @@ __all__ = [
     "IMAGE_PREVIEW",
     "INNER_ORIGIN",
     "INPUT_COLOUR",
-    "MATCH_TYPE",
     "MULTILINE_HEIGHT",
     "MULTISELECT_HEIGHT",
     "NODE_GAP",

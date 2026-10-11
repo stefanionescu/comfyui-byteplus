@@ -6,7 +6,6 @@ from enum import StrEnum
 class HostNode(StrEnum):
     """One ComfyUI node, by the name ComfyUI registers it under."""
 
-    IMAGE = "LoadImage"
     AUDIO = "LoadAudio"
     PREVIEW = "PreviewAny"
     TEXT = "PrimitiveString"

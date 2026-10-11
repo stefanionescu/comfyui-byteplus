@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import cast, TYPE_CHECKING
-from scripts.workflows.page.config import NOTE
+from scripts.workflows.page.config import NOTE, AUTOGROW_TYPE
 from scripts.workflows.page.widgets import read_widget_default
-from scripts.workflows.page.config import MATCH_TYPE, AUTOGROW_TYPE
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -85,21 +84,8 @@ def _build_subgraph_schema(subgraph: Subgraph, palette: Palette) -> Schema:
         key, socket = source.split(".", 1)
         node = _find_node(subgraph, key)
         _, item = _find_socket(palette.find_schema(node), "outputs", socket, node.kind)
-        outputs.append({**item, "name": name, "type": _read_output_type(subgraph, palette, key, item)})
+        outputs.append({**item, "name": name})
     return {"inputs": inputs, "outputs": outputs}
-
-
-def _read_output_type(subgraph: Subgraph, palette: Palette, key: str, item: Item) -> object:
-    """Read an output's type; a switch passes on the type of a node linked into it inside the subgraph."""
-    if item["type"] != MATCH_TYPE:
-        return item["type"]
-    for start, end in subgraph.links:
-        source_key, output = start.split(".", 1)
-        if end.startswith(f"{key}.") and not end.endswith(".switch"):
-            source = _find_node(subgraph, source_key)
-            _, source_item = _find_socket(palette.find_schema(source), "outputs", output, source.kind)
-            return source_item["type"]
-    return item["type"]
 
 
 def read_slot_type(settings: Mapping[str, object]) -> object:

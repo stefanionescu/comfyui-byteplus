@@ -45,7 +45,7 @@ WORKFLOWS = (
 def _build_palette(export: dict[str, object], workflow: Workflow) -> Palette:
     """Build the table of every node one workflow may place.
 
-    A subgraph's ID comes from its workflow and name, so two workflows can each define their own Check.
+    A subgraph's ID comes from its workflow and name, so two workflows can each define their own Draw.
     """
     schemas = cast("dict[str, dict[str, object]]", export["nodes"]) | cast(
         "dict[str, dict[str, object]]", export["host"]

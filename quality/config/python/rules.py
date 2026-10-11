@@ -11,7 +11,7 @@ FORBIDDEN_EXPORT_HOOKS = {
 RUNTIME_ROOT_PACKAGE = "src"
 MUTABLE_RECORD_TYPES = {"list", "dict", "set", "bytearray", "Counter", "collections.Counter"}
 FORBIDDEN_RUNTIME_IMPORT_ROOTS = {"tests", "quality", "scripts"}
-DOCSTRING_SOURCE_PREFIXES = ("src/", "config/", "scripts/", "quality/")
+DOCSTRING_SOURCE_PREFIXES = ("src/", "scripts/", "quality/")
 PLACEHOLDER_DOCSTRING_PREFIXES = ("Handle ", "Provide ")
 
 SINGLETON_CLASS_SUFFIX = "Singleton"

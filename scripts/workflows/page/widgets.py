@@ -93,9 +93,6 @@ def encode_widget_values(schema: Schema, values: Mapping[str, WidgetValue], owne
         if item.get("control_after_generate"):
             # A paid node's seed ships fixed, so opening an example never sends a new request by itself.
             result.append("fixed")
-        if item.get("image_upload"):
-            # The page adds an upload button after an upload dropdown.
-            result.append("image")
     return result
 
 

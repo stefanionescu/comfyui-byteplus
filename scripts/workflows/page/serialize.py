@@ -12,7 +12,6 @@ from scripts.workflows.page.layout import place_stacks, place_columns
 from scripts.workflows.page.config import (
     ANY_TYPE,
     PORT_GAP,
-    MATCH_TYPE,
     PORT_WIDTH,
     BYPASS_MODE,
     INNER_ORIGIN,
@@ -89,24 +88,6 @@ def _find_slot(entry: Json, side: str, name: str) -> int:
     return index
 
 
-def _find_switch_types(entries: Mapping[str, Json], links: tuple[tuple[str, str], ...]) -> dict[str, object]:
-    """Find the type each switch passes on: the type of the values linked into its matched inputs.
-
-    ComfyUI saves a switch's any-type sockets with the type of the values that feed it once they are linked.
-    """
-    matched: dict[str, object] = {}
-    for start, end in links:
-        source_key, output = start.split(".", 1)
-        target_key, input_name = end.split(".", 1)
-        target = entries[target_key]
-        socket = cast("list[Json]", target["inputs"])[_find_slot(target, "inputs", input_name)]
-        origin = entries[source_key]
-        kind = cast("list[Json]", origin["outputs"])[_find_slot(origin, "outputs", output)]["type"]
-        if socket["type"] == MATCH_TYPE and kind != MATCH_TYPE:
-            matched[target_key] = kind
-    return matched
-
-
 def _encode_ports(
     subgraph: Subgraph, subgraph_id: str, entries: dict[str, Json], records: list[Json], side: str
 ) -> list[Json]:
@@ -131,21 +112,12 @@ def _encode_ports(
         else:
             cast("list[int]", inner["links"]).append(number)
             record = {"origin_id": entry["id"], "origin_slot": position, "target_id": port_node, "target_slot": index}
-        if inner["type"] == MATCH_TYPE:
-            inner["type"] = _read_switch_type(entry)
         records.append({"id": number, **record, "type": inner["type"]})
         # A port takes the most specific type among the sockets it feeds.
-        if port["type"] in {"", ANY_TYPE, MATCH_TYPE}:
+        if port["type"] in {"", ANY_TYPE}:
             port["type"] = inner["type"]
         cast("list[int]", port["linkIds"]).append(number)
     return ports
-
-
-def _read_switch_type(entry: Json) -> object:
-    """Read the type a switch passes on from its sockets that links inside the subgraph already typed."""
-    sockets = [*cast("list[Json]", entry["inputs"]), *cast("list[Json]", entry["outputs"])]
-    typed = (socket["type"] for socket in sockets if socket["name"] != "switch" and socket["type"] != MATCH_TYPE)
-    return next(typed, MATCH_TYPE)
 
 
 def encode_nodes(
@@ -174,9 +146,8 @@ def encode_nodes(
 
 
 def encode_links(entries: Mapping[str, Json], links: tuple[tuple[str, str], ...]) -> list[Json]:
-    """Link serialized nodes, and give each switch the type of the values it passes on."""
+    """Link serialized nodes."""
     records: list[Json] = []
-    matched = _find_switch_types(entries, links)
     for number, (start, end) in enumerate(links, 1):
         # The node key comes first; the rest is the socket's full name, which can name a slot of a growing row.
         source_key, output = start.split(".", 1)
@@ -187,11 +158,6 @@ def encode_links(entries: Mapping[str, Json], links: tuple[tuple[str, str], ...]
         cast("list[int]", cast("list[Json]", origin["outputs"])[origin_slot]["links"]).append(number)
         cast("list[Json]", target["inputs"])[target_slot]["link"] = number
         kind = cast("list[Json]", origin["outputs"])[origin_slot]["type"]
-        if kind == MATCH_TYPE:
-            kind = matched[source_key]
-            cast("list[Json]", origin["outputs"])[origin_slot]["type"] = kind
-        if cast("list[Json]", target["inputs"])[target_slot]["type"] == MATCH_TYPE:
-            cast("list[Json]", target["inputs"])[target_slot]["type"] = kind
         records.append(
             {
                 "id": number,
