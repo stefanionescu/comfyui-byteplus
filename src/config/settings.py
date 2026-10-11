@@ -1,6 +1,7 @@
 """The editable settings with their defaults and ranges, and the size and time a settings request may take."""
 
-# Each setting's default and range. ModelArk refuses a request body over 64 MB, so the upload limit stops there.
+# Each setting's default and range, in seconds or in megabytes of 1,000,000 bytes. ModelArk refuses a request body
+# over 64 MB, so the maximum upload size stops there.
 SETTING_RANGES: dict[str, dict[str, int]] = {
     "request_timeout_seconds": {"default": 1800, "minimum": 10, "maximum": 3600},
     "max_upload_megabytes": {"default": 64, "minimum": 1, "maximum": 64},

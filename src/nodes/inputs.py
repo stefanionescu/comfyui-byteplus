@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
     from ..types.references import Reference
 
-# The references input every media node shares; ComfyUI only reads an input definition, so one instance serves all.
+# The references input of every node that takes references; ComfyUI only reads an input definition, so one serves all.
 REFERENCES_INPUT = io.Custom(SOCKET_TYPES["REFERENCES"]).Input(
     "references",
     optional=True,

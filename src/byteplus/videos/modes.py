@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from ...types.settings import Settings
     from ...types.videos import VideoRequest
 
-# Prompt text Seedance would read as a setting, such as "--rs 720p".
 _VIDEO_COMMAND = re.compile(VIDEO_COMMAND_PATTERN)
 
 

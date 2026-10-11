@@ -19,7 +19,7 @@ class VideoRequest:
         model_id: The model ID sent to ModelArk.
         prompt: What the video shows; empty to finish a draft.
         duration: The length in seconds; -1 lets the model choose.
-        resolution: The resolution, always sent except to finish a draft.
+        resolution: The resolution to send; a draft is made at 480p instead.
         ratio: The aspect ratio, or adaptive.
         has_audio: The generate_audio value: whether the video has sound.
         omni_reference_task_type: auto, reference, edit, or extend; auto sends nothing.

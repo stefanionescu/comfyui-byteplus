@@ -36,8 +36,8 @@ var TEXT = {
   working: "Working..."
 };
 var LIMIT_LABELS = /* @__PURE__ */ new Map([
-  ["max_download_megabytes", "maximum download size (MiB)"],
-  ["max_upload_megabytes", "maximum upload size (MiB)"],
+  ["max_download_megabytes", "maximum download size (MB)"],
+  ["max_upload_megabytes", "maximum upload size (MB)"],
   ["request_timeout_seconds", "request timeout (seconds)"]
 ]);
 function message(key) {

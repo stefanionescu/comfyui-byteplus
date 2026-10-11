@@ -21,7 +21,6 @@ if TYPE_CHECKING:
     from pathlib import Path
     from typing import Literal
 
-# A task ID in ModelArk's documented form, which is also safe as a record's file name and in a URL path.
 TASK_ID = re.compile(TASK_ID_PATTERN)
 
 

@@ -84,11 +84,11 @@ Change these in **BytePlus settings**. New requests use the saved values.
 
 ![The BytePlus Settings dialog: the ModelArk API key field with Save Key and Clear Saved Key, and the request timeout, maximum upload size, and maximum download size with Save Limits.](docs/images/settings-dialog.png)
 
-| Setting                     | Default | Range      | What it limits                                                         |
-| --------------------------- | ------- | ---------- | ---------------------------------------------------------------------- |
-| request timeout (seconds)   | 1800    | 10 to 3600 | How long one request may take; for a video or 3D task, the whole wait. |
-| maximum upload size (MiB)   | 64      | 1 to 64    | The media and documents in one request.                                |
-| maximum download size (MiB) | 512     | 16 to 4096 | The largest reply, image, video, or 3D file accepted.                  |
+| Setting                    | Default | Range      | What it limits                                                         |
+| -------------------------- | ------- | ---------- | ---------------------------------------------------------------------- |
+| request timeout (seconds)  | 1800    | 10 to 3600 | How long one request may take; for a video or 3D task, the whole wait. |
+| maximum upload size (MB)   | 64      | 1 to 64    | The media and documents in one request.                                |
+| maximum download size (MB) | 512     | 16 to 4096 | The largest reply, image, video, or 3D file accepted.                  |
 
 ## Models
 

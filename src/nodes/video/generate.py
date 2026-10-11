@@ -53,13 +53,19 @@ _CONTROLS = (
         default=DURATION["DEFAULT"],
         min=DURATION["AUTO"],
         max=DURATION["MAX"],
-        tooltip="Length in seconds. -1 lets the model choose; Seedance 2.5 may then make up to 30 seconds.",
+        tooltip=(
+            "Length in seconds. -1 lets the model choose; Seedance 2.5 may then make up to 30 seconds. An edit always "
+            "sends -1."
+        ),
     ),
     io.Combo.Input(
         "resolution",
         options=list(RESOLUTION_CHOICES),
         default=RESOLUTION_DEFAULT,
-        tooltip="Always sent. Higher resolutions cost more, and each model takes only some; Model: Info lists them.",
+        tooltip=(
+            "Sent with every task, except that a draft is made at 480p; finishing a draft sends this value. Higher "
+            "resolutions cost more, and each model takes only some; Model: Info lists them."
+        ),
     ),
     io.Combo.Input(
         "ratio",
@@ -117,10 +123,7 @@ _MEDIA = (
         types=list(IMAGE_SOCKET_TYPES),
         display_name="first frame",
         optional=True,
-        tooltip=(
-            "The image the video starts from: one image, or references that hold one image. References keep a "
-            "ModelArk output trusted."
-        ),
+        tooltip="The image the video starts from: one image, or references that hold one image.",
     ),
     io.MultiType.Input(
         "last_frame",

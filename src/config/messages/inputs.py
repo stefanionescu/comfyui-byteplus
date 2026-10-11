@@ -10,7 +10,7 @@ DOCUMENT_MISSING = "Put a PDF or text file in ComfyUI's input folder, press R, a
 
 DOCUMENT_OUTSIDE = "Choose a document inside ComfyUI's input folder."
 
-DOCUMENT_SIZE = "The document is larger than the maximum upload size of {maximum} MiB in BytePlus settings."
+DOCUMENT_SIZE = "The document is larger than the maximum upload size of {maximum} MB in BytePlus settings."
 
 DOCUMENT_UNREADABLE = "The document could not be read as UTF-8 text. Save it as UTF-8 or as a PDF."
 

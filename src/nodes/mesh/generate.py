@@ -59,8 +59,8 @@ class MeshGenerate(PaidNode):
                     "images",
                     optional=True,
                     tooltip=(
-                        "Images of the subject: one, a batch, or a list. Hyper3D takes up to 5; Hitem3D needs "
-                        "references instead."
+                        "Images of the subject: one, a batch, or a list. Hyper3D takes up to 5, image references "
+                        "included; Hitem3D reads only addresses, so connect references instead."
                     ),
                 ),
                 REFERENCES_INPUT,
@@ -72,7 +72,7 @@ class MeshGenerate(PaidNode):
                     placeholder="prompt",
                     tooltip=(
                         "What to make, in English, for Hyper3D, then any of the model's commands, such as --material "
-                        "PBR. It may be empty when images are connected."
+                        "PBR. It may be empty when images or image references are connected."
                     ),
                 ),
             ],

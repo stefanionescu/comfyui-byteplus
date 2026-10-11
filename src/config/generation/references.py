@@ -1,4 +1,4 @@
-"""The kinds, origins, addresses, and lifetimes of the files ModelArk reads by address."""
+"""The kinds, addresses, and lifetimes of the files ModelArk reads by address."""
 
 # The kinds Reference: Add offers; drafts come only from video nodes.
 ADDED_KINDS = ("image", "video", "audio")

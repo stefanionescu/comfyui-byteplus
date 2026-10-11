@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 from .failures import read_failure
 from ..types.parsing import parse_json
 from contextlib import asynccontextmanager
-from ..config.units import BYTES_PER_MEBIBYTE
+from ..config.units import BYTES_PER_MEGABYTE
 from ..config.messages.media import DOWNLOAD_LIMIT
 from ..types.errors import ErrorCode, BytePlusError
 from ..config.byteplus import REPLY_BYTES, CONSOLE_URLS, ENDPOINT_URLS
@@ -56,7 +56,7 @@ async def _read_body(response: aiohttp.ClientResponse, settings: Settings) -> by
     content = bytearray()
     async for chunk in response.content.iter_chunked(REPLY_BYTES["CHUNK"]):
         content.extend(chunk)
-        if len(content) > maximum * BYTES_PER_MEBIBYTE:
+        if len(content) > maximum * BYTES_PER_MEGABYTE:
             raise BytePlusError(ErrorCode.MEDIA, DOWNLOAD_LIMIT.format(maximum=maximum))
     return bytes(content)
 

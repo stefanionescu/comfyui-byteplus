@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 from typing import Protocol, TYPE_CHECKING
-from ..config.units import BYTES_PER_MEBIBYTE
+from ..config.units import BYTES_PER_MEGABYTE
 from ..config.messages.media import UPLOAD_LIMIT
 from ..types.errors import ErrorCode, BytePlusError
 
@@ -28,8 +28,8 @@ class Operation[Result](Protocol):
 def validate_upload_size(media: Iterable[str], settings: Settings) -> None:
     """Refuse encoded media, data URLs or base64 text, larger in total than the maximum upload size."""
     size = sum(len(item) for item in media)
-    if size > settings.max_upload_megabytes * BYTES_PER_MEBIBYTE:
-        shown = math.ceil(size * 10 / BYTES_PER_MEBIBYTE) / 10
+    if size > settings.max_upload_megabytes * BYTES_PER_MEGABYTE:
+        shown = math.ceil(size * 10 / BYTES_PER_MEGABYTE) / 10
         raise BytePlusError(
             ErrorCode.INVALID_INPUT, UPLOAD_LIMIT.format(size=shown, maximum=settings.max_upload_megabytes)
         )

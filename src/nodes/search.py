@@ -64,8 +64,8 @@ class SearchEmbed(PaidNode):
                     default="",
                     placeholder="instructions",
                     tooltip=(
-                        "Sent as written with every item, in ModelArk's Target_modality, Instruction, and Query lines. "
-                        "Leave it empty to let ModelArk choose."
+                        "Sent as ModelArk's instructions field with every item; write it in ModelArk's form, such as "
+                        "Target_modality: image.\nInstruction:…\nQuery:"
                     ),
                 ),
                 io.String.Input(

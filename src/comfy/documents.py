@@ -3,7 +3,7 @@
 import folder_paths
 from pathlib import Path
 from ..types.chat import Document
-from ..config.units import BYTES_PER_MEBIBYTE
+from ..config.units import BYTES_PER_MEGABYTE
 from ..types.errors import ErrorCode, BytePlusError
 from ..config.generation.chat import DOCUMENT_TYPES, PDF_MEDIA_TYPE
 from comfy_api_nodes.util.conversions import text_filepath_to_data_uri
@@ -34,7 +34,7 @@ def read_document(name: str, max_megabytes: int) -> Document:
     media_type = DOCUMENT_TYPES.get(path.suffix.lower())
     if media_type is None:
         raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_KIND)
-    if path.stat().st_size > max_megabytes * BYTES_PER_MEBIBYTE:
+    if path.stat().st_size > max_megabytes * BYTES_PER_MEGABYTE:
         raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_SIZE.format(maximum=max_megabytes))
     if media_type == PDF_MEDIA_TYPE:
         return Document(path.name, media_type, None, text_filepath_to_data_uri(str(path)))

@@ -1,4 +1,4 @@
-"""Video choices, limits, and the task timing that video and 3D share."""
+"""Video choices, and the task constants video and 3D share: timing, statuses, and the Download nodes' labels."""
 
 from .inputs import MODEL_DEFAULT
 
