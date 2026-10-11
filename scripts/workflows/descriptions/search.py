@@ -23,8 +23,8 @@ DRAW = Subgraph(
             HostNode.FORMAT,
             {
                 "f_string": (
-                    "Four different hero photos for an online shop's home page, each with a new camera angle and "
-                    "composition: {a}"
+                    "Generate 4 different hero photos for an online shop's home page, each with a new camera angle "
+                    "and composition: {a}"
                 )
             },
         ),

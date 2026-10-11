@@ -569,7 +569,7 @@
               "Node name for S&R": "StringFormat"
             },
             "widgets_values": [
-              "Four different hero photos for an online shop's home page, each with a new camera angle and composition: {a}"
+              "Generate 4 different hero photos for an online shop's home page, each with a new camera angle and composition: {a}"
             ]
           },
           {
