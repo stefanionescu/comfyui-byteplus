@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your product in **Product**.\n3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input folder. Press R if it is not listed.\n4. Press **Run**. The listing is saved as JSON under `text/byteplus`.\n\nModels: Seedream 5.0 flash and Seed 2.0 lite. Activate them on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your product in **Product**.\n3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input folder. Press R if it is not listed.\n4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -581,7 +581,7 @@
             ],
             "size": [
               340,
-              290
+              26
             ],
             "flags": {},
             "order": 101,

@@ -49,8 +49,8 @@ references the model does not take, and names what it does take.
 Examples: **video-01-animate-a-character**, **video-02-continue-a-shot**, and
 **video-04-draft-then-finish**.
 
-A task cancelled while it waits in ModelArk's queue is not billed. A task that
-has started runs to the end even if you cancel, ComfyUI restarts, or the
-request timeout passes; collect it with **Video: Download**.
+ModelArk usually starts a task at once. A task that has started runs to the
+end and is billed even if you cancel, ComfyUI restarts, or the request timeout
+passes; collect it with **Video: Download**.
 
 [ModelArk video generation documentation](https://docs.byteplus.com/en/docs/modelark/create-video-generation-task-api)

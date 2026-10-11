@@ -8,8 +8,7 @@ WORKFLOW_TEXTS = {
             KEY_STEP + "2. Describe your product in **Product**.\n"
             "3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input "
             "folder. Press R if it is not listed.\n"
-            "4. Press **Run**. The listing is saved as JSON under `text/byteplus`.\n\n"
-            "Models: Seedream 5.0 flash and Seed 2.0 lite. Activate them on ModelArk's **Model activation** page."
+            "4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
         ),
         "photo": (
             "Seedream 5.0 flash draws a square product photo from **Product**. To use your own photo, add **Load "
@@ -27,9 +26,7 @@ WORKFLOW_TEXTS = {
     "chat-02-summarize-a-voice-note": {
         "input": (
             KEY_STEP + "2. Upload a voice note in **Voice Note**: a recording of up to a few minutes.\n"
-            "3. Press **Run**. The transcript and the action items are saved under `text/byteplus`.\n\n"
-            "Models: Seed 2.0 mini, which reads audio, and DeepSeek V4 flash. Activate them on ModelArk's **Model "
-            "activation** page."
+            "3. Press **Run**. The transcript and the action items are saved under `text/byteplus`."
         ),
         "transcribe": (
             "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with thinking off. "
@@ -50,8 +47,7 @@ WORKFLOW_TEXTS = {
         "input": (
             KEY_STEP + "2. Describe your character in **Character**: who they are, what they wear, and what they "
             "carry.\n"
-            "3. Press **Run**. Both images are saved under `image/byteplus`.\n\n"
-            "Model: Seedream 5.0 flash. Activate it on ModelArk's **Model activation** page."
+            "3. Press **Run**. Both images are saved under `image/byteplus`."
         ),
         "design": (
             "Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its **references** carry the "
@@ -69,8 +65,7 @@ WORKFLOW_TEXTS = {
     "image-02-make-a-poster-series": {
         "input": (
             KEY_STEP + '2. Describe the series in **Brief**, starting with how many, such as "Generate 4 posters".\n'
-            "3. Press **Run**. Up to four posters are saved under `image/byteplus`.\n\n"
-            "Model: Seedream 4.0. Activate it on ModelArk's **Model activation** page."
+            "3. Press **Run**. Up to four posters are saved under `image/byteplus`."
         ),
         "model": (
             "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for "
@@ -87,8 +82,7 @@ WORKFLOW_TEXTS = {
     "image-03-split-a-poster-into-layers": {
         "input": (
             KEY_STEP + "2. Describe the poster in **Poster**. Put any words it shows in quotation marks.\n"
-            "3. Press **Run**. The poster and each layer are saved under `image/byteplus`.\n\n"
-            "Model: Seedream 5.0 flash. Activate it on ModelArk's **Model activation** page."
+            "3. Press **Run**. The poster and each layer are saved under `image/byteplus`."
         ),
         "draw": (
             "Seedream 5.0 flash draws the poster at 3:4 as a PNG. Its **references** carry the poster's own address "
@@ -106,8 +100,7 @@ WORKFLOW_TEXTS = {
         "input": (
             KEY_STEP + "2. Describe your character in **Character**, and what they do and say in **Scene**. Put "
             "spoken words in double quotation marks.\n"
-            "3. Press **Run**. The video is saved under `video/byteplus`.\n\n"
-            "Models: Seedream 5.0 flash and Seedance 2.0 mini. Activate them on ModelArk's **Model activation** page."
+            "3. Press **Run**. The video is saved under `video/byteplus`."
         ),
         "design": (
             "Seedream 5.0 flash draws the character, which becomes the video's first frame. Seedance refuses images "
@@ -119,16 +112,15 @@ WORKFLOW_TEXTS = {
             "Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the "
             "line. The character's address works for 24 hours; after that, open **Design** and change **run "
             "number** to draw a new one.\n\n"
-            "If you cancel while the task waits in BytePlus's queue, it is cancelled and nothing is billed. Once it "
-            "has started, it runs to the end; collect it with **video-05-recover-a-video**."
+            "BytePlus usually starts the task at once, so a cancelled run's video is still made and billed; collect it "
+            "with **video-05-recover-a-video**."
         ),
         "animate_description": "Turns the character into a video and saves it.",
     },
     "video-02-continue-a-shot": {
         "input": (
             KEY_STEP + "2. Describe the first shot in **Opening** and the next in **Next**.\n"
-            "3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`.\n\n"
-            "Model: Seedance 2.0 mini. Activate it on ModelArk's **Model activation** page."
+            "3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`."
         ),
         "shot_1": (
             "Seedance 2.0 mini makes the first five-second shot at 480p. Its **references** carry the shot's video "
@@ -144,8 +136,8 @@ WORKFLOW_TEXTS = {
         "shot_2_description": "Makes the next shot from the first shot's last frame and saves it.",
         "join": (
             "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.\n\n"
-            "If you cancel while a shot waits in BytePlus's queue, it is cancelled and nothing is billed. A shot that "
-            "has started runs to the end; collect it with **video-05-recover-a-video**."
+            "BytePlus usually starts a shot at once, so a cancelled shot is still made and billed; collect it with "
+            "**video-05-recover-a-video**."
         ),
         "join_description": "Joins the two shots and saves the result.",
     },
@@ -155,9 +147,7 @@ WORKFLOW_TEXTS = {
             "characters** tab. Open a character, copy its asset ID, and paste it into **asset ID or address** on "
             "**Reference: Add** in **Character**.\n"
             "3. Describe the product in **Product** and the shot in **Scene**.\n"
-            "4. Press **Run**. The video is saved under `video/byteplus`.\n\n"
-            "BytePlus allows videos made with preset characters only for trying the models and internal use. Models: "
-            "Seedream 5.0 flash and Seedance 2.0 mini. Activate them on ModelArk's **Model activation** page."
+            "4. Press **Run**. The video is saved under `video/byteplus`."
         ),
         "product": (
             "Seedream 5.0 flash draws the product. Its **references** carry the image's address on to **Reference: "
@@ -166,13 +156,14 @@ WORKFLOW_TEXTS = {
         "draw_description": "Draws the product.",
         "character": (
             "**Reference: Add** adds the preset character after the product, so the product is Image 1 and the "
-            "character Image 2, as **Scene** says. The first run stops here until you paste an asset ID."
+            "character Image 2, as **Scene** says. The first run stops here until you paste an asset ID. BytePlus "
+            "allows preset characters only for trying the models and internal use."
         ),
         "video": (
             "Seedance 2.0 mini films the character with the product. BytePlus trusts its preset characters, so their "
             "faces are not blocked.\n\n"
-            "If you cancel while the task waits in BytePlus's queue, it is cancelled and nothing is billed. Once it "
-            "has started, collect it with **video-05-recover-a-video**."
+            "BytePlus usually starts the task at once, so a cancelled run's video is still made and billed; collect it "
+            "with **video-05-recover-a-video**."
         ),
         "film_description": "Films the preset character with the product and saves the video.",
     },
@@ -181,8 +172,7 @@ WORKFLOW_TEXTS = {
             KEY_STEP + "2. Describe the video in **Prompt**.\n"
             "3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n"
             "4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. "
-            "Only the finish runs; ComfyUI reuses the draft.\n\n"
-            "Model: Seedance 2.5. Activate it on ModelArk's **Model activation** page."
+            "Only the finish runs; ComfyUI reuses the draft."
         ),
         "draft": (
             "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which BytePlus "
@@ -213,8 +203,7 @@ WORKFLOW_TEXTS = {
     "search-01-choose-a-hero-image": {
         "input": (
             KEY_STEP + "2. Describe the product and the picture you need in **Brief**, in one line.\n"
-            "3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`.\n\n"
-            "Models: Seedream 4.0 and Skylark embedding vision. Activate them on ModelArk's **Model activation** page."
+            "3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`."
         ),
         "draw": "Seedream 4.0 draws a series of options from the brief, up to the four **count** allows.",
         "draw_description": "Draws up to four options from the brief.",
@@ -234,9 +223,7 @@ WORKFLOW_TEXTS = {
     "3d-01-turn-a-character-into-a-3d-model": {
         "input": (
             KEY_STEP + "2. Describe your character in **Character**.\n"
-            "3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`.\n\n"
-            "BytePlus offers 3D generation only to accounts in some countries. Models: Seedream 5.0 flash and Hyper3D "
-            "Gen2. Activate them on ModelArk's **Model activation** page."
+            "3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`."
         ),
         "design": (
             "Seedream 5.0 flash draws the character standing in a T-pose, from the front, on a plain white "
@@ -246,8 +233,8 @@ WORKFLOW_TEXTS = {
         "build": (
             "Hyper3D Gen2 turns the image into a 3D model with PBR textures, in a pose ready for rigging. **Save 3D "
             "Model** saves it and shows it.\n\n"
-            "If you cancel while the task is queued, it is cancelled and nothing is billed. Once it has started, it "
-            "runs to the end; collect it in **Recover**."
+            "BytePlus usually starts the task at once, so a cancelled run's model is still made and billed; collect it "
+            "in **Recover**."
         ),
         "recover": (
             "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after "

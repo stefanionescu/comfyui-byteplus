@@ -31,7 +31,7 @@ PAID_COLOURS = {"color": "#432", "bgcolor": "#653"}
 BYPASS_MODE = 4
 # Node IDs are one space across a workflow, so each subgraph numbers its nodes from its own hundred.
 SUBGRAPH_ID_STEP = 100
-# Node width and the heights ComfyUI's page adds up for a node, checked on frontend 1.49.6: a row per socket,
+# Node width and the heights ComfyUI's page adds up for a node, checked on frontend 1.52.7: a row per socket,
 # each widget and the gap after it, the space under the widgets, and the space under the node.
 NODE_WIDTH = 340
 SLOT_HEIGHT = 20
@@ -42,7 +42,7 @@ NODE_PADDING = 6
 # A multi-line text and a multi-select list are drawn at least this tall.
 MULTILINE_HEIGHT = 50
 MULTISELECT_HEIGHT = 62
-# The notes, measured on frontend 1.49.6: the frame around their text, the smallest height the page draws,
+# The notes, measured on frontend 1.52.7: the frame around their text, the smallest height the page draws,
 # one wrapped line, the space a blank line leaves between paragraphs, the width the text loses to the frame and
 # to a numbered list's indent, and the width of one character and of one code character, rounded up so a line
 # wraps no later than the page wraps it.
@@ -64,12 +64,12 @@ ANY_TYPE = "*"
 # Nodes that draw their own panel, measured in the page. The save nodes are sized for their empty state;
 # ComfyUI grows them as their viewers fill.
 DOM_SIZES: dict[str, tuple[int, int]] = {
-    HostNode.IMAGE: (340, 350),
+    HostNode.IMAGE: (340, 314),
     HostNode.AUDIO: (340, 136),
-    HostNode.PREVIEW: (340, 240),
+    HostNode.PREVIEW: (340, 122),
     HostNode.SAVE_TEXT: (340, 170),
-    HostNode.SAVE_IMAGE: (340, 290),
-    HostNode.PREVIEW_IMAGE: (340, 290),
+    HostNode.SAVE_IMAGE: (340, 58),
+    HostNode.PREVIEW_IMAGE: (340, 26),
     HostNode.SAVE_VIDEO: (340, 106),
     # The page makes a new Save 3D Model node at least 400 by 550, the room its 3D viewer needs.
     HostNode.SAVE_MESH: (400, 550),

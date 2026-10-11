@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the poster in **Poster**. Put any words it shows in quotation marks.\n3. Press **Run**. The poster and each layer are saved under `image/byteplus`.\n\nModel: Seedream 5.0 flash. Activate it on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the poster in **Poster**. Put any words it shows in quotation marks.\n3. Press **Run**. The poster and each layer are saved under `image/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 2,
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        336
+        302
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "915fcaee-bdc0-5d05-8b2c-9121e26ccdf8",
       "pos": [
         460,
-        336
+        302
       ],
       "size": [
         340,
@@ -196,7 +196,7 @@
       "type": "43d5c621-dad1-5f47-a7f6-a444d513666e",
       "pos": [
         890,
-        336
+        302
       ],
       "size": [
         340,
@@ -252,7 +252,7 @@
         0,
         30,
         400,
-        424
+        390
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -265,7 +265,7 @@
         430,
         30,
         400,
-        424
+        390
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -278,7 +278,7 @@
         860,
         30,
         400,
-        362
+        328
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -522,7 +522,7 @@
             ],
             "size": [
               340,
-              290
+              58
             ],
             "flags": {},
             "order": 101,
@@ -796,7 +796,7 @@
             ],
             "size": [
               340,
-              290
+              58
             ],
             "flags": {},
             "order": 202,

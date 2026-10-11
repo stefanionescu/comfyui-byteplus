@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        132
+        108
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the first shot in **Opening** and the next in **Next**.\n3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`.\n\nModel: Seedance 2.0 mini. Activate it on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the first shot in **Opening** and the next in **Next**.\n3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        132
+        108
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        132
+        108
       ],
       "flags": {},
       "order": 2,
@@ -112,7 +112,7 @@
       ],
       "size": [
         340,
-        132
+        108
       ],
       "flags": {},
       "order": 3,
@@ -132,7 +132,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.\n\nIf you cancel while a shot waits in BytePlus's queue, it is cancelled and nothing is billed. A shot that has started runs to the end; collect it with **video-05-recover-a-video**."
+        "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.\n\nBytePlus usually starts a shot at once, so a cancelled shot is still made and billed; collect it with **video-05-recover-a-video**."
       ],
       "title": "Note"
     },
@@ -141,7 +141,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        336
+        312
       ],
       "size": [
         340,
@@ -182,7 +182,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        488
+        464
       ],
       "size": [
         340,
@@ -223,7 +223,7 @@
       "type": "96b6970c-1564-529f-9aba-14f00bdf3540",
       "pos": [
         460,
-        336
+        312
       ],
       "size": [
         340,
@@ -277,7 +277,7 @@
       "type": "21ec3eea-97a6-5f14-bb7e-0db7452bd7f3",
       "pos": [
         890,
-        336
+        312
       ],
       "size": [
         340,
@@ -329,7 +329,7 @@
       "type": "6e4a6b1c-def8-5215-b42d-851d1aa49120",
       "pos": [
         1320,
-        336
+        312
       ],
       "size": [
         340,
@@ -414,7 +414,7 @@
         0,
         30,
         400,
-        576
+        552
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -427,7 +427,7 @@
         430,
         30,
         400,
-        444
+        420
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -440,7 +440,7 @@
         860,
         30,
         400,
-        424
+        400
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -453,7 +453,7 @@
         1290,
         30,
         400,
-        382
+        358
       ],
       "color": "#68688c",
       "font_size": 24,

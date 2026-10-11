@@ -38,8 +38,8 @@ model does not take, and names what it does take.
 
 Example: **3d-01-turn-a-character-into-a-3d-model**.
 
-A task cancelled while it waits in ModelArk's queue is not billed. A task that
-has started runs to the end even if you cancel, ComfyUI restarts, or the
-request timeout passes; collect it with **3D: Download**.
+ModelArk usually starts a task at once. A task that has started runs to the
+end and is billed even if you cancel, ComfyUI restarts, or the request timeout
+passes; collect it with **3D: Download**.
 
 [ModelArk 3D generation documentation](https://docs.byteplus.com/en/docs/modelark/shadoweye-create-3d-generation-task-api)

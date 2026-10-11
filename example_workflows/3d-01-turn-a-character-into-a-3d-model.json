@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        132
+        88
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**.\n3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`.\n\nBytePlus offers 3D generation only to accounts in some countries. Models: Seedream 5.0 flash and Hyper3D Gen2. Activate them on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**.\n3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        132
+        88
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         780,
-        132
+        88
       ],
       "flags": {},
       "order": 2,
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Hyper3D Gen2 turns the image into a 3D model with PBR textures, in a pose ready for rigging. **Save 3D Model** saves it and shows it.\n\nIf you cancel while the task is queued, it is cancelled and nothing is billed. Once it has started, it runs to the end; collect it in **Recover**."
+        "Hyper3D Gen2 turns the image into a 3D model with PBR textures, in a pose ready for rigging. **Save 3D Model** saves it and shows it.\n\nBytePlus usually starts the task at once, so a cancelled run's model is still made and billed; collect it in **Recover**."
       ],
       "title": "Note"
     },
@@ -108,11 +108,11 @@
       "type": "MarkdownNote",
       "pos": [
         890,
-        1056
+        1012
       ],
       "size": [
         780,
-        132
+        88
       ],
       "flags": {},
       "order": 3,
@@ -141,7 +141,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        336
+        292
       ],
       "size": [
         340,
@@ -182,7 +182,7 @@
       "type": "b04e8c4d-a88e-5a40-add1-0d1495141ae3",
       "pos": [
         460,
-        336
+        292
       ],
       "size": [
         340,
@@ -225,7 +225,7 @@
       "type": "BytePlusMeshGenerate",
       "pos": [
         890,
-        336
+        292
       ],
       "size": [
         340,
@@ -357,7 +357,7 @@
       "type": "SaveGLB",
       "pos": [
         1270,
-        336
+        292
       ],
       "size": [
         400,
@@ -394,7 +394,7 @@
       "type": "BytePlusMeshDownload",
       "pos": [
         890,
-        1252
+        1164
       ],
       "size": [
         340,
@@ -434,7 +434,7 @@
       "type": "SaveGLB",
       "pos": [
         1270,
-        1252
+        1164
       ],
       "size": [
         400,
@@ -509,7 +509,7 @@
         0,
         30,
         400,
-        424
+        380
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -522,7 +522,7 @@
         430,
         30,
         400,
-        362
+        318
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -535,7 +535,7 @@
         860,
         30,
         840,
-        886
+        842
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -546,9 +546,9 @@
       "title": "Recover",
       "bounding": [
         860,
-        946,
+        902,
         840,
-        886
+        842
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -845,7 +845,7 @@
             ],
             "size": [
               340,
-              290
+              26
             ],
             "flags": {},
             "order": 102,

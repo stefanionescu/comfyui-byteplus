@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**: who they are, what they wear, and what they carry.\n3. Press **Run**. Both images are saved under `image/byteplus`.\n\nModel: Seedream 5.0 flash. Activate it on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**: who they are, what they wear, and what they carry.\n3. Press **Run**. Both images are saved under `image/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 2,
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        336
+        302
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "6c03f997-4743-5b12-9806-1ed3f40c5f2f",
       "pos": [
         460,
-        336
+        302
       ],
       "size": [
         340,
@@ -191,7 +191,7 @@
       "type": "88e2de0c-a481-5407-8fec-649151f17d73",
       "pos": [
         890,
-        336
+        302
       ],
       "size": [
         340,
@@ -247,7 +247,7 @@
         0,
         30,
         400,
-        424
+        390
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -260,7 +260,7 @@
         430,
         30,
         400,
-        362
+        328
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -273,7 +273,7 @@
         860,
         30,
         400,
-        362
+        328
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -571,7 +571,7 @@
             ],
             "size": [
               340,
-              290
+              58
             ],
             "flags": {},
             "order": 102,
@@ -854,7 +854,7 @@
             ],
             "size": [
               340,
-              290
+              58
             ],
             "flags": {},
             "order": 201,

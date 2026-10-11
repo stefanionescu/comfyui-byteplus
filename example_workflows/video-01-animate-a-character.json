@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        144
+        120
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**, and what they do and say in **Scene**. Put spoken words in double quotation marks.\n3. Press **Run**. The video is saved under `video/byteplus`.\n\nModels: Seedream 5.0 flash and Seedance 2.0 mini. Activate them on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your character in **Character**, and what they do and say in **Scene**. Put spoken words in double quotation marks.\n3. Press **Run**. The video is saved under `video/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        144
+        120
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        144
+        120
       ],
       "flags": {},
       "order": 2,
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the line. The character's address works for 24 hours; after that, open **Design** and change **run number** to draw a new one.\n\nIf you cancel while the task waits in BytePlus's queue, it is cancelled and nothing is billed. Once it has started, it runs to the end; collect it with **video-05-recover-a-video**."
+        "Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the line. The character's address works for 24 hours; after that, open **Design** and change **run number** to draw a new one.\n\nBytePlus usually starts the task at once, so a cancelled run's video is still made and billed; collect it with **video-05-recover-a-video**."
       ],
       "title": "Note"
     },
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        348
+        324
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        500
+        476
       ],
       "size": [
         340,
@@ -190,7 +190,7 @@
       "type": "a2febba3-7063-5c5e-92e6-867afab643df",
       "pos": [
         460,
-        348
+        324
       ],
       "size": [
         340,
@@ -237,7 +237,7 @@
       "type": "14781347-4f8d-5b8a-acca-76df89bbc0ab",
       "pos": [
         890,
-        348
+        324
       ],
       "size": [
         340,
@@ -311,7 +311,7 @@
         0,
         30,
         400,
-        588
+        564
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -324,7 +324,7 @@
         430,
         30,
         400,
-        436
+        412
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -337,7 +337,7 @@
         860,
         30,
         400,
-        436
+        412
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -581,7 +581,7 @@
             ],
             "size": [
               340,
-              290
+              26
             ],
             "flags": {},
             "order": 101,

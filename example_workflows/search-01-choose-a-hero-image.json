@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the product and the picture you need in **Brief**, in one line.\n3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`.\n\nModels: Seedream 4.0 and Skylark embedding vision. Activate them on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the product and the picture you need in **Brief**, in one line.\n3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         720,
-        132
+        98
       ],
       "flags": {},
       "order": 2,
@@ -112,7 +112,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 3,
@@ -141,7 +141,7 @@
       "type": "PrimitiveString",
       "pos": [
         30,
-        336
+        302
       ],
       "size": [
         340,
@@ -183,7 +183,7 @@
       "type": "dcbea73d-39e8-5d32-aac0-4c2c5076cae0",
       "pos": [
         460,
-        336
+        302
       ],
       "size": [
         340,
@@ -227,7 +227,7 @@
       "type": "d1c4dccf-ea93-5c53-b161-1da9b97f2322",
       "pos": [
         890,
-        336
+        302
       ],
       "size": [
         340,
@@ -272,11 +272,11 @@
       "type": "PreviewAny",
       "pos": [
         1270,
-        336
+        302
       ],
       "size": [
         340,
-        240
+        122
       ],
       "flags": {},
       "order": 7,
@@ -306,7 +306,7 @@
       "type": "39f8ef38-8dd5-524b-9006-745e1566ae2f",
       "pos": [
         1700,
-        336
+        302
       ],
       "size": [
         340,
@@ -399,7 +399,7 @@
         0,
         30,
         400,
-        394
+        360
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -412,7 +412,7 @@
         430,
         30,
         400,
-        362
+        328
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -425,7 +425,7 @@
         860,
         30,
         780,
-        576
+        424
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -438,7 +438,7 @@
         1670,
         30,
         400,
-        382
+        348
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -735,7 +735,7 @@
             ],
             "size": [
               340,
-              290
+              26
             ],
             "flags": {},
             "order": 102,
@@ -1796,7 +1796,7 @@
             ],
             "size": [
               340,
-              290
+              58
             ],
             "flags": {},
             "order": 311,

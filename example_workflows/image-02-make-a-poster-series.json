@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the series in **Brief**, starting with how many, such as \"Generate 4 posters\".\n3. Press **Run**. Up to four posters are saved under `image/byteplus`.\n\nModel: Seedream 4.0. Activate it on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the series in **Brief**, starting with how many, such as \"Generate 4 posters\".\n3. Press **Run**. Up to four posters are saved under `image/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -42,11 +42,11 @@
       "type": "MarkdownNote",
       "pos": [
         30,
-        594
+        560
       ],
       "size": [
         720,
-        132
+        98
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        132
+        98
       ],
       "flags": {},
       "order": 2,
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        336
+        302
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "PrimitiveString",
       "pos": [
         30,
-        790
+        722
       ],
       "size": [
         340,
@@ -191,7 +191,7 @@
       "type": "BytePlusModelInfo",
       "pos": [
         30,
-        912
+        844
       ],
       "size": [
         340,
@@ -231,11 +231,11 @@
       "type": "PreviewAny",
       "pos": [
         410,
-        790
+        722
       ],
       "size": [
         340,
-        240
+        122
       ],
       "flags": {},
       "order": 6,
@@ -265,7 +265,7 @@
       "type": "2e30d73f-38c4-5ba2-a361-52084ca6a9fa",
       "pos": [
         840,
-        336
+        302
       ],
       "size": [
         340,
@@ -351,7 +351,7 @@
         0,
         30,
         400,
-        424
+        390
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -362,9 +362,9 @@
       "title": "Model",
       "bounding": [
         0,
-        484,
+        450,
         780,
-        576
+        482
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -377,7 +377,7 @@
         810,
         30,
         400,
-        448
+        414
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -618,7 +618,7 @@
             ],
             "size": [
               340,
-              290
+              58
             ],
             "flags": {},
             "order": 101,

@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        156
+        122
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the video in **Prompt**.\n3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. Only the finish runs; ComfyUI reuses the draft.\n\nModel: Seedance 2.5. Activate it on ModelArk's **Model activation** page."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the video in **Prompt**.\n3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. Only the finish runs; ComfyUI reuses the draft."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        156
+        122
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        156
+        122
       ],
       "flags": {},
       "order": 2,
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        360
+        326
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "7a33b4f6-7329-5836-bd0c-943cee887178",
       "pos": [
         460,
-        360
+        326
       ],
       "size": [
         340,
@@ -196,7 +196,7 @@
       "type": "e2f7b8b7-70ec-59dd-b5a4-af37cab7d296",
       "pos": [
         890,
-        360
+        326
       ],
       "size": [
         340,
@@ -252,7 +252,7 @@
         0,
         30,
         400,
-        448
+        414
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -265,7 +265,7 @@
         430,
         30,
         400,
-        448
+        414
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -278,7 +278,7 @@
         860,
         30,
         400,
-        386
+        352
       ],
       "color": "#68688c",
       "font_size": 24,
