@@ -48,7 +48,6 @@ class Subgraph:
     inputs: tuple[tuple[str, str], ...] = ()
     outputs: tuple[tuple[str, str], ...] = ()
     description: str = ""
-    stacks: tuple[tuple[Group, ...], ...] = ()
     # The previews shown on the placed node, as `node key` and preview name.
     previews: tuple[tuple[str, str], ...] = ()
 

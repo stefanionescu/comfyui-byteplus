@@ -7,16 +7,12 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from scripts.types import Item, Schema, WidgetValue
 
-# A node's schema as the export describes it, and one of its inputs or outputs.
-
 
 def _validate_widget_value(item: Item, value: object, owner: str) -> None:
     """Refuse a widget value its input does not accept."""
     kind = item["type"]
     options = cast("list[object]", item.get("options") or [])
-    if kind == "COMBO" and item.get("multiselect"):
-        is_valid = isinstance(value, list) and (not options or set(cast("list[object]", value)) <= set(options))
-    elif kind == "COMBO":
+    if kind == "COMBO":
         # An empty choice leaves the person to pick one, as for a folder or file listed from this machine.
         is_valid = not options or value in options or value == ""
     elif kind in {"INT", "FLOAT"}:
@@ -54,8 +50,6 @@ def _encode_dropdown_values(item: Item, values: Mapping[str, WidgetValue], owner
             value = values.get(f"{name}.{child}", read_widget_default(child_item))
             _validate_widget_value(child_item, value, owner)
             result.append(value)
-            if child_item.get("control_after_generate"):
-                result.append("fixed")
     return result
 
 
@@ -66,7 +60,7 @@ def read_widget_default(item: Item) -> object:
         return default
     if item["type"] == "COMBO":
         options = cast("list[object]", item.get("options") or [])
-        return [] if item.get("multiselect") else options[0] if options else ""
+        return options[0] if options else ""
     return {"STRING": "", "BOOLEAN": False}.get(str(item["type"]), item.get("min", 0))
 
 

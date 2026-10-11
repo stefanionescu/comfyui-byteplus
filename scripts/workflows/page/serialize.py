@@ -5,12 +5,11 @@ from __future__ import annotations
 import uuid
 from typing import cast, TYPE_CHECKING
 from scripts.workflows.page.graph import NAMESPACE
+from scripts.workflows.page.layout import place_columns
 from scripts.workflows.page.widgets import encode_widget_values
 from scripts.workflows.page.palette import Palette, read_slot_type
 from scripts.workflows.page.sizes import measure, list_shown_slots
-from scripts.workflows.page.layout import place_stacks, place_columns
 from scripts.workflows.page.config import (
-    ANY_TYPE,
     PORT_GAP,
     PORT_WIDTH,
     BYPASS_MODE,
@@ -94,13 +93,7 @@ def _encode_ports(
     """Link the exposed inputs or outputs to the inner nodes."""
     ports: list[Json] = []
     port_node, inner_side = (-10, "inputs") if side == "inputs" else (-20, "outputs")
-    for name, socket in getattr(subgraph, side):
-        port = next((port for port in ports if port["name"] == name), None)
-        if port is None:
-            port_id = str(uuid.uuid5(NAMESPACE, f"{subgraph_id}.{side}.{name}"))
-            port = cast("Json", {"id": port_id, "name": name, "type": "", "linkIds": [], "pos": [0, 0]})
-            ports.append(port)
-        index = ports.index(port)
+    for index, (name, socket) in enumerate(getattr(subgraph, side)):
         key, socket_name = socket.split(".", 1)
         entry = entries[key]
         position = _find_slot(entry, inner_side, socket_name)
@@ -113,10 +106,8 @@ def _encode_ports(
             cast("list[int]", inner["links"]).append(number)
             record = {"origin_id": entry["id"], "origin_slot": position, "target_id": port_node, "target_slot": index}
         records.append({"id": number, **record, "type": inner["type"]})
-        # A port takes the most specific type among the sockets it feeds.
-        if port["type"] in {"", ANY_TYPE}:
-            port["type"] = inner["type"]
-        cast("list[int]", port["linkIds"]).append(number)
+        port_id = str(uuid.uuid5(NAMESPACE, f"{subgraph_id}.{side}.{name}"))
+        ports.append({"id": port_id, "name": name, "type": inner["type"], "linkIds": [number], "pos": [0, 0]})
     return ports
 
 
@@ -199,10 +190,7 @@ def encode_subgraph(subgraph: Subgraph, palette: Palette, position: int) -> Json
         )
         for node in subgraph.nodes
     }
-    if subgraph.stacks:
-        placed, groups = place_stacks(subgraph.stacks, sizes, INNER_ORIGIN)
-    else:
-        placed, groups = place_columns(subgraph.columns, sizes, INNER_ORIGIN), []
+    placed = place_columns(subgraph.columns, sizes, INNER_ORIGIN)
     boxes = {key: (box.x, box.y, box.width, box.height) for key, box in placed.items()}
     entries = encode_nodes(subgraph.nodes, palette, boxes, targets, position * SUBGRAPH_ID_STEP + 1)
     records = encode_links(entries, subgraph.links)
@@ -239,7 +227,7 @@ def encode_subgraph(subgraph: Subgraph, palette: Palette, position: int) -> Json
         "outputs": outputs,
         "widgets": [],
         "nodes": list(entries.values()),
-        "groups": groups,
+        "groups": [],
         "links": records,
         "extra": {"description": subgraph.description} if subgraph.description else {},
     }

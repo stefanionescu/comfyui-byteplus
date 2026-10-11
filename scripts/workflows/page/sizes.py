@@ -21,7 +21,6 @@ from scripts.workflows.page.config import (
     NOTE_LINE_HEIGHT,
     NOTE_LIST_INDENT,
     NOTE_SIDE_PADDING,
-    MULTISELECT_HEIGHT,
     NOTE_PARAGRAPH_GAP,
     NOTE_CHARACTER_WIDTH,
     NOTE_CODE_CHARACTER_WIDTH,
@@ -64,11 +63,9 @@ def _measure_option(item: Mapping[str, object], chosen: object) -> list[int]:
 
 
 def _measure_widget(item: Mapping[str, object]) -> int:
-    """Height of one widget before its gap: a multi-line text and a multi-select list are taller."""
+    """Height of one widget before its gap: a multi-line text is taller."""
     if item.get("multiline"):
         return MULTILINE_HEIGHT
-    if item.get("multiselect"):
-        return MULTISELECT_HEIGHT
     return WIDGET_HEIGHT
 
 

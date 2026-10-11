@@ -1,8 +1,8 @@
 """The group notes and subgraph descriptions of the shipped workflows, in plain language."""
 
 KEY_STEP = "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n"
-RECOVER_STEP = (
-    "ModelArk usually starts the task at once, so a cancelled run's video is still made and billed; collect it with "
+RECOVER_NOTE = (
+    "ModelArk usually starts the task at once, so a cancelled run's video is still made and billed. Collect it with "
     "**video-05-recover-a-video**."
 )
 
@@ -103,14 +103,13 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. The video is saved under `video/byteplus`."
         ),
         "design": (
-            "Seedream 5.0 flash draws the character, which becomes the video's first frame. Seedance refuses "
-            "real-looking faces, but trusts the original file of an image Seedream 5.0 drew from a prompt alone, for "
-            "30 days; **references** carries that file's address."
+            "Seedream 5.0 flash draws the character, which becomes the video's first frame. **references** carries "
+            "the image's original file, so Seedance accepts its real-looking face."
         ),
         "design_description": "Draws the character.",
         "animate": (
             "Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the "
-            "line.\n\n" + RECOVER_STEP
+            "line.\n\n" + RECOVER_NOTE
         ),
         "animate_description": "Turns the character into a video and saves it.",
     },
@@ -121,7 +120,7 @@ WORKFLOW_TEXTS = {
         ),
         "shot_1": (
             "Seedance 2.0 mini makes the first five-second shot at 480p. Its **references** carry the shot's video "
-            "and its last frame on, as ModelArk's own files.\n\n" + RECOVER_STEP
+            "and its last frame on, as ModelArk's own files.\n\n" + RECOVER_NOTE
         ),
         "shot_1_description": "Makes the first shot and saves it.",
         "shot_2": (
@@ -152,7 +151,7 @@ WORKFLOW_TEXTS = {
             "**Reference: Add** adds the preset character after the product, so the product is Image 1 and the "
             "character Image 2, as **Scene** says. The first run stops here until you paste an asset ID."
         ),
-        "film": "Seedance 2.0 mini films the character with the product.\n\n" + RECOVER_STEP,
+        "film": "Seedance 2.0 mini films the character with the product.\n\n" + RECOVER_NOTE,
         "film_description": "Films the preset character with the product and saves the video.",
     },
     "video-04-draft-then-finish": {
@@ -160,17 +159,17 @@ WORKFLOW_TEXTS = {
             KEY_STEP + "2. Describe the video in **Prompt**.\n"
             "3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n"
             "4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. "
-            "Only the finish runs; ComfyUI reuses the draft."
+            "Only the finish runs. ComfyUI reuses the draft."
         ),
         "draft": (
             "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which ModelArk "
-            "keeps for seven days."
+            "keeps for 7 days."
         ),
         "draft_description": "Makes a four-second 480p draft and saves it.",
         "finish": (
             "**Finish** is off when the workflow opens, because a finished video is billed as a 1080p video. "
-            "Seedance 2.5 remakes the draft at 1080p with the same prompt, length, and shape; a draft can be "
-            "finished only at 1080p.\n\n"
+            "Seedance 2.5 remakes the draft at 1080p with the same prompt, length, and shape. It finishes drafts only "
+            "at 1080p.\n\n"
             "1080p video from Seedance 2.5 is 10-bit H.265. If your player shows nothing, open the file in VLC, mpv, "
             "or QuickTime Player."
         ),
@@ -184,7 +183,7 @@ WORKFLOW_TEXTS = {
             + "2. In **task**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
             "to list tasks started after the page loaded.\n"
             "3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\n"
-            "A task leaves the list once its video is saved."
+            "A task leaves the list once its video is downloaded."
         ),
     },
     "search-01-choose-a-hero-image": {
@@ -196,14 +195,14 @@ WORKFLOW_TEXTS = {
         "draw_description": "Draws four options from the brief.",
         "score": (
             "Skylark embedding vision turns the brief and each option into an embedding and compares each with the "
-            "brief. **Scores** lists the brief first, compared with itself, then each option in order; the highest "
+            "brief. **Scores** lists the brief first, compared with itself, then each option in order. The highest "
             "after the first is the best match."
         ),
         "score_description": "Embeds the brief and the options, and compares each option with the brief.",
         "choose": (
-            "**Choose** picks the best match with ComfyUI's own nodes: **Extract Text** reads each option's score, "
+            "**Choose** picks the best match with ComfyUI's own nodes. **Extract Text** reads each option's score, "
             "**Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes "
-            "that option, which is saved under `image/byteplus`."
+            "that option. The option is saved under `image/byteplus`."
         ),
         "choose_description": "Picks the option with the highest score and saves it.",
     },
@@ -214,7 +213,7 @@ WORKFLOW_TEXTS = {
         ),
         "design": (
             "Seedream 5.0 flash draws the character standing in a T-pose, from the front, on a plain white "
-            "background, which Hyper3D turns into a clean model."
+            "background, which Hyper3D turns into a clean 3D model."
         ),
         "design_description": "Draws the character in a T-pose.",
         "build": (
@@ -222,9 +221,13 @@ WORKFLOW_TEXTS = {
             "pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it."
         ),
         "recover": (
-            "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, or after ComfyUI restarts "
-            "while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn them on, choose "
-            "the task in **task**, and press **Run**. Press R to list tasks started after the page loaded."
+            "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or "
+            "after ComfyUI restarts while one runs.\n\n"
+            "1. Select **Design**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so "
+            "they do not run and bill again.\n"
+            "2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n"
+            "3. In **task**, choose the task, and press **Run** (press R to list tasks started after the page "
+            "loaded)."
         ),
     },
 }

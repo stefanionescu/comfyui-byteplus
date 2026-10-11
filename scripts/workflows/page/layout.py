@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from dataclasses import dataclass
-from types import MappingProxyType
 from scripts.workflows.page.config import GUTTER, NODE_GAP, GROUP_TOP, STACK_GAP, CANVAS_ORIGIN
 
 if TYPE_CHECKING:
@@ -64,10 +63,7 @@ def place_columns(
 
 
 def place_stacks(
-    stacks: Sequence[Sequence[Group]],
-    sizes: Mapping[str, tuple[int, int]],
-    origin: tuple[int, int] = CANVAS_ORIGIN,
-    notes: Mapping[str, str] = MappingProxyType({}),
+    stacks: Sequence[Sequence[Group]], sizes: Mapping[str, tuple[int, int]], notes: Mapping[str, str]
 ) -> tuple[dict[str, Box], list[dict[str, object]]]:
     """Place the stacks side by side, each group with its note, and serialize each group's frame.
 
@@ -75,9 +71,9 @@ def place_stacks(
     """
     boxes: dict[str, Box] = {}
     frames: list[dict[str, object]] = []
-    x = origin[0]
+    x = CANVAS_ORIGIN[0]
     for stack in stacks:
-        y = origin[1]
+        y = CANVAS_ORIGIN[1]
         width = 0
         for group in stack:
             placed, frame = _place_group(group, sizes, (x, y), notes.get(group.title))

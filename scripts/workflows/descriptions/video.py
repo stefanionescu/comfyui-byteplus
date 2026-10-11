@@ -7,9 +7,10 @@ from src.config.namespace import NODE_PREFIX
 from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.workflows.descriptions.notes import WORKFLOW_TEXTS
 from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
+from scripts.workflows.descriptions.nodes import IMAGE_GENERATE, VIDEO_GENERATE
 from scripts.workflows.page.config import STAGE_COLOUR, IMAGE_PREVIEW, VIDEO_PREVIEW
-from scripts.workflows.descriptions.nodes import SEEDANCE_25, IMAGE_GENERATE, VIDEO_GENERATE
 
+SEEDANCE_25 = "dreamina-seedance-2-5-260628"
 SCENE_PROMPT = 'She smiles, waves, and says: "Welcome to the night market." Handheld camera, warm light.'
 ANIMATE_TEXTS = WORKFLOW_TEXTS["video-01-animate-a-character"]
 CONTINUE_TEXTS = WORKFLOW_TEXTS["video-02-continue-a-shot"]

@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the video in **Prompt**.\n3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. Only the finish runs; ComfyUI reuses the draft."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe the video in **Prompt**.\n3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. Only the finish runs. ComfyUI reuses the draft."
       ],
       "title": "Start Here"
     },
@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which ModelArk keeps for seven days."
+        "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which ModelArk keeps for 7 days."
       ],
       "title": "Note"
     },
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Finish** is off when the workflow opens, because a finished video is billed as a 1080p video. Seedance 2.5 remakes the draft at 1080p with the same prompt, length, and shape; a draft can be finished only at 1080p.\n\n1080p video from Seedance 2.5 is 10-bit H.265. If your player shows nothing, open the file in VLC, mpv, or QuickTime Player."
+        "**Finish** is off when the workflow opens, because a finished video is billed as a 1080p video. Seedance 2.5 remakes the draft at 1080p with the same prompt, length, and shape. It finishes drafts only at 1080p.\n\n1080p video from Seedance 2.5 is 10-bit H.265. If your player shows nothing, open the file in VLC, mpv, or QuickTime Player."
       ],
       "title": "Note"
     },

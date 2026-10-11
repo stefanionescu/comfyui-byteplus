@@ -37,9 +37,8 @@ WIDGET_HEIGHT = 20
 WIDGET_GAP = 4
 WIDGETS_PADDING = 8
 NODE_PADDING = 6
-# A multi-line text and a multi-select list are drawn at least this tall.
+# A multi-line text is drawn at least this tall.
 MULTILINE_HEIGHT = 50
-MULTISELECT_HEIGHT = 62
 # The notes, measured on frontend 1.52.7: the frame around their text, the smallest height the page draws,
 # one wrapped line, the space a blank line leaves between paragraphs, the width the text loses to the frame and
 # to a numbered list's indent, and the width of one character and of one code character, rounded up so a line
@@ -55,8 +54,6 @@ NOTE_CODE_CHARACTER_WIDTH = 7
 # A dropdown whose options add widgets, and a row of sockets that grows by one as its last socket is linked.
 DROPDOWN_TYPE = "COMFY_DYNAMICCOMBO_V3"
 AUTOGROW_TYPE = "COMFY_AUTOGROW_V3"
-# A socket that takes any type, such as Format Text's.
-ANY_TYPE = "*"
 # Nodes that draw their own panel, measured in the page. The save nodes are sized for their empty state;
 # ComfyUI grows them as their viewers fill.
 DOM_SIZES: dict[str, tuple[int, int]] = {
@@ -71,7 +68,6 @@ DOM_SIZES: dict[str, tuple[int, int]] = {
 }
 
 __all__ = [
-    "ANY_TYPE",
     "AUTOGROW_TYPE",
     "BYPASS_MODE",
     "CANVAS_ORIGIN",
@@ -83,7 +79,6 @@ __all__ = [
     "INNER_ORIGIN",
     "INPUT_COLOUR",
     "MULTILINE_HEIGHT",
-    "MULTISELECT_HEIGHT",
     "NODE_GAP",
     "NODE_PADDING",
     "NODE_WIDTH",

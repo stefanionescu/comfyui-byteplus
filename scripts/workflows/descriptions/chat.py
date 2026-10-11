@@ -8,9 +8,11 @@ from src.config.namespace import NODE_PREFIX
 from scripts.workflows.descriptions.texts import SHARED_TEXTS
 from scripts.workflows.descriptions.notes import WORKFLOW_TEXTS
 from scripts.workflows.page.graph import Node, Group, Subgraph, Workflow
+from scripts.workflows.descriptions.nodes import CHAT_ASK, IMAGE_GENERATE
 from scripts.workflows.page.config import STAGE_COLOUR, TEXT_PREVIEW, IMAGE_PREVIEW
-from scripts.workflows.descriptions.nodes import CHAT_ASK, SEED_MINI, DEEPSEEK_FLASH, IMAGE_GENERATE
 
+SEED_MINI = "seed-2-0-mini-260428"
+DEEPSEEK_FLASH = "deepseek-v4-flash-ga-260731"
 LISTING_SCHEMA = json.dumps(
     {
         "name": "listing",

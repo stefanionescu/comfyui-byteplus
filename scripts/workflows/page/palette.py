@@ -72,8 +72,6 @@ def _build_subgraph_schema(subgraph: Subgraph, palette: Palette) -> Schema:
     """Describe a subgraph as one node; an input linked to a widget inside shows as that widget."""
     inputs: list[Item] = []
     for name, target in subgraph.inputs:
-        if any(item["name"] == name for item in inputs):
-            continue
         key, socket = target.split(".", 1)
         node = _find_node(subgraph, key)
         item = _find_input(node, palette.find_schema(node), socket)

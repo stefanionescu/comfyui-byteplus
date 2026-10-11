@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Skylark embedding vision turns the brief and each option into an embedding and compares each with the brief. **Scores** lists the brief first, compared with itself, then each option in order; the highest after the first is the best match."
+        "Skylark embedding vision turns the brief and each option into an embedding and compares each with the brief. **Scores** lists the brief first, compared with itself, then each option in order. The highest after the first is the best match."
       ],
       "title": "Note"
     },
@@ -132,7 +132,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Choose** picks the best match with ComfyUI's own nodes: **Extract Text** reads each option's score, **Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes that option, which is saved under `image/byteplus`."
+        "**Choose** picks the best match with ComfyUI's own nodes. **Extract Text** reads each option's score, **Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes that option. The option is saved under `image/byteplus`."
       ],
       "title": "Note"
     },

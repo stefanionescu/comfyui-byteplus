@@ -12,7 +12,8 @@ from scripts.workflows.descriptions.nodes import SEEDREAM_4, IMAGE_GENERATE
 
 # One similarity as JSON writes it: a signed number, with a fraction or an exponent when it has one.
 SCORE = r"(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)"
-# The brief's similarity, then four option scores, which the padded similarities always hold.
+# The brief's similarity to itself, then four option scores. Choose pads the list with four -2 scores, so it always
+# holds at least five numbers, even when Seedream made fewer images.
 SCORES_PATTERN = r"[^-\d]+".join([SCORE] * 5)
 HERO_TEXTS = WORKFLOW_TEXTS["search-01-choose-a-hero-image"]
 
