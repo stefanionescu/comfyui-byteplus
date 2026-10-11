@@ -16,9 +16,9 @@ class Value(BaseModel):
 
 
 class Reply(BaseModel):
-    """A frozen record that ignores unknown fields, for documents BytePlus sends."""
+    """A frozen record that ignores unknown fields, for documents ModelArk sends."""
 
-    # BytePlus adds fields over time; a new field must not break a paid run that already succeeded.
+    # ModelArk adds fields over time; a new field must not break a paid run that already succeeded.
     model_config = ConfigDict(extra="ignore", frozen=True)
 
 

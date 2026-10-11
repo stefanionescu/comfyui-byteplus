@@ -104,13 +104,11 @@ class Layer:
 
     Attributes:
         content: The downloaded PNG file.
-        address: The https address it was downloaded from.
         box: Where it sits on the base image: left, top, right, and bottom, in the base image's pixels.
 
     """
 
     content: bytes
-    address: str
     box: tuple[int, int, int, int]
 
 
@@ -119,15 +117,13 @@ class LayerResult:
     """The base image and the layers of one split.
 
     Attributes:
-        base: The base image the layers sit on.
+        base: The downloaded base image the layers sit on.
         layers: The layers from bottom to top.
-        created_at: When ModelArk accepted the request, in Unix seconds.
 
     """
 
-    base: OutputFile
+    base: bytes
     layers: tuple[Layer, ...]
-    created_at: int
 
 
 __all__ = [

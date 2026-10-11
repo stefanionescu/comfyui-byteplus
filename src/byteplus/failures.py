@@ -1,4 +1,4 @@
-"""Turn ModelArk's error replies into reviewed messages that carry BytePlus's cleaned reason where it helps."""
+"""Turn ModelArk's error replies into reviewed messages that carry ModelArk's cleaned reason where it helps."""
 
 import re
 from http import HTTPStatus
@@ -137,9 +137,9 @@ def _choose_failure(status: int | None, code: str | None, message: str) -> tuple
 def _sanitize_reason(message: str) -> str:
     """Remove the only private details a reason can carry, then shorten it.
 
-    Console addresses stay, without the scheme. Other addresses go, since storage links carry signatures, and so do
-    ModelArk's request ID and key-shaped text. The reason ends as a sentence, since a message may add its next step
-    after it.
+    Console addresses stay, without the scheme. Other addresses are removed, because storage links carry signatures.
+    ModelArk's request ID and key-shaped text are removed too. The reason ends as a sentence, because a message can add
+    its next step after it.
     """
     text = _URL.sub("", _CONSOLE_URL.sub(r"\1", message))
     text = " ".join(_KEY.sub("", _REQUEST_ID.sub("", text)).split())
@@ -154,7 +154,7 @@ def build_failure(status: int | None, code: str | None, message: str) -> BytePlu
     """Build the reviewed error for one ModelArk error, by its code and then its status, with the cleaned reason.
 
     The status is None for the error of a failed task, and the reply's status for an error inside a successful reply.
-    A message without a reason placeholder drops the reason.
+    A template without a reason placeholder drops the reason.
     """
     category, template = _choose_failure(status, code, message)
     text = template.format(reason=_sanitize_reason(message), status=status, **CONSOLE_URLS)

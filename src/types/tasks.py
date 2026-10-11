@@ -31,7 +31,7 @@ class TaskRecord(Value):
     kind: Literal["videos", "meshes"]
     model_id: str
     submitted_at: str
-    is_draft: bool = False
+    is_draft: bool
 
 
 @dataclass(frozen=True, slots=True)
@@ -62,14 +62,12 @@ class TaskResult:
         record: The task's record.
         outputs: Each downloaded file, keyed by its reply field: video_url, last_frame_url, or file_url.
         created_at: When ModelArk accepted the task, in Unix seconds.
-        updated_at: When the task last changed status, in Unix seconds.
 
     """
 
     record: TaskRecord
     outputs: Mapping[str, OutputFile]
     created_at: int
-    updated_at: int
 
 
 __all__ = ["TaskRecord", "TaskRequest", "TaskResult"]

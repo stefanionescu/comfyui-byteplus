@@ -39,7 +39,7 @@ _MEDIA = (
     io.Audio.Input(
         "audio",
         optional=True,
-        tooltip="Audio clips for models that read audio, such as seed-2-0-lite. Create List joins several.",
+        tooltip="Audio clips for models that read audio, such as seed-2-0-lite-260428. Create List joins several.",
     ),
 )
 
@@ -70,7 +70,8 @@ _CONTROLS = (
         max=MAX_COMPLETION_TOKENS,
         advanced=True,
         tooltip=(
-            "The most tokens the model may write, reasoning included; 0 keeps the model's 4,096-token answer limit."
+            "The most tokens the model may write, reasoning included; 0 keeps the model's own limit, 4,096 tokens on "
+            "most models."
         ),
     ),
     io.DynamicCombo.Input(

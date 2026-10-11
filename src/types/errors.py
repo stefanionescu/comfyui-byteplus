@@ -24,7 +24,7 @@ class ErrorCode(StrEnum):
 
 
 class BytePlusError(RuntimeError):
-    """Show reviewed text; BytePlus's cleaned reason, when there is one, is already part of it."""
+    """Show reviewed text; ModelArk's cleaned reason, when there is one, is already part of it."""
 
     def __init__(self, code: ErrorCode, message: str) -> None:
         """Store the complete message and its category."""

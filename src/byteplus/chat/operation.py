@@ -7,12 +7,14 @@ from typing import TYPE_CHECKING
 from ..transport import send_json
 from ...types.chat import ChatResult
 from pydantic import ValidationError
+from ...config.models import MEDIA_LABELS
 from ...config.byteplus import ENDPOINT_URLS
 from ..listing import find_listed_chat_model
 from ..operation import validate_upload_size
 from ..references import validate_references
+from ..models import find_model, validate_value
+from ...config.messages.models import MODEL_INPUT
 from ...types.replies import ChatReply, ChatMessage
-from ..models import find_model, validate_inputs, validate_value
 from ...types.errors import ErrorCode, BytePlusError, UnknownModelError
 from ...config.messages.run import ANSWER_CUT, REPLY_EMPTY, ANSWER_FILTERED, REPLY_UNREADABLE
 from ...config.messages.inputs import (
@@ -30,8 +32,8 @@ if TYPE_CHECKING:
     from ...types.settings import Settings, Configuration
 
 
-def _list_input_kinds(request: ChatRequest) -> list[str]:
-    """List the kinds of file connected, local or by reference, in a fixed order; a text document needs no kind."""
+def _validate_inputs(request: ChatRequest, match: ModelMatch[ChatRow]) -> None:
+    """Refuse a connected kind of file, local or by reference, that the model does not read."""
     linked = {reference.kind for reference in request.references}
     connected = {
         "image": bool(request.image_urls),
@@ -39,14 +41,17 @@ def _list_input_kinds(request: ChatRequest) -> list[str]:
         "audio": bool(request.audio_clips),
         "pdf": any(document.file_url for document in request.documents),
     }
-    return [kind for kind, is_local in connected.items() if is_local or kind in linked]
+    for kind, is_local in connected.items():
+        if (is_local or kind in linked) and kind not in match.row.inputs:
+            message = MODEL_INPUT.format(model=match.model_id, media=MEDIA_LABELS[kind])
+            raise BytePlusError(ErrorCode.INVALID_INPUT, message)
 
 
 def _validate_controls(request: ChatRequest, match: ModelMatch[ChatRow]) -> None:
-    """Refuse, before anything is paid, a control the model's row does not take; the first refusal stops the check.
+    """Refuse, before anything is paid, a control the model's row does not take.
 
-    A model that takes only json_object makes valid JSON but ignores a schema, so it refuses one rather than look
-    as if it followed it.
+    A model that takes only json_object makes valid JSON but ignores a schema. The check refuses a schema for such a
+    model, so no answer only looks as if it followed one.
     """
     limits = match.row.chat
     if request.thinking is not None:
@@ -61,11 +66,7 @@ def _validate_controls(request: ChatRequest, match: ModelMatch[ChatRow]) -> None
 
 
 async def _find_chat_model(model_id: str, configuration: Configuration) -> ModelMatch[ChatRow]:
-    """Find the model's row in the table, or else in ModelArk's model listing.
-
-    The listing holds chat models newer than the table, so only an ID the table does not know is looked up there.
-    When the listing does not list it as a chat model, the table's refusal stands.
-    """
+    """Find the model's row in the table, or else in ModelArk's model listing."""
     try:
         return find_model(model_id, "chat")
     except UnknownModelError:
@@ -122,7 +123,7 @@ class ChatOperation:
         """Check the request against the model's row, send it, and read the answer."""
         request = self.request
         match = await _find_chat_model(request.model_id, configuration)
-        validate_inputs(match, _list_input_kinds(request))
+        _validate_inputs(request, match)
         _validate_controls(request, match)
         body = build_body(request, match.row)
         return _parse_answer(await send_json(ENDPOINT_URLS["chat"], body, configuration))

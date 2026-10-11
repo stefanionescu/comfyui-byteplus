@@ -1,4 +1,4 @@
-"""Check ComfyUI media, then convert it with ComfyUI's own helpers to what ModelArk reads and from what BytePlus sends.
+"""Check ComfyUI media, then convert it with ComfyUI's own helpers to and from the formats ModelArk uses.
 
 Encoding and decoding block, so callers run these functions through wait_for_thread.
 """
@@ -10,12 +10,11 @@ import torch
 from typing import TYPE_CHECKING
 from comfy_api.latest import Types
 from ..types.errors import ErrorCode, BytePlusError
-from ..config.media import WAV, IMAGE_TENSOR, MP4_URL_PREFIX, MAX_IMAGE_PIXELS
+from ..config.media import WAV, IMAGE_TENSOR, MP4_URL_PREFIX
 from ..config.messages.media import (
     AUDIO_EMPTY,
     IMAGE_PIXELS,
     IMAGE_CHANNELS,
-    IMAGE_TOO_LARGE,
     AUDIO_UNWRITABLE,
     IMAGE_UNREADABLE,
     VIDEO_UNWRITABLE,
@@ -32,10 +31,7 @@ if TYPE_CHECKING:
 
 
 def encode_images(image: torch.Tensor) -> tuple[str, ...]:
-    """Encode every image of a batch as a PNG data URL, never shrinking it; an image ModelArk cannot read is refused.
-
-    Every frame of a batch has the same size, so one pixel count covers the batch.
-    """
+    """Encode every image of a batch as a PNG data URL, never shrinking it; an image ModelArk cannot read is refused."""
     if image.ndim != IMAGE_TENSOR["DIMENSIONS"] or image.shape[-1] not in {
         IMAGE_TENSOR["RGB_CHANNELS"],
         IMAGE_TENSOR["RGBA_CHANNELS"],
@@ -43,10 +39,6 @@ def encode_images(image: torch.Tensor) -> tuple[str, ...]:
         raise BytePlusError(ErrorCode.INVALID_INPUT, IMAGE_CHANNELS)
     if not bool(torch.isfinite(image).all()):
         raise BytePlusError(ErrorCode.INVALID_INPUT, IMAGE_PIXELS)
-    height, width = image.shape[1], image.shape[2]
-    if height * width > MAX_IMAGE_PIXELS:
-        message = IMAGE_TOO_LARGE.format(width=width, height=height, maximum=f"{MAX_IMAGE_PIXELS:,}")
-        raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     try:
         return tuple(tensor_to_data_uri(frame.clamp(0, 1), total_pixels=None) for frame in image)
     except Exception:  # noqa: BLE001 -- reason: ComfyUI's helper raises unrelated exception types; one reviewed message replaces them.

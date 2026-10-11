@@ -55,8 +55,8 @@ class PaidNode(io.ComfyNode):
 class TaskDownload(io.ComfyNode):
     """Wait for one recorded task of the node's kind and return what it made.
 
-    Collecting a task sends only status checks, a cancel of a queued task, and downloads, which bill nothing, and the
-    same task always gives the same outputs, so ComfyUI's cache is correct and this is not a paid node.
+    Collecting a task bills nothing: it sends only status checks, downloads, and a cancel of a queued task. The same
+    task always gives the same outputs, so ComfyUI's cache is correct and this is not a paid node.
 
     Attributes:
         kind: The kind of task the node lists and collects.

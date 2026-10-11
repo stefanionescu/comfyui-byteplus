@@ -32,7 +32,7 @@ class OutputFile:
 
     Attributes:
         content: The downloaded file.
-        address: The https address it was downloaded from, which ModelArk can read again for 24 hours.
+        address: The https address it was downloaded from.
 
     """
 

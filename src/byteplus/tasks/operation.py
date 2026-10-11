@@ -1,6 +1,7 @@
 """Create a video or 3D task and record it as soon as ModelArk accepts it, then wait for it and download what it made.
 
-A cancel while the task is queued cancels it, which bills nothing; a task that started runs on and stays recorded.
+When the person cancels a run while its task is queued, the task is cancelled and bills nothing. A task that started
+runs on, and its record stays.
 """
 
 from __future__ import annotations
@@ -47,9 +48,9 @@ if TYPE_CHECKING:
 
 
 async def _wait_settled[T](task: asyncio.Task[T]) -> bool:
-    """Wait until the task ends, however often a cancel arrives, and report whether one arrived.
+    """Wait until the asyncio task ends, however often a cancel arrives, and report whether one arrived.
 
-    A cancel stops only the wait, never the task it waits for, so a second cancel cannot cut the task off either.
+    A cancel stops only the wait, never the asyncio task it waits for, so a second cancel cannot cut it off either.
     """
     is_cancelled = False
     while not task.done():
@@ -60,7 +61,7 @@ async def _wait_settled[T](task: asyncio.Task[T]) -> bool:
     return is_cancelled
 
 
-async def _delete_queued_task(record: TaskRecord, tasks: TaskStore, configuration: Configuration) -> None:
+async def _send_cancel(record: TaskRecord, tasks: TaskStore, configuration: Configuration) -> None:
     """Cancel a queued task, which bills nothing, and delete its record once ModelArk accepts.
 
     ModelArk refuses when the task started in the meantime. The person asked to stop, so the refusal is not raised,
@@ -86,7 +87,10 @@ def _read_task_id(document: Json) -> str:
 
 
 def _parse_task_reply(document: Json) -> TaskReply:
-    """Read a status check; a check bills nothing, so one that does not parse leaves the record for another."""
+    """Read a status check's reply.
+
+    A check bills nothing, so an unreadable reply is a transport error, and the record stays for a later check.
+    """
     try:
         return TaskReply.model_validate(document)
     except ValidationError:
@@ -111,9 +115,9 @@ class TaskDownloadOperation:
     """Wait for one recorded task and download what it made; status checks, cancels, and downloads bill nothing."""
 
     def __init__(self, record: TaskRecord, tasks: TaskStore, last_status: str | None = None) -> None:
-        """Keep the record, the store that deletes it, and the last status seen: queued right after the create request.
+        """Keep the record, the store that deletes it, and the last status seen.
 
-        A recorded task's status is unknown until the first check.
+        The last status is queued right after the create request, and None for a recorded task before its first check.
         """
         self.record = record
         self.tasks = tasks
@@ -153,7 +157,7 @@ class TaskDownloadOperation:
         """Accept any recorded task; there is nothing to refuse before checking its status."""
 
     async def send(self, configuration: Configuration) -> TaskResult:
-        """Wait for the task and download what it made, deleting the record once the task ends without files or saves.
+        """Wait for the task, download what it made, and delete the record once nothing is left to collect.
 
         A cancel while the last status seen is queued cancels the task. A cancel while it runs, or before its status
         is known, sends nothing and keeps the record, since a started task runs on and is billed.
@@ -161,12 +165,12 @@ class TaskDownloadOperation:
         record = self.record
         if datetime.now(UTC) >= datetime.fromisoformat(record.submitted_at) + timedelta(seconds=TASK_RETENTION_SECONDS):
             await asyncio.to_thread(self.tasks.delete, record.task_id)
-            raise BytePlusError(ErrorCode.UNAVAILABLE, TASK_GONE)
+            raise BytePlusError(ErrorCode.UNAVAILABLE, TASK_GONE.format(node=KIND_NODES[record.kind]))
         try:
             reply = await self._wait_for_end(configuration)
         except asyncio.CancelledError:
             if self.last_status == CANCELLABLE_STATUS:
-                await _wait_settled(asyncio.create_task(_delete_queued_task(record, self.tasks, configuration)))
+                await _wait_settled(asyncio.create_task(_send_cancel(record, self.tasks, configuration)))
             raise
         if reply.status != "succeeded":
             await asyncio.to_thread(self.tasks.delete, record.task_id)
@@ -177,7 +181,7 @@ class TaskDownloadOperation:
         outputs = await self._download_outputs(reply, configuration)
         # The record goes only after every download, so a failed download can be collected again.
         await asyncio.to_thread(self.tasks.delete, record.task_id)
-        return TaskResult(record, outputs, reply.created_at, reply.updated_at)
+        return TaskResult(record, outputs, reply.created_at)
 
 
 class TaskOperation:
@@ -219,7 +223,7 @@ class TaskOperation:
         is_cancelled = await _wait_settled(creating)
         record = creating.result()
         if is_cancelled:
-            await _wait_settled(asyncio.create_task(_delete_queued_task(record, self.tasks, configuration)))
+            await _wait_settled(asyncio.create_task(_send_cancel(record, self.tasks, configuration)))
             raise asyncio.CancelledError
         return await TaskDownloadOperation(record, self.tasks, last_status=CANCELLABLE_STATUS).send(configuration)
 

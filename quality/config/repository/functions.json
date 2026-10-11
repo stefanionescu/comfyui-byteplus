@@ -51,7 +51,7 @@
             {
                 "path": "src/byteplus/tasks/operation.py",
                 "names": ["TaskOperation.validate"],
-                "reason": "The run wrapper calls this Operation step, and each kind of task brings its own checks to it."
+                "reason": "send_request calls validate on every Operation, and this one hands the check to its request."
             }
         ]
     },

@@ -1,6 +1,6 @@
 """Check a Seedance request against its model's row, build the task body, and build the task that sends it.
 
-The mode decides the content items and their fixed order, and the row decides the fields the body may hold.
+The mode decides the content items and their fixed order, and the row decides the fields the body can hold.
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
 
 def _validate_draft_finish(request: VideoRequest, match: ModelMatch[VideoRow]) -> None:
-    """Refuse a draft the model cannot finish, or at a size it does not finish at."""
+    """Refuse a draft finish the model does not take, or a resolution it cannot finish a draft at."""
     limits = match.row.video
     if not limits.draft_resolutions:
         raise BytePlusError(ErrorCode.INVALID_INPUT, DRAFT_FINISH_UNSUPPORTED.format(model=match.model_id))
@@ -51,8 +51,8 @@ def _validate_draft_finish(request: VideoRequest, match: ModelMatch[VideoRow]) -
 def _validate_media(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> None:
     """Refuse a mode the model does not take, and references it cannot read or that expire too soon.
 
-    Only Seedance 2.5 and the 2.0 series take reference media, so past the mode check references reach only models
-    that read every kind of them, assets included. A frame may be an output or a link, not an asset.
+    Only Seedance 2.5 and the 2.0 series take reference media, and they read every kind of reference, assets
+    included. A frame can be an output or a link, not an asset.
     """
     if mode not in match.row.video.modes:
         message = VIDEO_MODE_UNSUPPORTED.format(model=match.model_id, mode=VIDEO_MODE_LABELS[mode])
@@ -79,9 +79,9 @@ def _choose_duration(request: VideoRequest, match: ModelMatch[VideoRow]) -> int:
 
 
 def _choose_task_fields(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict[str, Json]:
-    """Choose the task type, resolution, and duration fields, each always sent where the model takes it.
+    """Choose the task type, resolution, and duration fields.
 
-    A draft is made at 480p whatever the resolution says.
+    The task type is sent only when it is not auto. A draft is made at 480p whatever the resolution says.
     """
     limits = match.row.video
     fields: dict[str, Json] = {}
@@ -103,9 +103,9 @@ def _choose_task_fields(request: VideoRequest, match: ModelMatch[VideoRow]) -> d
 
 
 def _choose_ratio(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> str | None:
-    """Choose the ratio, judged for the mode, or for an edit or extend task, which keeps its video's shape.
+    """Choose the ratio for the mode, or for an edit or extend task, which keeps its video's shape.
 
-    Where the model keeps the shape of its input, model default sends adaptive and a fixed ratio is refused; where it
+    Where the model keeps the shape of its input, model default sends adaptive and a fixed ratio is refused. Where it
     cannot choose a shape, adaptive is refused. Every Seedance model takes every other ratio.
     """
     limits = match.row.video
@@ -177,8 +177,8 @@ def _build_content(request: VideoRequest) -> list[Json]:
 def _build_video_body(request: VideoRequest) -> dict[str, Json]:
     """Refuse, before anything is paid, what the model's row does not take, then build the body with Request Options.
 
-    The first refusal stops the check. Finishing a draft sends only the draft and the settings ModelArk lets a finish
-    change; ModelArk reuses the rest from the draft and refuses it if sent again.
+    Finishing a draft sends only the draft and the settings a finish can change. ModelArk reuses the rest from the
+    draft, and refuses the request if the rest is sent again.
     """
     match = find_model(request.model_id, "videos")
     mode = choose_video_mode(request)

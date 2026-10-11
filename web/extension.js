@@ -12,7 +12,7 @@ var TEXT = {
     invalidLimit: "ComfyUI returned an invalid BytePlus limit.",
     invalidResponse: "ComfyUI returned an invalid BytePlus settings response.",
     keyCleared: "Saved key cleared.",
-    keyNotice: "Add a ModelArk API key to use the extension. Create one on the API keys page of the ModelArk console. Your key stays on your ComfyUI server and is sent only to BytePlus.",
+    keyNotice: "Add a ModelArk API key to use the extension. Your key stays on your ComfyUI server and is sent only to ModelArk.",
     keySaved: "Key saved.",
     limits: "Request limits",
     limitsSaved: "Limits saved.",
@@ -30,7 +30,7 @@ var TEXT = {
     unreadableResponse: "ComfyUI returned an unreadable BytePlus settings response.",
     updateFailed: "BytePlus settings could not be saved.",
     readFailed: "ComfyUI could not read BytePlus settings.",
-    removeFailed: "ComfyUI could not clear the saved ModelArk key.",
+    removeFailed: "ComfyUI could not clear the saved ModelArk API key.",
     menu: "BytePlus settings"
   },
   working: "Working..."
@@ -665,7 +665,7 @@ async function requestConfiguration(fetcher, signal, route = browserRoutes.setti
 var current;
 var SettingsDialog = class {
   /**
-   * Build settings forms without contacting BytePlus.
+   * Build settings forms without contacting ModelArk.
    * @param fetcher - ComfyUI's local API client.
    */
   constructor(fetcher) {

@@ -1,4 +1,4 @@
-"""Add a preset character, an asset, or a public file address to the references a video, image, or chat node sends."""
+"""Add a preset character, an asset, or a public address to the references a chat, image, video, or 3D node sends."""
 
 from __future__ import annotations
 
@@ -26,8 +26,8 @@ class ReferenceAdd(io.ComfyNode):
             display_name="Reference: Add",
             category=MENUS["SHARED"],
             description=(
-                "Add a preset character, an asset, or a public file address to the references a video, image, or "
-                "chat node sends."
+                "Add a preset character, an asset, or a public file address to the references a chat, image, "
+                "video, or 3D node sends."
             ),
             inputs=[
                 REFERENCES_INPUT,
@@ -40,7 +40,10 @@ class ReferenceAdd(io.ComfyNode):
                 io.String.Input(
                     "url",
                     default="",
-                    tooltip="An asset ID, such as a preset character's, an asset:// URI, or a public https:// address.",
+                    tooltip=(
+                        "An asset ID, such as a preset character's, with or without asset://, or a public https:// "
+                        "address."
+                    ),
                 ),
             ],
             outputs=[io.Custom(SOCKET_TYPES["REFERENCES"]).Output("references", display_name="references")],

@@ -34,7 +34,7 @@ OPTIMIZE_PROMPT_OPTIONS_INPUT = io.Combo.Input(
     options=list(OPTIMIZE_PROMPT_MODES),
     default=MODEL_DEFAULT,
     advanced=True,
-    tooltip="Fast answers sooner with slightly lower quality, on models that offer it.",
+    tooltip="Fast makes images sooner at slightly lower quality, on models that offer it.",
 )
 # The watermark input of the image and video nodes.
 WATERMARK_INPUT = io.Boolean.Input(

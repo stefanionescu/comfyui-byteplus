@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from ...types.images import EncodedImage
     from ...types.references import Reference
 
-# The video controls; a dropdown left at model default sends nothing, except resolution and duration, always sent.
+# The video controls. A dropdown left at model default or auto sends nothing; resolution and duration are always sent.
 _CONTROLS = (
     io.Int.Input(
         "duration",
@@ -54,7 +54,7 @@ _CONTROLS = (
         min=DURATION["AUTO"],
         max=DURATION["MAX"],
         tooltip=(
-            "Length in seconds. -1 lets the model choose; Seedance 2.5 may then make up to 30 seconds. An edit always "
+            "Length in seconds. -1 lets the model choose; Seedance 2.5 can then make up to 30 seconds. An edit always "
             "sends -1."
         ),
     ),
@@ -63,8 +63,8 @@ _CONTROLS = (
         options=list(RESOLUTION_CHOICES),
         default=RESOLUTION_DEFAULT,
         tooltip=(
-            "Sent with every task, except that a draft is made at 480p; finishing a draft sends this value. Higher "
-            "resolutions cost more, and each model takes only some; Model: Info lists them."
+            "Higher resolutions cost more. Model: Info lists the ones each model takes. A draft is always made at "
+            "480p, and finishing a draft uses this value."
         ),
     ),
     io.Combo.Input(

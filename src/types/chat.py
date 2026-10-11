@@ -70,7 +70,7 @@ class ChatRequest:
         audio_clips: Base64 WAV without a data: prefix, as the input_audio part takes it.
         documents: Attached files, in chain order.
         references: Image, video, and audio addresses ModelArk reads itself, in chain order.
-        thinking: The thinking.type to send: enabled, disabled, or auto.
+        thinking: The thinking.type to send: enabled or disabled.
         effort: The reasoning effort to send.
         max_completion_tokens: The most tokens the model may write, reasoning included, or 0 for ModelArk's answer
             limit.

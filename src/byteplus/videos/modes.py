@@ -29,7 +29,7 @@ _VIDEO_COMMAND = re.compile(VIDEO_COMMAND_PATTERN)
 
 
 def _validate_draft(request: VideoRequest) -> None:
-    """Refuse a draft to finish beside anything else, more than one, or with draft on; ModelArk reuses the rest."""
+    """Refuse more than one draft, a draft beside any other input, or a draft finish with draft turned on."""
     drafts = [reference for reference in request.references if reference.kind == "draft"]
     if len(drafts) > 1:
         raise BytePlusError(ErrorCode.INVALID_INPUT, DRAFT_SINGLE.format(count=len(drafts)))
@@ -41,7 +41,11 @@ def _validate_draft(request: VideoRequest) -> None:
 
 
 def _validate_sources(request: VideoRequest, mode: str) -> None:
-    """Refuse a request with nothing to make a video from, frames beside reference media, and a task without them."""
+    """Refuse a request with nothing to make a video from, and inputs that do not fit together.
+
+    A last frame needs a first frame, and frames cannot go beside reference media. A task type other than auto needs
+    reference media, and edit and extend need a reference video.
+    """
     if mode == "text" and not request.prompt.strip() and request.last_frame is None:
         raise BytePlusError(ErrorCode.INVALID_INPUT, VIDEO_EMPTY)
     if request.last_frame is not None and request.first_frame is None:

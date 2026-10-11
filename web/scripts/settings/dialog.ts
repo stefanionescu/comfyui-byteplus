@@ -30,7 +30,7 @@ class SettingsDialog {
   private configuration: Configuration | undefined;
 
   /**
-   * Build settings forms without contacting BytePlus.
+   * Build settings forms without contacting ModelArk.
    * @param fetcher - ComfyUI's local API client.
    */
   constructor(private readonly fetcher: Fetcher) {

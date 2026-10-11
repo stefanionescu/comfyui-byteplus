@@ -2,8 +2,8 @@
 name = "comfyui-byteplus"
 version = "0.1.0"
 description = """\
-  Use any BytePlus ModelArk model in ComfyUI with your own API key: chat and media reading, image generation and \
-  editing, layer splitting, video, 3D, embeddings and character references.\
+  Use any BytePlus ModelArk model in ComfyUI with your own API key: chat, images, layer splitting, video, 3D, \
+  embeddings and preset characters.\
   """
 readme = "README.md"
 license = "MIT"
@@ -124,7 +124,7 @@ lint.pylint.max-statements = 30
 [tool.interrogate]
 fail-under = 100
 ignore-init-method = true
-# Ruff's D418 refuses a docstring on an @overload stub; the implementation carries the docstring.
+# Ruff's D418 forbids a docstring on an @overload stub, so only the implementation has one.
 ignore-overloaded-functions = true
 exclude = [ ".artifacts", ".git", ".venv", "node_modules", "web" ]
 verbose = 1
@@ -144,7 +144,7 @@ per_rule_ignores.DEP001 = [
   "server",
   "torch"
 ]
-# aiohttp, which ComfyUI supplies, brings yarl; output downloads pass a yarl URL so a signed address is sent unchanged.
+# yarl comes with ComfyUI's aiohttp. Output downloads pass a yarl URL so aiohttp sends a signed address unchanged.
 per_rule_ignores.DEP003 = [ "yarl" ]
 # ComfyUI supplies these libraries; the dev group installs them only for checks and scripts.
 per_rule_ignores.DEP004 = [ "aiohttp", "av", "numpy", "PIL", "tomli", "packaging", "yaml" ]

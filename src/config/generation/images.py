@@ -17,7 +17,8 @@ MAX_IMAGES = {
     "MAX": 15,
 }
 
-# Every image request asks for addresses, which keep a Seedream output trusted by Seedance.
+# Every image request asks for addresses, because Seedance trusts a Seedream image with a real face only at its original
+# address.
 RESPONSE_FORMAT = "url"
 
 # The Split Layers size choices; every model that splits layers takes them.

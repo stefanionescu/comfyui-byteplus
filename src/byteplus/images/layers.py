@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from ..failures import build_failure
 from .generate import parse_image_reply
 from ..options import build_request_body
+from ...types.references import Reference
 from ...config.byteplus import ENDPOINT_URLS
 from ..operation import validate_upload_size
 from ..references import validate_references
@@ -14,7 +15,6 @@ from ..models import find_model, validate_value
 from ..transport import send_json, download_output
 from ...config.messages.run import REPLY_UNREADABLE
 from ...types.errors import ErrorCode, BytePlusError
-from ...types.references import Reference, OutputFile
 from ...config.generation.images import RESPONSE_FORMAT
 from ...types.images import Layer, LayerResult, EncodedImage
 
@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
 
 def _validate_layer_request(request: LayerRequest, match: ModelMatch[ImageRow]) -> None:
-    """Refuse, before anything is paid, a reference the model cannot read and a mode it does not take.
+    """Refuse, before anything is paid, a reference the model cannot read and an optimize prompt mode it does not take.
 
     Every layer model takes every size, and ModelArk checks the image's own size itself.
     """
@@ -104,9 +104,9 @@ class LayerOperation:
         reply = parse_image_reply(await send_json(ENDPOINT_URLS["images"], body, configuration))
         base, boxes = _list_layers(reply)
         settings = configuration.settings
-        base_output = OutputFile(await download_output(base, settings), base)
-        layers = [Layer(await download_output(address, settings), address, box) for address, box in boxes]
-        return LayerResult(base_output, tuple(layers), created_at=reply.created)
+        base_content = await download_output(base, settings)
+        layers = [Layer(await download_output(address, settings), box) for address, box in boxes]
+        return LayerResult(base_content, tuple(layers))
 
 
 __all__ = ["LayerOperation"]

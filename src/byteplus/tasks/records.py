@@ -1,6 +1,6 @@
 """Keep a private record of every video and 3D task ModelArk accepted.
 
-A task keeps running after a cancel that came too late or a restart, so its record is how it is collected.
+A task that started keeps running after a cancel or a ComfyUI restart, and its record lets a Download node collect it.
 """
 
 from __future__ import annotations

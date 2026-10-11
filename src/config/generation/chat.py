@@ -16,13 +16,13 @@ TEMPERATURE = {
     "STEP": 0.05,
 }
 
-# The thinking.type values; a model's row lists the ones it takes, and only some models take auto.
-THINKING_CHOICES = (MODEL_DEFAULT, "enabled", "disabled", "auto")
+# The thinking.type values; a model's row lists the ones it takes.
+THINKING_CHOICES = (MODEL_DEFAULT, "enabled", "disabled")
 
 # How much a reasoning model thinks; a model that takes an effort takes all seven and maps them to its own levels.
 EFFORTS = (MODEL_DEFAULT, "none", "minimal", "low", "medium", "high", "xhigh", "max")
 
-# The chat reference's upper bound for max_completion_tokens, below the model list's longest outputs.
+# The largest max_completion_tokens the Chat API takes, though the model list names longer outputs.
 MAX_COMPLETION_TOKENS = 65_536
 
 # A text document goes to the model as text, under its name.
@@ -40,8 +40,8 @@ DOCUMENT_TYPES = {
     ".json": "application/json",
 }
 
-# The model listing's domains of chat models; its image, video, and 3D entries carry none of the parameters those
-# nodes check.
+# The model listing's domains of chat models. Only chat models are looked up there, since the listing lacks the
+# settings the image, video, and 3D checks need.
 LISTED_CHAT_DOMAINS = ("LLM", "VLM")
 
 # The model listing's status of a model that no longer answers.

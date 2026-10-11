@@ -1,1 +1,1 @@
-"""Connect BytePlus requests and local routes to the ComfyUI host."""
+"""Connect ModelArk requests and local routes to the ComfyUI host."""

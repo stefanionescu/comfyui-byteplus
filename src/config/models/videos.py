@@ -6,7 +6,7 @@ REFERENCE_INPUTS = ("text", "image", "video", "audio")
 # Seedance 1.x reads a prompt and frames.
 FRAME_INPUTS = ("text", "image")
 
-# Every way a task may start: a prompt alone, a first frame, first and last frames, or references.
+# Every way a task can start: a prompt alone, a first frame, first and last frames, or references.
 ALL_MODES = ("text", "first_frame", "first_last_frame", "references")
 
 # The modes of a model that takes no references.

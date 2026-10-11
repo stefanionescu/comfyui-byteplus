@@ -7,9 +7,6 @@ IMAGE_TENSOR = {
     "RGBA_CHANNELS": 4,
 }
 
-# The most pixels any ModelArk endpoint reads in one image: 6000 by 6000.
-MAX_IMAGE_PIXELS = 36_000_000
-
 # Video goes inline only to chat and embedding models, as an MP4 data URL.
 MP4_URL_PREFIX = "data:video/mp4;base64,"
 
@@ -22,7 +19,6 @@ WAV = {
 
 __all__ = [
     "IMAGE_TENSOR",
-    "MAX_IMAGE_PIXELS",
     "MP4_URL_PREFIX",
     "WAV",
 ]

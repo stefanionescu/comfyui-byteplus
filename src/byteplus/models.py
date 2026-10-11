@@ -6,17 +6,16 @@ Nothing here sends a request or needs the key.
 import re
 from ..types import Kind
 from typing import Literal, overload
+from collections.abc import Mapping, Sequence
 from ..config.generation.models import DEFAULT_MODELS
-from collections.abc import Mapping, Iterable, Sequence
 from ..config.patterns import MODEL_ID_PATTERN, MODEL_VERSION_PATTERN
 from ..types.errors import ErrorCode, BytePlusError, UnknownModelError
-from ..config.models import ALIASES, KIND_NODES, MODEL_TABLE, MEDIA_LABELS, ENDPOINT_PREFIX
+from ..config.models import ALIASES, KIND_NODES, MODEL_TABLE, ENDPOINT_PREFIX
 from ..types.models import ChatRow, MeshRow, ImageRow, ModelRow, VideoRow, ModelMatch, MatchMethod, EmbeddingRow
 from ..config.messages.models import (
     MODEL_KIND,
     MODEL_EMPTY,
     MODEL_FIELD,
-    MODEL_INPUT,
     MODEL_VALUE,
     MODEL_UNKNOWN,
     MODEL_VERSION,
@@ -26,7 +25,7 @@ from ..config.messages.models import (
 
 _MODEL_ID = re.compile(MODEL_ID_PATTERN)
 VERSION_SUFFIX = re.compile(MODEL_VERSION_PATTERN)
-# The limits key a row literal holds names the row record it becomes.
+# Each table entry holds one limits key, such as chat or video, which names the row type the entry becomes.
 _ROW_TYPES: dict[str, type[ModelRow]] = {
     "chat": ChatRow,
     "image": ImageRow,
@@ -37,22 +36,22 @@ _ROW_TYPES: dict[str, type[ModelRow]] = {
 
 
 def _parse_rows(table: Mapping[str, Mapping[str, object]]) -> dict[str, ModelRow]:
-    """Build the row record of each table literal, refusing a misspelled key or a wrong value.
+    """Build the row of each table entry, refusing a misspelled key or a wrong value.
 
-    A literal holds exactly one limits key; unpacking refuses a literal with none or several.
+    The unpacking refuses an entry with no limits key or with several.
     """
     rows: dict[str, ModelRow] = {}
-    for model_id, literal in table.items():
-        (row_type,) = (record for key, record in _ROW_TYPES.items() if key in literal)
-        rows[model_id] = row_type.model_validate({**literal, "model_id": model_id})
+    for model_id, entry in table.items():
+        (row_type,) = (record for key, record in _ROW_TYPES.items() if key in entry)
+        rows[model_id] = row_type.model_validate({**entry, "model_id": model_id})
     return rows
 
 
 # The table is parsed once, when ComfyUI imports the extension, so a mistake in it stops loading and names the key.
 _ROWS = _parse_rows(MODEL_TABLE)
 _EXACT_ROWS = {**_ROWS, **{alias: _ROWS[target] for alias, target in ALIASES.items()}}
-# Each family, the model ID without its version, maps to its newest row, which takes another version. Within a family
-# the IDs sort by version, so the newest comes last; a deprecated row always has a newer one.
+# Each family, the model ID without its version, maps to its newest row, which checks an ID with an unlisted version.
+# Within a family the IDs sort by version, so the newest comes last. A deprecated row always has a newer one.
 _FAMILY_ROWS = {VERSION_SUFFIX.sub("", model_id): _EXACT_ROWS[model_id] for model_id in sorted(_EXACT_ROWS)}
 
 
@@ -133,19 +132,11 @@ def find_model(model_id: str, kind: Kind | None) -> ModelMatch[ModelRow]:
     return ModelMatch(model_id=text, row=row, matched=matched)
 
 
-def validate_inputs(match: ModelMatch[ModelRow], kinds: Iterable[str]) -> None:
-    """Refuse each connected kind of input the model does not read: text, image, video, audio, or pdf."""
-    for kind in kinds:
-        if kind not in match.row.inputs:
-            message = MODEL_INPUT.format(model=match.model_id, media=MEDIA_LABELS[kind])
-            raise BytePlusError(ErrorCode.INVALID_INPUT, message)
-
-
 def validate_value(match: ModelMatch[ModelRow], label: str, value: str, values: Sequence[str]) -> None:
     """Refuse a setting the model does not take at all, or a value it does not list.
 
-    The label is the control's label as the node shows it, such as size; no values means the model takes no such
-    setting.
+    The label is the control's label as the node shows it, such as output format. An empty list of values means the
+    model takes no such setting.
     """
     if not values:
         raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field=label))
@@ -154,4 +145,4 @@ def validate_value(match: ModelMatch[ModelRow], label: str, value: str, values: 
         raise BytePlusError(ErrorCode.INVALID_INPUT, message)
 
 
-__all__ = ["VERSION_SUFFIX", "find_model", "validate_inputs", "validate_value"]
+__all__ = ["VERSION_SUFFIX", "find_model", "validate_value"]

@@ -40,8 +40,8 @@ _PIXEL_SIZE = re.compile(IMAGE_SIZE_PATTERN)
 def _validate_background(request: ImageRequest, match: ModelMatch[ImageRow], background: str) -> None:
     """Refuse a transparent background the model or the request cannot make.
 
-    ModelArk keeps the transparency of exactly one reference image, which must have an alpha channel, and writes it
-    as PNG. A linked or output image is not measured.
+    ModelArk makes a transparent background only from exactly one input image that has an alpha channel, and writes
+    it as PNG. A linked or output image is not checked for an alpha channel.
     """
     validate_value(match, "background", background, match.row.image.backgrounds)
     has_one_source = len(request.images) + len(request.references) == 1
@@ -52,7 +52,7 @@ def _validate_background(request: ImageRequest, match: ModelMatch[ImageRow], bac
 
 
 def _validate_image_request(request: ImageRequest, match: ModelMatch[ImageRow]) -> None:
-    """Refuse, before anything is paid, what the model's row does not take; the first refusal stops the check.
+    """Refuse, before anything is paid, what the model's row does not take.
 
     Seedream reads no assets, which only Seedance video takes. A size is one of the model's sizes or any WIDTHxHEIGHT,
     whose pixels ModelArk checks itself.
@@ -73,7 +73,10 @@ def _validate_image_request(request: ImageRequest, match: ModelMatch[ImageRow]) 
 
 
 def _build_sequential_fields(max_images: int, limits: ImageLimits) -> dict[str, Json]:
-    """Ask for up to max_images images in sequence, or turn sequential generation off for one where the model has it."""
+    """Ask for up to max_images images in sequence, or turn sequential generation off for a single image.
+
+    A model without sequential image generation gets no sequential field.
+    """
     if max_images > 1:
         sequence: dict[str, Json] = {"max_images": max_images}
         return {"sequential_image_generation": "auto", "sequential_image_generation_options": sequence}
@@ -84,7 +87,7 @@ def _build_image_body(request: ImageRequest, match: ModelMatch[ImageRow]) -> dic
     """Build the checked request's body, with the options of Request Options.
 
     The size is sent as typed, and an empty size sends none. ModelArk names the images Image 1, Image 2, and so on
-    in the order of image: the local images first, then the references in chain order.
+    in the order of the image field: the local images first, then the references in chain order.
     """
     body: dict[str, Json] = {
         "model": match.model_id,
@@ -111,8 +114,8 @@ def _build_image_body(request: ImageRequest, match: ModelMatch[ImageRow]) -> dic
 def _list_addresses(reply: ImageReply) -> list[str]:
     """List the address of every image made, in reply order.
 
-    An image moderation refused is left out; it is not billed, and sequential image generation may make fewer images
-    than asked in any case. When none was made, the first error stops the run with its own message, such as a
+    An image that moderation refused is left out. It is not billed, and sequential image generation can make fewer
+    images than asked anyway. When none was made, the first error stops the run with its own message, such as a
     moderation refusal.
     """
     addresses = [item.url for item in reply.images if item.url is not None]

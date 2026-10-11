@@ -16,7 +16,7 @@ REFERENCE_DRAFT_EXPIRED = (
 )
 
 REFERENCE_EXPIRED = (
-    "Reference {position} is a ModelArk output address that has expired or expires within {minutes} minutes; output "
+    "Reference {position} is a ModelArk output address that has expired or expires within {minutes} minutes. Output "
     "addresses last 24 hours. Change run number on the node that made it to make it again."
 )
 
@@ -29,7 +29,7 @@ REFERENCE_URL = (
     "address that starts with https://."
 )
 
-REFERENCE_URL_EMPTY = "Paste a preset character's asset ID, an asset:// URI, or an https:// address into url."
+REFERENCE_URL_EMPTY = "Paste an asset ID, such as a preset character's, or an https:// address into url."
 
 __all__ = [
     "REFERENCE_ADDRESS_LENGTH",

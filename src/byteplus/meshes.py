@@ -1,4 +1,4 @@
-"""Check a 3D request against what every 3D model and its own row take, build the task body, and build its task.
+"""Check a 3D request against every 3D model and then its model's row, and build the task that sends it.
 
 Hyper3D and Hitem3D read their settings as --name value commands after the prompt. The person writes them in the
 prompt; the node only asks for GLB, the file its model_3d output carries.
@@ -52,8 +52,7 @@ def _build_text(request: MeshRequest, command: str) -> str:
 def _validate_mesh_request(request: MeshRequest, settings: Settings) -> None:
     """Refuse, before the model row is read, a request no 3D model could take, and images over the upload limit.
 
-    ModelArk reads image references itself, so only outputs and links are taken, and an output must not expire before
-    the task starts.
+    No 3D model reads assets, so only outputs and links are taken. An output must not expire before the task starts.
     """
     if not request.prompt and not request.images and not request.references:
         raise BytePlusError(ErrorCode.INVALID_INPUT, MESH_INPUT_EMPTY)
@@ -66,7 +65,8 @@ def _build_mesh_body(request: MeshRequest) -> dict[str, Json]:
 
     A model that reads no text, such as Hitem3D, takes its commands in the text item but still needs an image to work
     from. The text item comes first, then the images, then the image references. ModelArk cuts a longer text without
-    an error, which could drop the format command the node adds, so a prompt that leaves it too little room is refused.
+    an error, and the cut could drop the format command the node adds. So a prompt that leaves the command too little
+    room is refused.
     """
     match = find_model(request.model_id, "meshes")
     if not request.images and not request.references and "text" not in match.row.inputs:
@@ -74,7 +74,7 @@ def _build_mesh_body(request: MeshRequest) -> dict[str, Json]:
     limits = match.row.mesh
     text = _build_text(request, limits.format_command)
     if 0 < limits.max_prompt_characters < len(text):
-        # The prompt is what the text holds beyond the added command and the space before it.
+        # The prompt gets what the limit leaves after the added command and the space before it.
         maximum = limits.max_prompt_characters - (len(text) - len(request.prompt))
         raise BytePlusError(ErrorCode.INVALID_INPUT, MESH_PROMPT_LENGTH.format(model=match.model_id, maximum=maximum))
     content: list[Json] = [{"type": "text", "text": text}]

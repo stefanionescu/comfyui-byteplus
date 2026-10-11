@@ -1,4 +1,4 @@
-"""Find a chat model the bundled table lacks in ModelArk's model listing, so a newer chat model works at once.
+"""Find a chat model the bundled table lacks in ModelArk's model listing, so a newer chat model works without an update.
 
 The listing bills nothing. It lists what a model reads and its token limits, but not whether it takes thinking or a
 reasoning effort, or reads PDF files, so a row built from it takes none of these.
@@ -38,7 +38,7 @@ async def _read_listing(configuration: Configuration) -> Mapping[str, ListedMode
 
 
 def _build_row(listed: ListedModel) -> ChatRow:
-    """Build a chat row from what the listing says the model reads and takes; a limit it leaves out reads as 0."""
+    """Build a chat row from what the listing says the model reads and takes."""
     limits = listed.token_limits
     formats = listed.features.structured_outputs
     offered = {"json_schema": formats.has_schema, "json_object": formats.has_json}
@@ -47,7 +47,7 @@ def _build_row(listed: ListedModel) -> ChatRow:
             "model_id": listed.id,
             "kinds": ("chat",),
             "inputs": listed.modalities.input_modalities,
-            "sources": (ENDPOINT_URLS["models"],),
+            "sources": (),
             "chat": {
                 "context": limits.context_window,
                 "max_output": limits.max_output_token_length,

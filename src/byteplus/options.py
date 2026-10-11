@@ -15,9 +15,9 @@ if TYPE_CHECKING:
 
 
 def build_request_body(body: Mapping[str, Json], options: Options | None, kind: Kind, row: ModelRow) -> dict[str, Json]:
-    """Add the options' extra fields and service tier, refusing before anything is sent what this request cannot take.
+    """Add the extra fields and service tier of Request Options, refusing any this request cannot take before sending.
 
-    Extra fields go at the top level as written and may replace a field the node set, such as watermark, but never one
+    Extra fields go at the top level as written and can replace a field the node set, such as watermark, but never one
     it reserves. Flex is refused for a model whose row lacks it.
     """
     merged = dict(body)

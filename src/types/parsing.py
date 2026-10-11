@@ -54,8 +54,8 @@ def parse_json(
 def parse_fields(text: str, message: str) -> dict[str, Json] | None:
     """Parse a JSON object a person typed into a node, or None for empty text.
 
-    JSON that does not parse is refused with parse_json's own message, and any value but an object with the message
-    given.
+    JSON that does not parse is refused with parse_json's own message. A value that is not an object is refused with
+    the given message.
     """
     if not text.strip():
         return None

@@ -8,7 +8,7 @@ TASK_UNKNOWN = "Choose an unfinished task from the list. Press R in ComfyUI to r
 
 MESH_NOT_GLB = (
     "ModelArk returned a file that is not a GLB model, so ComfyUI cannot open it. The task finished and may be "
-    "billed; check Usage in the ModelArk console before running again."
+    "billed; check the Usage page in the ModelArk console before running again."
 )
 
 TASK_CANCELLED = (
@@ -25,13 +25,13 @@ TASK_FILES_EXPIRED = (
     "be downloaded."
 )
 
-TASK_GONE = "ModelArk keeps tasks for 7 days, and this one is older. Run the node again to start a new task."
+TASK_GONE = "ModelArk keeps tasks for 7 days, and this one is older. Run {node} again to start a new task."
 
 TASK_KIND = "That task is a {task} task. Collect it with {node}."
 
 TASK_UNRECORDED = (
     "ModelArk accepted the task, but its reply could not be read, so the task was not recorded. It may be running "
-    "and billed; check Usage in the ModelArk console before running again."
+    "and billed; check the Usage page in the ModelArk console before running again."
 )
 
 TASK_WAIT_LIMIT = (

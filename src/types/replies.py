@@ -1,4 +1,4 @@
-"""The parts of BytePlus's replies the extension reads; unknown fields are ignored."""
+"""The parts of ModelArk's replies the extension reads; unknown fields are ignored."""
 
 from . import Reply
 from pydantic import Field
@@ -102,7 +102,6 @@ class TaskReply(Reply):
     """A video or 3D task's status check.
 
     Attributes:
-        id: The task's ID.
         status: Where the task is: queued, running, or one of the statuses of a task that has ended.
         content: What a succeeded task made.
         error: Why a failed task failed.
@@ -111,7 +110,6 @@ class TaskReply(Reply):
 
     """
 
-    id: str
     status: Literal["queued", "running", "succeeded", "failed", "cancelled", "expired"]
     content: TaskContentReply | None = None
     error: ErrorBody | None = None
@@ -233,7 +231,7 @@ class ListedModel(Reply):
 
     Attributes:
         id: The model ID.
-        domain: Its kind, such as LLM, VLM, or ImageGeneration.
+        domain: Its category, such as LLM, VLM, or ImageGeneration.
         status: Shutdown or Retiring; None for a current model.
         modalities: What it reads and makes.
         features: Its structured output modes.

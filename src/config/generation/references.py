@@ -15,10 +15,10 @@ MAX_ADDRESS_CHARACTERS = 2048
 # Image, video, and last-frame addresses last 24 hours.
 OUTPUT_LIFETIME_SECONDS = 86_400
 
-# A Seedance 2.5 draft task can be finished for 7 days.
+# A draft task can be finished for 7 days.
 DRAFT_LIFETIME_SECONDS = 604_800
 
-# ModelArk may read the file only when a queued task starts, so a reference must last this much beyond the request.
+# ModelArk can read the file as late as when a queued task starts, so a reference must last this long after the request.
 EXPIRY_MARGIN_SECONDS = 600
 
 __all__ = [

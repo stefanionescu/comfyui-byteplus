@@ -14,8 +14,7 @@ IMAGE_SHAPE = {
     "MAX_ASPECT": 100,
 }
 
-# ModelArk's largest video item, counted in the file's bytes; BytePlus writes MB, and 1,000,000 bytes is the smaller
-# reading, so a video sent is never above the limit.
+# ModelArk's largest video item, 50 MB, counted in the file's bytes.
 MAX_VIDEO_BYTES = 50_000_000
 
 __all__ = [

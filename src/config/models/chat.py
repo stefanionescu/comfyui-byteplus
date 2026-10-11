@@ -6,7 +6,8 @@ VISION_INPUTS = ("text", "image", "video", "pdf")
 # The model list's audio understanding table: the visual inputs and audio.
 OMNI_INPUTS = ("text", "image", "video", "audio", "pdf")
 
-# Since 2026-09-09 a text model accepts other media without reading it, and ModelArk bills the answer.
+# A text model reads only text. GLM 5.2 and the DeepSeek V4 official releases accept other media without reading it,
+# and ModelArk still bills the answer.
 TEXT_INPUTS = ("text",)
 
 # The pages every chat row is read from.
@@ -70,8 +71,8 @@ CHAT_ROWS = {
     "seed-2-0-code-preview-260328": {
         "kinds": ("chat",),
         "inputs": VISION_INPUTS,
-        # The chat page lists temperature for this model, but the Responses page fixes it at 1, which ModelArk would
-        # ignore without an error.
+        # The chat page lists temperature for this model, but the Responses page fixes it at 1. ModelArk would ignore
+        # any other value without an error.
         "chat": {**SEED_CHAT, "has_temperature": False, "response_formats": ()},
         "sources": (*CHAT_PAGES, "document-understanding", "create-model-responses-api"),
     },

@@ -90,8 +90,8 @@ async def _send_free_request(
 ) -> AsyncGenerator[aiohttp.ClientResponse]:
     """Send one request that bills nothing, once, and hand over its reply.
 
-    A failure to connect or to read reads as BytePlus being out of reach, never as an uncertain charge, so the caller
-    may send it again.
+    A failure to connect or to read is reported as BytePlus being out of reach, not as a possible charge, because the
+    request bills nothing.
     """
     try:
         async with (
@@ -106,8 +106,8 @@ async def _send_free_request(
 def _parse_reply(content: bytes, code: ErrorCode) -> Json:
     """Read a JSON reply whose size the download limit already bounds.
 
-    The reply came with a success status, so the code says what an unreadable one means: a paid request ran and may be
-    billed, or a request that bills nothing failed.
+    The reply came with a success status. The code says what an unreadable reply means: UNCERTAIN when a paid request
+    ran and may be billed, or TRANSPORT when a request that bills nothing failed.
     """
     try:
         text = content.decode("utf-8")
@@ -129,7 +129,7 @@ async def send_json(url: str, body: Mapping[str, Json], configuration: Configura
 
 
 async def send_lookup(url: str, configuration: Configuration) -> Json:
-    """Send one GET with the key that bills nothing, such as a task check, and return its parsed JSON reply."""
+    """Send one GET that bills nothing, such as a task status check, and return its parsed JSON reply."""
     settings = configuration.settings
     async with _send_free_request("GET", url, settings, configuration.credential) as response:
         await _validate_reply(response)
@@ -151,9 +151,9 @@ async def send_task_cancel(task_id: str, configuration: Configuration) -> None:
 async def download_output(url: str, settings: Settings) -> bytes:
     """Download one output file from BytePlus's storage, once, without the key.
 
-    The address carries its own signature, so it is sent byte for byte; a storage host's error body is not ModelArk's,
-    so a failure names only its status. An address that is not https was never an output file, and the request that
-    returned it ran.
+    The address carries its own signature, so it is sent byte for byte. A storage host's error body is not in
+    ModelArk's format, so a failure names only its status. An address that is not https is not an output file, but
+    the paid request behind it ran, so its charge is uncertain.
     """
     if not url.startswith("https://"):
         raise BytePlusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)

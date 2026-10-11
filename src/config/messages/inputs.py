@@ -55,7 +55,7 @@ MESH_IMAGE_REQUIRED = "{model} needs at least one image. Connect an image refere
 MESH_INPUT_EMPTY = "Write a prompt, or connect images or image references to make the 3D model from."
 
 MESH_PROMPT_LENGTH = (
-    "{model} reads at most {maximum} characters of prompt, beside the file format command the node adds. Shorten the "
+    "{model} reads at most {maximum} characters of prompt, plus the file format command the node adds. Shorten the "
     "prompt."
 )
 

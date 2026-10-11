@@ -66,7 +66,7 @@ def _place_layer(
 
 def _build_outputs(result: LayerResult) -> io.NodeOutput:
     """Decode the base image, and place each layer and its mask on a canvas the base image's size."""
-    base, _mask = decode_image(result.base.content)
+    base, _mask = decode_image(result.base)
     canvas = (base.shape[2], base.shape[1])
     placed = [_place_layer(*decode_image(layer.content), layer.box, canvas) for layer in result.layers]
     return io.NodeOutput(
@@ -100,7 +100,7 @@ class ImageSplitLayers(PaidNode):
                     options=list(LAYER_SIZES),
                     default=LAYER_SIZE_DEFAULT,
                     tooltip=(
-                        "The size of the base image and layers. Auto keeps each part near its own size, from 1K to 2K."
+                        "The size of the base image and layers. Auto keeps the input image's size, within 1K to 2K."
                     ),
                 ),
                 OPTIMIZE_PROMPT_OPTIONS_INPUT,

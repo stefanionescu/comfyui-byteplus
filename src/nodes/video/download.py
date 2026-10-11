@@ -27,7 +27,7 @@ class VideoDownload(TaskDownload):
             inputs=[
                 io.Combo.Input(
                     "task",
-                    options=list_task_labels(get_runtime().tasks, "videos"),
+                    options=list_task_labels(get_runtime().tasks, cls.kind),
                     tooltip="A video task recorded on this server. Press R to list tasks recorded later.",
                 )
             ],

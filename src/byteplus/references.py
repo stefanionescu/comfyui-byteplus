@@ -1,4 +1,4 @@
-"""Parse, check, and build the files ModelArk reads by address, so every node applies the same reference rules."""
+"""Parse, check, and build references to files ModelArk reads by address, so every node applies the same rules."""
 
 import re
 from urllib.parse import urlsplit
@@ -44,9 +44,9 @@ def _is_link(text: str) -> bool:
 
 
 def parse_reference_url(url: str, kind: ReferenceKind) -> Reference:
-    """Parse what a person typed into Reference: Add: an asset ID, an asset:// URI, or a public https address.
+    """Parse the address typed into Reference: Add, which is an asset ID, an asset:// URI, or a public https address.
 
-    The asset ID is kept exactly as typed, since BytePlus treats IDs as opaque. Any other text, such as an http://
+    The asset ID is kept exactly as typed, since ModelArk treats IDs as opaque. Any other text, such as an http://
     or data: address, is refused.
     """
     text = url.strip()
@@ -68,10 +68,10 @@ def validate_references(
     *,
     can_read_assets: bool,
 ) -> None:
-    """Refuse a reference the node's model cannot read, or one that expires before ModelArk may read it.
+    """Refuse a reference the node does not take, an asset the model cannot read, or an output about to expire.
 
-    Every model reads outputs and links, so assets are the only origin a model refuses. ModelArk may read a reference
-    only when a queued task starts, so an output must last a margin beyond now.
+    Every model reads outputs and links, so assets are the only origin a model refuses. ModelArk can read a reference
+    as late as when a queued task starts, so an output must last at least the expiry margin from now.
     """
     deadline = datetime.now(UTC) + timedelta(seconds=EXPIRY_MARGIN_SECONDS)
     for position, reference in enumerate(references, start=1):

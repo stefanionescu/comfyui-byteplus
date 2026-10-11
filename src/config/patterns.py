@@ -26,10 +26,10 @@ MESH_FORMAT_COMMAND_PATTERN = r"(?:^|\s)--(?:fileformat|ff)\s+(\S+)"
 # A settings revision, a SHA-256 digest.
 REVISION_PATTERN = r"^[a-f0-9]{64}$"
 
-# A failed reply's reason is cleaned before a person sees it. Console addresses stay, without the scheme; other
-# addresses, ModelArk's request ID, and key-shaped text go: a UUID, an ark- key, or a run of 32 or more letters,
-# digits, and base64 signs that holds both a letter and a digit. FREE_TRIAL tells ModelArk's two QuotaExceeded
-# replies apart.
+# A failed reply's reason is cleaned before a person sees it. Console addresses stay, without the scheme. Other
+# addresses, ModelArk's request ID, and key-shaped text are removed. Key-shaped text is a UUID, an ark- key, or a run
+# of 32 or more letters, digits, and base64 signs that holds both a letter and a digit. FREE_TRIAL tells ModelArk's
+# two QuotaExceeded replies apart.
 REASON_PATTERNS = {
     "CONSOLE_URL": r"https://(console\.byteplus\.com/\S*?)(?=[.,;:]?(?:\s|$))",
     "URL": r"https?://\S+",

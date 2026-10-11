@@ -56,12 +56,12 @@ class VideoLimits(Value):
     """The video controls one Seedance model takes.
 
     Attributes:
-        modes: What a task may start from: text (a prompt alone), first_frame, first_last_frame, or references.
+        modes: What a task can start from: text (a prompt alone), first_frame, first_last_frame, or references.
         resolutions: The resolution values the model takes.
         durations: The shortest and the longest duration, in seconds.
         can_choose_duration: Whether duration takes -1, which lets the model choose the length.
         adaptive_modes: The modes in which ratio must be adaptive.
-        fixed_ratio_modes: The modes in which ratio may not be adaptive.
+        fixed_ratio_modes: The modes in which ratio cannot be adaptive.
         has_audio: Whether the model takes generate_audio.
         has_seed: Whether the model takes seed (-1 to 2,147,483,647).
         has_fixed_camera: Whether the model takes camera_fixed.
@@ -119,7 +119,7 @@ class ModelRow(Value):
         model_id: The model ID the row describes.
         kinds: The paid node kinds that take the model; layers marks a model that takes layer_decomposition.
         inputs: What the model reads: text, image, video, audio, or pdf.
-        sources: The BytePlus pages the row was read from, as page codes such as model-list; the table index holds
+        sources: The BytePlus pages the row was read from, as page codes such as model-list; SOURCE_DATES holds
             their update dates.
         has_flex: Whether the model takes service_tier flex.
         status: current; deprecated when BytePlus set a deactivation date and a newer version of the family replaces

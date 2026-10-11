@@ -1,6 +1,6 @@
 """Messages for ModelArk failures.
 
-{reason} is BytePlus's cleaned reason, ending as a sentence, and console placeholders are filled from CONSOLE_URLS.
+{reason} is ModelArk's cleaned reason, ending as a sentence. Console placeholders are filled from CONSOLE_URLS.
 """
 
 ACCESS_DENIED = (
@@ -63,8 +63,8 @@ MODEL_NOT_FOUND = (
 NO_REASON = "no reason given."
 
 OUTPUT_DOWNLOAD_FAILED = (
-    "The output file could not be downloaded from BytePlus storage: HTTP {status}. Output addresses work for 24 "
-    "hours; a video or 3D task stays recorded, so its Download node can collect it again."
+    "The output file could not be downloaded from BytePlus storage: HTTP {status}. Output addresses last 24 hours. "
+    "A video or 3D task stays recorded, so its Download node can collect it again."
 )
 
 OUTPUT_REFUSED = (
@@ -83,8 +83,8 @@ REAL_PERSON = (
 REPLY_EMPTY = "ModelArk's reply held no result. Run again or choose another model."
 
 REPLY_UNREADABLE = (
-    "ModelArk's reply could not be read. The request may still have run; check Usage in the ModelArk console before "
-    "running again."
+    "ModelArk's reply could not be read. The request may still have run; check the Usage page in the ModelArk "
+    "console before running again."
 )
 
 REQUEST_FAILED = "ModelArk returned HTTP {status}. Try again later."
@@ -102,11 +102,11 @@ REQUEST_UNCERTAIN = (
 )
 
 SERVER_BUSY = (
-    "ModelArk is overloaded or slowing a sudden rise in requests. Wait a few minutes, then run again with fewer "
-    "requests at once."
+    "ModelArk is overloaded, or your requests rose too fast. Wait a few minutes, then run again with fewer requests "
+    "at once."
 )
 
-SERVER_FAILED = "BytePlus failed with an internal error: {reason} Try again later."
+SERVER_FAILED = "ModelArk failed with an internal error: {reason} Try again later."
 
 TASK_FAILED = "ModelArk could not finish the task: {reason}"
 
@@ -116,7 +116,7 @@ TASK_QUEUE_FULL = (
 
 TASK_TYPE_REFUSED = (
     "Seedance read the inputs as a different kind of video task than the request allows: {reason} Change the "
-    "references, the prompt, or the task type, then run again."
+    "references, the prompt, or the omni reference task type, then run again."
 )
 
 __all__ = [

@@ -8,8 +8,8 @@ from .generation.inputs import MODEL_DEFAULT
 # Every ModelArk request goes to Asia Pacific (Johor), the one region that serves every model the pack takes.
 BASE_URL = "https://ark.ap-southeast.bytepluses.com/api/v3"
 
-# The endpoints; layer splitting shares images, and videos and 3D share tasks, each task at its ID after the tasks
-# address. The model listing bills nothing.
+# The endpoints. Layer splitting uses the images endpoint. Video and 3D tasks share the tasks endpoint, which serves
+# each task at its ID. Reading the model listing bills nothing.
 ENDPOINT_URLS = {
     "chat": BASE_URL + "/chat/completions",
     "images": BASE_URL + "/images/generations",

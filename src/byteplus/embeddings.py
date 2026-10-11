@@ -14,10 +14,10 @@ from .options import build_request_body
 from ..types.replies import EmbeddingReply
 from ..types.search import EmbeddingResult
 from ..config.byteplus import ENDPOINT_URLS
+from .operation import validate_upload_size
 from ..config.units import BYTES_PER_MEGABYTE
 from ..config.messages.run import REPLY_UNREADABLE
 from ..types.errors import ErrorCode, BytePlusError
-from .operation import validate_upload_size, measure_encoded_bytes
 from ..config.generation.search import IMAGE_SHAPE, MAX_TEXT_BYTES, MAX_VIDEO_BYTES
 from ..config.messages.inputs import (
     SEARCH_TEXT_SIZE,
@@ -50,7 +50,9 @@ def _validate_items(request: EmbeddingRequest) -> None:
             message = SEARCH_IMAGE_SHAPE.format(number=number, width=image.width, height=image.height)
             raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     for number, url in enumerate(request.video_urls, 1):
-        size = measure_encoded_bytes(url)
+        # The file's size, measured from the data URL's base64 text without decoding it.
+        encoded = url.partition(",")[2]
+        size = len(encoded) * 3 // 4 - (len(encoded) - len(encoded.rstrip("=")))
         if size > MAX_VIDEO_BYTES:
             shown = math.ceil(size * 10 / BYTES_PER_MEGABYTE) / 10
             raise BytePlusError(ErrorCode.INVALID_INPUT, SEARCH_VIDEO_SIZE.format(number=number, size=shown))
@@ -104,7 +106,7 @@ def _parse_vector(document: Json, vectors: Sequence[tuple[float, ...]]) -> tuple
 
 
 def _build_similarities(vectors: Sequence[tuple[float, ...]]) -> tuple[float, ...]:
-    """Compare each vector with the first by cosine similarity, as ModelArk's guide does; a zero-length vector is 0.
+    """Compare each vector with the first by cosine similarity, as ModelArk's guide does; an all-zero vector scores 0.
 
     math.fsum adds the products without rounding error building up over thousands of values.
     """
@@ -119,7 +121,7 @@ def _build_similarities(vectors: Sequence[tuple[float, ...]]) -> tuple[float, ..
 
 
 class EmbeddingOperation:
-    """One Search: Embed run: one embedding request per item, sent one after another, each once."""
+    """One Search: Embed run, which sends one embedding request per item, one after another, each once."""
 
     def __init__(self, request: EmbeddingRequest) -> None:
         """Keep the request to validate and send."""

@@ -48,7 +48,7 @@ class ModelInfo(io.ComfyNode):
             node_id=f"{NODE_PREFIX}{cls.__name__}",
             display_name="Model: Info",
             category=MENUS["SHARED"],
-            description="Show what any BytePlus model reads, makes, and takes, as JSON. Free, and needs no key.",
+            description="Show what a ModelArk model reads, makes, and takes, as JSON. Free, and needs no key.",
             inputs=[io.String.Input(INPUT_NAMES["MODEL"], default=DEFAULT_MODELS["chat"], tooltip=MODEL_TOOLTIP)],
             outputs=[io.String.Output("info", display_name="info")],
         )
@@ -56,7 +56,7 @@ class ModelInfo(io.ComfyNode):
     @classmethod
     @override
     def execute(cls, *, model: str) -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
-        """Find the row with the paid nodes' own lookup, so this node refuses the IDs they refuse."""
+        """Find the row with the paid nodes' table lookup; unlike Chat: Ask, it skips ModelArk's model listing."""
         return io.NodeOutput(_format_report(find_model(model, None)))
 
 

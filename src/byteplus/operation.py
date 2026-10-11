@@ -1,4 +1,4 @@
-"""Define the paid request every node hands to the run wrapper, and measure and limit the media it sends."""
+"""Define the paid request every node hands to the run wrapper, and the upload limit every request shares."""
 
 from __future__ import annotations
 
@@ -35,15 +35,4 @@ def validate_upload_size(media: Iterable[str], settings: Settings) -> None:
         )
 
 
-def measure_encoded_bytes(encoded: str) -> int:
-    """Measure the file a data URL or a base64 text holds, without decoding it.
-
-    ModelArk's per-file limits count the file, not its base64 text, which is a third longer.
-    """
-    _, comma, tail = encoded.partition(",")
-    text = tail if comma else encoded
-    padding = len(text) - len(text.rstrip("="))
-    return len(text) * 3 // 4 - padding
-
-
-__all__ = ["Operation", "measure_encoded_bytes", "validate_upload_size"]
+__all__ = ["Operation", "validate_upload_size"]

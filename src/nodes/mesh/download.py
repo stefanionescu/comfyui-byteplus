@@ -27,7 +27,7 @@ class MeshDownload(TaskDownload):
             inputs=[
                 io.Combo.Input(
                     "task",
-                    options=list_task_labels(get_runtime().tasks, "meshes"),
+                    options=list_task_labels(get_runtime().tasks, cls.kind),
                     tooltip="A 3D task recorded on this server. Press R to list tasks recorded later.",
                 )
             ],

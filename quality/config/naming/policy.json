@@ -132,7 +132,7 @@
         {
             "path_regexes": ["^src/(config|types|nodes)/"],
             "languages": ["python"],
-            "categories": ["variables", "constants", "attributes", "parameters"],
+            "categories": ["variables", "constants", "parameters"],
             "names": ["resolution", "RESOLUTION_CHOICES", "RESOLUTION_DEFAULT", "DRAFT_RESOLUTION"],
             "allowed_banned_terms": ["resolution"],
             "reason": "BytePlus names this Seedance request field."
@@ -140,10 +140,10 @@
         {
             "path_regexes": ["^src/(nodes|types)/options\\.py$"],
             "languages": ["python"],
-            "categories": ["variables", "parameters", "attributes"],
+            "categories": ["variables", "parameters"],
             "names": ["service_tier"],
             "allowed_banned_terms": ["service"],
-            "reason": "BytePlus names this request field service_tier; Request Options' input and its record keep the name."
+            "reason": "BytePlus names this request field service_tier, and Request Options keeps that name for its input and its record."
         },
         {
             "path_regexes": ["^src/config/byteplus\\.py$"],
