@@ -5,8 +5,6 @@ bytes, rounded up to one decimal. {mode} is what a video starts from, in the wor
 image, video, or audio, and {seconds} has one decimal.
 """
 
-ANSWER_SCHEMA_INVALID = "The answer schema must be a JSON object that describes the answer."
-
 AUDIO_LENGTH = "{model} takes reference audio clips of {minimum} to {maximum} seconds; one is {seconds} seconds."
 
 AUDIO_NEEDS_MEDIA = "{model} needs a reference image or video beside reference audio."
@@ -57,8 +55,8 @@ DRAFT_FINISH_SIZE = "{model} finishes drafts at {resolutions}. Set resolution to
 DRAFT_FINISH_UNSUPPORTED = "{model} cannot finish drafts. Choose the model that made the draft."
 
 DRAFT_REUSED = (
-    "Finishing a draft keeps its aspect ratio, sound, task, and camera. Set aspect ratio and generate audio to model "
-    "default, task to auto, and camera fixed off."
+    "Finishing a draft keeps its ratio, sound, task type, and camera. Set ratio and generate audio to model default, "
+    "omni reference task type to auto, and camera fixed off."
 )
 
 DRAFT_SINGLE = "Connect one draft to finish; the references hold {count}."
@@ -68,8 +66,8 @@ DRAFT_TWICE = "Turn off draft to finish a draft."
 EFFORT_UNSUPPORTED = "{model} does not take a reasoning effort. Set reasoning effort to model default."
 
 EFFORT_WITHOUT_THINKING = (
-    "With thinking off, ModelArk takes only the minimal reasoning effort. Set reasoning effort to minimal or model "
-    "default, or turn thinking on."
+    "With thinking disabled, ModelArk takes only the minimal reasoning effort. Set reasoning effort to minimal or "
+    "model default, or set thinking to enabled."
 )
 
 FRAMES_BESIDE_REFERENCES = (
@@ -78,13 +76,13 @@ FRAMES_BESIDE_REFERENCES = (
 )
 
 IMAGE_COUNT_SINGLE = (
-    "{model} makes one image per run. Set count to 1, or choose a model that makes image series; Model: Info shows "
-    "which do."
+    "{model} makes one image per run. Set max images to 1, or choose a model that makes image series; Model: Info "
+    "shows which do."
 )
 
 IMAGE_COUNT_TOTAL = (
-    "Reference images and count together can be at most 15, and they are {total}. Lower count or connect fewer "
-    "references."
+    "Reference images and max images together can be at most 15, and they are {total}. Lower max images or connect "
+    "fewer references."
 )
 
 IMAGE_REFERENCE_LIMIT = "{model} takes at most {maximum} reference images, and {count} are connected."
@@ -96,11 +94,22 @@ IMAGE_REFERENCE_SHAPE = (
 
 IMAGE_SINGLE = "Connect one image to {input}, not a batch or a list."
 
+IMAGE_SIZE = (
+    "{model} takes size {tiers}, or WIDTHxHEIGHT such as 2048x2048: {minimum} to {maximum} pixels in all, with the "
+    "long side at most 16 times the short side. Leave it empty for the model's default."
+)
+
+JSON_SCHEMA_INVALID = "Write the JSON schema as a JSON object with a name and a schema."
+
 LAST_FRAME_ALONE = "Connect a first frame with the last frame."
 
 LAYER_IMAGE_SIZE = (
     "The image to split is {width} by {height} pixels. It needs at least 262,144 pixels in all, such as 512 by 512, "
     "and its long side at most 16 times the short side. Resize it with Scale Image to Total Pixels."
+)
+
+MESH_FORMAT_COMMAND = (
+    "The prompt asks for file format {value}, and the node returns GLB. Remove the format command, or write {command}."
 )
 
 MESH_IMAGES_ADDRESS_ONLY = (
@@ -126,36 +135,29 @@ MESH_IMAGE_SIZE = (
 
 MESH_INPUT_EMPTY = "Write a prompt, or connect images or image references to make the 3D model from."
 
-MESH_PROMPT_COMMAND = "The prompt holds a ModelArk 3D command (--{name}). Remove it; the node's inputs set these."
 
-MESH_PROMPT_LENGTH = "{model} reads at most {maximum} characters of prompt with these settings. Shorten the prompt."
-
-MESH_PROMPT_UNSUPPORTED = "{model} makes 3D models from images only. Clear the prompt."
-
-MESH_VIEWS = (
-    "Write views as the side each image shows, separated by commas, in the order front, back, left, right, such as: "
-    "front, left."
+MESH_PROMPT_LENGTH = (
+    "{model} reads at most {maximum} characters of prompt, beside the file format command the node adds. Shorten the "
+    "prompt."
 )
 
-MESH_VIEWS_COUNT = (
-    "Views lists {views} sides, and {count} images are connected. Name one side for each image, or leave views empty."
-)
 
 OPTIONS_JSON = "Write {field} as a JSON object, or leave it empty."
 
 OPTION_FLEX = (
-    "{model} does not take the flex tier. Set tier to model default in Request Options, or choose a model that "
-    'takes flex; Model: Info shows "flex": true for them.'
+    "{model} does not take the flex tier. Set service tier to model default in Request Options, or choose a model "
+    'that takes flex; Model: Info shows "flex": true for them.'
 )
 
 OPTION_RESERVED_FIELD = "The node sets {field} itself. Remove it from the extra fields in Request Options."
 
 OPTION_TIER_KIND = (
-    "{node} requests take no service tier. Set tier to model default in the Request Options connected to it."
+    "{node} requests take no service tier. Set service tier to model default in the Request Options connected to it."
 )
 
 OUTPUT_TOKENS_RANGE = (
-    "{model} writes at most {maximum} tokens, reasoning included. Set max tokens to {maximum} or less, or to 0."
+    "{model} writes at most {maximum} tokens, reasoning included. Set max completion tokens to {maximum} or less, or "
+    "to 0."
 )
 
 PROMPT_COMMAND = (
@@ -165,22 +167,22 @@ PROMPT_COMMAND = (
 PROMPT_EMPTY = "Write a prompt."
 
 RATIO_ADAPTIVE_ONLY = (
-    "{model} keeps the shape of its input for a video from {mode}. Set aspect ratio to adaptive or model default."
+    "{model} keeps the shape of its input for a video from {mode}. Set ratio to adaptive or model default."
 )
 
-RATIO_FIXED_ONLY = "{model} cannot choose the shape of a video from {mode}. Choose an aspect ratio such as 16:9."
+RATIO_FIXED_ONLY = "{model} cannot choose the shape of a video from {mode}. Set ratio to a shape such as 16:9."
 
 REFERENCE_IMAGE_ASSET = "The {input} input takes an image made by ModelArk or a public address, not an asset."
 
 REFERENCE_IMAGE_SINGLE = "Connect references that hold exactly one image to {input}; they hold {count}."
 
 SCHEMA_JSON_ONLY = (
-    "{model} can answer in JSON but cannot follow a schema. Clear the answer schema and ask for JSON in the prompt, "
+    "{model} can answer in JSON but cannot follow a schema. Clear the JSON schema and ask for JSON in the prompt, "
     "or choose a model such as seed-2-0-lite-260428."
 )
 
 SCHEMA_UNSUPPORTED = (
-    "{model} cannot follow an answer schema. Clear the answer schema, or choose a model that can, such as "
+    "{model} cannot follow a JSON schema. Clear the JSON schema, or choose a model that can, such as "
     "seed-2-0-lite-260428."
 )
 
@@ -197,7 +199,6 @@ SEARCH_ITEM_STOPPED = (
     "Search: Embed stopped at item {number} of {count}; the items before it were sent and the rest were not. {message}"
 )
 
-SEARCH_TASK_EMPTY = "Write the task for the instructions, or set instructions to model default."
 
 SEARCH_TEXT_SIZE = (
     "Line {number} is longer than the 100,000 bytes ModelArk embeds as one text. Shorten it, or split it over "
@@ -211,20 +212,21 @@ SEARCH_VIDEO_SIZE = (
 SINGLE_VALUE = "Connect one value to {name}, not a list."
 
 TASK_NEEDS_REFERENCES = (
-    "Task {task} needs reference media. Connect references or reference images, or set task to auto."
+    "Omni reference task type {task} needs reference media. Connect references or reference image, or set omni "
+    "reference task type to auto."
 )
 
-TASK_NEEDS_VIDEO = "Task {task} needs a reference video. Add one to references, or set task to reference or auto."
+TASK_NEEDS_VIDEO = (
+    "Omni reference task type {task} needs a reference video. Add one to references, or set omni reference task type "
+    "to reference or auto."
+)
 
 TEMPERATURE_FIXED = (
     "{model} always uses its own temperature. Set temperature to model default, or choose another model."
 )
 
-THINKING_FIXED = "{model} always thinks before answering. Set thinking to model default or on."
 
-THINKING_UNSUPPORTED = "{model} does not let you turn thinking on or off. Set thinking to model default."
-
-TRANSPARENT_FORMAT = "A transparent background needs the PNG file format. Set file format to png or model default."
+TRANSPARENT_FORMAT = "A transparent background needs a PNG. Set output format to png or model default."
 
 TRANSPARENT_SOURCE = (
     "A transparent background needs exactly one reference image with transparency. Add a mask to an image with Join "
@@ -253,7 +255,6 @@ VIDEO_MODE_UNSUPPORTED = "{model} cannot make a video from {mode}. Choose a mode
 VIDEO_REFERENCE_LIMIT = "{model} takes at most {maximum} {kind} references, and {count} are connected."
 
 __all__ = [
-    "ANSWER_SCHEMA_INVALID",
     "AUDIO_LENGTH",
     "AUDIO_NEEDS_MEDIA",
     "AUDIO_TOTAL",
@@ -281,19 +282,18 @@ __all__ = [
     "IMAGE_REFERENCE_LIMIT",
     "IMAGE_REFERENCE_SHAPE",
     "IMAGE_SINGLE",
+    "IMAGE_SIZE",
+    "JSON_SCHEMA_INVALID",
     "LAST_FRAME_ALONE",
     "LAYER_IMAGE_SIZE",
+    "MESH_FORMAT_COMMAND",
     "MESH_IMAGES_ADDRESS_ONLY",
     "MESH_IMAGE_COUNT",
     "MESH_IMAGE_PIXELS",
     "MESH_IMAGE_REQUIRED",
     "MESH_IMAGE_SIZE",
     "MESH_INPUT_EMPTY",
-    "MESH_PROMPT_COMMAND",
     "MESH_PROMPT_LENGTH",
-    "MESH_PROMPT_UNSUPPORTED",
-    "MESH_VIEWS",
-    "MESH_VIEWS_COUNT",
     "OPTIONS_JSON",
     "OPTION_FLEX",
     "OPTION_RESERVED_FIELD",
@@ -311,15 +311,12 @@ __all__ = [
     "SEARCH_IMAGE_SHAPE",
     "SEARCH_ITEMS_EMPTY",
     "SEARCH_ITEM_STOPPED",
-    "SEARCH_TASK_EMPTY",
     "SEARCH_TEXT_SIZE",
     "SEARCH_VIDEO_SIZE",
     "SINGLE_VALUE",
     "TASK_NEEDS_REFERENCES",
     "TASK_NEEDS_VIDEO",
     "TEMPERATURE_FIXED",
-    "THINKING_FIXED",
-    "THINKING_UNSUPPORTED",
     "TRANSPARENT_FORMAT",
     "TRANSPARENT_SOURCE",
     "VIDEO_EMPTY",

@@ -398,11 +398,11 @@
                 }
               },
               {
-                "name": "aspect_ratio",
+                "name": "ratio",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "aspect_ratio"
+                  "name": "ratio"
                 }
               },
               {
@@ -414,11 +414,11 @@
                 }
               },
               {
-                "name": "task",
+                "name": "omni_reference_task_type",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "task"
+                  "name": "omni_reference_task_type"
                 }
               },
               {
@@ -466,7 +466,7 @@
                 "shape": 7
               },
               {
-                "name": "reference_images",
+                "name": "reference_image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7
@@ -737,11 +737,11 @@
                 }
               },
               {
-                "name": "aspect_ratio",
+                "name": "ratio",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "aspect_ratio"
+                  "name": "ratio"
                 }
               },
               {
@@ -753,11 +753,11 @@
                 }
               },
               {
-                "name": "task",
+                "name": "omni_reference_task_type",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "task"
+                  "name": "omni_reference_task_type"
                 }
               },
               {
@@ -805,7 +805,7 @@
                 "shape": 7
               },
               {
-                "name": "reference_images",
+                "name": "reference_image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7

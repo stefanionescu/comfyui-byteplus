@@ -3,7 +3,6 @@
 from . import Kind, Value
 from typing import Literal
 from dataclasses import dataclass
-from collections.abc import Mapping
 
 type ModelStatus = Literal["current", "deprecated", "retiring"]
 type MatchMethod = Literal["exact", "family", "listing"]
@@ -44,7 +43,6 @@ class ImageLimits(Value):
     """The image controls one Seedream model takes.
 
     Attributes:
-        size_table: Which table of pixel sizes gives the width and height of a tier and an aspect ratio.
         tiers: The size tiers the model takes.
         default_tier: The tier the model makes when the request sets no size.
         pixels: The fewest and the most pixels in all (width times height) of a WIDTHxHEIGHT size.
@@ -58,7 +56,6 @@ class ImageLimits(Value):
 
     """
 
-    size_table: Literal["dola", "seedream"]
     tiers: tuple[str, ...]
     default_tier: str
     pixels: tuple[int, int]
@@ -137,17 +134,10 @@ class MeshLimits(Value):
     """The 3D controls one 3D model takes.
 
     Attributes:
-        dialect: Which command set the model reads, which the 3D node maps its inputs to.
+        dialect: Which command set the model reads, which decides the file format command the 3D node adds.
         max_images: The most images in one task.
         has_inline_images: Whether images may be sent as base64 data URLs; otherwise only public addresses.
-        max_prompt_characters: The longest text item; 0 when the model takes no prompt, only commands.
-        textures: The texture choices the model takes.
-        topologies: The topology choices the model takes.
-        face_ranges: The faces allowed, by topology choice, with the model default choice for the model's default
-            topology.
-        precisions: The precision choices the model takes.
-        has_pose: Whether the model takes a T or A pose.
-        has_views: Whether the model takes image view labels.
+        max_prompt_characters: The longest text item, commands included; 0 when the model's page names no limit.
 
     """
 
@@ -155,12 +145,6 @@ class MeshLimits(Value):
     max_images: int
     has_inline_images: bool
     max_prompt_characters: int
-    textures: tuple[str, ...]
-    topologies: tuple[str, ...]
-    face_ranges: Mapping[str, tuple[int, int]]
-    precisions: tuple[str, ...]
-    has_pose: bool
-    has_views: bool
 
 
 class ModelRow(Value):

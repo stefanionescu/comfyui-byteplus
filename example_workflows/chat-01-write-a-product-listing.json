@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking off, and writes the listing as JSON: a title, five bullet points, and a short description. The answer schema makes it answer in exactly that shape. **Write** shows the listing and saves it.\n\nOpen **Write** to change the instructions or the schema."
+        "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking disabled, and writes the listing as JSON: a title, five bullet points, and a short description. The JSON schema makes it answer in exactly that shape. **Write** shows the listing and saves it.\n\nOpen **Write** to change the instructions or the schema."
       ],
       "title": "Note"
     },
@@ -427,7 +427,7 @@
             ],
             "size": [
               340,
-              344
+              320
             ],
             "flags": {},
             "order": 100,
@@ -443,26 +443,18 @@
               },
               {
                 "name": "size",
-                "type": "COMBO",
+                "type": "STRING",
                 "link": null,
                 "widget": {
                   "name": "size"
                 }
               },
               {
-                "name": "aspect_ratio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "aspect_ratio"
-                }
-              },
-              {
-                "name": "count",
+                "name": "max_images",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "count"
+                  "name": "max_images"
                 }
               },
               {
@@ -482,11 +474,11 @@
                 }
               },
               {
-                "name": "prompt_optimization",
+                "name": "optimize_prompt_options",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "prompt_optimization"
+                  "name": "optimize_prompt_options"
                 }
               },
               {
@@ -498,7 +490,7 @@
                 }
               },
               {
-                "name": "reference_images",
+                "name": "image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7
@@ -559,8 +551,7 @@
             },
             "widgets_values": [
               "dola-seedream-5-0-flash-260915",
-              "model default",
-              "1:1",
+              "2048x2048",
               1,
               "model default",
               "model default",
@@ -621,7 +612,7 @@
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 101,
-            "target_slot": 12,
+            "target_slot": 11,
             "type": "STRING"
           },
           {
@@ -772,11 +763,11 @@
                 }
               },
               {
-                "name": "max_tokens",
+                "name": "max_completion_tokens",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "max_tokens"
+                  "name": "max_completion_tokens"
                 }
               },
               {
@@ -802,11 +793,11 @@
                 "shape": 7
               },
               {
-                "name": "answer_schema",
+                "name": "json_schema",
                 "type": "STRING",
                 "link": null,
                 "widget": {
-                  "name": "answer_schema"
+                  "name": "json_schema"
                 }
               },
               {
@@ -850,12 +841,12 @@
             },
             "widgets_values": [
               "seed-2-0-lite-260428",
-              "off",
+              "disabled",
               "model default",
               0,
               "model default",
               0,
-              "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": {\n      \"type\": \"string\"\n    },\n    \"bullets\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"description\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"title\",\n    \"bullets\",\n    \"description\"\n  ],\n  \"additionalProperties\": false\n}",
+              "{\n  \"name\": \"listing\",\n  \"schema\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"title\": {\n        \"type\": \"string\"\n      },\n      \"bullets\": {\n        \"type\": \"array\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"description\": {\n        \"type\": \"string\"\n      }\n    },\n    \"required\": [\n      \"title\",\n      \"bullets\",\n      \"description\"\n    ],\n    \"additionalProperties\": false\n  },\n  \"strict\": true\n}",
               "Write a marketplace listing for this product from the photo and the spec sheet. Use only facts you can see in the photo or read in the spec sheet. Keep the title under 80 characters, write five bullet points, and keep the description under 60 words.",
               ""
             ],

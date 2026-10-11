@@ -28,7 +28,7 @@ SHEET = Subgraph(
             HostNode.FORMAT,
             {"f_string": "Character sheet: {a} Full body, front view, standing, plain light gray background."},
         ),
-        Node("draw", GENERATE, {"size": "1.5K", "aspect_ratio": "3:4"}, is_paid=True),
+        Node("draw", GENERATE, {"size": "1344x1792"}, is_paid=True),
         Node("save", HostNode.SAVE_IMAGE, {"filename_prefix": "image/byteplus/character"}),
     ),
     links=(("prompt.STRING", "draw.prompt"), ("draw.images", "save.images")),
@@ -45,7 +45,7 @@ WAVE = Subgraph(
         Node(
             "edit",
             GENERATE,
-            {"size": "1.5K", "aspect_ratio": "3:4", "prompt": "The character in Image 1, waving, same outfit"},
+            {"size": "1344x1792", "prompt": "The character in Image 1, waving, same outfit"},
             is_paid=True,
         ),
         Node("save", HostNode.SAVE_IMAGE, {"filename_prefix": "image/byteplus/character-waving"}),
@@ -89,7 +89,7 @@ SERIES = Subgraph(
         Node(
             "draw",
             GENERATE,
-            {"model": SEEDREAM_4, "size": "2K", "aspect_ratio": "16:9", "count": 4},
+            {"model": SEEDREAM_4, "size": "2848x1600", "max_images": 4},
             is_paid=True,
         ),
         Node("save", HostNode.SAVE_IMAGE, {"filename_prefix": "image/byteplus/poster-series"}),
@@ -142,7 +142,7 @@ DRAW = Subgraph(
         Node(
             "draw",
             GENERATE,
-            {"size": "1.5K", "aspect_ratio": "3:4", "output_format": "png"},
+            {"size": "1344x1792", "output_format": "png"},
             is_paid=True,
         ),
         Node("save", HostNode.SAVE_IMAGE, {"filename_prefix": "image/byteplus/poster"}),

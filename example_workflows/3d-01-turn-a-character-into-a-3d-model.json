@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Hyper3D Gen2 turns the image into a 3D model with PBR textures, in a pose ready for rigging. **Save 3D Model** saves it and shows it.\n\nBytePlus usually starts the task at once, so a cancelled run's model is still made and billed; collect it in **Recover**."
+        "Hyper3D Gen2 turns the image into a 3D model. Its prompt holds Hyper3D's commands for PBR textures and a pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it.\n\nBytePlus usually starts the task at once, so a cancelled run's model is still made and billed; collect it in **Recover**."
       ],
       "title": "Note"
     },
@@ -229,7 +229,7 @@
       ],
       "size": [
         340,
-        320
+        176
       ],
       "flags": {},
       "order": 6,
@@ -254,54 +254,6 @@
           "type": "BYTEPLUS_REFERENCES",
           "link": null,
           "shape": 7
-        },
-        {
-          "name": "texture",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "texture"
-          }
-        },
-        {
-          "name": "topology",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "topology"
-          }
-        },
-        {
-          "name": "faces",
-          "type": "INT",
-          "link": null,
-          "widget": {
-            "name": "faces"
-          }
-        },
-        {
-          "name": "precision",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "precision"
-          }
-        },
-        {
-          "name": "pose",
-          "type": "COMBO",
-          "link": null,
-          "widget": {
-            "name": "pose"
-          }
-        },
-        {
-          "name": "views",
-          "type": "STRING",
-          "link": null,
-          "widget": {
-            "name": "views"
-          }
         },
         {
           "name": "run_number",
@@ -340,14 +292,8 @@
       },
       "widgets_values": [
         "hyper3d-gen2-260112",
-        "PBR",
-        "model default",
         0,
-        "model default",
-        "T or A pose",
-        "",
-        0,
-        ""
+        "--material PBR --TAPose true"
       ],
       "color": "#432",
       "bgcolor": "#653"
@@ -691,7 +637,7 @@
             ],
             "size": [
               340,
-              344
+              320
             ],
             "flags": {},
             "order": 101,
@@ -707,26 +653,18 @@
               },
               {
                 "name": "size",
-                "type": "COMBO",
+                "type": "STRING",
                 "link": null,
                 "widget": {
                   "name": "size"
                 }
               },
               {
-                "name": "aspect_ratio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "aspect_ratio"
-                }
-              },
-              {
-                "name": "count",
+                "name": "max_images",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "count"
+                  "name": "max_images"
                 }
               },
               {
@@ -746,11 +684,11 @@
                 }
               },
               {
-                "name": "prompt_optimization",
+                "name": "optimize_prompt_options",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "prompt_optimization"
+                  "name": "optimize_prompt_options"
                 }
               },
               {
@@ -762,7 +700,7 @@
                 }
               },
               {
-                "name": "reference_images",
+                "name": "image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7
@@ -823,8 +761,7 @@
             },
             "widgets_values": [
               "dola-seedream-5-0-flash-260915",
-              "model default",
-              "model default",
+              "",
               1,
               "model default",
               "model default",
@@ -877,7 +814,7 @@
             "origin_id": 101,
             "origin_slot": 0,
             "target_id": 102,
-            "target_slot": 12,
+            "target_slot": 11,
             "type": "STRING"
           },
           {

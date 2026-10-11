@@ -32,10 +32,11 @@ from ..inputs import (
     build_request_inputs,
 )
 from ...config.generation.videos import (
+    RATIOS,
     DURATION,
     TASK_TYPES,
     RESOLUTIONS,
-    ASPECT_RATIOS,
+    AUDIO_VALUES,
     AUDIO_CHOICES,
     OUTPUT_FORMATS,
     POLL_INTERVAL_SECONDS,
@@ -54,9 +55,9 @@ _CONTROLS = (
     io.Int.Input(
         "duration",
         default=DURATION["DEFAULT"],
-        min=0,
+        min=DURATION["AUTO"],
         max=DURATION["MAX"],
-        tooltip="Length in seconds. 0 lets the model choose; Seedance 2.5 may then make up to 30 seconds.",
+        tooltip="Length in seconds. -1 lets the model choose; Seedance 2.5 may then make up to 30 seconds.",
     ),
     io.Combo.Input(
         "resolution",
@@ -66,9 +67,8 @@ _CONTROLS = (
         tooltip="Always sent. Higher resolutions cost more, and each model takes only some; Model: Info lists them.",
     ),
     io.Combo.Input(
-        "aspect_ratio",
-        display_name="aspect ratio",
-        options=list(ASPECT_RATIOS),
+        "ratio",
+        options=list(RATIOS),
         default=MODEL_DEFAULT,
         tooltip="The video's shape. Adaptive follows the first frame, the video being edited, or the prompt.",
     ),
@@ -77,10 +77,11 @@ _CONTROLS = (
         display_name="generate audio",
         options=list(AUDIO_CHOICES),
         default=MODEL_DEFAULT,
-        tooltip="Whether the video has sound. Models that make sound make it unless this is off.",
+        tooltip="Whether the video has sound. Models that make sound make it unless this is false.",
     ),
     io.Combo.Input(
-        "task",
+        "omni_reference_task_type",
+        display_name="omni reference task type",
         options=list(TASK_TYPES),
         default=TASK_TYPES[0],
         tooltip=(
@@ -105,7 +106,7 @@ _CONTROLS = (
     ),
     io.Combo.Input(
         "output_format",
-        display_name="file format",
+        display_name="output format",
         options=list(OUTPUT_FORMATS),
         default=MODEL_DEFAULT,
         advanced=True,
@@ -139,8 +140,8 @@ _MEDIA = (
         tooltip="The image the video ends on, with a first frame.",
     ),
     io.Image.Input(
-        "reference_images",
-        display_name="reference images",
+        "reference_image",
+        display_name="reference image",
         optional=True,
         tooltip="Images the video follows: one, a batch, or a list. They come first, as Image 1, Image 2.",
     ),
@@ -159,13 +160,13 @@ type _Frame = EncodedImage | Reference | None
 def _encode_media(
     first_frame: list[object] | None,
     last_frame: list[object] | None,
-    reference_images: list[torch.Tensor] | None,
+    reference_image: list[torch.Tensor] | None,
     reference_audio: list[Input.Audio] | None,
 ) -> tuple[_Frame, _Frame, tuple[EncodedImage, ...], tuple[EncodedAudio, ...]]:
     """Read each connected frame socket, and encode the reference images and clips, in one worker thread."""
     first = read_image_socket("first frame", first_frame) if first_frame else None
     last = read_image_socket("last frame", last_frame) if last_frame else None
-    return first, last, encode_sized_images(reference_images or ()), encode_audio_clips(reference_audio or ())
+    return first, last, encode_sized_images(reference_image or ()), encode_audio_clips(reference_audio or ())
 
 
 def build_video_outputs(result: TaskResult) -> io.NodeOutput:
@@ -193,7 +194,7 @@ def build_video_outputs(result: TaskResult) -> io.NodeOutput:
 class VideoGenerate(PaidNode):
     """Create one video task, record it, wait for it, and return the video, its last frame, and their references."""
 
-    list_inputs = frozenset({"first_frame", "last_frame", "reference_images", "reference_audio"})
+    list_inputs = frozenset({"first_frame", "last_frame", "reference_image", "reference_audio"})
 
     @classmethod
     def define_schema(cls) -> io.Schema:
@@ -238,16 +239,16 @@ class VideoGenerate(PaidNode):
         seed: int,
         duration: int,
         resolution: str,
-        aspect_ratio: str,
+        ratio: str,
         generate_audio: str,
-        task: str,
+        omni_reference_task_type: str,
         draft: bool,
         camera_fixed: bool,
         output_format: str,
         watermark: bool,
         first_frame: list[object] | None = None,
         last_frame: list[object] | None = None,
-        reference_images: list[torch.Tensor] | None = None,
+        reference_image: list[torch.Tensor] | None = None,
         reference_audio: list[Input.Audio] | None = None,
         references: tuple[Reference, ...] | None = None,
         options: Options | None = None,
@@ -257,7 +258,7 @@ class VideoGenerate(PaidNode):
         async def send_encoded() -> io.NodeOutput:
             """Encode the media inside the owned task, then send the request."""
             first, last, images, clips = await wait_for_thread(
-                lambda: _encode_media(first_frame, last_frame, reference_images, reference_audio)
+                lambda: _encode_media(first_frame, last_frame, reference_image, reference_audio)
             )
             # A dropdown left at model default sends nothing.
             request = VideoRequest(
@@ -265,9 +266,9 @@ class VideoGenerate(PaidNode):
                 prompt=prompt,
                 duration=duration,
                 resolution=resolution,
-                aspect_ratio=None if aspect_ratio == MODEL_DEFAULT else aspect_ratio,
-                has_sound={"on": True, "off": False}.get(generate_audio),
-                task_type=task,
+                ratio=None if ratio == MODEL_DEFAULT else ratio,
+                has_sound=AUDIO_VALUES.get(generate_audio),
+                task_type=omni_reference_task_type,
                 is_draft=draft,
                 is_camera_fixed=camera_fixed,
                 output_format=None if output_format == MODEL_DEFAULT else output_format,

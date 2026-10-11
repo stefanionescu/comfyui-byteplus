@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from ..options import build_request_body
-from ...config.generation.chat import AUDIO_FORMAT, DOCUMENT_TEXT, ANSWER_SCHEMA_NAME
+from ...config.generation.chat import AUDIO_FORMAT, DOCUMENT_TEXT
 
 if TYPE_CHECKING:
     from ...types import Json
@@ -53,20 +53,19 @@ def build_body(request: ChatRequest, row: ModelRow) -> dict[str, Json]:
     """Add each control that is set, then the options of Request Options; the model's row has checked every control.
 
     max_completion_tokens caps the reasoning and the answer together, so max_tokens, which leaves the reasoning
-    uncapped, is never sent. The reply is never streamed.
+    uncapped, is never sent. The JSON schema goes inside response_format as written. The reply is never streamed.
     """
     body: dict[str, Json] = {"model": request.model_id, "messages": _build_messages(request)}
     if request.thinking is not None:
         body["thinking"] = {"type": request.thinking}
     if request.effort is not None:
         body["reasoning_effort"] = request.effort
-    if request.max_tokens > 0:
-        body["max_completion_tokens"] = request.max_tokens
+    if request.max_completion_tokens > 0:
+        body["max_completion_tokens"] = request.max_completion_tokens
     if request.temperature is not None:
         body["temperature"] = request.temperature
-    if request.answer_schema is not None:
-        schema: dict[str, Json] = {"name": ANSWER_SCHEMA_NAME, "schema": dict(request.answer_schema), "strict": True}
-        body["response_format"] = {"type": "json_schema", "json_schema": schema}
+    if request.json_schema is not None:
+        body["response_format"] = {"type": "json_schema", "json_schema": dict(request.json_schema)}
     return build_request_body(body, request.options, "chat", row)
 
 

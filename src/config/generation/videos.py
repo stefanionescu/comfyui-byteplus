@@ -2,7 +2,7 @@
 
 from .inputs import MODEL_DEFAULT
 
-# The duration widget's default and largest value, and what 0 is sent as: -1, which lets the model choose.
+# The duration widget's default and largest value, and -1, which lets the model choose.
 DURATION = {
     "DEFAULT": 5,
     "MAX": 30,
@@ -17,21 +17,23 @@ RESOLUTIONS = {
 }
 
 # Every Seedance model takes every one of these ratios, so the model rows do not list them.
-ASPECT_RATIOS = (MODEL_DEFAULT, "adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9")
+RATIOS = (MODEL_DEFAULT, "adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9")
 
 # The ratio sent where a model keeps the shape of its input.
 ADAPTIVE_RATIO = "adaptive"
 
-# Whether the video has sound.
-AUDIO_CHOICES = (MODEL_DEFAULT, "on", "off")
+# The generate_audio choices; the boolean each sends.
+AUDIO_CHOICES = (MODEL_DEFAULT, "true", "false")
+AUDIO_VALUES = {"true": True, "false": False}
 
-# What Seedance 2.5 does with reference media; auto sends nothing and lets the model decide.
+# The omni_reference_task_type values: what Seedance 2.5 does with reference media. auto, ModelArk's default, sends
+# nothing and lets the model decide.
 TASK_TYPES = ("auto", "reference", "edit", "extend")
 
 # The task types that keep the shape of the reference video, so they take only the adaptive ratio.
 ADAPTIVE_TASK_TYPES = ("edit", "extend")
 
-# The video file formats.
+# The output_format choices.
 OUTPUT_FORMATS = (MODEL_DEFAULT, "mp4", "mov")
 
 # A local frame or reference image every Seedance model reads: each side in pixels, and width over height.
@@ -66,8 +68,8 @@ JOB_TIME_CHARACTERS = 16
 __all__ = [
     "ADAPTIVE_RATIO",
     "ADAPTIVE_TASK_TYPES",
-    "ASPECT_RATIOS",
     "AUDIO_CHOICES",
+    "AUDIO_VALUES",
     "CANCELLABLE_STATUS",
     "CONTENT_FIELDS",
     "DONE_STATUSES",
@@ -77,6 +79,7 @@ __all__ = [
     "JOB_TIME_CHARACTERS",
     "OUTPUT_FORMATS",
     "POLL_INTERVAL_SECONDS",
+    "RATIOS",
     "RESOLUTIONS",
     "TASK_RETENTION_SECONDS",
     "TASK_TYPES",

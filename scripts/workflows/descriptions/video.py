@@ -21,7 +21,7 @@ RECOVER_TEXTS = WORKFLOW_TEXTS["video-05-recover-a-video"]
 DESIGN = Subgraph(
     name=SHARED_TEXTS["design"],
     nodes=(
-        Node("draw", f"{NODE_PREFIX}ImageGenerate", {"size": "1.5K", "aspect_ratio": "16:9"}, is_paid=True),
+        Node("draw", f"{NODE_PREFIX}ImageGenerate", {"size": "2048x1152"}, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
     ),
     links=(("draw.images", "look.images"),),

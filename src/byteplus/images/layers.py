@@ -43,13 +43,13 @@ def _validate_layer_request(request: LayerRequest, match: ModelMatch[ImageRow]) 
             message = LAYER_IMAGE_SIZE.format(width=image.width, height=image.height)
             raise ByteplusError(ErrorCode.INVALID_INPUT, message)
     if request.prompt_mode is not None:
-        validate_value(match, "prompt optimization", request.prompt_mode, match.row.image.prompt_modes)
+        validate_value(match, "optimize prompt options", request.prompt_mode, match.row.image.prompt_modes)
 
 
 def _build_layer_body(request: LayerRequest, match: ModelMatch[ImageRow]) -> dict[str, Json]:
     """Build the split's body, with the options of Request Options.
 
-    Without a prompt ModelArk splits every main part. No file format is sent: it would apply only to the base image,
+    Without a prompt ModelArk splits every main part. No output_format is sent: it would apply only to the base image,
     and layers are always PNG.
     """
     image = request.image

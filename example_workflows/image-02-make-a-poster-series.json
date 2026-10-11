@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes a series of related images in one request, so **count** can be 4. The default, Seedream 5.0 flash, makes one image per request, so the node refuses a count of 4 for it before sending anything."
+        "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes a series of related images in one request, so **max images** can be 4. The default, Seedream 5.0 flash, makes one image per request, so the node refuses 4 for it before sending anything."
       ],
       "title": "Note"
     },
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It decides how many to make, up to the four **count** allows, and each poster it makes is billed."
+        "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It decides how many to make, up to the four **max images** allows, and each poster it makes is billed."
       ],
       "title": "Note"
     },
@@ -465,7 +465,7 @@
             ],
             "size": [
               340,
-              344
+              320
             ],
             "flags": {},
             "order": 100,
@@ -481,26 +481,18 @@
               },
               {
                 "name": "size",
-                "type": "COMBO",
+                "type": "STRING",
                 "link": null,
                 "widget": {
                   "name": "size"
                 }
               },
               {
-                "name": "aspect_ratio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "aspect_ratio"
-                }
-              },
-              {
-                "name": "count",
+                "name": "max_images",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "count"
+                  "name": "max_images"
                 }
               },
               {
@@ -520,11 +512,11 @@
                 }
               },
               {
-                "name": "prompt_optimization",
+                "name": "optimize_prompt_options",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "prompt_optimization"
+                  "name": "optimize_prompt_options"
                 }
               },
               {
@@ -536,7 +528,7 @@
                 }
               },
               {
-                "name": "reference_images",
+                "name": "image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7
@@ -596,8 +588,7 @@
             },
             "widgets_values": [
               "seedream-4-0-250828",
-              "2K",
-              "16:9",
+              "2848x1600",
               4,
               "model default",
               "model default",
@@ -668,7 +659,7 @@
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 101,
-            "target_slot": 12,
+            "target_slot": 11,
             "type": "STRING"
           },
           {

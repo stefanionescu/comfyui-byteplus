@@ -35,10 +35,10 @@ class RequestOptions(io.ComfyNode):
 
     @classmethod
     def define_schema(cls) -> io.Schema:
-        """Offer the tier, model default or flex, and the extra fields as one JSON object."""
+        """Offer the service tier, model default or flex, and the extra fields as one JSON object."""
         tier = io.Combo.Input(
-            "tier",
-            display_name="tier",
+            "service_tier",
+            display_name="service tier",
             options=list(TIER_CHOICES),
             default=MODEL_DEFAULT,
             tooltip="flex asks for ModelArk's lower-cost tier, which queues requests until it has room. Only some "
@@ -65,10 +65,10 @@ class RequestOptions(io.ComfyNode):
 
     @classmethod
     @override
-    def execute(cls, *, tier: str, extra_fields: str) -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
+    def execute(cls, *, service_tier: str, extra_fields: str) -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
         """Check the extra fields before any request; a paid node checks the rest when it merges them."""
         options = Options(
-            tier=None if tier == MODEL_DEFAULT else tier,
+            tier=None if service_tier == MODEL_DEFAULT else service_tier,
             extra_fields=MappingProxyType(_parse_fields(extra_fields, "extra fields")),
         )
         return io.NodeOutput(options)

@@ -5,10 +5,7 @@
 [![Python 3.12 or later](docs/images/badge-python.svg)](#requirements)
 [![MIT license](docs/images/badge-license.svg)](LICENSE.md)
 
-Run any BytePlus ModelArk model in ComfyUI with your own API key. Requests go
-from your ComfyUI server straight to BytePlus and are billed to your BytePlus
-account. This is not ComfyUI's built-in ByteDance support, whose nodes bill
-your Comfy account.
+Run any BytePlus ModelArk model in ComfyUI with your own API key.
 
 - **Chat:** ask Seed, GLM, or DeepSeek models with images, video, audio, or
   documents; get text or JSON.
@@ -164,7 +161,7 @@ Each paid node takes any model ID from the
 A newer version of a model the extension knows also works. **Model: Info**
 shows what any ID takes, for free and without a key.
 
-![Video: Generate on the canvas: sockets for the first frame, last frame, reference images, reference audio, references, and options; the model field set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, aspect ratio, generate audio, task, draft, camera fixed, file format, watermark, seed, and run number; and the prompt box at the bottom.](docs/images/video-generate-node.png)
+![Video: Generate on the canvas: sockets for the first frame, last frame, reference image, reference audio, references, and options; the model field set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate audio, omni reference task type, draft, camera fixed, output format, watermark, seed, and run number; and the prompt box at the bottom.](docs/images/video-generate-node.png)
 
 Before sending, the node checks your request against the extension's own
 table of ModelArk models, and stops before anything is paid if the model

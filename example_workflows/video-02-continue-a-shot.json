@@ -13,7 +13,7 @@
       ],
       "size": [
         340,
-        108
+        120
       ],
       "flags": {},
       "order": 0,
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        108
+        120
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        108
+        120
       ],
       "flags": {},
       "order": 2,
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same way, each connected to the one before.\n\nTo continue the clip itself rather than start from its last frame, use Seedance 2.5, set **task** to **extend**, and connect the first shot's **references** to **references** instead of **first frame**."
+        "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same way, each connected to the one before.\n\nTo continue the clip itself rather than start from its last frame, use Seedance 2.5, set **omni reference task type** to **extend**, and connect the first shot's **references** to **references** instead of **first frame**."
       ],
       "title": "Note"
     },
@@ -112,7 +112,7 @@
       ],
       "size": [
         340,
-        108
+        120
       ],
       "flags": {},
       "order": 3,
@@ -141,7 +141,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        312
+        324
       ],
       "size": [
         340,
@@ -182,7 +182,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        464
+        476
       ],
       "size": [
         340,
@@ -223,7 +223,7 @@
       "type": "96b6970c-1564-529f-9aba-14f00bdf3540",
       "pos": [
         460,
-        312
+        324
       ],
       "size": [
         340,
@@ -277,7 +277,7 @@
       "type": "21ec3eea-97a6-5f14-bb7e-0db7452bd7f3",
       "pos": [
         890,
-        312
+        324
       ],
       "size": [
         340,
@@ -329,7 +329,7 @@
       "type": "6e4a6b1c-def8-5215-b42d-851d1aa49120",
       "pos": [
         1320,
-        312
+        324
       ],
       "size": [
         340,
@@ -414,7 +414,7 @@
         0,
         30,
         400,
-        552
+        564
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -427,7 +427,7 @@
         430,
         30,
         400,
-        420
+        432
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -440,7 +440,7 @@
         860,
         30,
         400,
-        400
+        412
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -453,7 +453,7 @@
         1290,
         30,
         400,
-        358
+        370
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -585,11 +585,11 @@
                 }
               },
               {
-                "name": "aspect_ratio",
+                "name": "ratio",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "aspect_ratio"
+                  "name": "ratio"
                 }
               },
               {
@@ -601,11 +601,11 @@
                 }
               },
               {
-                "name": "task",
+                "name": "omni_reference_task_type",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "task"
+                  "name": "omni_reference_task_type"
                 }
               },
               {
@@ -653,7 +653,7 @@
                 "shape": 7
               },
               {
-                "name": "reference_images",
+                "name": "reference_image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7
@@ -958,11 +958,11 @@
                 }
               },
               {
-                "name": "aspect_ratio",
+                "name": "ratio",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "aspect_ratio"
+                  "name": "ratio"
                 }
               },
               {
@@ -974,11 +974,11 @@
                 }
               },
               {
-                "name": "task",
+                "name": "omni_reference_task_type",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "task"
+                  "name": "omni_reference_task_type"
                 }
               },
               {
@@ -1026,7 +1026,7 @@
                 "shape": 7
               },
               {
-                "name": "reference_images",
+                "name": "reference_image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7

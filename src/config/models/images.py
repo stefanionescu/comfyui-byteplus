@@ -11,7 +11,6 @@ FORMATS = ("png", "jpeg")
 
 # Seedream 5.0 pro and flash: the edit models, which make one image a request and can split it into layers.
 EDIT_IMAGE = {
-    "size_table": "dola",
     "tiers": ("1K", "1.5K", "2K"),
     "default_tier": "2K",
     "pixels": (921_600, 4_624_220),
@@ -23,7 +22,6 @@ EDIT_IMAGE = {
 
 # Seedream 5.0 lite, 4.5, and 4.0: the series models, whose default size, 2048x2048, is their 2K tier.
 SERIES_IMAGE = {
-    "size_table": "seedream",
     "default_tier": "2K",
     "max_references": 14,
     "has_series": True,

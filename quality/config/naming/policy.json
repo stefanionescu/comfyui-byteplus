@@ -144,6 +144,14 @@
             "names": ["resolution", "RESOLUTIONS"],
             "allowed_banned_terms": ["resolution"],
             "reason": "BytePlus names this Seedance and Seedream request field; the extension keeps its spelling."
+        },
+        {
+            "path_regexes": ["^src/nodes/options\\.py$"],
+            "languages": ["python"],
+            "categories": ["parameters"],
+            "names": ["service_tier"],
+            "allowed_banned_terms": ["service"],
+            "reason": "Request Options' input takes BytePlus's service_tier field name, and ComfyUI passes it to execute by that name."
         }
     ],
     "excluded_paths": [

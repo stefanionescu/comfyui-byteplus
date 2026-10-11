@@ -20,9 +20,7 @@ class EmbeddingRequest:
         images: Image items, in list order and then batch order.
         video_urls: MP4 data URLs of video items.
         dimensions: The vector length, or None for the model's default.
-        instructions: search or compare, the template each item is read with; None for model default, which sends
-            no instructions.
-        task: The task the template names; empty for model default.
+        instructions: The instructions sent as written with every item; None sends none.
         options: The service tier and extra fields from Request Options.
 
     """
@@ -33,7 +31,6 @@ class EmbeddingRequest:
     video_urls: tuple[str, ...]
     dimensions: int | None
     instructions: str | None
-    task: str
     options: Options | None
 
 

@@ -13,19 +13,14 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class MeshRequest:
-    """One 3D request with its images already encoded; None means model default.
+    """One 3D request with its images already encoded.
 
     Attributes:
         model_id: The model ID sent to ModelArk.
-        prompt: What to make, trimmed; empty when the model works from images alone.
+        prompt: What to make and the model's own --name value commands, trimmed; empty when the model works from
+            images alone.
         images: The images connected to images, in list order and then batch order.
         references: The image references, in chain order, which ModelArk reads after the images.
-        texture: white, textured, or PBR.
-        topology: triangles or quads.
-        faces: The face count, or 0 for the model's default.
-        precision: standard or high.
-        pose: T or A pose.
-        views: The side each image shows, lowercase; empty when not given.
         options: The service tier and extra fields from Request Options.
 
     """
@@ -34,12 +29,6 @@ class MeshRequest:
     prompt: str
     images: tuple[EncodedImage, ...]
     references: tuple[Reference, ...]
-    texture: str | None
-    topology: str | None
-    faces: int
-    precision: str | None
-    pose: str | None
-    views: tuple[str, ...]
     options: Options | None
 
 

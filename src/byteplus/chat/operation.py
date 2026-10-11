@@ -13,17 +13,16 @@ from ...config.byteplus import ENDPOINT_URLS
 from ..listing import find_listed_chat_model
 from ..references import validate_references
 from ...config.units import BYTES_PER_MEGABYTE
-from ..models import find_model, validate_model
 from ...types.replies import ChatReply, ChatMessage
 from ...types.errors import ErrorCode, ByteplusError
+from ..models import find_model, validate_model, validate_value
 from ..operation import validate_upload_size, measure_encoded_bytes
 from ...config.messages.run import ANSWER_CUT, REPLY_EMPTY, ANSWER_FILTERED, REPLY_UNREADABLE
-from ...config.generation.chat import MEDIA_BYTES, MAX_BODY_BYTES, THINKING_TYPES, THINKING_OFF_EFFORT
+from ...config.generation.chat import MEDIA_BYTES, THINKING_OFF, MAX_BODY_BYTES, THINKING_OFF_EFFORT
 from ...config.messages.inputs import (
     PROMPT_EMPTY,
     CHAT_PDF_SIZE,
     CHAT_BODY_SIZE,
-    THINKING_FIXED,
     CHAT_AUDIO_SIZE,
     CHAT_IMAGE_SIZE,
     CHAT_VIDEO_SIZE,
@@ -32,7 +31,6 @@ from ...config.messages.inputs import (
     EFFORT_UNSUPPORTED,
     SCHEMA_UNSUPPORTED,
     OUTPUT_TOKENS_RANGE,
-    THINKING_UNSUPPORTED,
     EFFORT_WITHOUT_THINKING,
 )
 
@@ -90,19 +88,16 @@ def _list_input_kinds(request: ChatRequest) -> list[str]:
 
 
 def _validate_thinking(request: ChatRequest, match: ModelMatch[ChatRow]) -> None:
-    """Refuse a thinking or effort choice the model does not take.
+    """Refuse a thinking.type the model's row does not list, and an effort choice the model does not take.
 
-    With thinking off, ModelArk returns an error for any effort but minimal.
+    With thinking disabled, ModelArk returns an error for any effort but minimal.
     """
     limits = match.row.chat
-    is_off = request.thinking == THINKING_TYPES["off"]
-    if request.thinking is not None and not limits.thinking:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, THINKING_UNSUPPORTED.format(model=match.model_id))
-    if is_off and request.thinking not in limits.thinking:
-        raise ByteplusError(ErrorCode.INVALID_INPUT, THINKING_FIXED.format(model=match.model_id))
+    if request.thinking is not None:
+        validate_value(match, "thinking", request.thinking, limits.thinking)
     if request.effort is not None and not limits.has_effort:
         raise ByteplusError(ErrorCode.INVALID_INPUT, EFFORT_UNSUPPORTED.format(model=match.model_id))
-    if is_off and request.effort not in {None, THINKING_OFF_EFFORT}:
+    if request.thinking == THINKING_OFF and request.effort not in {None, THINKING_OFF_EFFORT}:
         raise ByteplusError(ErrorCode.INVALID_INPUT, EFFORT_WITHOUT_THINKING)
 
 
@@ -116,10 +111,10 @@ def _validate_controls(request: ChatRequest, match: ModelMatch[ChatRow]) -> None
     _validate_thinking(request, match)
     if request.temperature is not None and not limits.has_temperature:
         raise ByteplusError(ErrorCode.INVALID_INPUT, TEMPERATURE_FIXED.format(model=match.model_id))
-    if request.answer_schema is not None and "json_schema" not in limits.answer_formats:
+    if request.json_schema is not None and "json_schema" not in limits.answer_formats:
         template = SCHEMA_JSON_ONLY if "json_object" in limits.answer_formats else SCHEMA_UNSUPPORTED
         raise ByteplusError(ErrorCode.INVALID_INPUT, template.format(model=match.model_id))
-    if request.max_tokens > limits.max_output:
+    if request.max_completion_tokens > limits.max_output:
         message = OUTPUT_TOKENS_RANGE.format(model=match.model_id, maximum=limits.max_output)
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
 

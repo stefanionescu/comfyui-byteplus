@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with thinking off. **Transcribe** shows the transcript and saves it."
+        "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with thinking disabled. **Transcribe** shows the transcript and saves it."
       ],
       "title": "Note"
     },
@@ -202,11 +202,11 @@
       "mode": 0,
       "inputs": [
         {
-          "name": "tier",
+          "name": "service_tier",
           "type": "COMBO",
           "link": null,
           "widget": {
-            "name": "tier"
+            "name": "service_tier"
           }
         },
         {
@@ -491,11 +491,11 @@
                 }
               },
               {
-                "name": "max_tokens",
+                "name": "max_completion_tokens",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "max_tokens"
+                  "name": "max_completion_tokens"
                 }
               },
               {
@@ -521,11 +521,11 @@
                 "shape": 7
               },
               {
-                "name": "answer_schema",
+                "name": "json_schema",
                 "type": "STRING",
                 "link": null,
                 "widget": {
-                  "name": "answer_schema"
+                  "name": "json_schema"
                 }
               },
               {
@@ -571,7 +571,7 @@
             },
             "widgets_values": [
               "seed-2-0-mini-260428",
-              "off",
+              "disabled",
               "model default",
               0,
               "model default",
@@ -802,11 +802,11 @@
                 }
               },
               {
-                "name": "max_tokens",
+                "name": "max_completion_tokens",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "max_tokens"
+                  "name": "max_completion_tokens"
                 }
               },
               {
@@ -832,11 +832,11 @@
                 "shape": 7
               },
               {
-                "name": "answer_schema",
+                "name": "json_schema",
                 "type": "STRING",
                 "link": null,
                 "widget": {
-                  "name": "answer_schema"
+                  "name": "json_schema"
                 }
               },
               {

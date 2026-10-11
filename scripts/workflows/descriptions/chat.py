@@ -15,14 +15,18 @@ MINI = "seed-2-0-mini-260428"
 DEEPSEEK = "deepseek-v4-flash-ga-260731"
 LISTING_SCHEMA = json.dumps(
     {
-        "type": "object",
-        "properties": {
-            "title": {"type": "string"},
-            "bullets": {"type": "array", "items": {"type": "string"}},
-            "description": {"type": "string"},
+        "name": "listing",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string"},
+                "bullets": {"type": "array", "items": {"type": "string"}},
+                "description": {"type": "string"},
+            },
+            "required": ["title", "bullets", "description"],
+            "additionalProperties": False,
         },
-        "required": ["title", "bullets", "description"],
-        "additionalProperties": False,
+        "strict": True,
     },
     indent=2,
 )
@@ -41,7 +45,7 @@ VOICE_TEXTS = WORKFLOW_TEXTS["chat-02-summarize-a-voice-note"]
 PHOTO = Subgraph(
     name=SHARED_TEXTS["photo"],
     nodes=(
-        Node("draw", f"{NODE_PREFIX}ImageGenerate", {"aspect_ratio": "1:1"}, is_paid=True),
+        Node("draw", f"{NODE_PREFIX}ImageGenerate", {"size": "2048x2048"}, is_paid=True),
         Node("look", HostNode.PREVIEW_IMAGE),
     ),
     links=(("draw.images", "look.images"),),
@@ -58,7 +62,7 @@ WRITE = Subgraph(
         Node(
             "ask",
             ASK,
-            {"thinking": "off", "answer_schema": LISTING_SCHEMA, "prompt": LISTING_PROMPT},
+            {"thinking": "disabled", "json_schema": LISTING_SCHEMA, "prompt": LISTING_PROMPT},
             is_paid=True,
         ),
         Node("save", HostNode.SAVE_TEXT, {"filename_prefix": "text/byteplus/product-listing", "format": "json"}),
@@ -109,7 +113,7 @@ TRANSCRIBE = Subgraph(
             ASK,
             {
                 "model": MINI,
-                "thinking": "off",
+                "thinking": "disabled",
                 "prompt": "Transcribe this voice note word for word. Write only what is said.",
             },
             is_paid=True,
@@ -142,7 +146,7 @@ SUMMARIZE_VOICE_NOTE = Workflow(
     nodes=(
         Node("voice_note", HostNode.AUDIO, {"audio": ""}, title=SHARED_TEXTS["voice_note"]),
         Node("transcribe", TRANSCRIBE.name),
-        Node("flex", f"{NODE_PREFIX}RequestOptions", {"tier": "flex"}),
+        Node("flex", f"{NODE_PREFIX}RequestOptions", {"service_tier": "flex"}),
         Node("actions", ACTIONS.name),
     ),
     links=(

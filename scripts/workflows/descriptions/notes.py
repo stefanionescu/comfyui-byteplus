@@ -16,8 +16,8 @@ WORKFLOW_TEXTS = {
         ),
         "photo_description": "Draws the product photo.",
         "write": (
-            "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking off, and writes the "
-            "listing as JSON: a title, five bullet points, and a short description. The answer schema makes it answer "
+            "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking disabled, and writes the "
+            "listing as JSON: a title, five bullet points, and a short description. The JSON schema makes it answer "
             "in exactly that shape. **Write** shows the listing and saves it.\n\n"
             "Open **Write** to change the instructions or the schema."
         ),
@@ -29,7 +29,7 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. The transcript and the action items are saved under `text/byteplus`."
         ),
         "transcribe": (
-            "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with thinking off. "
+            "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with thinking disabled. "
             "**Transcribe** shows the transcript and saves it."
         ),
         "transcribe_description": "Transcribes the voice note and saves the transcript.",
@@ -70,12 +70,12 @@ WORKFLOW_TEXTS = {
         "model": (
             "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for "
             "free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes a series of related images "
-            "in one request, so **count** can be 4. The default, Seedream 5.0 flash, makes one image per request, so "
-            "the node refuses a count of 4 for it before sending anything."
+            "in one request, so **max images** can be 4. The default, Seedream 5.0 flash, makes one image per request, "
+            "so the node refuses 4 for it before sending anything."
         ),
         "series": (
             "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It decides how many "
-            "to make, up to the four **count** allows, and each poster it makes is billed."
+            "to make, up to the four **max images** allows, and each poster it makes is billed."
         ),
         "series_description": "Draws the poster series and saves it.",
     },
@@ -130,8 +130,9 @@ WORKFLOW_TEXTS = {
         "shot_2": (
             "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same "
             "way, each connected to the one before.\n\n"
-            "To continue the clip itself rather than start from its last frame, use Seedance 2.5, set **task** to "
-            "**extend**, and connect the first shot's **references** to **references** instead of **first frame**."
+            "To continue the clip itself rather than start from its last frame, use Seedance 2.5, set **omni reference "
+            "task type** to **extend**, and connect the first shot's **references** to **references** instead of "
+            "**first frame**."
         ),
         "shot_2_description": "Makes the next shot from the first shot's last frame and saves it.",
         "join": (
@@ -205,7 +206,7 @@ WORKFLOW_TEXTS = {
             KEY_STEP + "2. Describe the product and the picture you need in **Brief**, in one line.\n"
             "3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`."
         ),
-        "draw": "Seedream 4.0 draws a series of options from the brief, up to the four **count** allows.",
+        "draw": "Seedream 4.0 draws a series of options from the brief, up to the four **max images** allows.",
         "draw_description": "Draws up to four options from the brief.",
         "score": (
             "Skylark embedding vision turns the brief and each option into an embedding, one request per item, and "
@@ -231,8 +232,8 @@ WORKFLOW_TEXTS = {
         ),
         "design_description": "Draws the character in a T-pose.",
         "build": (
-            "Hyper3D Gen2 turns the image into a 3D model with PBR textures, in a pose ready for rigging. **Save 3D "
-            "Model** saves it and shows it.\n\n"
+            "Hyper3D Gen2 turns the image into a 3D model. Its prompt holds Hyper3D's commands for PBR textures and a "
+            "pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it.\n\n"
             "BytePlus usually starts the task at once, so a cancelled run's model is still made and billed; collect it "
             "in **Recover**."
         ),

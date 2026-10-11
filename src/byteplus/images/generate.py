@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from datetime import UTC, datetime
@@ -12,13 +13,15 @@ from ..options import build_request_body
 from ...config.byteplus import ENDPOINT_URLS
 from ..operation import validate_upload_size
 from ..references import validate_references
+from ...config.patterns import IMAGE_SIZE_PATTERN
 from ..transport import send_json, download_output
 from ...types.errors import ErrorCode, ByteplusError
 from ...types.images import ImageOutput, ImageResult
 from ..models import find_model, validate_model, validate_value
 from ...config.messages.run import REPLY_EMPTY, REPLY_UNREADABLE
-from ...config.generation.images import PIXEL_SIZES, REFERENCE_SHAPE, RESPONSE_FORMAT, MAX_SERIES_IMAGES
+from ...config.generation.images import REFERENCE_SHAPE, RESPONSE_FORMAT, SIZE_MAX_ASPECT, MAX_SERIES_IMAGES
 from ...config.messages.inputs import (
+    IMAGE_SIZE,
     PROMPT_EMPTY,
     IMAGE_COUNT_TOTAL,
     IMAGE_COUNT_SINGLE,
@@ -33,6 +36,9 @@ if TYPE_CHECKING:
     from ...types.images import ImageRequest
     from ...types.settings import Settings, Configuration
     from ...types.models import ImageRow, ModelMatch, ImageLimits
+
+# A size in pixels, such as 2048x1152.
+_PIXEL_SIZE = re.compile(IMAGE_SIZE_PATTERN)
 
 
 def _validate_sources(request: ImageRequest, match: ModelMatch[ImageRow]) -> None:
@@ -56,13 +62,30 @@ def _validate_sources(request: ImageRequest, match: ModelMatch[ImageRow]) -> Non
             raise ByteplusError(ErrorCode.INVALID_INPUT, message)
 
 
+def _validate_size(size: str, match: ModelMatch[ImageRow]) -> None:
+    """Refuse a size that is neither one of the model's tiers nor a WIDTHxHEIGHT within its pixels and shape."""
+    limits = match.row.image
+    if size in limits.tiers:
+        return
+    minimum, maximum = limits.pixels
+    pixel_size = _PIXEL_SIZE.match(size)
+    if pixel_size is not None:
+        width, height = int(pixel_size.group(1)), int(pixel_size.group(2))
+        short_side, long_side = sorted((width, height))
+        if minimum <= width * height <= maximum and long_side <= SIZE_MAX_ASPECT * short_side:
+            return
+    tiers = ", ".join(limits.tiers)
+    message = IMAGE_SIZE.format(model=match.model_id, tiers=tiers, minimum=f"{minimum:,}", maximum=f"{maximum:,}")
+    raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+
+
 def _validate_count(request: ImageRequest, match: ModelMatch[ImageRow]) -> None:
     """Refuse a series from a model that makes one image, and a series too long for its references."""
-    if request.count == 1:
+    if request.max_images == 1:
         return
     if not match.row.image.has_series:
         raise ByteplusError(ErrorCode.INVALID_INPUT, IMAGE_COUNT_SINGLE.format(model=match.model_id))
-    total = len(request.images) + len(request.references) + request.count
+    total = len(request.images) + len(request.references) + request.max_images
     if total > MAX_SERIES_IMAGES:
         raise ByteplusError(ErrorCode.INVALID_INPUT, IMAGE_COUNT_TOTAL.format(total=total))
 
@@ -85,41 +108,40 @@ def _validate_image_request(request: ImageRequest, match: ModelMatch[ImageRow]) 
     """Refuse, before anything is paid, what the model's row does not take; the first refusal stops the check."""
     limits = match.row.image
     _validate_sources(request, match)
-    validate_value(match, "size", request.size or limits.default_tier, limits.tiers)
+    if request.size is not None:
+        _validate_size(request.size, match)
     _validate_count(request, match)
     if request.background is not None:
         _validate_background(request, match, request.background)
     if request.output_format is not None:
-        validate_value(match, "file format", request.output_format, limits.output_formats)
+        validate_value(match, "output format", request.output_format, limits.output_formats)
     if request.prompt_mode is not None:
-        validate_value(match, "prompt optimization", request.prompt_mode, limits.prompt_modes)
+        validate_value(match, "optimize prompt options", request.prompt_mode, limits.prompt_modes)
 
 
-def _build_series_fields(count: int, limits: ImageLimits) -> dict[str, Json]:
-    """Ask a series model for up to count images, or turn its series off for one; other models take no field."""
-    if count > 1:
-        return {"sequential_image_generation": "auto", "sequential_image_generation_options": {"max_images": count}}
+def _build_series_fields(max_images: int, limits: ImageLimits) -> dict[str, Json]:
+    """Ask a series model for up to max_images images, or turn its series off for one; other models take no field."""
+    if max_images > 1:
+        series: dict[str, Json] = {"max_images": max_images}
+        return {"sequential_image_generation": "auto", "sequential_image_generation_options": series}
     return {"sequential_image_generation": "disabled"} if limits.has_series else {}
 
 
 def _build_image_body(request: ImageRequest, match: ModelMatch[ImageRow]) -> dict[str, Json]:
     """Build the checked request's body, with the options of Request Options.
 
-    The size is always sent, as the row's default tier at model default. An aspect ratio turns the tier into
-    ModelArk's own width and height for it. ModelArk names the images Image 1, Image 2, and so on in the order of
-    image: the local images first, then the references in chain order.
+    The size is sent as typed, and an empty size sends none. ModelArk names the images Image 1, Image 2, and so on
+    in the order of image: the local images first, then the references in chain order.
     """
-    limits = match.row.image
-    tier = request.size or limits.default_tier
-    size = tier if request.aspect_ratio is None else PIXEL_SIZES[limits.size_table][tier][request.aspect_ratio]
     body: dict[str, Json] = {
         "model": match.model_id,
         "prompt": request.prompt,
-        "size": size,
         "response_format": RESPONSE_FORMAT,
         "watermark": request.has_watermark,
-        **_build_series_fields(request.count, limits),
+        **_build_series_fields(request.max_images, match.row.image),
     }
+    if request.size is not None:
+        body["size"] = request.size
     sources: list[Json] = [image.url for image in request.images]
     sources += [reference.address for reference in request.references]
     if sources:

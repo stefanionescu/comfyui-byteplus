@@ -16,23 +16,17 @@ TEMPERATURE = {
     "STEP": 0.05,
 }
 
-# Whether the model reasons; ModelArk's auto is left out, since only a retiring model takes it.
-THINKING_CHOICES = (MODEL_DEFAULT, "on", "off")
+# The thinking.type values; a model's row lists the ones it takes, and only some models take auto.
+THINKING_CHOICES = (MODEL_DEFAULT, "enabled", "disabled", "auto")
 
-# The thinking.type each choice sends.
-THINKING_TYPES = {
-    "on": "enabled",
-    "off": "disabled",
-}
+# The thinking.type that turns reasoning off, with which ModelArk takes only the minimal effort.
+THINKING_OFF = "disabled"
 
 # How much a reasoning model thinks; a model that takes an effort takes all seven and maps them to its own levels.
 EFFORTS = (MODEL_DEFAULT, "none", "minimal", "low", "medium", "high", "xhigh", "max")
 
 # The only effort ModelArk takes with thinking off.
 THINKING_OFF_EFFORT = "minimal"
-
-# The name an answer schema is sent under.
-ANSWER_SCHEMA_NAME = "answer"
 
 # The input_audio format of a base64 WAV clip.
 AUDIO_FORMAT = "wav"
@@ -81,7 +75,6 @@ LISTED_STATUSES = {
 }
 
 __all__ = [
-    "ANSWER_SCHEMA_NAME",
     "AUDIO_FORMAT",
     "DEFAULT_ANSWER_TOKENS",
     "DOCUMENT_TEXT",
@@ -96,6 +89,6 @@ __all__ = [
     "TEMPERATURE",
     "TEMPERATURE_CHOICE",
     "THINKING_CHOICES",
+    "THINKING_OFF",
     "THINKING_OFF_EFFORT",
-    "THINKING_TYPES",
 ]

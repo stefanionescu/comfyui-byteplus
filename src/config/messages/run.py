@@ -19,8 +19,8 @@ ACCOUNT_STATUS = (
 )
 
 ANSWER_CUT = (
-    "The model reached its token limit before it began the answer. Raise max tokens or set it to 0, or lower the "
-    "reasoning effort or turn thinking off."
+    "The model reached its token limit before it began the answer. Raise max completion tokens or set it to 0, or "
+    "lower the reasoning effort or set thinking to disabled."
 )
 
 ANSWER_FILTERED = "ModelArk's content moderation stopped the answer. Change the prompt or the media, and run again."

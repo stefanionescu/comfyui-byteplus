@@ -18,23 +18,14 @@ from .models import find_model, validate_model
 from ..config.messages.run import REPLY_UNREADABLE
 from ..types.errors import ErrorCode, ByteplusError
 from .operation import validate_upload_size, measure_encoded_bytes
+from ..config.generation.search import IMAGE_SHAPE, MAX_TEXT_BYTES, MAX_VIDEO_BYTES
 from ..config.messages.inputs import (
     SEARCH_TEXT_SIZE,
     SEARCH_DIMENSIONS,
-    SEARCH_TASK_EMPTY,
     SEARCH_VIDEO_SIZE,
     SEARCH_IMAGE_SHAPE,
     SEARCH_ITEMS_EMPTY,
     SEARCH_ITEM_STOPPED,
-)
-from ..config.generation.search import (
-    MODALITIES,
-    IMAGE_SHAPE,
-    MAX_TEXT_BYTES,
-    MAX_VIDEO_BYTES,
-    INSTRUCTION_CHOICE,
-    MODALITY_SEPARATOR,
-    INSTRUCTION_TEMPLATES,
 )
 
 if TYPE_CHECKING:
@@ -75,52 +66,27 @@ def _validate_row(request: EmbeddingRequest, match: ModelMatch[EmbeddingRow]) ->
         raise ByteplusError(ErrorCode.INVALID_INPUT, SEARCH_DIMENSIONS.format(model=match.model_id, choices=listed))
 
 
-def _list_items(request: EmbeddingRequest) -> tuple[tuple[str, Json], ...]:
-    """List each item's modality and content part, in item order: the texts, then the images, then the videos."""
-    texts: list[tuple[str, Json]] = [("text", {"type": "text", "text": text}) for text in request.texts]
-    images: list[tuple[str, Json]] = [
-        ("image", {"type": "image_url", "image_url": {"url": image.url}}) for image in request.images
-    ]
-    videos: list[tuple[str, Json]] = [
-        ("video", {"type": "video_url", "video_url": {"url": url}}) for url in request.video_urls
-    ]
+def _list_items(request: EmbeddingRequest) -> tuple[Json, ...]:
+    """List each item's content part, in item order: the texts, then the images, then the videos."""
+    texts: list[Json] = [{"type": "text", "text": text} for text in request.texts]
+    images: list[Json] = [{"type": "image_url", "image_url": {"url": image.url}} for image in request.images]
+    videos: list[Json] = [{"type": "video_url", "video_url": {"url": url}} for url in request.video_urls]
     return (*texts, *images, *videos)
 
 
-def _build_instructions(request: EmbeddingRequest, modalities: Sequence[str]) -> tuple[str | None, ...]:
-    """Fill ModelArk's instructions templates for each item, in item order; model default sends none.
-
-    Search tells the first item, the query, the modalities of the items it is compared with, and tells every other
-    item its own modality. Compare reads every item as a query over the modalities of all the items. ModelArk's
-    vectorization guide lets only the templates' braces change.
-    """
-    if request.instructions is None:
-        return (None,) * len(modalities)
-    is_search = request.instructions == INSTRUCTION_CHOICE["SEARCH"]
-    # A search of one item compares it with nothing, so it is told its own modality.
-    compared = set(modalities[1:] if is_search and len(modalities) > 1 else modalities)
-    targets = MODALITY_SEPARATOR.join(modality for modality in MODALITIES if modality in compared)
-    query = INSTRUCTION_TEMPLATES["QUERY"].format(modalities=targets, task=request.task)
-    if not is_search:
-        return (query,) * len(modalities)
-    return (query, *(INSTRUCTION_TEMPLATES["CANDIDATE"].format(modality=modality) for modality in modalities[1:]))
-
-
 def _build_bodies(request: EmbeddingRequest, row: EmbeddingRow) -> list[dict[str, Json]]:
-    """Build one body per item, in item order, each with the options of Request Options.
+    """Build one body per item, in item order, each with the instructions as written and the options.
 
     Every body is built before the first is sent, so options the request cannot take are refused before anything is
     paid.
     """
-    items = _list_items(request)
-    instructions = _build_instructions(request, [modality for modality, _part in items])
     bodies: list[dict[str, Json]] = []
-    for (_modality, part), instruction in zip(items, instructions, strict=True):
+    for part in _list_items(request):
         body: dict[str, Json] = {"model": request.model_id, "input": [part]}
         if request.dimensions is not None:
             body["dimensions"] = request.dimensions
-        if instruction is not None:
-            body["instructions"] = instruction
+        if request.instructions is not None:
+            body["instructions"] = request.instructions
         bodies.append(build_request_body(body, request.options, "embeddings", row))
     return bodies
 
@@ -162,7 +128,7 @@ class EmbeddingOperation:
         self.request = request
 
     def validate(self, settings: Settings) -> None:
-        """Refuse no items, an item ModelArk does not embed, an empty task, and media above the maximum upload size.
+        """Refuse no items, an item ModelArk does not embed, and media above the maximum upload size.
 
         Every item is checked before the first request, so a refusal never leaves earlier items billed for nothing.
         The maximum upload size bounds the media of the whole run.
@@ -171,8 +137,6 @@ class EmbeddingOperation:
         if not (request.texts or request.images or request.video_urls):
             raise ByteplusError(ErrorCode.INVALID_INPUT, SEARCH_ITEMS_EMPTY)
         _validate_items(request)
-        if request.instructions is not None and not request.task:
-            raise ByteplusError(ErrorCode.INVALID_INPUT, SEARCH_TASK_EMPTY)
         validate_upload_size((*(image.url for image in request.images), *request.video_urls), settings)
 
     async def send(self, configuration: Configuration) -> EmbeddingResult:

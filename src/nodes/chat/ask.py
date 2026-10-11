@@ -11,20 +11,13 @@ from comfy_execution.graph import ExecutionBlocker
 from ...byteplus.chat.operation import ChatOperation
 from ...types.errors import ErrorCode, ByteplusError
 from ...config.generation.models import DEFAULT_MODELS
+from ...config.messages.inputs import JSON_SCHEMA_INVALID
 from ...types.chat import Turn, ChatRequest, Conversation
-from ...config.messages.inputs import ANSWER_SCHEMA_INVALID
 from ...config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
 from ..inputs import encode_media, REFERENCES_INPUT, build_request_inputs
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
 from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
-from ...config.generation.chat import (
-    EFFORTS,
-    TEMPERATURE,
-    THINKING_TYPES,
-    THINKING_CHOICES,
-    TEMPERATURE_CHOICE,
-    MAX_COMPLETION_TOKENS,
-)
+from ...config.generation.chat import EFFORTS, TEMPERATURE, THINKING_CHOICES, TEMPERATURE_CHOICE, MAX_COMPLETION_TOKENS
 
 if TYPE_CHECKING:
     import torch
@@ -58,7 +51,9 @@ _CONTROLS = (
         "thinking",
         options=list(THINKING_CHOICES),
         default=MODEL_DEFAULT,
-        tooltip="Whether the model reasons before answering. Off is faster and costs less; some models always think.",
+        tooltip=(
+            "Whether the model reasons before answering. Disabled is faster and costs less; some models always think."
+        ),
     ),
     io.Combo.Input(
         "reasoning_effort",
@@ -66,11 +61,11 @@ _CONTROLS = (
         options=list(EFFORTS),
         default=MODEL_DEFAULT,
         advanced=True,
-        tooltip="How much the model reasons before answering. With thinking off, only minimal is allowed.",
+        tooltip="How much the model reasons before answering. With thinking disabled, only minimal is allowed.",
     ),
     io.Int.Input(
-        "max_tokens",
-        display_name="max tokens",
+        "max_completion_tokens",
+        display_name="max completion tokens",
         default=0,
         min=0,
         max=MAX_COMPLETION_TOKENS,
@@ -113,7 +108,7 @@ def _read_temperature(choice: Mapping[str, object] | None) -> float | None:
 
 
 def _read_schema(text: str) -> Mapping[str, Json] | None:
-    """Read the answer schema, which must be a JSON object; empty text means free text."""
+    """Read the response_format.json_schema object, which must be a JSON object; empty text means free text."""
     if not text.strip():
         return None
     try:
@@ -121,7 +116,7 @@ def _read_schema(text: str) -> Mapping[str, Json] | None:
     except ByteplusError:
         schema = None
     if not isinstance(schema, dict):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, ANSWER_SCHEMA_INVALID)
+        raise ByteplusError(ErrorCode.INVALID_INPUT, JSON_SCHEMA_INVALID)
     return schema
 
 
@@ -164,13 +159,16 @@ class ChatAsk(PaidNode):
                 *_CONTROLS,
                 *build_request_inputs(has_seed=False),
                 io.String.Input(
-                    "answer_schema",
-                    display_name="answer schema",
-                    placeholder="answer schema",
+                    "json_schema",
+                    display_name="JSON schema",
+                    placeholder="JSON schema",
                     default="",
                     multiline=True,
                     advanced=True,
-                    tooltip="A JSON schema the answer must follow; leave empty for free text.",
+                    tooltip=(
+                        "Sent as response_format.json_schema: a JSON object with a name and a schema. Leave it empty "
+                        "for free text."
+                    ),
                 ),
                 io.String.Input(
                     "prompt", multiline=True, default="", placeholder="prompt", tooltip="The question or instruction."
@@ -203,9 +201,9 @@ class ChatAsk(PaidNode):
         model: str,
         thinking: str = MODEL_DEFAULT,
         reasoning_effort: str = MODEL_DEFAULT,
-        max_tokens: int = 0,
+        max_completion_tokens: int = 0,
         temperature: Mapping[str, object] | None = None,
-        answer_schema: str = "",
+        json_schema: str = "",
         system_prompt: str = "",
         conversation: Conversation | None = None,
         documents: tuple[Document, ...] | None = None,
@@ -217,7 +215,7 @@ class ChatAsk(PaidNode):
     ) -> io.NodeOutput:
         """Read the schema before any media is encoded, then encode the media inside the owned task and send."""
         history = conversation or Conversation(())
-        schema = _read_schema(answer_schema)
+        schema = _read_schema(json_schema)
         temperature_value = _read_temperature(temperature)
 
         async def send_encoded() -> io.NodeOutput:
@@ -234,11 +232,11 @@ class ChatAsk(PaidNode):
                 audio_clips=clips,
                 documents=documents or (),
                 references=references or (),
-                thinking=THINKING_TYPES.get(thinking),
+                thinking=None if thinking == MODEL_DEFAULT else thinking,
                 effort=None if reasoning_effort == MODEL_DEFAULT else reasoning_effort,
-                max_tokens=max_tokens,
+                max_completion_tokens=max_completion_tokens,
                 temperature=temperature_value,
-                answer_schema=schema,
+                json_schema=schema,
                 options=options,
             )
             return await send_request(

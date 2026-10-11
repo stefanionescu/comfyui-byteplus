@@ -31,7 +31,7 @@ DRAW = Subgraph(
         Node(
             "draw",
             f"{NODE_PREFIX}ImageGenerate",
-            {"model": "seedream-4-0-250828", "aspect_ratio": "16:9", "count": 4},
+            {"model": "seedream-4-0-250828", "size": "2848x1600", "max_images": 4},
             is_paid=True,
         ),
         Node("look", HostNode.PREVIEW_IMAGE),
@@ -50,7 +50,12 @@ EMBED = Subgraph(
         Node(
             "embed",
             f"{NODE_PREFIX}SearchEmbed",
-            {"instructions.task": "Find the image that best matches this product description"},
+            {
+                "instructions": (
+                    "Target_modality: text/image.\nInstruction:Find the image that best matches this product "
+                    "description\nQuery:"
+                )
+            },
             is_paid=True,
         ),
     ),

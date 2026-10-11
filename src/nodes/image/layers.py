@@ -98,8 +98,8 @@ class ImageSplitLayers(PaidNode):
                     ),
                 ),
                 io.Combo.Input(
-                    "prompt_optimization",
-                    display_name="prompt optimization",
+                    "optimize_prompt_options",
+                    display_name="optimize prompt options",
                     options=list(PROMPT_MODES),
                     default=MODEL_DEFAULT,
                     advanced=True,
@@ -145,7 +145,7 @@ class ImageSplitLayers(PaidNode):
         model: str,
         image: list[object],
         size: str,
-        prompt_optimization: str,
+        optimize_prompt_options: str,
         watermark: bool,
         options: Options | None = None,
     ) -> io.NodeOutput:
@@ -159,7 +159,7 @@ class ImageSplitLayers(PaidNode):
                 prompt=prompt,
                 image=source,
                 size=size,
-                prompt_mode=None if prompt_optimization == MODEL_DEFAULT else prompt_optimization,
+                prompt_mode=None if optimize_prompt_options == MODEL_DEFAULT else optimize_prompt_options,
                 has_watermark=watermark,
                 options=options,
             )

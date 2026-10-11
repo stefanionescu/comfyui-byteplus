@@ -17,35 +17,26 @@ from ...config.generation.references import OUTPUT_LIFETIME_SECONDS
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
 from ..inputs import REFERENCES_INPUT, encode_sized_images, build_request_inputs
 from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
-from ...config.generation.images import COUNT, SIZES, BACKGROUNDS, PROMPT_MODES, ASPECT_RATIOS, OUTPUT_FORMATS
+from ...config.generation.images import MAX_IMAGES, BACKGROUNDS, PROMPT_MODES, OUTPUT_FORMATS
 
 if TYPE_CHECKING:
     import torch
     from ...types.options import Options
     from ...types.images import ImageResult
 
-# The image controls; a dropdown left at model default sends nothing, except size, which sends the default tier.
+# The image controls; an empty size and a dropdown left at model default send nothing.
 _CONTROLS = (
-    io.Combo.Input(
+    io.String.Input(
         "size",
-        options=list(SIZES),
-        default=MODEL_DEFAULT,
-        tooltip=(
-            "How large the image is. Model default is 2K. Each model takes only some sizes; Model: Info lists them."
-        ),
-    ),
-    io.Combo.Input(
-        "aspect_ratio",
-        display_name="aspect ratio",
-        options=list(ASPECT_RATIOS),
-        default=MODEL_DEFAULT,
-        tooltip="The image's shape. Model default lets the model take it from the prompt.",
+        default="",
+        tooltip="A tier such as 2K, or pixels such as 2048x1152; empty leaves it to the model. Model: Info lists both.",
     ),
     io.Int.Input(
-        "count",
-        default=COUNT["DEFAULT"],
+        "max_images",
+        display_name="max images",
+        default=MAX_IMAGES["DEFAULT"],
         min=1,
-        max=COUNT["MAX"],
+        max=MAX_IMAGES["MAX"],
         tooltip=(
             "The most images to make. Above 1, only models that make image series take it, and the prompt must ask "
             'for that many, such as "Generate 4 images of a lighthouse".'
@@ -59,14 +50,14 @@ _CONTROLS = (
     ),
     io.Combo.Input(
         "output_format",
-        display_name="file format",
+        display_name="output format",
         options=list(OUTPUT_FORMATS),
         default=MODEL_DEFAULT,
         tooltip="PNG or JPEG. Model default is JPEG.",
     ),
     io.Combo.Input(
-        "prompt_optimization",
-        display_name="prompt optimization",
+        "optimize_prompt_options",
+        display_name="optimize prompt options",
         options=list(PROMPT_MODES),
         default=MODEL_DEFAULT,
         advanced=True,
@@ -96,7 +87,7 @@ def _build_outputs(result: ImageResult) -> io.NodeOutput:
 class ImageGenerate(PaidNode):
     """Send one image request and return every image it made, with masks and references."""
 
-    list_inputs = frozenset({"reference_images"})
+    list_inputs = frozenset({"image"})
 
     @classmethod
     def define_schema(cls) -> io.Schema:
@@ -110,8 +101,7 @@ class ImageGenerate(PaidNode):
                 io.String.Input(INPUT_NAMES["MODEL"], default=DEFAULT_MODELS["images"], tooltip=MODEL_TOOLTIP),
                 *_CONTROLS,
                 io.Image.Input(
-                    "reference_images",
-                    display_name="reference images",
+                    "image",
                     optional=True,
                     tooltip=(
                         "Images to edit or combine: one, a batch, or a list. They come first in the prompt's Image 1, "
@@ -144,33 +134,31 @@ class ImageGenerate(PaidNode):
         prompt: str,
         model: str,
         size: str,
-        aspect_ratio: str,
-        count: int,
+        max_images: int,
         background: str,
         output_format: str,
-        prompt_optimization: str,
+        optimize_prompt_options: str,
         watermark: bool,
-        reference_images: list[torch.Tensor] | None = None,
+        image: list[torch.Tensor] | None = None,
         references: tuple[Reference, ...] | None = None,
         options: Options | None = None,
     ) -> io.NodeOutput:
-        """Encode the reference images inside the owned task, then send the request."""
+        """Encode the images inside the owned task, then send the request."""
 
         async def send_encoded() -> io.NodeOutput:
-            """Encode the reference images inside the owned task, then send the request."""
-            images = await wait_for_thread(lambda: encode_sized_images(reference_images or ()))
-            # A dropdown left at model default sends nothing.
+            """Encode the images inside the owned task, then send the request."""
+            images = await wait_for_thread(lambda: encode_sized_images(image or ()))
+            # An empty size and a dropdown left at model default send nothing.
             request = ImageRequest(
                 model_id=model.strip(),
                 prompt=prompt,
                 images=images,
                 references=references or (),
-                size=None if size == MODEL_DEFAULT else size,
-                aspect_ratio=None if aspect_ratio == MODEL_DEFAULT else aspect_ratio,
-                count=count,
+                size=size.strip() or None,
+                max_images=max_images,
                 background=None if background == MODEL_DEFAULT else background,
                 output_format=None if output_format == MODEL_DEFAULT else output_format,
-                prompt_mode=None if prompt_optimization == MODEL_DEFAULT else prompt_optimization,
+                prompt_mode=None if optimize_prompt_options == MODEL_DEFAULT else optimize_prompt_options,
                 has_watermark=watermark,
                 options=options,
             )

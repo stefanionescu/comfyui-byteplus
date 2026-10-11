@@ -30,19 +30,18 @@ class EncodedImage:
 
 @dataclass(frozen=True, slots=True)
 class ImageRequest:
-    """One image request with its reference images already encoded; None means model default.
+    """One image request with its images already encoded; None means model default.
 
     Attributes:
         model_id: The model ID sent to ModelArk.
         prompt: What to draw or change.
-        images: The images connected to reference images, in list order and then batch order.
+        images: The images connected to image, in list order and then batch order.
         references: The references chain, in chain order.
-        size: The size tier.
-        aspect_ratio: The aspect ratio, which turns the tier into ModelArk's width and height.
-        count: How many images to make; above 1 asks a series model for up to that many.
+        size: A size tier such as 2K, or WIDTHxHEIGHT in pixels.
+        max_images: The most images to make; above 1 asks a series model for up to that many.
         background: transparent, or None.
         output_format: png or jpeg.
-        prompt_mode: The prompt optimization mode, standard or fast.
+        prompt_mode: The optimize_prompt_options.mode, standard or fast.
         has_watermark: Whether ModelArk marks the images as AI-generated.
         options: The service tier and extra fields from Request Options.
 
@@ -53,8 +52,7 @@ class ImageRequest:
     images: tuple[EncodedImage, ...]
     references: tuple[Reference, ...]
     size: str | None
-    aspect_ratio: str | None
-    count: int
+    max_images: int
     background: str | None
     output_format: str | None
     prompt_mode: str | None
@@ -99,7 +97,7 @@ class LayerRequest:
         prompt: What to split out; empty splits every main part.
         image: The image to split: encoded here, or a reference ModelArk reads by address.
         size: The size tier of the base image and the layers.
-        prompt_mode: The prompt optimization mode, standard or fast.
+        prompt_mode: The optimize_prompt_options.mode, standard or fast.
         has_watermark: Whether ModelArk marks the images as AI-generated.
         options: The service tier and extra fields from Request Options.
 

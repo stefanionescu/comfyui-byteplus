@@ -426,7 +426,7 @@
             ],
             "size": [
               340,
-              344
+              320
             ],
             "flags": {},
             "order": 100,
@@ -442,26 +442,18 @@
               },
               {
                 "name": "size",
-                "type": "COMBO",
+                "type": "STRING",
                 "link": null,
                 "widget": {
                   "name": "size"
                 }
               },
               {
-                "name": "aspect_ratio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "aspect_ratio"
-                }
-              },
-              {
-                "name": "count",
+                "name": "max_images",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "count"
+                  "name": "max_images"
                 }
               },
               {
@@ -481,11 +473,11 @@
                 }
               },
               {
-                "name": "prompt_optimization",
+                "name": "optimize_prompt_options",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "prompt_optimization"
+                  "name": "optimize_prompt_options"
                 }
               },
               {
@@ -497,7 +489,7 @@
                 }
               },
               {
-                "name": "reference_images",
+                "name": "image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7
@@ -559,8 +551,7 @@
             },
             "widgets_values": [
               "dola-seedream-5-0-flash-260915",
-              "1.5K",
-              "16:9",
+              "2048x1152",
               1,
               "model default",
               "model default",
@@ -621,7 +612,7 @@
             "origin_id": -10,
             "origin_slot": 0,
             "target_id": 101,
-            "target_slot": 12,
+            "target_slot": 11,
             "type": "STRING"
           },
           {
@@ -736,11 +727,11 @@
                 }
               },
               {
-                "name": "aspect_ratio",
+                "name": "ratio",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "aspect_ratio"
+                  "name": "ratio"
                 }
               },
               {
@@ -752,11 +743,11 @@
                 }
               },
               {
-                "name": "task",
+                "name": "omni_reference_task_type",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "task"
+                  "name": "omni_reference_task_type"
                 }
               },
               {
@@ -804,7 +795,7 @@
                 "shape": 7
               },
               {
-                "name": "reference_images",
+                "name": "reference_image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7

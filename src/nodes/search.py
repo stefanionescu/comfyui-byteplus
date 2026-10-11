@@ -6,57 +6,20 @@ import json
 import asyncio
 from .base import PaidNode
 from comfy_api.latest import io
-from typing import cast, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from ..types.search import EmbeddingRequest
+from ..config.generation.search import DIMENSIONS
 from ..config.namespace import MENUS, NODE_PREFIX
 from ..byteplus.embeddings import EmbeddingOperation
 from ..config.generation.models import DEFAULT_MODELS
 from ..comfy.execution import send_request, wait_for_task, wait_for_thread
 from .inputs import encode_media, encode_sized_images, build_request_inputs
-from ..config.generation.search import TASKS, DIMENSIONS, INSTRUCTION_CHOICE
 from ..config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
 
 if TYPE_CHECKING:
     import torch
     from comfy_api.latest import Input
     from ..types.options import Options
-    from collections.abc import Mapping
-
-
-# The instructions presets: search and compare send their task, which starts at the preset's own, and model default
-# sends no instructions.
-_INSTRUCTIONS = io.DynamicCombo.Input(
-    INSTRUCTION_CHOICE["INPUT"],
-    options=[
-        *(
-            io.DynamicCombo.Option(
-                preset,
-                [
-                    io.String.Input(
-                        INSTRUCTION_CHOICE["TASK"],
-                        display_name="task",
-                        default=TASKS[preset],
-                        tooltip=(
-                            "What the comparison looks for, in English, such as: Find the photo that matches this "
-                            "product description."
-                        ),
-                    )
-                ],
-            )
-            for preset in (INSTRUCTION_CHOICE["SEARCH"], INSTRUCTION_CHOICE["COMPARE"])
-        ),
-        io.DynamicCombo.Option(MODEL_DEFAULT, []),
-    ],
-    tooltip="How the model reads the items. Search treats the first item as the query; compare treats all items alike.",
-)
-
-
-def _read_instructions(choice: Mapping[str, object]) -> tuple[str | None, str]:
-    """Read the instructions preset and its task; model default sends no instructions and has no task."""
-    preset = cast("str", choice[INSTRUCTION_CHOICE["INPUT"]])
-    if preset == MODEL_DEFAULT:
-        return None, ""
-    return preset, cast("str", choice[INSTRUCTION_CHOICE["TASK"]]).strip()
 
 
 class SearchEmbed(PaidNode):
@@ -93,8 +56,17 @@ class SearchEmbed(PaidNode):
                     advanced=True,
                     tooltip="The vector length; model default is 2048.",
                 ),
-                _INSTRUCTIONS,
                 *build_request_inputs(has_seed=False),
+                io.String.Input(
+                    "instructions",
+                    multiline=True,
+                    default="",
+                    placeholder="instructions",
+                    tooltip=(
+                        "Sent as written with every item, in ModelArk's Target_modality, Instruction, and Query lines. "
+                        "Leave it empty to let ModelArk choose."
+                    ),
+                ),
                 io.String.Input(
                     "texts",
                     multiline=True,
@@ -118,14 +90,13 @@ class SearchEmbed(PaidNode):
         texts: list[str],
         model: str,
         dimensions: str,
-        instructions: Mapping[str, object],
+        instructions: str,
         images: list[torch.Tensor] | None = None,
         videos: list[Input.Video] | None = None,
         options: Options | None = None,
     ) -> io.NodeOutput:
         """Encode every image and video inside the owned task, then send the items one after another."""
         lines = tuple(line.strip() for text in texts for line in text.splitlines() if line.strip())
-        preset, task = _read_instructions(instructions)
 
         async def send_encoded() -> io.NodeOutput:
             """Encode the media inside the owned task, then send the requests."""
@@ -138,8 +109,7 @@ class SearchEmbed(PaidNode):
                 images=encoded_images,
                 video_urls=video_urls,
                 dimensions=None if dimensions == MODEL_DEFAULT else int(dimensions),
-                instructions=preset,
-                task=task,
+                instructions=instructions if instructions.strip() else None,
                 options=options,
             )
             return await send_request(

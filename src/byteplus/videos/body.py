@@ -48,11 +48,11 @@ def _validate_draft_finish(request: VideoRequest, match: ModelMatch[VideoRow]) -
     if request.resolution not in limits.draft_finishes:
         message = DRAFT_FINISH_SIZE.format(model=match.model_id, resolutions=", ".join(limits.draft_finishes))
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-    is_changed = request.aspect_ratio is not None or request.has_sound is not None
+    is_changed = request.ratio is not None or request.has_sound is not None
     if is_changed or request.task_type != "auto" or request.is_camera_fixed:
         raise ByteplusError(ErrorCode.INVALID_INPUT, DRAFT_REUSED)
     if request.output_format is not None:
-        validate_value(match, "file format", request.output_format, limits.output_formats)
+        validate_value(match, "output format", request.output_format, limits.output_formats)
 
 
 def _validate_media(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> None:
@@ -101,7 +101,7 @@ def _validate_images(request: VideoRequest) -> None:
         ("first frame", request.first_frame),
         ("last frame", request.last_frame),
     ]
-    labelled.extend(("reference images", image) for image in request.images)
+    labelled.extend(("reference image", image) for image in request.images)
     for label, image in labelled:
         if not isinstance(image, EncodedImage):
             continue
@@ -136,23 +136,22 @@ def _choose_length(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict[s
     """Choose the task type, resolution, and duration fields, each always sent where the model takes it.
 
     A draft is made at 480p whatever the resolution says. An edit always sends -1, since it matches the length of the
-    video it edits, and so does 0, which lets the model choose.
+    video it edits.
     """
     limits = match.row.video
     fields: dict[str, Json] = {}
     if request.task_type != "auto":
-        validate_value(match, "task", request.task_type, limits.task_types)
+        validate_value(match, "omni reference task type", request.task_type, limits.task_types)
         fields["omni_reference_task_type"] = request.task_type
     if request.is_draft:
-        validate_value(match, "draft", "on", ("on",) if limits.draft_finishes else ())
+        validate_value(match, "draft", "true", ("true",) if limits.draft_finishes else ())
         fields["draft"] = True
         # RESOLUTIONS also holds the choices, so its values type as either; the draft size is text.
         fields["resolution"] = cast("str", RESOLUTIONS["DRAFT"])
     else:
         validate_value(match, "resolution", request.resolution, limits.resolutions)
         fields["resolution"] = request.resolution
-    is_chosen = request.task_type == "edit" or request.duration == 0
-    duration = DURATION["AUTO"] if is_chosen else request.duration
+    duration = DURATION["AUTO"] if request.task_type == "edit" else request.duration
     extra = (DURATION["AUTO"],) if limits.can_choose_duration else ()
     validate_range(match, "duration", duration, limits.durations, extra)
     fields["duration"] = duration
@@ -169,16 +168,16 @@ def _choose_ratio(request: VideoRequest, match: ModelMatch[VideoRow], mode: str)
     is_adaptive_task = request.task_type in ADAPTIVE_TASK_TYPES
     label = VIDEO_MODE_LABELS[request.task_type if is_adaptive_task else mode]
     if mode in limits.adaptive_modes or is_adaptive_task:
-        if request.aspect_ratio not in {None, ADAPTIVE_RATIO}:
+        if request.ratio not in {None, ADAPTIVE_RATIO}:
             raise ByteplusError(ErrorCode.INVALID_INPUT, RATIO_ADAPTIVE_ONLY.format(model=match.model_id, mode=label))
         return ADAPTIVE_RATIO
-    if mode in limits.fixed_ratio_modes and request.aspect_ratio == ADAPTIVE_RATIO:
+    if mode in limits.fixed_ratio_modes and request.ratio == ADAPTIVE_RATIO:
         raise ByteplusError(ErrorCode.INVALID_INPUT, RATIO_FIXED_ONLY.format(model=match.model_id, mode=label))
-    return request.aspect_ratio
+    return request.ratio
 
 
 def _choose_controls(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict[str, Json]:
-    """Choose sound, camera, file format, watermark, last frame, and seed.
+    """Choose sound, camera, output format, watermark, last frame, and seed.
 
     A draft returns no last frame; its output is the draft to finish. The seed is the one field left out silently,
     for a model that takes none.
@@ -186,14 +185,14 @@ def _choose_controls(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict
     limits = match.row.video
     fields: dict[str, Json] = {"watermark": request.has_watermark}
     if request.has_sound is not None:
-        sound = "on" if request.has_sound else "off"
-        validate_value(match, "generate audio", sound, ("on", "off") if limits.has_audio else ())
+        sound = "true" if request.has_sound else "false"
+        validate_value(match, "generate audio", sound, ("true", "false") if limits.has_audio else ())
         fields["generate_audio"] = request.has_sound
     if request.is_camera_fixed:
-        validate_value(match, "camera fixed", "on", ("on",) if limits.has_fixed_camera else ())
+        validate_value(match, "camera fixed", "true", ("true",) if limits.has_fixed_camera else ())
         fields["camera_fixed"] = True
     if request.output_format is not None:
-        validate_value(match, "file format", request.output_format, limits.output_formats)
+        validate_value(match, "output format", request.output_format, limits.output_formats)
         fields["output_format"] = request.output_format
     if not request.is_draft:
         fields["return_last_frame"] = True

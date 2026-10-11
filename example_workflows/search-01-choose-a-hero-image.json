@@ -66,7 +66,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 4.0 draws a series of options from the brief, up to the four **count** allows."
+        "Seedream 4.0 draws a series of options from the brief, up to the four **max images** allows."
       ],
       "title": "Note"
     },
@@ -581,7 +581,7 @@
             ],
             "size": [
               340,
-              344
+              320
             ],
             "flags": {},
             "order": 101,
@@ -597,26 +597,18 @@
               },
               {
                 "name": "size",
-                "type": "COMBO",
+                "type": "STRING",
                 "link": null,
                 "widget": {
                   "name": "size"
                 }
               },
               {
-                "name": "aspect_ratio",
-                "type": "COMBO",
-                "link": null,
-                "widget": {
-                  "name": "aspect_ratio"
-                }
-              },
-              {
-                "name": "count",
+                "name": "max_images",
                 "type": "INT",
                 "link": null,
                 "widget": {
-                  "name": "count"
+                  "name": "max_images"
                 }
               },
               {
@@ -636,11 +628,11 @@
                 }
               },
               {
-                "name": "prompt_optimization",
+                "name": "optimize_prompt_options",
                 "type": "COMBO",
                 "link": null,
                 "widget": {
-                  "name": "prompt_optimization"
+                  "name": "optimize_prompt_options"
                 }
               },
               {
@@ -652,7 +644,7 @@
                 }
               },
               {
-                "name": "reference_images",
+                "name": "image",
                 "type": "IMAGE",
                 "link": null,
                 "shape": 7
@@ -713,8 +705,7 @@
             },
             "widgets_values": [
               "seedream-4-0-250828",
-              "model default",
-              "16:9",
+              "2848x1600",
               4,
               "model default",
               "model default",
@@ -767,7 +758,7 @@
             "origin_id": 101,
             "origin_slot": 0,
             "target_id": 102,
-            "target_slot": 12,
+            "target_slot": 11,
             "type": "STRING"
           },
           {
@@ -880,7 +871,7 @@
             ],
             "size": [
               340,
-              248
+              254
             ],
             "flags": {},
             "order": 200,
@@ -915,14 +906,6 @@
                 }
               },
               {
-                "name": "instructions",
-                "type": "COMFY_DYNAMICCOMBO_V3",
-                "link": null,
-                "widget": {
-                  "name": "instructions"
-                }
-              },
-              {
                 "name": "run_number",
                 "type": "INT",
                 "link": null,
@@ -935,6 +918,14 @@
                 "type": "BYTEPLUS_OPTIONS",
                 "link": null,
                 "shape": 7
+              },
+              {
+                "name": "instructions",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "instructions"
+                }
               },
               {
                 "name": "texts",
@@ -965,9 +956,8 @@
             "widgets_values": [
               "skylark-embedding-vision-251215",
               "model default",
-              "search",
-              "Find the image that best matches this product description",
               0,
+              "Target_modality: text/image.\nInstruction:Find the image that best matches this product description\nQuery:",
               ""
             ],
             "color": "#432",

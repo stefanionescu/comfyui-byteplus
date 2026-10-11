@@ -29,8 +29,8 @@ for developers. For installation and a first run, see the [README](README.md).
   Earlier turns come from **conversation**. It returns the answer, the
   reasoning when the model shares it, and the conversation.
 - **Image: Generate** sends the prompt, the chosen settings, each reference
-  image as PNG, and image references as their addresses. Above a **count** of
-  1 it asks for a series of at most that many images. It returns the images,
+  image as PNG, and image references as their addresses. Above a **max
+  images** of 1 it asks for a series of at most that many images. It returns the images,
   their masks (white is transparent), and their addresses as references.
 - **Image: Split Layers** sends one image or image reference. It returns the
   base image, each layer, and each layer's mask.
@@ -44,12 +44,12 @@ for developers. For installation and a first run, see the [README](README.md).
   references. It sends nothing.
 - **Search: Embed** sends each text line, image, and video in its own request,
   one after another. It compares each embedding with the first one locally.
-- **3D: Generate** sends the prompt, the images as PNG, the image references,
-  and the chosen settings as a task. It records the task, checks it every 10
-  seconds, and downloads the GLB file. **3D: Download** collects a recorded 3D
-  task.
-- **Request Options** adds the tier and its extra fields to each connected
-  paid node's request.
+- **3D: Generate** sends the prompt with the model's own commands and the GLB
+  format command, the images as PNG, and the image references as a task. It
+  records the task, checks it every 10 seconds, and downloads the GLB file.
+  **3D: Download** collects a recorded 3D task.
+- **Request Options** adds the service tier and its extra fields to each
+  connected paid node's request.
 - **Model: Info** reads the model table bundled with the extension and returns
   one row as JSON. It sends nothing.
 
@@ -133,7 +133,7 @@ an asset (`asset://asset-…`); or a public `https://` address added with
 **Reference: Add**.
 
 **Video: Generate** numbers media by kind, in the order it sends them: Image
-1, Image 2, Video 1, Audio 1. Images connected to **reference images** come
+1, Image 2, Video 1, Audio 1. Images connected to **reference image** come
 first, then image references in chain order; audio works the same way, and
 videos come only from references. **Reference: Add** puts its reference after
 the ones it receives. Name each file in the prompt by its place, such as "the
@@ -206,7 +206,7 @@ table, and ModelArk refuses a request outside them.
 Paid nodes check these before sending, along with the [model checks](#models).
 
 **Chat: Ask** stops when the prompt is empty, the media are over the upload
-limit, the answer schema is not a JSON object, or a reference is an asset,
+limit, the JSON schema is not a JSON object, or a reference is an asset,
 which only video takes.
 
 **Chat: Attach Document** stops when no file is chosen or the file is outside
@@ -229,11 +229,11 @@ reference has expired; or a draft is combined with other media.
 **Reference: Add** stops when the asset ID or address is empty, or is not an
 asset ID, an `asset://` URI, or an `https://` address.
 
-**Search: Embed** stops when there are no items, or **instructions** is set and
-its task is empty.
+**Search: Embed** stops when there are no items.
 
-**3D: Generate** stops when there is no prompt and no image, or more images
-are connected than the model takes.
+**3D: Generate** stops when there is no prompt and no image, Hitem3D gets no
+image, the prompt asks for a file format other than GLB, or more images are
+connected than the model takes.
 
 **3D: Download** stops when the chosen task is not recorded on this server.
 

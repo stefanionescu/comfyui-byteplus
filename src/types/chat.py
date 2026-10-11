@@ -70,11 +70,12 @@ class ChatRequest:
         audio_clips: Base64 WAV without a data: prefix, as the input_audio part takes it.
         documents: Attached files, in chain order.
         references: Image, video, and audio addresses ModelArk reads itself, in chain order.
-        thinking: The thinking.type to send, enabled or disabled.
+        thinking: The thinking.type to send: enabled, disabled, or auto.
         effort: The reasoning effort to send.
-        max_tokens: The most tokens the model may write, reasoning included, or 0 for ModelArk's answer limit.
+        max_completion_tokens: The most tokens the model may write, reasoning included, or 0 for ModelArk's answer
+            limit.
         temperature: The sampling temperature to send.
-        answer_schema: JSON schema the answer must follow, or None for free text.
+        json_schema: The response_format.json_schema object to send as written, or None for free text.
         options: The service tier and extra fields from Request Options.
 
     """
@@ -90,9 +91,9 @@ class ChatRequest:
     references: tuple[Reference, ...]
     thinking: str | None
     effort: str | None
-    max_tokens: int
+    max_completion_tokens: int
     temperature: float | None
-    answer_schema: Mapping[str, Json] | None
+    json_schema: Mapping[str, Json] | None
     options: Options | None
 
 

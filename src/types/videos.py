@@ -32,18 +32,18 @@ class VideoRequest:
     Attributes:
         model_id: The model ID sent to ModelArk.
         prompt: What the video shows; empty to finish a draft.
-        duration: The length in seconds; 0 lets the model choose.
+        duration: The length in seconds; -1 lets the model choose.
         resolution: The resolution, always sent except to finish a draft.
-        aspect_ratio: The aspect ratio.
-        has_sound: Whether the video has sound.
-        task_type: auto, reference, edit, or extend; auto sends nothing.
+        ratio: The aspect ratio, or adaptive.
+        has_sound: The generate_audio value: whether the video has sound.
+        task_type: The omni_reference_task_type: auto, reference, edit, or extend; auto sends nothing.
         is_draft: Whether to make a 480p draft.
         is_camera_fixed: Whether to ask the model to keep the camera still.
         output_format: mp4 or mov.
         has_watermark: Whether ModelArk marks the video as AI-generated.
         first_frame: The image the video starts from: encoded here, or a reference ModelArk reads by address.
         last_frame: The image the video ends on, in the same forms.
-        images: The images connected to reference images, in list order and then batch order.
+        images: The images connected to reference image, in list order and then batch order.
         clips: The clips connected to reference audio, in list order and then batch order.
         references: The references chain, in chain order.
         seed: The seed, sent only to models that take one.
@@ -55,7 +55,7 @@ class VideoRequest:
     prompt: str
     duration: int
     resolution: str
-    aspect_ratio: str | None
+    ratio: str | None
     has_sound: bool | None
     task_type: str
     is_draft: bool
