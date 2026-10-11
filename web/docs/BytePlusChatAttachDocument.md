@@ -22,8 +22,8 @@ Chain several of these nodes to attach several files.
 2. Choose it in **document**.
 3. Connect **documents** to **Chat: Ask**.
 
-A PDF goes to models that read PDFs, up to 50 MB; ModelArk reads each page
-as an image. A text file goes to any model and must be UTF-8. An edited file
-is read again on the next run. Example: **chat-01-write-a-product-listing**.
+A PDF goes to models that read PDFs; ModelArk reads each page as an image. A
+text file goes to any model and must be UTF-8. An edited file is read again on
+the next run. Example: **chat-01-write-a-product-listing**.
 
 [ModelArk document understanding](https://docs.byteplus.com/en/docs/modelark/document-understanding)

@@ -212,9 +212,9 @@ CAST_CHARACTER = Workflow(
     ),
     stacks=(
         (Group(SHARED_TEXTS["input"], (("product", "scene"),), note=CAST_TEXTS["input"]),),
-        (Group(SHARED_TEXTS["product"], (("draw",),), STAGE_COLOUR, CAST_TEXTS["product"]),),
+        (Group(SHARED_TEXTS["draw"], (("draw",),), STAGE_COLOUR, CAST_TEXTS["draw"]),),
         (Group(SHARED_TEXTS["character"], (("cast",),), STAGE_COLOUR, CAST_TEXTS["character"]),),
-        (Group(SHARED_TEXTS["video"], (("film",),), STAGE_COLOUR, CAST_TEXTS["video"]),),
+        (Group(SHARED_TEXTS["film"], (("film",),), STAGE_COLOUR, CAST_TEXTS["film"]),),
     ),
     subgraphs=(DRAW, FILM),
 )

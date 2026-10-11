@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Reference: Add** adds the preset character after the product, so the product is Image 1 and the character Image 2, as **Scene** says. The first run stops here until you paste an asset ID. BytePlus allows preset characters only for trying the models and internal use."
+        "**Reference: Add** adds the preset character after the product, so the product is Image 1 and the character Image 2, as **Scene** says. The first run stops here until you paste an asset ID."
       ],
       "title": "Note"
     },
@@ -132,7 +132,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedance 2.0 mini films the character with the product. BytePlus trusts its preset characters, so their faces are not blocked.\n\nBytePlus usually starts the task at once, so a cancelled run's video is still made and billed; collect it with **video-05-recover-a-video**."
+        "Seedance 2.0 mini films the character with the product.\n\nModelArk usually starts the task at once, so a cancelled run's video is still made and billed; collect it with **video-05-recover-a-video**."
       ],
       "title": "Note"
     },
@@ -415,7 +415,7 @@
     },
     {
       "id": 2,
-      "title": "Product",
+      "title": "Draw",
       "bounding": [
         430,
         30,
@@ -441,7 +441,7 @@
     },
     {
       "id": 4,
-      "title": "Video",
+      "title": "Film",
       "bounding": [
         1290,
         30,

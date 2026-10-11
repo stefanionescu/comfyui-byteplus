@@ -9,9 +9,9 @@ each person, object, and block of text, with Seedream 5.0 pro or flash.
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `model`                   | A Seedream 5.0 pro or flash model ID; the default is `dola-seedream-5-0-flash-260915`.                                                                                         |
 | `size`                    | `1K`, `1.5K`, `2K`, or `auto`, which keeps each part near its own size, from 1K to 2K.                                                                                         |
-| `optimize_prompt_options` | `standard` or `fast`, sent as its mode, on models that offer it.                                                                                                               |
+| `optimize_prompt_options` | `standard` or `fast`, sent as `optimize_prompt_options.mode`, on models that offer it.                                                                                         |
 | `watermark`               | Adds an AI-generated mark in the lower right corner.                                                                                                                           |
-| `image`                   | One image to split, or references that hold one, such as the **references** of **Image: Generate**. It needs 262,144 to 36 million pixels, such as 512 by 512 to 6000 by 6000. |
+| `image`                   | One image to split, or references that hold one, such as the **references** of **Image: Generate**.                                                                            |
 | `run_number`              | Change it to send the same request again.                                                                                                                                      |
 | `prompt`                  | What to split out. Leave it empty to split every main part, or mark a region as `<bbox>left top right bottom</bbox>`, from 0 0 at the top left to 999 999 at the bottom right. |
 | `options`                 | Settings from **Request Options**.                                                                                                                                             |

@@ -24,8 +24,7 @@ Sets the service tier and extra request fields for any number of paid nodes.
 A paid node stops with an error, before sending, when **service tier** is
 `flex` and its model does not take flex, or when **extra fields** sets a field
 the node sets itself, such as `model` or `prompt`. **Model: Info** shows
-`"flex": true` for each model that takes flex. A flex request waits in
-ModelArk's queue, so it can take much longer.
+`"flex": true` for each model that takes flex.
 
 Example: **chat-02-summarize-a-voice-note**.
 

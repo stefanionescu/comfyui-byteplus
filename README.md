@@ -7,18 +7,15 @@
 
 Run any BytePlus ModelArk model in ComfyUI with your own API key.
 
-- **Chat:** ask Seed, GLM, or DeepSeek models with images, video, audio, or
-  documents; get text or JSON.
+- **Chat:** ask with images, video, audio, or documents; get text or JSON.
 - **Image:** generate and edit images with Seedream, and split an image into
   layers.
-- **Video:** make a video with Seedance from a prompt, frames, or references;
-  extend a clip or finish a draft.
-- **References and characters:** cast BytePlus's preset characters, or
-  characters you design with Seedream, in a Seedance video.
+- **Video:** make a video with Seedance from a prompt, frames, references, or
+  preset characters; extend a clip or finish a draft.
 - **Search:** embed and compare text, images, and video.
 - **3D:** turn images or a prompt into a GLB 3D model.
-- **Request Options:** the flex tier and extra request fields for any paid
-  node.
+- **Request Options:** extra request fields for any paid node, and the flex
+  tier on models that take it.
 
 ## Contents
 
@@ -28,7 +25,6 @@ Run any BytePlus ModelArk model in ComfyUI with your own API key.
 - [Example workflows](#example-workflows)
 - [Nodes](#nodes)
 - [Models](#models)
-- [Characters](#characters)
 - [How a run works](#how-a-run-works)
 - [Development](#development)
 - [Common problems](#common-problems)
@@ -129,7 +125,7 @@ They are in **Browse Templates → comfyui-byteplus**. Start with each
 workflow's **Start Here** note; each step is a subgraph. Media inputs start
 empty, and most workflows draw their own inputs with Seedream.
 
-![Screenshot of the Character group in video-03: a note explains that Reference: Add adds the preset character after the product, so the product is Image 1 and the character Image 2, and the Reference: Add node shows its kind set to image and an empty asset ID or address field.](docs/images/workflow-cast-group.png)
+![Screenshot of the Character group in video-03: a note explains that Reference: Add adds the preset character after the product, so the product is Image 1 and the character Image 2, and the Reference: Add node shows its kind set to image and an empty url field.](docs/images/workflow-cast-group.png)
 
 After an update, open the examples in a new tab to get the new versions.
 
@@ -159,46 +155,25 @@ The nodes are under **BytePlus** in the node menu, and each has a help page.
 Each paid node takes any model ID from the
 [ModelArk model list](https://docs.byteplus.com/en/docs/modelark/model-list).
 A newer version of a model the extension knows also works. **Model: Info**
-shows what any ID takes, for free and without a key.
+shows what a model the extension knows takes, for free and without a key.
 
 ![Video: Generate on the canvas: sockets for the first frame, last frame, reference image, reference audio, references, and options; the model field set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate audio, omni reference task type, draft, camera fixed, output format, watermark, seed, and run number; and the prompt box at the bottom.](docs/images/video-generate-node.png)
 
 Before sending, the node checks your request against the extension's own
 table of ModelArk models, and stops before anything is paid if the model
-cannot take it. The error names what the model does take. Each model must
-also be activated on the ModelArk console's **Model activation** page, which
-the extension cannot check. The [advanced guide](ADVANCED.md#models) lists
-every check and each node's default model.
-
-## Characters
-
-Seedance 2.x refuses reference images and videos with real-looking faces. It
-accepts these characters:
-
-- A preset character from BytePlus's library. In the ModelArk console, open
-  **Playground**, choose Seedance 2.5, and open the **Digital characters**
-  tab. Copy a character's asset ID into **Reference: Add**. BytePlus allows
-  videos made with preset characters only for trying the models and internal
-  use.
-- A character you design with Seedream 5.0. Connect the **references** of
-  **Image: Generate** to **Video: Generate**. ModelArk trusts its own original
-  file for 30 days, and the file's address works for 24 hours.
-- An asset from your BytePlus asset library, by its ID in **Reference: Add**.
-  Uploading to the library needs an enterprise account and is not part of
-  the extension.
-
-The [advanced guide](ADVANCED.md#characters-and-references) explains how
-references are numbered in a prompt and how long each one lasts.
+cannot take it. The error names what the model does take. The
+[advanced guide](ADVANCED.md#models) lists every check and each node's default
+model.
 
 ## How a run works
 
 1. The node checks its inputs against the model's row in the extension's
    table, and stops before anything is paid.
-2. It sends the request with your key, straight to BytePlus. Nothing is sent
+2. It sends the request with your key, straight to ModelArk. Nothing is sent
    twice. A video or 3D task is recorded, checked until ready, and
    downloaded.
-3. Outputs keep the address of each file BytePlus made, so the next node can
-   send BytePlus's own file. Nodes connected to an empty output are skipped.
+3. Outputs keep the address of each file ModelArk made, so the next node can
+   send ModelArk's own file. Nodes connected to an empty output are skipped.
 
 The [advanced guide](ADVANCED.md#what-each-node-sends) lists what each node
 sends and returns.

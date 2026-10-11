@@ -1,13 +1,17 @@
 """The group notes and subgraph descriptions of the shipped workflows, in plain language."""
 
 KEY_STEP = "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n"
+RECOVER_STEP = (
+    "ModelArk usually starts the task at once, so a cancelled run's video is still made and billed; collect it with "
+    "**video-05-recover-a-video**."
+)
 
 WORKFLOW_TEXTS = {
     "chat-01-write-a-product-listing": {
         "input": (
             KEY_STEP + "2. Describe your product in **Product**.\n"
             "3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input "
-            "folder. Press R if it is not listed.\n"
+            "folder.\n"
             "4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
         ),
         "photo": (
@@ -17,8 +21,8 @@ WORKFLOW_TEXTS = {
         "photo_description": "Draws the product photo.",
         "write": (
             "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking disabled, and writes the "
-            "listing as JSON: a title, five bullet points, and a short description. The JSON schema makes it answer "
-            "in exactly that shape. **Write** shows the listing and saves it.\n\n"
+            "listing as JSON: a title, five bullet points, and a short description. **Write** shows the listing and "
+            "saves it.\n\n"
             "Open **Write** to change the instructions or the schema."
         ),
         "write_description": "Writes the listing from the photo and the spec sheet, as JSON, and saves it.",
@@ -34,12 +38,10 @@ WORKFLOW_TEXTS = {
         ),
         "transcribe_description": "Transcribes the voice note and saves the transcript.",
         "actions": (
-            "DeepSeek V4 flash continues the same conversation: **conversation** carries the transcript, so the "
+            "DeepSeek V4 flash GA continues the same conversation: **conversation** carries the transcript, so the "
             "audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the "
             "list.\n\n"
-            "**Request Options** sends this request at the flex tier, which BytePlus runs in a low-priority queue at a "
-            "lower rate, so the answer can take several minutes. Only a few models take flex; **Model: Info** shows "
-            '`"flex": true` for them.'
+            "**Request Options** sends this request at the flex tier, which costs less but can take several minutes."
         ),
         "actions_description": "Lists the action items from the transcript and saves them.",
     },
@@ -53,12 +55,10 @@ WORKFLOW_TEXTS = {
             "Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its **references** carry the "
             "image's own ModelArk address on to **Wave**."
         ),
-        "sheet_description": "Draws the character and saves the image.",
+        "design_description": "Draws the character and saves the image.",
         "wave": (
             "Seedream 5.0 flash edits the character from its address, keeping the outfit, and draws it waving. "
-            "Change the prompt in **Wave** to pose the character another way.\n\n"
-            "The address works for 24 hours; after that, open **Sheet** and change **run number** to draw the "
-            "character again."
+            "Change the prompt in **Wave** to pose the character another way."
         ),
         "wave_description": "Draws the same character waving and saves the image.",
     },
@@ -69,13 +69,13 @@ WORKFLOW_TEXTS = {
         ),
         "model": (
             "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for "
-            "free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes a series of related images "
-            "in one request, so **max images** can be 4. The default, Seedream 5.0 flash, makes one image per request, "
+            "free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes several related images in "
+            "one request, so **max images** can be 4. The default, Seedream 5.0 flash, makes one image per request, "
             "so the node refuses 4 for it before sending anything."
         ),
         "series": (
-            "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It decides how many "
-            "to make, up to the four **max images** allows, and each poster it makes is billed."
+            "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It makes as many as "
+            "**Brief** asks for, up to the four **max images** allows."
         ),
         "series_description": "Draws the poster series and saves it.",
     },
@@ -103,17 +103,14 @@ WORKFLOW_TEXTS = {
             "3. Press **Run**. The video is saved under `video/byteplus`."
         ),
         "design": (
-            "Seedream 5.0 flash draws the character, which becomes the video's first frame. Seedance refuses images "
-            "of real-looking faces, but it trusts images ModelArk made itself for 30 days, as long as it gets the "
-            "original file. **references** carries that original address, not a copy."
+            "Seedream 5.0 flash draws the character, which becomes the video's first frame. Seedance refuses "
+            "real-looking faces, but trusts the original file of an image Seedream 5.0 drew from a prompt alone, for "
+            "30 days; **references** carries that file's address."
         ),
         "design_description": "Draws the character.",
         "animate": (
             "Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the "
-            "line. The character's address works for 24 hours; after that, open **Design** and change **run "
-            "number** to draw a new one.\n\n"
-            "BytePlus usually starts the task at once, so a cancelled run's video is still made and billed; collect it "
-            "with **video-05-recover-a-video**."
+            "line.\n\n" + RECOVER_STEP
         ),
         "animate_description": "Turns the character into a video and saves it.",
     },
@@ -124,7 +121,7 @@ WORKFLOW_TEXTS = {
         ),
         "shot_1": (
             "Seedance 2.0 mini makes the first five-second shot at 480p. Its **references** carry the shot's video "
-            "and its last frame on, as BytePlus's own files."
+            "and its last frame on, as ModelArk's own files.\n\n" + RECOVER_STEP
         ),
         "shot_1_description": "Makes the first shot and saves it.",
         "shot_2": (
@@ -135,11 +132,7 @@ WORKFLOW_TEXTS = {
             "**first frame**."
         ),
         "shot_2_description": "Makes the next shot from the first shot's last frame and saves it.",
-        "join": (
-            "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.\n\n"
-            "BytePlus usually starts a shot at once, so a cancelled shot is still made and billed; collect it with "
-            "**video-05-recover-a-video**."
-        ),
+        "join": "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.",
         "join_description": "Joins the two shots and saves the result.",
     },
     "video-03-cast-a-preset-character": {
@@ -150,22 +143,16 @@ WORKFLOW_TEXTS = {
             "3. Describe the product in **Product** and the shot in **Scene**.\n"
             "4. Press **Run**. The video is saved under `video/byteplus`."
         ),
-        "product": (
+        "draw": (
             "Seedream 5.0 flash draws the product. Its **references** carry the image's address on to **Reference: "
             "Add**."
         ),
         "draw_description": "Draws the product.",
         "character": (
             "**Reference: Add** adds the preset character after the product, so the product is Image 1 and the "
-            "character Image 2, as **Scene** says. The first run stops here until you paste an asset ID. BytePlus "
-            "allows preset characters only for trying the models and internal use."
+            "character Image 2, as **Scene** says. The first run stops here until you paste an asset ID."
         ),
-        "video": (
-            "Seedance 2.0 mini films the character with the product. BytePlus trusts its preset characters, so their "
-            "faces are not blocked.\n\n"
-            "BytePlus usually starts the task at once, so a cancelled run's video is still made and billed; collect it "
-            "with **video-05-recover-a-video**."
-        ),
+        "film": "Seedance 2.0 mini films the character with the product.\n\n" + RECOVER_STEP,
         "film_description": "Films the preset character with the product and saves the video.",
     },
     "video-04-draft-then-finish": {
@@ -176,7 +163,7 @@ WORKFLOW_TEXTS = {
             "Only the finish runs; ComfyUI reuses the draft."
         ),
         "draft": (
-            "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which BytePlus "
+            "Seedance 2.5 makes a quick 480p draft. Its **references** carry the draft's task ID, which ModelArk "
             "keeps for seven days."
         ),
         "draft_description": "Makes a four-second 480p draft and saves it.",
@@ -191,14 +178,13 @@ WORKFLOW_TEXTS = {
     },
     "video-05-recover-a-video": {
         "recover": (
-            "Use this after you cancel a run of **Video: Generate** once its task has started, after the run times "
-            "out, or after ComfyUI restarts while a video is being made. BytePlus keeps making the video. A task that "
-            "was still queued when you cancelled was cancelled, and is not listed.\n\n"
+            "Use this after you cancel a run of **Video: Generate**, after it times out, or after ComfyUI restarts "
+            "while a video is being made. ModelArk still makes the video.\n\n"
             + KEY_STEP
             + "2. In **task**, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
             "to list tasks started after the page loaded.\n"
             "3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\n"
-            "A task leaves the list once its video is saved. BytePlus deletes a finished video's file after 24 hours."
+            "A task leaves the list once its video is saved."
         ),
     },
     "search-01-choose-a-hero-image": {
@@ -206,18 +192,18 @@ WORKFLOW_TEXTS = {
             KEY_STEP + "2. Describe the product and the picture you need in **Brief**, in one line.\n"
             "3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`."
         ),
-        "draw": "Seedream 4.0 draws a series of options from the brief, up to the four **max images** allows.",
-        "draw_description": "Draws up to four options from the brief.",
+        "draw": "Seedream 4.0 draws four options from the brief in one request.",
+        "draw_description": "Draws four options from the brief.",
         "score": (
-            "Skylark embedding vision turns the brief and each option into an embedding, one request per item, and "
-            "compares each with the brief. **Scores** lists the brief first, compared with itself, then each option "
-            "in order; the highest after the first is the best match."
+            "Skylark embedding vision turns the brief and each option into an embedding and compares each with the "
+            "brief. **Scores** lists the brief first, compared with itself, then each option in order; the highest "
+            "after the first is the best match."
         ),
         "score_description": "Embeds the brief and the options, and compares each option with the brief.",
         "choose": (
             "**Choose** picks the best match with ComfyUI's own nodes: **Extract Text** reads each option's score, "
             "**Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes "
-            "that option, which is saved under `image/byteplus`. A missing option scores -2, so it is never chosen."
+            "that option, which is saved under `image/byteplus`."
         ),
         "choose_description": "Picks the option with the highest score and saves it.",
     },
@@ -233,15 +219,12 @@ WORKFLOW_TEXTS = {
         "design_description": "Draws the character in a T-pose.",
         "build": (
             "Hyper3D Gen2 turns the image into a 3D model. Its prompt holds Hyper3D's commands for PBR textures and a "
-            "pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it.\n\n"
-            "BytePlus usually starts the task at once, so a cancelled run's model is still made and billed; collect it "
-            "in **Recover**."
+            "pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it."
         ),
         "recover": (
-            "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after "
-            "ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn "
-            "them on, choose the task in **task**, and press **Run**. Press R to list tasks started after the page "
-            "loaded."
+            "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, or after ComfyUI restarts "
+            "while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn them on, choose "
+            "the task in **task**, and press **Run**. Press R to list tasks started after the page loaded."
         ),
     },
 }

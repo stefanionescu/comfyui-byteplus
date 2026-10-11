@@ -1,8 +1,7 @@
 # 3D: Download
 
 Downloads a 3D model that ModelArk kept making after a run stopped: you
-cancelled it after it started, ComfyUI restarted, or the wait passed the
-request timeout.
+cancelled it, ComfyUI restarted, or it waited too long.
 
 ## Inputs
 

@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seedream 5.0 flash edits the character from its address, keeping the outfit, and draws it waving. Change the prompt in **Wave** to pose the character another way.\n\nThe address works for 24 hours; after that, open **Sheet** and change **run number** to draw the character again."
+        "Seedream 5.0 flash edits the character from its address, keeping the outfit, and draws it waving. Change the prompt in **Wave** to pose the character another way."
       ],
       "title": "Note"
     },
@@ -146,7 +146,7 @@
     },
     {
       "id": 5,
-      "type": "6c03f997-4743-5b12-9806-1ed3f40c5f2f",
+      "type": "91bcb8a7-7f02-58c9-a8e2-c9bd8021f36d",
       "pos": [
         460,
         302
@@ -184,7 +184,7 @@
         ]
       },
       "widgets_values": [],
-      "title": "Sheet"
+      "title": "Design"
     },
     {
       "id": 6,
@@ -294,7 +294,7 @@
   "definitions": {
     "subgraphs": [
       {
-        "id": "6c03f997-4743-5b12-9806-1ed3f40c5f2f",
+        "id": "91bcb8a7-7f02-58c9-a8e2-c9bd8021f36d",
         "version": 1,
         "state": {
           "lastGroupId": 0,
@@ -304,7 +304,7 @@
         },
         "revision": 0,
         "config": {},
-        "name": "Sheet",
+        "name": "Design",
         "inputNode": {
           "id": -10,
           "bounding": [
@@ -325,7 +325,7 @@
         },
         "inputs": [
           {
-            "id": "167c27a1-333d-5686-b31c-f05423b4e89d",
+            "id": "7ca4bb51-1773-52bd-967b-61ffaab48b13",
             "name": "character",
             "type": "*",
             "linkIds": [
@@ -339,7 +339,7 @@
         ],
         "outputs": [
           {
-            "id": "7b6a06e6-129a-534d-8e87-4d0cf5ea975e",
+            "id": "a408adae-9ac2-53ef-81c8-fc01123128aa",
             "name": "references",
             "type": "BYTEPLUS_REFERENCES",
             "linkIds": [

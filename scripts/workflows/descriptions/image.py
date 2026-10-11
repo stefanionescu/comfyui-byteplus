@@ -20,8 +20,8 @@ CHARACTER_TEXTS = WORKFLOW_TEXTS["image-01-design-a-character"]
 SERIES_TEXTS = WORKFLOW_TEXTS["image-02-make-a-poster-series"]
 LAYERS_TEXTS = WORKFLOW_TEXTS["image-03-split-a-poster-into-layers"]
 
-SHEET = Subgraph(
-    name=SHARED_TEXTS["sheet"],
+DESIGN = Subgraph(
+    name=SHARED_TEXTS["design"],
     nodes=(
         Node(
             "prompt",
@@ -35,7 +35,7 @@ SHEET = Subgraph(
     columns=(("prompt",), ("draw",), ("save",)),
     inputs=(("character", "prompt.values.a"),),
     outputs=(("references", "draw.references"),),
-    description=CHARACTER_TEXTS["sheet_description"],
+    description=CHARACTER_TEXTS["design_description"],
     previews=(("save", IMAGE_PREVIEW),),
 )
 
@@ -71,16 +71,16 @@ DESIGN_CHARACTER = Workflow(
             },
             title=SHARED_TEXTS["character"],
         ),
-        Node("sheet", SHEET.name),
+        Node("design", DESIGN.name),
         Node("wave", WAVE.name),
     ),
-    links=(("character.STRING", "sheet.character"), ("sheet.references", "wave.references")),
+    links=(("character.STRING", "design.character"), ("design.references", "wave.references")),
     stacks=(
         (Group(SHARED_TEXTS["input"], (("character",),), note=CHARACTER_TEXTS["input"]),),
-        (Group(SHARED_TEXTS["design"], (("sheet",),), STAGE_COLOUR, CHARACTER_TEXTS["design"]),),
+        (Group(SHARED_TEXTS["design"], (("design",),), STAGE_COLOUR, CHARACTER_TEXTS["design"]),),
         (Group(SHARED_TEXTS["wave"], (("wave",),), STAGE_COLOUR, CHARACTER_TEXTS["wave"]),),
     ),
-    subgraphs=(SHEET, WAVE),
+    subgraphs=(DESIGN, WAVE),
 )
 
 SERIES = Subgraph(

@@ -13,7 +13,7 @@
       ],
       "size": [
         720,
-        108
+        96
       ],
       "flags": {},
       "order": 0,
@@ -33,7 +33,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your product in **Product**.\n3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input folder. Press R if it is not listed.\n4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
+        "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus settings**.\n2. Describe your product in **Product**.\n3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input folder.\n4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
       ],
       "title": "Start Here"
     },
@@ -46,7 +46,7 @@
       ],
       "size": [
         340,
-        108
+        96
       ],
       "flags": {},
       "order": 1,
@@ -79,7 +79,7 @@
       ],
       "size": [
         340,
-        108
+        96
       ],
       "flags": {},
       "order": 2,
@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking disabled, and writes the listing as JSON: a title, five bullet points, and a short description. The JSON schema makes it answer in exactly that shape. **Write** shows the listing and saves it.\n\nOpen **Write** to change the instructions or the schema."
+        "Seed 2.0 lite reads the photo and the spec sheet in one request, with thinking disabled, and writes the listing as JSON: a title, five bullet points, and a short description. **Write** shows the listing and saves it.\n\nOpen **Write** to change the instructions or the schema."
       ],
       "title": "Note"
     },
@@ -108,7 +108,7 @@
       "type": "PrimitiveStringMultiline",
       "pos": [
         30,
-        312
+        300
       ],
       "size": [
         340,
@@ -149,7 +149,7 @@
       "type": "BytePlusChatAttachDocument",
       "pos": [
         410,
-        312
+        300
       ],
       "size": [
         340,
@@ -195,7 +195,7 @@
       "type": "f2ad5c2f-1e1b-5561-9f30-142b9908db75",
       "pos": [
         840,
-        312
+        300
       ],
       "size": [
         340,
@@ -243,7 +243,7 @@
       "type": "8b353114-e641-533a-9d96-9976c64e554d",
       "pos": [
         1270,
-        312
+        300
       ],
       "size": [
         340,
@@ -312,7 +312,7 @@
         0,
         30,
         780,
-        400
+        388
       ],
       "color": "#55746b",
       "font_size": 24,
@@ -325,7 +325,7 @@
         810,
         30,
         400,
-        400
+        388
       ],
       "color": "#68688c",
       "font_size": 24,
@@ -338,7 +338,7 @@
         1240,
         30,
         400,
-        358
+        346
       ],
       "color": "#68688c",
       "font_size": 24,

@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "Hyper3D Gen2 turns the image into a 3D model. Its prompt holds Hyper3D's commands for PBR textures and a pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it.\n\nBytePlus usually starts the task at once, so a cancelled run's model is still made and billed; collect it in **Recover**."
+        "Hyper3D Gen2 turns the image into a 3D model. Its prompt holds Hyper3D's commands for PBR textures and a pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it."
       ],
       "title": "Note"
     },
@@ -132,7 +132,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task that had started, or after ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn them on, choose the task in **task**, and press **Run**. Press R to list tasks started after the page loaded."
+        "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, or after ComfyUI restarts while one runs: select **3D: Download** and **Save 3D Model** here, press Ctrl+B to turn them on, choose the task in **task**, and press **Run**. Press R to list tasks started after the page loaded."
       ],
       "title": "Note"
     },

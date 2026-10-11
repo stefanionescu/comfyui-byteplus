@@ -99,7 +99,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "DeepSeek V4 flash continues the same conversation: **conversation** carries the transcript, so the audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the list.\n\n**Request Options** sends this request at the flex tier, which BytePlus runs in a low-priority queue at a lower rate, so the answer can take several minutes. Only a few models take flex; **Model: Info** shows `\"flex\": true` for them."
+        "DeepSeek V4 flash GA continues the same conversation: **conversation** carries the transcript, so the audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the list.\n\n**Request Options** sends this request at the flex tier, which costs less but can take several minutes."
       ],
       "title": "Note"
     },
