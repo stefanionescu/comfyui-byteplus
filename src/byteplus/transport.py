@@ -85,10 +85,20 @@ async def _validate_paid_request(settings: Settings) -> AsyncGenerator[None]:
 
 
 @asynccontextmanager
-async def _validate_free_request() -> AsyncGenerator[None]:
-    """Report a failed request that bills nothing as BytePlus being out of reach, so the caller can send it later."""
+async def _send_free_request(
+    method: str, url: str | URL, settings: Settings, credential: Credential | None
+) -> AsyncGenerator[aiohttp.ClientResponse]:
+    """Send one request that bills nothing, once, and hand over its reply.
+
+    A failure to connect or to read reads as BytePlus being out of reach, never as an uncertain charge, so the caller
+    may send it again.
+    """
     try:
-        yield
+        async with (
+            _create_session(settings, credential) as session,
+            session.request(method, url, allow_redirects=False) as response,
+        ):
+            yield response
     except (aiohttp.ClientError, TimeoutError):
         raise ByteplusError(ErrorCode.TRANSPORT, BYTEPLUS_UNREACHABLE) from None
 
@@ -119,17 +129,11 @@ async def send_json(url: str, body: Mapping[str, Json], configuration: Configura
 
 
 async def send_lookup(url: str, configuration: Configuration) -> Json:
-    """Send one GET with the key that bills nothing, such as a task check, and return its parsed JSON reply.
-
-    Any failure reads as BytePlus being out of reach, never as an uncertain charge, so a caller may check again.
-    """
-    async with (
-        _validate_free_request(),
-        _create_session(configuration.settings, configuration.credential) as session,
-        session.get(url, allow_redirects=False) as response,
-    ):
+    """Send one GET with the key that bills nothing, such as a task check, and return its parsed JSON reply."""
+    settings = configuration.settings
+    async with _send_free_request("GET", url, settings, configuration.credential) as response:
         await _validate_reply(response)
-        content = await _read_body(response, configuration.settings)
+        content = await _read_body(response, settings)
     return _parse_reply(content, ErrorCode.TRANSPORT)
 
 
@@ -140,11 +144,7 @@ async def send_task_cancel(task_id: str, configuration: Configuration) -> None:
     has an empty body, which is not read.
     """
     url = f"{ENDPOINT_URLS['tasks']}/{task_id}"
-    async with (
-        _validate_free_request(),
-        _create_session(configuration.settings, configuration.credential) as session,
-        session.delete(url, allow_redirects=False) as response,
-    ):
+    async with _send_free_request("DELETE", url, configuration.settings, configuration.credential) as response:
         await _validate_reply(response)
 
 
@@ -157,11 +157,7 @@ async def download_output(url: str, settings: Settings) -> bytes:
     """
     if not url.startswith("https://"):
         raise ByteplusError(ErrorCode.UNCERTAIN, REPLY_UNREADABLE)
-    async with (
-        _validate_free_request(),
-        _create_session(settings, None) as session,
-        session.get(URL(url, encoded=True), allow_redirects=False) as response,
-    ):
+    async with _send_free_request("GET", URL(url, encoded=True), settings, None) as response:
         if response.status >= HTTPStatus.MULTIPLE_CHOICES:
             raise ByteplusError(ErrorCode.TRANSPORT, OUTPUT_DOWNLOAD_FAILED.format(status=response.status))
         return await _read_body(response, settings)

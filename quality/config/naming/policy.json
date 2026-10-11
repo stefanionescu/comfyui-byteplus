@@ -130,20 +130,12 @@
             "reason": "Other extensions call Model: Info by its node ID, BytePlusModelInfo, which ComfyUI builds from this class name."
         },
         {
-            "path_regexes": ["^src/(config|types|byteplus|nodes)/.*\\.py$"],
+            "path_regexes": ["^src/(config|types|nodes)/"],
             "languages": ["python"],
             "categories": ["variables", "constants", "attributes", "parameters"],
-            "names": ["resolution", "RESOLUTIONS"],
+            "names": ["resolution", "RESOLUTION_CHOICES", "RESOLUTION_DEFAULT", "DRAFT_RESOLUTION"],
             "allowed_banned_terms": ["resolution"],
-            "reason": "BytePlus names this Seedance and Seedream request field; the extension keeps its spelling."
-        },
-        {
-            "path_regexes": ["^scripts/workflows/.*\\.py$"],
-            "languages": ["python"],
-            "categories": ["variables", "constants", "attributes", "parameters"],
-            "names": ["resolution", "RESOLUTIONS"],
-            "allowed_banned_terms": ["resolution"],
-            "reason": "BytePlus names this Seedance and Seedream request field; the extension keeps its spelling."
+            "reason": "BytePlus names this Seedance request field."
         },
         {
             "path_regexes": ["^src/nodes/options\\.py$"],

@@ -5,23 +5,20 @@ from __future__ import annotations
 import asyncio
 import io as memory
 from ..base import PaidNode
-from functools import partial
 from typing import TYPE_CHECKING
-from ...types.tasks import TaskRequest
 from comfy_api.latest import io, Types
 from ...types.meshes import MeshRequest
 from ...comfy.runtime import get_runtime
 from ...config.messages.tasks import MESH_NOT_GLB
 from ...config.namespace import MENUS, NODE_PREFIX
+from ...byteplus.meshes import build_mesh_operation
 from ...config.messages.run import REPLY_UNREADABLE
 from ...types.errors import ErrorCode, ByteplusError
-from ...byteplus.tasks.operation import TaskOperation
 from ...config.generation.models import DEFAULT_MODELS
 from ...config.generation.inputs import INPUT_NAMES, MODEL_TOOLTIP
-from ...byteplus.meshes import build_mesh_body, validate_mesh_request
+from ...config.generation.meshes import FILE_FORMAT, GLB_SIGNATURE
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
 from ..inputs import REFERENCES_INPUT, encode_sized_images, build_request_inputs
-from ...config.generation.meshes import JOB_KIND, FILE_FORMAT, GLB_SIGNATURE, POLL_INTERVAL_SECONDS
 
 if TYPE_CHECKING:
     import torch
@@ -67,7 +64,7 @@ class MeshGenerate(PaidNode):
                     ),
                 ),
                 REFERENCES_INPUT,
-                *build_request_inputs(has_seed=False),
+                *build_request_inputs(),
                 io.String.Input(
                     "prompt",
                     multiline=True,
@@ -94,10 +91,10 @@ class MeshGenerate(PaidNode):
         references: tuple[Reference, ...] | None = None,
         options: Options | None = None,
     ) -> io.NodeOutput:
-        """Encode the images inside the owned task, then create, record, and wait for the task."""
+        """Wait for the task in an owned task, so ComfyUI's cancel reaches the encoding and the wait."""
 
         async def send_encoded() -> io.NodeOutput:
-            """Encode the images inside the owned task, then send the request."""
+            """Encode the images in a worker thread, then create, record, and wait for the task."""
             encoded = await wait_for_thread(lambda: encode_sized_images(images or ()))
             request = MeshRequest(
                 model_id=model.strip(),
@@ -106,15 +103,7 @@ class MeshGenerate(PaidNode):
                 references=references or (),
                 options=options,
             )
-            task_request = TaskRequest(
-                kind=JOB_KIND,
-                model_id=request.model_id,
-                validate_request=partial(validate_mesh_request, request),
-                build_body=partial(build_mesh_body, request),
-                is_draft=False,
-                poll_seconds=POLL_INTERVAL_SECONDS,
-            )
-            operation = TaskOperation(task_request, get_runtime().jobs)
+            operation = build_mesh_operation(request, get_runtime().jobs)
             return await send_request(operation, build_mesh_output, cls.hidden.unique_id)
 
         return await wait_for_task(asyncio.create_task(send_encoded()))

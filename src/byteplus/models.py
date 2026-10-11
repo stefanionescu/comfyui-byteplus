@@ -10,19 +10,17 @@ from ..config.generation.models import DEFAULT_MODELS
 from collections.abc import Mapping, Iterable, Sequence
 from ..config.patterns import MODEL_ID_PATTERN, MODEL_VERSION_PATTERN
 from ..types.errors import ErrorCode, ByteplusError, UnknownModelError
-from ..config.models import ALIASES, FAMILIES, KIND_NODES, MODEL_TABLE, MEDIA_LABELS, ENDPOINT_PREFIX
+from ..config.models import ALIASES, KIND_NODES, MODEL_TABLE, MEDIA_LABELS, ENDPOINT_PREFIX
 from ..types.models import ChatRow, MeshRow, ImageRow, ModelRow, VideoRow, ModelMatch, MatchMethod, EmbeddingRow
 from ..config.messages.models import (
     MODEL_KIND,
     MODEL_EMPTY,
     MODEL_FIELD,
     MODEL_INPUT,
-    MODEL_RANGE,
     MODEL_VALUE,
     MODEL_UNKNOWN,
     MODEL_VERSION,
     MODEL_ENDPOINT,
-    MODEL_RANGE_EXTRA,
     MODEL_UNKNOWN_ANY,
 )
 
@@ -53,7 +51,9 @@ def _parse_rows(table: Mapping[str, Mapping[str, object]]) -> dict[str, ModelRow
 # The table is parsed once, when ComfyUI imports the extension, so a mistake in it stops loading and names the key.
 _ROWS = _parse_rows(MODEL_TABLE)
 _EXACT_ROWS = {**_ROWS, **{alias: _ROWS[target] for alias, target in ALIASES.items()}}
-_FAMILY_ROWS = {family: _ROWS[newest] for family, newest in FAMILIES.items()}
+# Each family, the model ID without its version, maps to its newest row, which takes another version. Within a family
+# the IDs sort by version, so the newest comes last; a deprecated row always has a newer one.
+_FAMILY_ROWS = {VERSION_SUFFIX.sub("", model_id): _EXACT_ROWS[model_id] for model_id in sorted(_EXACT_ROWS)}
 
 
 def _describe_unknown(model_id: str, kind: Kind | None) -> str:
@@ -154,19 +154,4 @@ def validate_value(match: ModelMatch[ModelRow], label: str, value: str, values: 
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
 
 
-def validate_range(
-    match: ModelMatch[ModelRow], label: str, value: int, bounds: tuple[int, int], extra_values: Sequence[int] = ()
-) -> None:
-    """Refuse a number outside the model's bounds that is not one of its extra values, such as -1 for duration."""
-    minimum, maximum = bounds
-    if minimum <= value <= maximum or value in extra_values:
-        return
-    fields = {"model": match.model_id, "field": label, "minimum": minimum, "maximum": maximum}
-    if extra_values:
-        message = MODEL_RANGE_EXTRA.format(**fields, extra=" or ".join(str(extra) for extra in extra_values))
-    else:
-        message = MODEL_RANGE.format(**fields)
-    raise ByteplusError(ErrorCode.INVALID_INPUT, message)
-
-
-__all__ = ["VERSION_SUFFIX", "find_model", "validate_model", "validate_range", "validate_value"]
+__all__ = ["VERSION_SUFFIX", "find_model", "validate_model", "validate_value"]

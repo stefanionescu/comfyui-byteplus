@@ -7,10 +7,9 @@ from ..base import PaidNode
 from comfy_api.latest import io
 from typing import cast, TYPE_CHECKING
 from ...comfy.media import encode_video
-from ...types.parsing import parse_json
+from ...types.parsing import parse_fields
 from comfy_execution.graph import ExecutionBlocker
 from ...byteplus.chat.operation import ChatOperation
-from ...types.errors import ErrorCode, ByteplusError
 from ...config.generation.models import DEFAULT_MODELS
 from ...config.messages.inputs import JSON_SCHEMA_INVALID
 from ...types.chat import Turn, ChatRequest, Conversation
@@ -22,7 +21,6 @@ from ...config.generation.chat import EFFORTS, TEMPERATURE, THINKING_CHOICES, TE
 
 if TYPE_CHECKING:
     import torch
-    from ...types import Json
     from comfy_api.latest import Input
     from collections.abc import Mapping
     from ...types.options import Options
@@ -108,19 +106,6 @@ def _read_temperature(choice: Mapping[str, object] | None) -> float | None:
     return float(cast("float", choice[TEMPERATURE_CHOICE["VALUE"]]))
 
 
-def _read_schema(text: str) -> Mapping[str, Json] | None:
-    """Read the response_format.json_schema object, which must be a JSON object; empty text means free text."""
-    if not text.strip():
-        return None
-    try:
-        schema = parse_json(text)
-    except ByteplusError:
-        schema = None
-    if not isinstance(schema, dict):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, JSON_SCHEMA_INVALID)
-    return schema
-
-
 def _build_outputs(result: ChatResult, history: Conversation, prompt: str) -> io.NodeOutput:
     """Return the answer and the reasoning, and extend the conversation with this exchange's words."""
     turns = (*history.turns, Turn("user", prompt), Turn("assistant", result.text))
@@ -158,7 +143,7 @@ class ChatAsk(PaidNode):
                 *_MEDIA,
                 REFERENCES_INPUT,
                 *_CONTROLS,
-                *build_request_inputs(has_seed=False),
+                *build_request_inputs(),
                 io.String.Input(
                     "json_schema",
                     display_name="JSON schema",
@@ -214,13 +199,13 @@ class ChatAsk(PaidNode):
         references: tuple[Reference, ...] | None = None,
         options: Options | None = None,
     ) -> io.NodeOutput:
-        """Read the schema before any media is encoded, then encode the media inside the owned task and send."""
+        """Read the schema before any media is encoded, then wait for the request in an owned task."""
         history = conversation or Conversation(())
-        schema = _read_schema(json_schema)
+        schema = parse_fields(json_schema, JSON_SCHEMA_INVALID)
         temperature_value = _read_temperature(temperature)
 
         async def send_encoded() -> io.NodeOutput:
-            """Encode the media inside the owned task, then send the request."""
+            """Encode the media in a worker thread, then send the request."""
             image_urls, video_urls, clips = await wait_for_thread(
                 lambda: (
                     tuple(image.url for image in encode_sized_images(images or ())),
@@ -228,7 +213,6 @@ class ChatAsk(PaidNode):
                     encode_audio_clips(audio or ()),
                 )
             )
-            # A dropdown left at model default sends nothing.
             request = ChatRequest(
                 model_id=model.strip(),
                 system_prompt=system_prompt,

@@ -8,27 +8,41 @@ from __future__ import annotations
 import time
 import asyncio
 from .jobs import TASK_ID
-from ..models import find_model
+from typing import TYPE_CHECKING
 from ..failures import build_failure
 from pydantic import ValidationError
-from typing import cast, TYPE_CHECKING
+from ...config.models import KIND_NODES
+from ...types.references import OutputFile
 from ...config.byteplus import ENDPOINT_URLS
 from datetime import UTC, datetime, timedelta
+from ...types.tasks import TaskJob, TaskResult
 from ...config.messages.run import REPLY_UNREADABLE
 from ...types.errors import ErrorCode, ByteplusError
 from ...types.replies import TaskReply, TaskCreateReply
-from ...types.tasks import TaskJob, TaskOutput, TaskResult
 from ...config.generation.references import OUTPUT_LIFETIME_SECONDS
 from ..transport import send_json, send_lookup, download_output, send_task_cancel
-from ...config.generation.videos import DONE_STATUSES, CANCELLABLE_STATUS, TASK_RETENTION_SECONDS
-from ...config.messages.tasks import TASK_GONE, TASK_OUTCOMES, TASK_UNRECORDED, TASK_FILES_EXPIRED
+from ...config.messages.tasks import (
+    TASK_GONE,
+    TASK_NAMES,
+    TASK_EXPIRED,
+    DOWNLOAD_NODES,
+    TASK_CANCELLED,
+    TASK_UNRECORDED,
+    TASK_WAIT_LIMIT,
+    TASK_FILES_EXPIRED,
+)
+from ...config.generation.videos import (
+    DONE_STATUSES,
+    CANCELLABLE_STATUS,
+    POLL_INTERVAL_SECONDS,
+    TASK_RETENTION_SECONDS,
+)
 
 if TYPE_CHECKING:
     from ...types import Json
     from .jobs import JobStore
     from collections.abc import Mapping
     from ...types.tasks import TaskRequest
-    from ...types.models import ModelRow, ModelMatch
     from ...types.settings import Settings, Configuration
 
 
@@ -87,21 +101,20 @@ def _build_ended_failure(job: TaskJob, reply: TaskReply) -> ByteplusError:
     if reply.status == "failed":
         error = reply.error
         return build_failure(None, error.code if error else None, error.message if error else "")
-    outcome = "CANCELLED" if reply.status == "cancelled" else "EXPIRED"
-    return ByteplusError(ErrorCode.UNAVAILABLE, TASK_OUTCOMES[job.kind][outcome])
+    template = TASK_CANCELLED if reply.status == "cancelled" else TASK_EXPIRED
+    return ByteplusError(ErrorCode.UNAVAILABLE, template.format(task=TASK_NAMES[job.kind], node=KIND_NODES[job.kind]))
 
 
 class TaskDownloadOperation:
     """Wait for one recorded task and download what it made; status checks, cancels, and downloads bill nothing."""
 
-    def __init__(self, job: TaskJob, jobs: JobStore, poll_seconds: int, last_status: str | None = None) -> None:
+    def __init__(self, job: TaskJob, jobs: JobStore, last_status: str | None = None) -> None:
         """Keep the record, the store that deletes it, and the last status seen: queued right after the create request.
 
         A recorded task's status is unknown until the first check.
         """
         self.job = job
         self.jobs = jobs
-        self.poll_seconds = poll_seconds
         self.last_status = last_status
 
     async def _wait_for_end(self, configuration: Configuration) -> TaskReply:
@@ -118,18 +131,19 @@ class TaskDownloadOperation:
             if reply.status in DONE_STATUSES:
                 return reply
             if time.monotonic() >= deadline:
-                message = TASK_OUTCOMES[self.job.kind]["WAIT_LIMIT"].format(seconds=seconds)
+                kind = self.job.kind
+                message = TASK_WAIT_LIMIT.format(task=TASK_NAMES[kind], seconds=seconds, node=DOWNLOAD_NODES[kind])
                 raise ByteplusError(ErrorCode.TIMEOUT, message)
-            await asyncio.sleep(self.poll_seconds)
+            await asyncio.sleep(POLL_INTERVAL_SECONDS)
 
-    async def _download_outputs(self, reply: TaskReply, configuration: Configuration) -> dict[str, TaskOutput]:
+    async def _download_outputs(self, reply: TaskReply, configuration: Configuration) -> dict[str, OutputFile]:
         """Download each address the finished task holds once, in reply field order, without the key."""
         content: dict[str, str | None] = reply.content.model_dump() if reply.content is not None else {}
         addresses = {field: address for field, address in content.items() if address}
         if not addresses:
             raise ByteplusError(ErrorCode.TRANSPORT, REPLY_UNREADABLE)
         return {
-            field: TaskOutput(address, await download_output(address, configuration.settings))
+            field: OutputFile(await download_output(address, configuration.settings), address)
             for field, address in addresses.items()
         }
 
@@ -164,10 +178,10 @@ class TaskDownloadOperation:
         return TaskResult(job, outputs, reply.created_at, reply.updated_at)
 
 
-class TaskOperation[Row: ModelRow]:
+class TaskOperation:
     """One video or 3D task, sent once and recorded as soon as ModelArk accepts it."""
 
-    def __init__(self, request: TaskRequest[Row], jobs: JobStore) -> None:
+    def __init__(self, request: TaskRequest, jobs: JobStore) -> None:
         """Keep the request to check and send, and the store its task is recorded in."""
         self.request = request
         self.jobs = jobs
@@ -198,18 +212,14 @@ class TaskOperation[Row: ModelRow]:
         A cancel during the create request waits for that request to end, so a task it created is recorded and then
         cancelled while it is still queued, rather than left running without a record.
         """
-        request = self.request
-        # find_model returns the row type of the kind it is given, which is the row type the request's checks take.
-        match: ModelMatch[Row] = cast("ModelMatch[Row]", find_model(request.model_id, request.kind))
-        body = request.build_body(match)
+        body = self.request.build_body()
         creating = asyncio.create_task(self._create_job(body, configuration))
         is_cancelled = await _wait_settled(creating)
         job = creating.result()
         if is_cancelled:
             await _wait_settled(asyncio.create_task(_delete_queued_task(job, self.jobs, configuration)))
             raise asyncio.CancelledError
-        download = TaskDownloadOperation(job, self.jobs, request.poll_seconds, last_status=CANCELLABLE_STATUS)
-        return await download.send(configuration)
+        return await TaskDownloadOperation(job, self.jobs, last_status=CANCELLABLE_STATUS).send(configuration)
 
 
 __all__ = ["TaskDownloadOperation", "TaskOperation"]

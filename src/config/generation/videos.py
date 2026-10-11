@@ -9,11 +9,17 @@ DURATION = {
     "AUTO": -1,
 }
 
-# The resolution widget's choices and default, and the size every draft is made at.
-RESOLUTIONS = {
-    "CHOICES": ("480p", "720p", "1080p", "4k"),
-    "DEFAULT": "720p",
-    "DRAFT": "480p",
+# The resolution widget's choices and default.
+RESOLUTION_CHOICES = ("480p", "720p", "1080p", "4k")
+RESOLUTION_DEFAULT = "720p"
+
+# The resolution every draft is made at.
+DRAFT_RESOLUTION = "480p"
+
+# The seed widget's default and largest value, in Seedance's range.
+SEED = {
+    "DEFAULT": 42,
+    "MAX": 2**31 - 1,
 }
 
 # Every Seedance model takes every one of these ratios, so the model rows do not list them.
@@ -36,7 +42,7 @@ ADAPTIVE_TASK_TYPES = ("edit", "extend")
 # The output_format choices.
 OUTPUT_FORMATS = (MODEL_DEFAULT, "mp4", "mov")
 
-# The time between a video task's status checks; the first check is immediate.
+# The time between a video or 3D task's status checks; the first check is immediate.
 POLL_INTERVAL_SECONDS = 10
 
 # ModelArk answers status checks for 7 days after a task was created.
@@ -61,13 +67,16 @@ __all__ = [
     "AUDIO_VALUES",
     "CANCELLABLE_STATUS",
     "DONE_STATUSES",
+    "DRAFT_RESOLUTION",
     "DURATION",
     "JOB_LABEL_SEPARATOR",
     "JOB_TIME_CHARACTERS",
     "OUTPUT_FORMATS",
     "POLL_INTERVAL_SECONDS",
     "RATIOS",
-    "RESOLUTIONS",
+    "RESOLUTION_CHOICES",
+    "RESOLUTION_DEFAULT",
+    "SEED",
     "TASK_RETENTION_SECONDS",
     "TASK_TYPES",
 ]

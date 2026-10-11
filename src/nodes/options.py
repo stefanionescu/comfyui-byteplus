@@ -2,32 +2,15 @@
 
 from __future__ import annotations
 
+from typing import override
 from comfy_api.latest import io
 from types import MappingProxyType
 from ..types.options import Options
-from ..types.parsing import parse_json
-from typing import override, TYPE_CHECKING
+from ..types.parsing import parse_fields
+from ..config.byteplus import TIER_CHOICES
 from ..config.messages.inputs import OPTIONS_JSON
-from ..types.errors import ErrorCode, ByteplusError
 from ..config.generation.inputs import MODEL_DEFAULT
-from ..config.generation.options import TIER_CHOICES
 from ..config.namespace import NODE_PREFIX, MENUS, SOCKET_TYPES
-
-if TYPE_CHECKING:
-    from ..types import Json
-
-
-def _parse_fields(text: str, field: str) -> dict[str, Json]:
-    """Parse a JSON object field, or nothing when it is empty."""
-    if not text.strip():
-        return {}
-    try:
-        value = parse_json(text)
-    except ByteplusError:
-        value = None
-    if not isinstance(value, dict):
-        raise ByteplusError(ErrorCode.INVALID_INPUT, OPTIONS_JSON.format(field=field))
-    return value
 
 
 class RequestOptions(io.ComfyNode):
@@ -69,7 +52,7 @@ class RequestOptions(io.ComfyNode):
         """Check the extra fields before any request; a paid node checks the rest when it merges them."""
         options = Options(
             tier=None if service_tier == MODEL_DEFAULT else service_tier,
-            extra_fields=MappingProxyType(_parse_fields(extra_fields, "extra fields")),
+            extra_fields=MappingProxyType(parse_fields(extra_fields, OPTIONS_JSON.format(field="extra fields")) or {}),
         )
         return io.NodeOutput(options)
 

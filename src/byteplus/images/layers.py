@@ -4,11 +4,9 @@ from __future__ import annotations
 
 from http import HTTPStatus
 from typing import TYPE_CHECKING
-from datetime import UTC, datetime
 from ..failures import build_failure
 from .generate import parse_image_reply
 from ..options import build_request_body
-from ...types.references import Reference
 from ...config.byteplus import ENDPOINT_URLS
 from ..operation import validate_upload_size
 from ..references import validate_references
@@ -16,8 +14,9 @@ from ..models import find_model, validate_value
 from ..transport import send_json, download_output
 from ...config.messages.run import REPLY_UNREADABLE
 from ...types.errors import ErrorCode, ByteplusError
+from ...types.references import Reference, OutputFile
 from ...config.generation.images import RESPONSE_FORMAT
-from ...types.images import Layer, ImageOutput, LayerResult, EncodedImage
+from ...types.images import Layer, LayerResult, EncodedImage
 
 if TYPE_CHECKING:
     from ...types import Json
@@ -34,7 +33,7 @@ def _validate_layer_request(request: LayerRequest, match: ModelMatch[ImageRow]) 
     """
     image = request.image
     if isinstance(image, Reference):
-        validate_references((image,), ("image",), can_read_assets=False, now=datetime.now(UTC))
+        validate_references((image,), ("image",), can_read_assets=False)
     if request.prompt_mode is not None:
         validate_value(match, "optimize prompt options", request.prompt_mode, match.row.image.prompt_modes)
 
@@ -103,7 +102,7 @@ class LayerOperation:
         reply = parse_image_reply(await send_json(ENDPOINT_URLS["images"], body, configuration))
         base, boxes = _list_layers(reply)
         settings = configuration.settings
-        base_output = ImageOutput(await download_output(base, settings), base)
+        base_output = OutputFile(await download_output(base, settings), base)
         layers = [Layer(await download_output(address, settings), address, box) for address, box in boxes]
         return LayerResult(base_output, tuple(layers), created_at=reply.created)
 

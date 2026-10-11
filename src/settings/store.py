@@ -45,11 +45,19 @@ class ConfigurationStore:
         self._previous = Configuration(settings, credential, generation)
         return self._previous
 
+    def read_settings(self) -> Settings:
+        """Read settings without creating files or directories; a save replaces the file whole, so no lock is needed."""
+        path = self.directory / FILE_NAMES["SETTINGS"]
+        if not path.exists():
+            return DEFAULT_SETTINGS
+        content = read_file(path, max_bytes=MAX_FILE_BYTES["SETTINGS"]).decode()
+        return parse_settings(validate_fields(parse_json(content)))
+
     def read_snapshot(self) -> Configuration:
         """Read effective values together and invalidate unreadable configuration."""
         with self.lock:
             try:
-                settings = read_settings(self.directory)
+                settings = self.read_settings()
                 credential = read_credential(self.directory)
             except ByteplusError:
                 self._previous = None
@@ -62,7 +70,7 @@ class ConfigurationStore:
     def read_status(self) -> dict[str, Json]:
         """Describe effective settings and API key presence without returning the key."""
         with self.lock:
-            settings = read_settings(self.directory)
+            settings = self.read_settings()
             source = read_credential_source(self.directory)
         return {
             "settings": asdict(settings),
@@ -80,7 +88,7 @@ class ConfigurationStore:
         if changes.keys() - EDITABLE_SETTINGS:
             raise ByteplusError(ErrorCode.CONFIGURATION, SETTING_READ_ONLY)
         with self.lock:
-            current = read_settings(self.directory)
+            current = self.read_settings()
             if revision != current.revision:
                 raise ByteplusError(ErrorCode.CONFLICT, SETTINGS_CHANGED)
             updated = parse_settings(asdict(current) | changes)
@@ -111,12 +119,4 @@ class ConfigurationStore:
         return self.read_status()
 
 
-def read_settings(directory: Path) -> Settings:
-    """Read settings without creating files or directories."""
-    path = directory / FILE_NAMES["SETTINGS"]
-    if not path.exists():
-        return DEFAULT_SETTINGS
-    return parse_settings(validate_fields(parse_json(read_file(path, max_bytes=MAX_FILE_BYTES["SETTINGS"]).decode())))
-
-
-__all__ = ["ConfigurationStore", "read_settings"]
+__all__ = ["ConfigurationStore"]

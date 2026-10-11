@@ -21,21 +21,6 @@ DRAFT_LIFETIME_SECONDS = 604_800
 # ModelArk may read the file only when a queued task starts, so a reference must last this much beyond the request.
 EXPIRY_MARGIN_SECONDS = 600
 
-# The Seedance role of each kind; a draft has none.
-REFERENCE_ROLES = {
-    "image": "reference_image",
-    "video": "reference_video",
-    "audio": "reference_audio",
-}
-
-# The Seedance content item type of each kind.
-PART_TYPES = {
-    "image": "image_url",
-    "video": "video_url",
-    "audio": "audio_url",
-    "draft": "draft_task",
-}
-
 __all__ = [
     "ADDED_KINDS",
     "ASSET_URI_PREFIX",
@@ -44,6 +29,4 @@ __all__ = [
     "LINK_SCHEME",
     "MAX_ADDRESS_CHARACTERS",
     "OUTPUT_LIFETIME_SECONDS",
-    "PART_TYPES",
-    "REFERENCE_ROLES",
 ]

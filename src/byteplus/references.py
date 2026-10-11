@@ -1,11 +1,10 @@
-"""Parse, check, and order the files ModelArk reads by address, so every node applies the same reference rules."""
+"""Parse, check, and build the files ModelArk reads by address, so every node applies the same reference rules."""
 
 import re
-from ..types import Json
 from urllib.parse import urlsplit
 from collections.abc import Sequence
-from datetime import datetime, timedelta
 from ..config.units import SECONDS_PER_MINUTE
+from datetime import UTC, datetime, timedelta
 from ..config.patterns import ASSET_ID_PATTERN
 from ..types.errors import ErrorCode, ByteplusError
 from ..types.references import Reference, ReferenceKind
@@ -19,15 +18,14 @@ from ..config.messages.references import (
     REFERENCE_ADDRESS_LENGTH,
 )
 from ..config.generation.references import (
-    PART_TYPES,
     LINK_SCHEME,
-    REFERENCE_ROLES,
     ASSET_URI_PREFIX,
     EXPIRY_MARGIN_SECONDS,
+    DRAFT_LIFETIME_SECONDS,
     MAX_ADDRESS_CHARACTERS,
+    OUTPUT_LIFETIME_SECONDS,
 )
 
-# BytePlus's API reference writes "Asset-…" and its Playground "asset-…", so the case does not matter.
 _ASSET_ID = re.compile(ASSET_ID_PATTERN, re.IGNORECASE)
 
 
@@ -69,15 +67,13 @@ def validate_references(
     kinds: Sequence[ReferenceKind],
     *,
     can_read_assets: bool,
-    now: datetime,
 ) -> None:
     """Refuse a reference the node's model cannot read, or one that expires before ModelArk may read it.
 
     Every model reads outputs and links, so assets are the only origin a model refuses. ModelArk may read a reference
-    only when a queued task starts, so an output must last a margin beyond now. Counting references against the
-    model's limits is the caller's check.
+    only when a queued task starts, so an output must last a margin beyond now.
     """
-    deadline = now + timedelta(seconds=EXPIRY_MARGIN_SECONDS)
+    deadline = datetime.now(UTC) + timedelta(seconds=EXPIRY_MARGIN_SECONDS)
     for position, reference in enumerate(references, start=1):
         if reference.kind not in kinds:
             message = REFERENCE_KIND.format(kinds=", ".join(kinds), position=position, kind=reference.kind)
@@ -90,17 +86,15 @@ def validate_references(
             raise ByteplusError(ErrorCode.INVALID_INPUT, message)
 
 
-def build_reference_parts(references: Sequence[Reference]) -> tuple[dict[str, Json], ...]:
-    """Build one Seedance content item per reference, in chain order; a draft item names its task and has no role."""
-    parts: list[dict[str, Json]] = []
-    for reference in references:
-        part_type = PART_TYPES[reference.kind]
-        if reference.kind == "draft":
-            parts.append({"type": part_type, part_type: {"id": reference.address}})
-        else:
-            address: dict[str, Json] = {"url": reference.address}
-            parts.append({"type": part_type, part_type: address, "role": REFERENCE_ROLES[reference.kind]})
-    return tuple(parts)
+def build_output_reference(kind: ReferenceKind, address: str, created_at: int) -> Reference:
+    """Build the reference to a file ModelArk made, which expires with its address.
+
+    The lifetime counts from when ModelArk accepted the request, so a reference expires a little before its address
+    does, never after. A draft lasts 7 days, and every other output 24 hours.
+    """
+    lifetime = DRAFT_LIFETIME_SECONDS if kind == "draft" else OUTPUT_LIFETIME_SECONDS
+    expires_at = datetime.fromtimestamp(created_at, UTC) + timedelta(seconds=lifetime)
+    return Reference(kind, address, "output", expires_at)
 
 
-__all__ = ["build_reference_parts", "parse_reference_source", "validate_references"]
+__all__ = ["build_output_reference", "parse_reference_source", "validate_references"]

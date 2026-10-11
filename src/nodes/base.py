@@ -1,13 +1,22 @@
-"""Share the cache key, the run-number input, and list inputs across the paid nodes."""
+"""Share the cache key, run number, and list inputs of the paid nodes, and the Download nodes' task collection."""
+
+from __future__ import annotations
 
 import asyncio
 from comfy_api.latest import io
-from typing import cast, ClassVar
 from ..comfy.runtime import get_runtime
-from collections.abc import Callable, Awaitable
+from ..byteplus.tasks.jobs import TASK_ID
 from ..config.messages.inputs import SINGLE_VALUE
 from ..config.generation.inputs import INPUT_NAMES
 from ..types.errors import ErrorCode, ByteplusError
+from ..comfy.execution import send_request, wait_for_task
+from ..byteplus.tasks.operation import TaskDownloadOperation
+from typing import cast, Literal, ClassVar, override, TYPE_CHECKING
+from ..config.messages.tasks import TASK_KIND, TASK_NAMES, JOB_UNKNOWN, DOWNLOAD_NODES
+
+if TYPE_CHECKING:
+    from ..types.tasks import TaskResult
+    from collections.abc import Callable, Awaitable
 
 
 class PaidNode(io.ComfyNode):
@@ -43,6 +52,45 @@ class PaidNode(io.ComfyNode):
         return await cls.send(**inputs)
 
 
+class TaskDownload(io.ComfyNode):
+    """Wait for one recorded task of the node's kind and return what it made.
+
+    Collecting a task sends only status checks, a cancel of a queued task, and downloads, which bill nothing, and the
+    same task always gives the same outputs, so ComfyUI's cache is correct and this is not a paid node.
+
+    Attributes:
+        kind: The kind of task the node lists and collects.
+        build_outputs: Builds the node's outputs from what the task made.
+
+    """
+
+    kind: ClassVar[Literal["videos", "meshes"]]
+    build_outputs: ClassVar[Callable[[TaskResult], io.NodeOutput]]
+
+    @classmethod
+    @override
+    def validate_inputs(cls, **inputs: object) -> bool | str:
+        """Take a task recorded after the node definitions were built, as long as the label starts with a task ID.
+
+        ComfyUI skips its own list check only for inputs the validator takes as positional or extra keywords.
+        """
+        return True if TASK_ID.match(str(inputs.get("job", "")).split(" ", 1)[0]) else JOB_UNKNOWN
+
+    @classmethod
+    @override
+    async def execute(cls, *, job: str = "") -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
+        """Read the task's record, wait for it, and download what it made."""
+        jobs = get_runtime().jobs
+        record = await asyncio.to_thread(jobs.read, job.split(" ", 1)[0])
+        if record.kind != cls.kind:
+            message = TASK_KIND.format(task=TASK_NAMES[record.kind], node=DOWNLOAD_NODES[record.kind])
+            raise ByteplusError(ErrorCode.INVALID_INPUT, message)
+        operation = TaskDownloadOperation(record, jobs)
+        return await wait_for_task(
+            asyncio.create_task(send_request(operation, cls.build_outputs, cls.hidden.unique_id))
+        )
+
+
 def _read_single(name: str, value: object) -> object:
     """Take the one value an input list holds; a dynamic dropdown holds one list for each of its fields."""
     if isinstance(value, dict):
@@ -54,4 +102,4 @@ def _read_single(name: str, value: object) -> object:
     return values[0]
 
 
-__all__ = ["PaidNode"]
+__all__ = ["PaidNode", "TaskDownload"]

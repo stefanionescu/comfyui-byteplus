@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 if TYPE_CHECKING:
     from .options import Options
-    from .references import Reference
+    from .references import Reference, OutputFile
 
 
 @dataclass(frozen=True, slots=True)
@@ -61,20 +61,6 @@ class ImageRequest:
 
 
 @dataclass(frozen=True, slots=True)
-class ImageOutput:
-    """One image ModelArk made.
-
-    Attributes:
-        content: The downloaded file.
-        address: The https address it was downloaded from, which ModelArk can read again for 24 hours.
-
-    """
-
-    content: bytes
-    address: str
-
-
-@dataclass(frozen=True, slots=True)
 class ImageResult:
     """Every image one request made.
 
@@ -84,7 +70,7 @@ class ImageResult:
 
     """
 
-    outputs: tuple[ImageOutput, ...]
+    outputs: tuple[OutputFile, ...]
     created_at: int
 
 
@@ -139,14 +125,13 @@ class LayerResult:
 
     """
 
-    base: ImageOutput
+    base: OutputFile
     layers: tuple[Layer, ...]
     created_at: int
 
 
 __all__ = [
     "EncodedImage",
-    "ImageOutput",
     "ImageRequest",
     "ImageResult",
     "Layer",

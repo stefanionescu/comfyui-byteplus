@@ -5,25 +5,20 @@ from __future__ import annotations
 import asyncio
 import io as memory
 from ..base import PaidNode
-from functools import partial
-from ...types.tasks import TaskRequest
-from typing import cast, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from ...comfy.media import decode_image
 from ...comfy.runtime import get_runtime
 from ...types.videos import VideoRequest
-from ...types.references import Reference
 from comfy_api.latest import io, InputImpl
-from datetime import UTC, datetime, timedelta
 from comfy_execution.graph import ExecutionBlocker
-from ...byteplus.videos.body import build_video_body
-from ...byteplus.tasks.operation import TaskOperation
 from ...config.generation.models import DEFAULT_MODELS
-from ...byteplus.videos.modes import validate_video_request
+from ...byteplus.references import build_output_reference
+from ...byteplus.videos.body import build_video_operation
 from ...config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
 from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
-from ...config.generation.references import DRAFT_LIFETIME_SECONDS, OUTPUT_LIFETIME_SECONDS
 from ..inputs import (
+    WATERMARK_INPUT,
     REFERENCES_INPUT,
     read_image_socket,
     encode_audio_clips,
@@ -32,14 +27,15 @@ from ..inputs import (
     build_request_inputs,
 )
 from ...config.generation.videos import (
+    SEED,
     RATIOS,
     DURATION,
     TASK_TYPES,
-    RESOLUTIONS,
     AUDIO_VALUES,
     AUDIO_CHOICES,
     OUTPUT_FORMATS,
-    POLL_INTERVAL_SECONDS,
+    RESOLUTION_CHOICES,
+    RESOLUTION_DEFAULT,
 )
 
 if TYPE_CHECKING:
@@ -48,6 +44,7 @@ if TYPE_CHECKING:
     from ...types.options import Options
     from ...types.tasks import TaskResult
     from ...types.images import EncodedImage
+    from ...types.references import Reference
 
 # The video controls; a dropdown left at model default sends nothing, except resolution and duration, always sent.
 _CONTROLS = (
@@ -60,9 +57,8 @@ _CONTROLS = (
     ),
     io.Combo.Input(
         "resolution",
-        options=list(RESOLUTIONS["CHOICES"]),
-        # RESOLUTIONS also holds the choices, so its values type as either; the default is text.
-        default=cast("str", RESOLUTIONS["DEFAULT"]),
+        options=list(RESOLUTION_CHOICES),
+        default=RESOLUTION_DEFAULT,
         tooltip="Always sent. Higher resolutions cost more, and each model takes only some; Model: Info lists them.",
     ),
     io.Combo.Input(
@@ -82,7 +78,7 @@ _CONTROLS = (
         "omni_reference_task_type",
         display_name="omni reference task type",
         options=list(TASK_TYPES),
-        default=TASK_TYPES[0],
+        default="auto",
         tooltip=(
             "What Seedance 2.5 does with reference media: follow it, edit a reference video, or extend one. Auto "
             "lets the model decide."
@@ -111,12 +107,7 @@ _CONTROLS = (
         advanced=True,
         tooltip="MP4 or MOV, on models that offer both. MOV keeps more color for editing; many players cannot play it.",
     ),
-    io.Boolean.Input(
-        "watermark",
-        default=False,
-        advanced=True,
-        tooltip="Adds an AI Generated mark in the lower right corner.",
-    ),
+    WATERMARK_INPUT,
 )
 
 # The frames, each one image or references that hold one, and the local reference media.
@@ -152,6 +143,17 @@ _MEDIA = (
     ),
 )
 
+# The seed starts fixed, so queueing a workflow again never sends a new paid request by itself.
+_SEED = io.Int.Input(
+    "seed",
+    display_name="seed",
+    tooltip="Number the model uses to vary its output. Results can change after model updates.",
+    default=SEED["DEFAULT"],
+    min=0,
+    max=SEED["MAX"],
+    control_after_generate=io.ControlAfterGenerate.fixed,
+)
+
 # A frame socket's value: an encoded image, a reference, or nothing when the socket is not connected.
 type _Frame = EncodedImage | Reference | None
 
@@ -171,21 +173,17 @@ def _encode_media(
 def build_video_outputs(result: TaskResult) -> io.NodeOutput:
     """Return the video, its decoded last frame, and their addresses as references, or the draft to finish.
 
-    The task's creation time is when ModelArk accepted it, so a reference expires a little before its address does,
-    never after. ComfyUI reads the video from memory, so no file is written.
+    ComfyUI reads the video from memory, so no file is written.
     """
-    created = datetime.fromtimestamp(result.created_at, UTC)
     video = result.outputs["video_url"]
     frame = result.outputs.get("last_frame_url")
     references: tuple[Reference, ...]
     if result.job.is_draft:
-        expires_at = created + timedelta(seconds=DRAFT_LIFETIME_SECONDS)
-        references = (Reference("draft", result.job.job_id, "output", expires_at),)
+        references = (build_output_reference("draft", result.job.job_id, result.created_at),)
     else:
-        expires_at = created + timedelta(seconds=OUTPUT_LIFETIME_SECONDS)
-        references = (Reference("video", video.address, "output", expires_at),)
+        references = (build_output_reference("video", video.address, result.created_at),)
         if frame is not None:
-            references += (Reference("image", frame.address, "output", expires_at),)
+            references += (build_output_reference("image", frame.address, result.created_at),)
     last_frame: object = decode_image(frame.content)[0] if frame is not None else ExecutionBlocker(None)
     return io.NodeOutput(InputImpl.VideoFromFile(memory.BytesIO(video.content)), last_frame, references)
 
@@ -208,7 +206,8 @@ class VideoGenerate(PaidNode):
                 *_CONTROLS,
                 *_MEDIA,
                 REFERENCES_INPUT,
-                *build_request_inputs(has_seed=True),
+                _SEED,
+                *build_request_inputs(),
                 io.String.Input(
                     "prompt",
                     multiline=True,
@@ -252,14 +251,13 @@ class VideoGenerate(PaidNode):
         references: tuple[Reference, ...] | None = None,
         options: Options | None = None,
     ) -> io.NodeOutput:
-        """Read the frames and encode the media inside the owned task, then create, record, and wait for the task."""
+        """Wait for the request in an owned task, so ComfyUI's cancel reaches the encoding and the task."""
 
         async def send_encoded() -> io.NodeOutput:
-            """Encode the media inside the owned task, then send the request."""
+            """Read the frames and encode the media in a worker thread, then create, record, and wait for the task."""
             first, last, images, clips = await wait_for_thread(
                 lambda: _encode_media(first_frame, last_frame, reference_image, reference_audio)
             )
-            # A dropdown left at model default sends nothing.
             request = VideoRequest(
                 model_id=model.strip(),
                 prompt=prompt,
@@ -280,15 +278,7 @@ class VideoGenerate(PaidNode):
                 seed=seed,
                 options=options,
             )
-            task_request = TaskRequest(
-                kind="videos",
-                model_id=request.model_id,
-                validate_request=partial(validate_video_request, request),
-                build_body=partial(build_video_body, request),
-                is_draft=request.is_draft,
-                poll_seconds=POLL_INTERVAL_SECONDS,
-            )
-            operation = TaskOperation(task_request, get_runtime().jobs)
+            operation = build_video_operation(request, get_runtime().jobs)
             return await send_request(operation, build_video_outputs, cls.hidden.unique_id)
 
         return await wait_for_task(asyncio.create_task(send_encoded()))

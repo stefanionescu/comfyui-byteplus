@@ -14,10 +14,16 @@ from ...config.namespace import MENUS, NODE_PREFIX
 from comfy_execution.graph import ExecutionBlocker
 from ...byteplus.images.layers import LayerOperation
 from ...config.generation.models import DEFAULT_MODELS
+from ...config.generation.images import LAYER_SIZES, LAYER_SIZE_DEFAULT
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
-from ..inputs import read_image_socket, IMAGE_SOCKET_TYPES, build_request_inputs
 from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
-from ...config.generation.images import LAYER_SIZES, PROMPT_MODES, LAYER_SIZE_DEFAULT
+from ..inputs import (
+    WATERMARK_INPUT,
+    read_image_socket,
+    IMAGE_SOCKET_TYPES,
+    build_request_inputs,
+    OPTIMIZE_PROMPT_OPTIONS_INPUT,
+)
 
 if TYPE_CHECKING:
     from ...types.options import Options
@@ -97,26 +103,14 @@ class ImageSplitLayers(PaidNode):
                         "The size of the base image and layers. Auto keeps each part near its own size, from 1K to 2K."
                     ),
                 ),
-                io.Combo.Input(
-                    "optimize_prompt_options",
-                    display_name="optimize prompt options",
-                    options=list(PROMPT_MODES),
-                    default=MODEL_DEFAULT,
-                    advanced=True,
-                    tooltip="Fast answers sooner with slightly lower quality, on models that offer it.",
-                ),
-                io.Boolean.Input(
-                    "watermark",
-                    default=False,
-                    advanced=True,
-                    tooltip="Adds an AI-generated mark in the lower right corner.",
-                ),
+                OPTIMIZE_PROMPT_OPTIONS_INPUT,
+                WATERMARK_INPUT,
                 io.MultiType.Input(
                     "image",
                     types=list(IMAGE_SOCKET_TYPES),
                     tooltip="The image to split: one image, or references that hold one image.",
                 ),
-                *build_request_inputs(has_seed=False),
+                *build_request_inputs(),
                 io.String.Input(
                     "prompt",
                     multiline=True,
@@ -149,10 +143,10 @@ class ImageSplitLayers(PaidNode):
         watermark: bool,
         options: Options | None = None,
     ) -> io.NodeOutput:
-        """Read the image socket inside the owned task, then send the split."""
+        """Wait for the split in an owned task, so ComfyUI's cancel reaches the encoding and the request."""
 
         async def send_encoded() -> io.NodeOutput:
-            """Encode the image inside the owned task, then send the request."""
+            """Read the image socket in a worker thread, then send the split."""
             source = await wait_for_thread(lambda: read_image_socket("image", image))
             request = LayerRequest(
                 model_id=model.strip(),

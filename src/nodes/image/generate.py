@@ -8,21 +8,26 @@ from comfy_api.latest import io
 from typing import TYPE_CHECKING
 from ...comfy.media import decode_image
 from ...types.images import ImageRequest
-from ...types.references import Reference
-from datetime import UTC, datetime, timedelta
 from ...byteplus.images.generate import ImageOperation
 from ...config.generation.models import DEFAULT_MODELS
+from ...byteplus.references import build_output_reference
 from ...config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
-from ...config.generation.references import OUTPUT_LIFETIME_SECONDS
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
-from ..inputs import REFERENCES_INPUT, encode_sized_images, build_request_inputs
+from ...config.generation.images import MAX_IMAGES, BACKGROUNDS, OUTPUT_FORMATS
 from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
-from ...config.generation.images import MAX_IMAGES, BACKGROUNDS, PROMPT_MODES, OUTPUT_FORMATS
+from ..inputs import (
+    WATERMARK_INPUT,
+    REFERENCES_INPUT,
+    encode_sized_images,
+    build_request_inputs,
+    OPTIMIZE_PROMPT_OPTIONS_INPUT,
+)
 
 if TYPE_CHECKING:
     import torch
     from ...types.options import Options
     from ...types.images import ImageResult
+    from ...types.references import Reference
 
 # The image controls; an empty size and a dropdown left at model default send nothing.
 _CONTROLS = (
@@ -55,32 +60,15 @@ _CONTROLS = (
         default=MODEL_DEFAULT,
         tooltip="PNG or JPEG. Model default is JPEG.",
     ),
-    io.Combo.Input(
-        "optimize_prompt_options",
-        display_name="optimize prompt options",
-        options=list(PROMPT_MODES),
-        default=MODEL_DEFAULT,
-        advanced=True,
-        tooltip="Fast answers sooner with slightly lower quality, on models that offer it.",
-    ),
-    io.Boolean.Input(
-        "watermark",
-        default=False,
-        advanced=True,
-        tooltip="Adds an AI-generated mark in the lower right corner.",
-    ),
+    OPTIMIZE_PROMPT_OPTIONS_INPUT,
+    WATERMARK_INPUT,
 )
 
 
 def _build_outputs(result: ImageResult) -> io.NodeOutput:
-    """Decode each image with its mask, and keep each image's address as an image reference.
-
-    ModelArk's created time is when it accepted the request, so a reference expires a little before its address does,
-    never after.
-    """
+    """Decode each image with its mask, and keep each image's address as an image reference."""
     decoded = [decode_image(output.content) for output in result.outputs]
-    expires_at = datetime.fromtimestamp(result.created_at, UTC) + timedelta(seconds=OUTPUT_LIFETIME_SECONDS)
-    references = tuple(Reference("image", output.address, "output", expires_at) for output in result.outputs)
+    references = tuple(build_output_reference("image", output.address, result.created_at) for output in result.outputs)
     return io.NodeOutput([pixels for pixels, _mask in decoded], [mask for _pixels, mask in decoded], references)
 
 
@@ -109,7 +97,7 @@ class ImageGenerate(PaidNode):
                     ),
                 ),
                 REFERENCES_INPUT,
-                *build_request_inputs(has_seed=False),
+                *build_request_inputs(),
                 io.String.Input(
                     "prompt",
                     multiline=True,
@@ -143,12 +131,11 @@ class ImageGenerate(PaidNode):
         references: tuple[Reference, ...] | None = None,
         options: Options | None = None,
     ) -> io.NodeOutput:
-        """Encode the images inside the owned task, then send the request."""
+        """Wait for the request in an owned task, so ComfyUI's cancel reaches the encoding and the request."""
 
         async def send_encoded() -> io.NodeOutput:
-            """Encode the images inside the owned task, then send the request."""
+            """Encode the images in a worker thread, then send the request."""
             images = await wait_for_thread(lambda: encode_sized_images(image or ()))
-            # An empty size and a dropdown left at model default send nothing.
             request = ImageRequest(
                 model_id=model.strip(),
                 prompt=prompt,

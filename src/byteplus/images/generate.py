@@ -5,11 +5,12 @@ from __future__ import annotations
 import re
 from http import HTTPStatus
 from typing import TYPE_CHECKING
-from datetime import UTC, datetime
 from ..failures import build_failure
 from pydantic import ValidationError
+from ...types.images import ImageResult
 from ...types.replies import ImageReply
 from ..options import build_request_body
+from ...types.references import OutputFile
 from ...config.byteplus import ENDPOINT_URLS
 from ..operation import validate_upload_size
 from ..references import validate_references
@@ -17,7 +18,6 @@ from ..models import find_model, validate_value
 from ...config.patterns import IMAGE_SIZE_PATTERN
 from ..transport import send_json, download_output
 from ...types.errors import ErrorCode, ByteplusError
-from ...types.images import ImageOutput, ImageResult
 from ...config.generation.images import RESPONSE_FORMAT
 from ...config.messages.run import REPLY_EMPTY, REPLY_UNREADABLE
 from ...config.messages.inputs import (
@@ -58,7 +58,7 @@ def _validate_image_request(request: ImageRequest, match: ModelMatch[ImageRow]) 
     whose pixels ModelArk checks itself.
     """
     limits = match.row.image
-    validate_references(request.references, ("image",), can_read_assets=False, now=datetime.now(UTC))
+    validate_references(request.references, ("image",), can_read_assets=False)
     if request.size is not None and request.size not in limits.tiers and _PIXEL_SIZE.match(request.size) is None:
         message = IMAGE_SIZE.format(model=match.model_id, tiers=", ".join(limits.tiers))
         raise ByteplusError(ErrorCode.INVALID_INPUT, message)
@@ -153,7 +153,7 @@ class ImageOperation:
         body = _build_image_body(request, match)
         reply = parse_image_reply(await send_json(ENDPOINT_URLS["images"], body, configuration))
         outputs = [
-            ImageOutput(await download_output(address, configuration.settings), address)
+            OutputFile(await download_output(address, configuration.settings), address)
             for address in _list_addresses(reply)
         ]
         return ImageResult(tuple(outputs), created_at=reply.created)

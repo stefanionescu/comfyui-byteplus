@@ -2,7 +2,6 @@
 
 import re
 from http import HTTPStatus
-from collections.abc import Mapping
 from pydantic import ValidationError
 from ..types.replies import ErrorReply
 from ..config.patterns import REASON_PATTERNS
@@ -84,9 +83,6 @@ _FAILURE_CODES: dict[str, tuple[ErrorCode, str]] = {
     "OutofContextError": (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
     "InternalServiceError": (ErrorCode.TRANSPORT, SERVER_FAILED),
 }
-# QuotaExceeded is the one code whose meaning only ModelArk's wording tells apart: a used-up free trial needs the
-# model activated, while the other replies need fewer queued tasks.
-_FREE_TRIAL_CODES: dict[str, tuple[ErrorCode, str]] = {"QuotaExceeded": (ErrorCode.LIMITED, FREE_QUOTA_USED)}
 # The statuses that decide a failure whose code is missing or unknown.
 _STATUS_FAILURES: dict[int, tuple[ErrorCode, str]] = {
     401: (ErrorCode.AUTHENTICATION, KEY_REJECTED),
@@ -97,15 +93,15 @@ _STATUS_FAILURES: dict[int, tuple[ErrorCode, str]] = {
 }
 
 
-def _find_failure(code: str, failures: Mapping[str, tuple[ErrorCode, str]]) -> tuple[ErrorCode, str] | None:
+def _find_failure(code: str) -> tuple[ErrorCode, str] | None:
     """Look a code up whole, then without its last dot-separated part, until a part is listed or nothing is left.
 
     Some codes end in a dot, such as InvalidParameter., so the empty last part is dropped like any other.
     """
     candidate = code
     while candidate:
-        if candidate in failures:
-            return failures[candidate]
+        if candidate in _FAILURE_CODES:
+            return _FAILURE_CODES[candidate]
         candidate = candidate.rpartition(".")[0]
     return None
 
@@ -127,14 +123,15 @@ def _choose_status_failure(status: int | None) -> tuple[ErrorCode, str]:
 
 
 def _choose_failure(status: int | None, code: str | None, message: str) -> tuple[ErrorCode, str]:
-    """Choose by code, the free trial wording first, then by status for a code that is missing or unknown."""
-    if code:
-        tables = (_FREE_TRIAL_CODES, _FAILURE_CODES) if _FREE_TRIAL.search(message) else (_FAILURE_CODES,)
-        for failures in tables:
-            failure = _find_failure(code, failures)
-            if failure is not None:
-                return failure
-    return _choose_status_failure(status)
+    """Choose by code, then by status for a code that is missing or unknown.
+
+    QuotaExceeded is the one code whose meaning only ModelArk's wording tells apart: a used-up free trial needs the
+    model activated, while the other replies need fewer queued tasks.
+    """
+    if code and code.partition(".")[0] == "QuotaExceeded" and _FREE_TRIAL.search(message):
+        return ErrorCode.LIMITED, FREE_QUOTA_USED
+    failure = _find_failure(code) if code else None
+    return failure if failure is not None else _choose_status_failure(status)
 
 
 def _sanitize_reason(message: str) -> str:

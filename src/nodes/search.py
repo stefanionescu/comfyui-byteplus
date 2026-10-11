@@ -57,7 +57,7 @@ class SearchEmbed(PaidNode):
                     advanced=True,
                     tooltip="The vector length; model default is 2048.",
                 ),
-                *build_request_inputs(has_seed=False),
+                *build_request_inputs(),
                 io.String.Input(
                     "instructions",
                     multiline=True,
@@ -96,11 +96,11 @@ class SearchEmbed(PaidNode):
         videos: list[Input.Video] | None = None,
         options: Options | None = None,
     ) -> io.NodeOutput:
-        """Encode every image and video inside the owned task, then send the items one after another."""
+        """Wait for the requests in an owned task, so ComfyUI's cancel reaches the encoding and the requests."""
         lines = tuple(line.strip() for text in texts for line in text.splitlines() if line.strip())
 
         async def send_encoded() -> io.NodeOutput:
-            """Encode the media inside the owned task, then send the requests."""
+            """Encode every image and video in a worker thread, then send the items one after another."""
             encoded_images, video_urls = await wait_for_thread(
                 lambda: (encode_sized_images(images or ()), tuple(encode_video(video) for video in videos or ()))
             )

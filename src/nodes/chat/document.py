@@ -8,7 +8,6 @@ from pathlib import Path
 from comfy_api.latest import io
 from ...comfy.runtime import get_runtime
 from typing import override, TYPE_CHECKING
-from ...settings.store import read_settings
 from ...types.errors import ErrorCode, ByteplusError
 from ...config.messages.inputs import DOCUMENT_MISSING
 from ...comfy.documents import read_document, list_documents
@@ -68,7 +67,7 @@ class ChatAttachDocument(io.ComfyNode):
         """Read the file off the event loop and add it after the earlier documents; no key is needed."""
         if not file:
             raise ByteplusError(ErrorCode.INVALID_INPUT, DOCUMENT_MISSING)
-        settings = await asyncio.to_thread(read_settings, get_runtime().configuration.directory)
+        settings = await asyncio.to_thread(get_runtime().configuration.read_settings)
         document = await asyncio.to_thread(read_document, file, settings.max_upload_megabytes)
         return io.NodeOutput((*documents, document))
 

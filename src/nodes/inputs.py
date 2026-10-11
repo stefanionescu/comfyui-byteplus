@@ -1,4 +1,4 @@
-"""Build the inputs the paid nodes share, the seed, the run number, and the options, and encode their media inputs."""
+"""Build the inputs the paid nodes share, and encode their media inputs."""
 
 from __future__ import annotations
 
@@ -8,10 +8,11 @@ from typing import cast, TYPE_CHECKING
 from ..config.media import IMAGE_TENSOR
 from ..types.images import EncodedImage
 from ..config.namespace import SOCKET_TYPES
+from ..config.generation.images import PROMPT_MODES
 from ..types.errors import ErrorCode, ByteplusError
 from ..comfy.media import encode_audio, encode_images
-from ..config.generation.inputs import SEED, RUN_NUMBER, INPUT_NAMES
 from ..config.messages.inputs import IMAGE_SINGLE, REFERENCE_IMAGE_SINGLE
+from ..config.generation.inputs import RUN_NUMBER, INPUT_NAMES, MODEL_DEFAULT
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -26,28 +27,32 @@ REFERENCES_INPUT = io.Custom(SOCKET_TYPES["REFERENCES"]).Input(
         "Video: Generate, or Video: Download."
     ),
 )
+# The optimize_prompt_options input of the Seedream nodes.
+OPTIMIZE_PROMPT_OPTIONS_INPUT = io.Combo.Input(
+    "optimize_prompt_options",
+    display_name="optimize prompt options",
+    options=list(PROMPT_MODES),
+    default=MODEL_DEFAULT,
+    advanced=True,
+    tooltip="Fast answers sooner with slightly lower quality, on models that offer it.",
+)
+# The watermark input of the image and video nodes.
+WATERMARK_INPUT = io.Boolean.Input(
+    "watermark",
+    default=False,
+    advanced=True,
+    tooltip="Adds an AI-generated mark in the lower right corner.",
+)
 # The types of a socket that takes one ComfyUI image or references, passed to each such socket's MultiType input.
 IMAGE_SOCKET_TYPES = (io.Image, io.Custom(SOCKET_TYPES["REFERENCES"]))
 
 
-def build_request_inputs(*, has_seed: bool) -> list[io.Input]:
-    """Build the seed, run number, and options inputs that follow a paid node's own inputs.
-
-    The seed starts fixed, so queueing a workflow again never sends a new paid request by itself.
-    """
-    seed = io.Int.Input(
-        INPUT_NAMES["SEED"],
-        display_name="seed",
-        tooltip="Number the model uses to vary its output. Results can change after model updates.",
-        default=SEED["DEFAULT"],
-        min=0,
-        max=SEED["MAX"],
-        control_after_generate=io.ControlAfterGenerate.fixed,
-    )
+def build_request_inputs() -> list[io.Input]:
+    """Build the run number and options inputs that follow a paid node's own inputs."""
     run_number = io.Int.Input(
         INPUT_NAMES["RUN_NUMBER"],
         display_name="run number",
-        tooltip="Change this number to send the same request again" + (" with the same seed." if has_seed else "."),
+        tooltip="Change this number to send the same request again.",
         default=RUN_NUMBER["DEFAULT"],
         min=RUN_NUMBER["MIN"],
         max=RUN_NUMBER["MAX"],
@@ -57,7 +62,7 @@ def build_request_inputs(*, has_seed: bool) -> list[io.Input]:
         optional=True,
         tooltip="Connect Request Options to choose the service tier or pass extra request fields.",
     )
-    return [seed, run_number, options] if has_seed else [run_number, options]
+    return [run_number, options]
 
 
 def encode_sized_images(batches: Sequence[torch.Tensor]) -> tuple[EncodedImage, ...]:
@@ -109,7 +114,9 @@ def read_image_socket(label: str, values: Sequence[object]) -> EncodedImage | Re
 
 __all__ = [
     "IMAGE_SOCKET_TYPES",
+    "OPTIMIZE_PROMPT_OPTIONS_INPUT",
     "REFERENCES_INPUT",
+    "WATERMARK_INPUT",
     "build_request_inputs",
     "encode_audio_clips",
     "encode_sized_images",

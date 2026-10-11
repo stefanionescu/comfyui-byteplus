@@ -68,10 +68,6 @@ OPTION_FLEX = (
 
 OPTION_RESERVED_FIELD = "The node sets {field} itself. Remove it from the extra fields in Request Options."
 
-OPTION_TIER_KIND = (
-    "{node} requests take no service tier. Set service tier to model default in the Request Options connected to it."
-)
-
 PROMPT_COMMAND = (
     "Remove {command} from the prompt. ModelArk reads it as a setting; set the video's settings with the node's inputs."
 )
@@ -180,7 +176,6 @@ __all__ = [
     "OPTIONS_JSON",
     "OPTION_FLEX",
     "OPTION_RESERVED_FIELD",
-    "OPTION_TIER_KIND",
     "PROMPT_COMMAND",
     "PROMPT_EMPTY",
     "RATIO_ADAPTIVE_ONLY",

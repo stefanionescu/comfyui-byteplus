@@ -102,12 +102,13 @@ class MeshLimits(Value):
     """The 3D controls one 3D model takes.
 
     Attributes:
-        dialect: Which command set the model reads, which decides the file format command the 3D node adds.
+        format_command: The command that asks for a GLB file, as the model's page writes it; the 3D node adds it, since
+            Hitem3D makes OBJ without it.
         max_prompt_characters: The longest text item, commands included; 0 when the model's page names no limit.
 
     """
 
-    dialect: Literal["hyper3d", "hitem3d"]
+    format_command: str
     max_prompt_characters: int
 
 

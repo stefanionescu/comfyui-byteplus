@@ -9,7 +9,7 @@ from typing import Literal, TYPE_CHECKING
 if TYPE_CHECKING:
     from . import Json
     from .settings import Settings
-    from .models import ModelRow, ModelMatch
+    from .references import OutputFile
     from collections.abc import Mapping, Callable
 
 
@@ -35,39 +35,23 @@ class TaskJob(Value):
 
 
 @dataclass(frozen=True, slots=True)
-class TaskRequest[Row: ModelRow]:
+class TaskRequest:
     """One video or 3D task to create, with the checks and the body of its kind.
 
     Attributes:
-        kind: videos or meshes: the model table kind and the record's kind.
+        kind: videos or meshes: the record's kind.
         model_id: The model ID as typed.
         validate_request: The checks that need no model row, the upload limit included.
-        build_body: The row's checks, then the body with Request Options merged.
+        build_body: Finds the model's row, runs its checks, and builds the body with Request Options merged.
         is_draft: Whether the task makes a Seedance draft.
-        poll_seconds: The time between status checks.
 
     """
 
     kind: Literal["videos", "meshes"]
     model_id: str
     validate_request: Callable[[Settings], None]
-    build_body: Callable[[ModelMatch[Row]], Mapping[str, Json]]
+    build_body: Callable[[], Mapping[str, Json]]
     is_draft: bool
-    poll_seconds: int
-
-
-@dataclass(frozen=True, slots=True)
-class TaskOutput:
-    """One file a finished task made.
-
-    Attributes:
-        address: The https address it was downloaded from, which ModelArk reads again for 24 hours.
-        content: The downloaded file.
-
-    """
-
-    address: str
-    content: bytes
 
 
 @dataclass(frozen=True, slots=True)
@@ -83,9 +67,9 @@ class TaskResult:
     """
 
     job: TaskJob
-    outputs: Mapping[str, TaskOutput]
+    outputs: Mapping[str, OutputFile]
     created_at: int
     updated_at: int
 
 
-__all__ = ["TaskJob", "TaskOutput", "TaskRequest", "TaskResult"]
+__all__ = ["TaskJob", "TaskRequest", "TaskResult"]

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from comfy_api.latest import io
+from .inputs import REFERENCES_INPUT
 from typing import override, TYPE_CHECKING
 from ..types.errors import ErrorCode, ByteplusError
 from ..config.generation.references import ADDED_KINDS
@@ -29,14 +30,7 @@ class ReferenceAdd(io.ComfyNode):
                 "chat node sends."
             ),
             inputs=[
-                io.Custom(SOCKET_TYPES["REFERENCES"]).Input(
-                    "references",
-                    optional=True,
-                    tooltip=(
-                        "Connect another Reference: Add, or the references output of Image: Generate, Video: "
-                        "Generate, or Video: Download, to add this file after them."
-                    ),
-                ),
+                REFERENCES_INPUT,
                 io.Combo.Input(
                     "kind",
                     options=list(ADDED_KINDS),

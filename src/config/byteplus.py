@@ -1,7 +1,9 @@
 """ModelArk's addresses, the reply limits, and the console pages messages name.
 
-It also holds the request fields each kind of request reserves, and the service tiers each kind takes.
+It also holds the request fields each kind of request reserves, and the service tiers Request Options offers.
 """
+
+from .generation.inputs import MODEL_DEFAULT
 
 # Every ModelArk request goes to Asia Pacific (Johor), the one region that serves every model the pack takes.
 BASE_URL = "https://ark.ap-southeast.bytepluses.com/api/v3"
@@ -59,11 +61,8 @@ RESERVED_FIELDS = {
     "embeddings": ("model", "input", "encoding_format", "service_tier"),
 }
 
-# The service_tier values each kind of request takes; a kind missing here takes none.
-TIERS = {
-    "chat": ("auto", "default", "fast", "flex"),
-    "videos": ("default", "flex"),
-}
+# The service_tier dropdown: nothing sent, or ModelArk's lower-priority, lower-cost tier.
+TIER_CHOICES = (MODEL_DEFAULT, "flex")
 
 __all__ = [
     "BASE_URL",
@@ -73,5 +72,5 @@ __all__ = [
     "REASON_ENDINGS",
     "REPLY_BYTES",
     "RESERVED_FIELDS",
-    "TIERS",
+    "TIER_CHOICES",
 ]

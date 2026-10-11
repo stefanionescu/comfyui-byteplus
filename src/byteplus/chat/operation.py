@@ -5,7 +5,6 @@ from __future__ import annotations
 from .content import build_body
 from typing import TYPE_CHECKING
 from ..transport import send_json
-from datetime import UTC, datetime
 from ...types.chat import ChatResult
 from pydantic import ValidationError
 from ...config.byteplus import ENDPOINT_URLS
@@ -117,9 +116,7 @@ class ChatOperation:
             raise ByteplusError(ErrorCode.INVALID_INPUT, PROMPT_EMPTY)
         files = [document.file_url for document in request.documents if document.file_url]
         validate_upload_size((*request.image_urls, *request.video_urls, *request.audio_clips, *files), settings)
-        validate_references(
-            request.references, ("image", "video", "audio"), can_read_assets=False, now=datetime.now(UTC)
-        )
+        validate_references(request.references, ("image", "video", "audio"), can_read_assets=False)
 
     async def send(self, configuration: Configuration) -> ChatResult:
         """Check the request against the model's row, send it, and read the answer."""

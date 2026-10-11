@@ -5,7 +5,7 @@ MESH_ROWS = {
         "kinds": ("meshes",),
         "inputs": ("text", "image"),
         "mesh": {
-            "dialect": "hyper3d",
+            "format_command": "--fileformat glb",
             # Hyper3D reads English only and cuts longer text.
             "max_prompt_characters": 400,
         },
@@ -15,7 +15,7 @@ MESH_ROWS = {
         "kinds": ("meshes",),
         "inputs": ("image",),
         "mesh": {
-            "dialect": "hitem3d",
+            "format_command": "--ff 2",
             # Its page names no text length.
             "max_prompt_characters": 0,
         },

@@ -3,7 +3,6 @@
 # The inputs every paid node shares.
 INPUT_NAMES = {
     "MODEL": "model",
-    "SEED": "seed",
     "RUN_NUMBER": "run_number",
     "OPTIONS": "options",
 }
@@ -13,12 +12,6 @@ MODEL_TOOLTIP = "Any ModelArk model ID. Copy one from the model list at docs.byt
 
 # Every dropdown's choice that sends nothing and leaves the value to the model.
 MODEL_DEFAULT = "model default"
-
-# The shared seed fits Seedance's range; only video models take it.
-SEED = {
-    "DEFAULT": 42,
-    "MAX": 2**31 - 1,
-}
 
 # The run number is the extension's own cache counter.
 RUN_NUMBER = {
@@ -32,5 +25,4 @@ __all__ = [
     "MODEL_DEFAULT",
     "MODEL_TOOLTIP",
     "RUN_NUMBER",
-    "SEED",
 ]

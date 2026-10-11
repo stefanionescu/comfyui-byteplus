@@ -1,4 +1,4 @@
-"""A file ModelArk reads by address, which the references socket carries in the order the person chained them."""
+"""Files at ModelArk addresses: a reference the references socket carries, and a file ModelArk made."""
 
 from typing import Literal
 from datetime import datetime
@@ -26,5 +26,19 @@ class Reference:
     expires_at: datetime | None
 
 
+@dataclass(frozen=True, slots=True)
+class OutputFile:
+    """One file ModelArk made.
+
+    Attributes:
+        content: The downloaded file.
+        address: The https address it was downloaded from, which ModelArk can read again for 24 hours.
+
+    """
+
+    content: bytes
+    address: str
+
+
 # Type aliases are imported by name; __all__ lists runtime names.
-__all__ = ["Reference"]
+__all__ = ["OutputFile", "Reference"]
