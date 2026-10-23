@@ -2,7 +2,7 @@
 
 from .inputs import MODEL_DEFAULT
 
-# The vector lengths the embedding endpoint takes; model default sends none.
+# The vector lengths the embedding endpoint takes; default sends none.
 DIMENSIONS = (MODEL_DEFAULT, "1024", "2048")
 
 # The longest text ModelArk embeds as one item, in UTF-8 bytes.

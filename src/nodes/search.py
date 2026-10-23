@@ -55,7 +55,7 @@ class SearchEmbed(PaidNode):
                     options=list(DIMENSIONS),
                     default=MODEL_DEFAULT,
                     advanced=True,
-                    tooltip="The vector length; model default is 2048.",
+                    tooltip="The vector length; default is 2048.",
                 ),
                 *build_request_inputs(),
                 io.String.Input(
@@ -102,7 +102,7 @@ class SearchEmbed(PaidNode):
             encoded_images, video_urls = await wait_for_thread(
                 lambda: (encode_sized_images(images or ()), tuple(encode_video(video) for video in videos or ()))
             )
-            # A dropdown left at model default sends nothing.
+            # A dropdown left at default sends nothing.
             request = EmbeddingRequest(
                 model_id=model.strip(),
                 texts=lines,

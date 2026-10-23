@@ -30,7 +30,7 @@ class EncodedImage:
 
 @dataclass(frozen=True, slots=True)
 class ImageRequest:
-    """One image request with its images already encoded; None means model default.
+    """One image request with its images already encoded; None means default.
 
     Attributes:
         model_id: The model ID sent to ModelArk.
@@ -76,7 +76,7 @@ class ImageResult:
 
 @dataclass(frozen=True, slots=True)
 class LayerRequest:
-    """One layer split request; None means model default.
+    """One layer split request; None means default.
 
     Attributes:
         model_id: The model ID sent to ModelArk.

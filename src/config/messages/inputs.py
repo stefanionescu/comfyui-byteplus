@@ -26,7 +26,7 @@ DRAFT_SINGLE = "Connect one draft to finish; the references hold {count}."
 
 DRAFT_TWICE = "Turn off draft to finish a draft."
 
-EFFORT_UNSUPPORTED = "{model} does not take reasoning_effort. Set reasoning_effort to model default."
+EFFORT_UNSUPPORTED = "{model} does not take reasoning_effort. Set reasoning_effort to default."
 
 FRAMES_BESIDE_REFERENCES = (
     "A video starts from first_frame or follows reference media, not both. Disconnect one, or name a reference "
@@ -62,7 +62,7 @@ MESH_PROMPT_LENGTH = (
 OPTIONS_JSON = "Write {field} as a JSON object, or leave it empty."
 
 OPTION_FLEX = (
-    "{model} does not take the flex tier. Set service_tier to model default in Request Options, or choose a model "
+    "{model} does not take the flex tier. Set service_tier to default in Request Options, or choose a model "
     'that takes flex; Model: Info shows "flex": true for them.'
 )
 
@@ -74,9 +74,7 @@ PROMPT_COMMAND = (
 
 PROMPT_EMPTY = "Write a prompt."
 
-RATIO_ADAPTIVE_ONLY = (
-    "{model} keeps the shape of its input for a video from {mode}. Set ratio to adaptive or model default."
-)
+RATIO_ADAPTIVE_ONLY = "{model} keeps the shape of its input for a video from {mode}. Set ratio to adaptive or default."
 
 RATIO_FIXED_ONLY = "{model} cannot choose the shape of a video from {mode}. Set ratio to a shape such as 16:9."
 
@@ -91,7 +89,7 @@ SCHEMA_UNSUPPORTED = (
     "{model} cannot follow a JSON schema. Clear json_schema, or choose a model that can, such as seed-2-0-lite-260428."
 )
 
-SEARCH_DIMENSIONS = "{model} makes vectors of {choices} values. Set dimensions to one of them, or to model default."
+SEARCH_DIMENSIONS = "{model} makes vectors of {choices} values. Set dimensions to one of them, or to default."
 
 SEARCH_IMAGE_SHAPE = (
     "Image {number} is {width} by {height} pixels. ModelArk needs each side above 14 pixels and the long side at "
@@ -125,11 +123,9 @@ TASK_NEEDS_VIDEO = (
     "omni_reference_task_type to reference or auto."
 )
 
-TEMPERATURE_FIXED = (
-    "{model} always uses its own temperature. Set temperature to model default, or choose another model."
-)
+TEMPERATURE_FIXED = "{model} always uses its own temperature. Set temperature to default, or choose another model."
 
-TRANSPARENT_FORMAT = "A transparent background needs a PNG. Set output_format to png or model default."
+TRANSPARENT_FORMAT = "A transparent background needs a PNG. Set output_format to png or default."
 
 TRANSPARENT_SOURCE = (
     "A transparent background needs exactly one reference image with transparency. Add a mask to an image with Join "

@@ -18,7 +18,7 @@ class RequestOptions(io.ComfyNode):
 
     @classmethod
     def define_schema(cls) -> io.Schema:
-        """Offer the service tier, model default or flex, and the extra fields as one JSON object."""
+        """Offer the service tier, default or flex, and the extra fields as one JSON object."""
         service_tier = io.Combo.Input(
             "service_tier",
             options=list(SERVICE_TIER_CHOICES),

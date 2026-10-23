@@ -4,10 +4,10 @@ Sets the service tier and extra request fields for any number of paid nodes.
 
 ## Inputs
 
-| Input          | What it takes                                                                                     |
-| -------------- | ------------------------------------------------------------------------------------------------- |
-| `service_tier` | `model default` sends nothing; `flex` asks for ModelArk's lower-cost tier, which queues requests. |
-| `extra_fields` | A JSON object of fields added to the request as written, such as `{"priority": 5}`.               |
+| Input          | What it takes                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------- |
+| `service_tier` | `default` sends nothing; `flex` asks for ModelArk's lower-cost tier, which queues requests. |
+| `extra_fields` | A JSON object of fields added to the request as written, such as `{"priority": 5}`.         |
 
 ## Outputs
 

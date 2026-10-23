@@ -219,7 +219,7 @@
             },
             "widgets_values": [
               "skylark-embedding-vision-251215",
-              "model default",
+              "default",
               0,
               "Target_modality: text/image.\nInstruction:Find the image that best matches this product description\nQuery:",
               ""

@@ -269,9 +269,9 @@
             "widgets_values": [
               "seed-2-0-mini-260428",
               "disabled",
-              "model default",
+              "default",
               0,
-              "model default",
+              "default",
               0,
               "",
               "Transcribe this voice note word for word. Write only what is said.",

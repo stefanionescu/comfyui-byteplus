@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from ...types.images import EncodedImage
     from ...types.references import Reference
 
-# The video controls. A dropdown left at model default or auto sends nothing; resolution and duration are always sent.
+# The video controls. A dropdown left at default or auto sends nothing; resolution and duration are always sent.
 _CONTROLS = (
     io.Int.Input(
         "duration",

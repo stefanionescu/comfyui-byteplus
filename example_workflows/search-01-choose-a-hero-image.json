@@ -707,9 +707,9 @@
               "seedream-4-0-250828",
               "2848x1600",
               4,
-              "model default",
-              "model default",
-              "model default",
+              "default",
+              "default",
+              "default",
               false,
               0,
               ""
@@ -955,7 +955,7 @@
             },
             "widgets_values": [
               "skylark-embedding-vision-251215",
-              "model default",
+              "default",
               0,
               "Target_modality: text/image.\nInstruction:Find the image that best matches this product description\nQuery:",
               ""

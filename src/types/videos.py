@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class VideoRequest:
-    """One Seedance request with its local media already encoded; None means model default.
+    """One Seedance request with its local media already encoded; None means default.
 
     Attributes:
         model_id: The model ID sent to ModelArk.

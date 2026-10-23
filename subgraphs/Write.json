@@ -265,9 +265,9 @@
             "widgets_values": [
               "seed-2-0-lite-260428",
               "disabled",
-              "model default",
+              "default",
               0,
-              "model default",
+              "default",
               0,
               "{\n  \"name\": \"listing\",\n  \"schema\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"title\": {\n        \"type\": \"string\"\n      },\n      \"bullets\": {\n        \"type\": \"array\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"description\": {\n        \"type\": \"string\"\n      }\n    },\n    \"required\": [\n      \"title\",\n      \"bullets\",\n      \"description\"\n    ],\n    \"additionalProperties\": false\n  },\n  \"strict\": true\n}",
               "Write a marketplace listing for this product from the photo and the spec sheet. Use only facts you can see in the photo or read in the spec sheet. Keep the title under 80 characters, write five bullet points, and keep the description under 60 words.",

@@ -10,7 +10,7 @@ with the first.
 | `model`        | An embedding model ID from the ModelArk model list; the default is `skylark-embedding-vision-251215`.                                                                                           |
 | `images`       | Images: one, a batch, or a list. Each image is one item.                                                                                                                                        |
 | `videos`       | Videos: one or a list, each up to 50 MB as MP4. Each video is one item; its sound is not read.                                                                                                  |
-| `dimensions`   | The embedding length: `1024` or `2048`. `model default` is 2048.                                                                                                                                |
+| `dimensions`   | The embedding length: `1024` or `2048`. `default` is 2048.                                                                                                                                      |
 | `instructions` | ModelArk's instructions, sent as written with every item, such as `Target_modality: image.`, `Instruction:…`, and `Query:` on three lines. Leave it empty to let ModelArk choose for each item. |
 | `run_number`   | Change it to send the same requests again.                                                                                                                                                      |
 | `options`      | Settings from **Request Options**.                                                                                                                                                              |

@@ -11,7 +11,7 @@ INPUT_NAMES = {
 MODEL_TOOLTIP = "Any ModelArk model ID. Copy one from the model list at docs.byteplus.com/en/docs/ModelArk/1330310."
 
 # Every dropdown's choice that sends nothing and leaves the value to the model.
-MODEL_DEFAULT = "model default"
+MODEL_DEFAULT = "default"
 
 # The run number is the extension's own cache counter.
 RUN_NUMBER = {

@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from ...types.images import ImageResult
     from ...types.references import Reference
 
-# The image controls; an empty size and a dropdown left at model default send nothing.
+# The image controls; an empty size and a dropdown left at default send nothing.
 _CONTROLS = (
     io.String.Input(
         "size",
@@ -59,7 +59,7 @@ _CONTROLS = (
         "output_format",
         options=list(OUTPUT_FORMATS),
         default=MODEL_DEFAULT,
-        tooltip="PNG or JPEG. With model default, the model makes JPEG.",
+        tooltip="PNG or JPEG. With default, the model makes JPEG.",
     ),
     OPTIMIZE_PROMPT_OPTIONS_INPUT,
     WATERMARK_INPUT,

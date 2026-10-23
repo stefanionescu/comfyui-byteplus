@@ -58,7 +58,7 @@ class Conversation:
 
 @dataclass(frozen=True, slots=True)
 class ChatRequest:
-    """One chat completion with its media already encoded; None means model default.
+    """One chat completion with its media already encoded; None means default.
 
     Attributes:
         model_id: The model ID sent to ModelArk.

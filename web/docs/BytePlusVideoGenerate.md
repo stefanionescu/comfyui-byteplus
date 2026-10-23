@@ -12,7 +12,7 @@ last frame, and their ModelArk addresses for the next shot.
 | `duration`                 | The length in seconds. -1 lets the model choose, and Seedance 2.5 can then make up to 30 seconds. An `edit` task always sends -1.                                                                                                                                 |
 | `resolution`               | `480p`, `720p`, `1080p`, or `4k`; each model takes some of them. A draft is made at 480p, and finishing one sends this value.                                                                                                                                     |
 | `ratio`                    | The shape, or `adaptive` to follow `first_frame`, the edited video, or the prompt.                                                                                                                                                                                |
-| `generate_audio`           | `true` or `false`. `model default` makes sound on models that make it.                                                                                                                                                                                            |
+| `generate_audio`           | `true` or `false`. `default` makes sound on models that make it.                                                                                                                                                                                                  |
 | `omni_reference_task_type` | On Seedance 2.5, `edit` or `extend` edits or extends a reference video, and `reference` follows the references; `auto` lets the model decide.                                                                                                                     |
 | `draft`                    | Makes a quick 480p draft, on models that offer drafts. To finish it, connect its `references` to another **Video: Generate** with the same model and an empty prompt. Set its `resolution` to one the model finishes drafts at, such as `1080p` for Seedance 2.5. |
 | `camera_fixed`             | Asks the model to keep the camera still, on models that take it.                                                                                                                                                                                                  |
@@ -28,7 +28,7 @@ last frame, and their ModelArk addresses for the next shot.
 | `prompt`                   | What the video shows. Name media as Image 1, Video 1, and Audio 1. It can be empty when frames or references are connected.                                                                                                                                       |
 | `options`                  | Settings from **Request Options**.                                                                                                                                                                                                                                |
 
-`model default` sends nothing. Before anything is paid, the node refuses a
+`default` sends nothing. Before anything is paid, the node refuses a
 `duration`, `resolution`, `ratio`, `generate_audio`, `omni_reference_task_type`,
 or `output_format` the model does not take, and names what it does take.
 

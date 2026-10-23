@@ -105,7 +105,7 @@ def _choose_task_fields(request: VideoRequest, match: ModelMatch[VideoRow]) -> d
 def _choose_ratio(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> str | None:
     """Choose the ratio for the mode, or for an edit or extend task, which keeps its video's shape.
 
-    Where the model keeps the shape of its input, model default sends adaptive and a fixed ratio is refused. Where it
+    Where the model keeps the shape of its input, default sends adaptive and a fixed ratio is refused. Where it
     cannot choose a shape, adaptive is refused. Every Seedance model takes every other ratio.
     """
     limits = match.row.video
