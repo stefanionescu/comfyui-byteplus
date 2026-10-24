@@ -2,56 +2,59 @@
 
 from __future__ import annotations
 
-from typing import override
-from comfy_api.latest import io
 from types import MappingProxyType
-from ..types.options import Options
-from ..types.parsing import parse_fields
-from ..config.messages.inputs import OPTIONS_JSON
+from typing import override
+
+from comfy_api.latest import io
+
+from ..state.options import Options
+from ..state.parsing import parse_fields
 from ..config.byteplus import SERVICE_TIER_CHOICES
+from ..config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
+from ..config.messages.inputs import OPTIONS_JSON
 from ..config.generation.inputs import MODEL_DEFAULT
-from ..config.namespace import NODE_PREFIX, MENUS, SOCKET_TYPES
 
 
 class RequestOptions(io.ComfyNode):
     """Output the service tier and extra fields; the paid node refuses what its request or model does not take."""
 
     @classmethod
+    @override
     def define_schema(cls) -> io.Schema:
         """Offer the service tier, default or flex, and the extra fields as one JSON object."""
         service_tier = io.Combo.Input(
-            "service_tier",
+            'service_tier',
             options=list(SERVICE_TIER_CHOICES),
             default=MODEL_DEFAULT,
             tooltip="Choose flex for ModelArk's lower-cost tier, which queues requests until it has room. Only some "
-            "chat and Seedance 1.x models take it; Model: Info shows which.",
+            'chat and Seedance 1.x models take it; Model: Info shows which.',
         )
         extra_fields = io.String.Input(
-            "extra_fields",
+            'extra_fields',
             multiline=True,
-            default="",
+            default='',
             advanced=True,
-            tooltip="A JSON object of request fields, added to the request as written. The node refuses a field it "
-            "sets itself.",
+            tooltip='A JSON object of request fields, added to the request as written. The node refuses a field it '
+            'sets itself.',
         )
         return io.Schema(
-            node_id=f"{NODE_PREFIX}{cls.__name__}",
-            display_name="Request Options",
-            category=MENUS["SHARED"],
-            description="Choose the service tier and extra request fields for any BytePlus node.",
+            node_id=f'{NODE_PREFIX}{cls.__name__}',
+            display_name='Request Options',
+            category=MENUS['SHARED'],
+            description='Choose the service tier and extra request fields for any BytePlus node.',
             inputs=[service_tier, extra_fields],
-            outputs=[io.Custom(SOCKET_TYPES["OPTIONS"]).Output("options", display_name="options")],
+            outputs=[io.Custom(SOCKET_TYPES['OPTIONS']).Output('options', display_name='options')],
         )
 
     @classmethod
     @override
-    def execute(cls, *, service_tier: str, extra_fields: str) -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] -- reason: ComfyUI calls by schema.
+    def execute(cls, *, service_tier: str, extra_fields: str) -> io.NodeOutput:  # pyright: ignore[reportIncompatibleMethodOverride] # reason: ComfyUI calls by schema.
         """Check the extra fields before any request; a paid node checks the rest when it merges them."""
         options = Options(
             service_tier=None if service_tier == MODEL_DEFAULT else service_tier,
-            extra_fields=MappingProxyType(parse_fields(extra_fields, OPTIONS_JSON.format(field="extra_fields")) or {}),
+            extra_fields=MappingProxyType(parse_fields(extra_fields, OPTIONS_JSON.format(field='extra_fields')) or {}),
         )
         return io.NodeOutput(options)
 
 
-__all__ = ["RequestOptions"]
+__all__ = ['RequestOptions']

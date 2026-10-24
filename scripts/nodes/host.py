@@ -6,22 +6,22 @@ from enum import StrEnum
 class HostNode(StrEnum):
     """One ComfyUI node, by the name ComfyUI registers it under."""
 
-    AUDIO = "LoadAudio"
-    PREVIEW = "PreviewAny"
-    TEXT = "PrimitiveString"
-    TEXT_BLOCK = "PrimitiveStringMultiline"
-    FORMAT = "StringFormat"
-    EXTRACT = "RegexExtract"
-    NUMBER = "ComfyNumberConvert"
-    MATH = "ComfyMathExpression"
-    LIST_ITEM = "GetItemFromList"
-    SAVE_IMAGE = "SaveImage"
-    PREVIEW_IMAGE = "PreviewImage"
-    JOIN_ALPHA = "JoinImageWithAlpha"
-    SAVE_TEXT = "SaveText"
-    SAVE_VIDEO = "SaveVideo"
-    SAVE_MESH = "SaveGLB"
-    JOIN_VIDEOS = "ConcatenateVideo"
+    AUDIO = 'LoadAudio'
+    PREVIEW = 'PreviewAny'
+    TEXT = 'PrimitiveString'
+    TEXT_BLOCK = 'PrimitiveStringMultiline'
+    FORMAT = 'StringFormat'
+    EXTRACT = 'RegexExtract'
+    NUMBER = 'ComfyNumberConvert'
+    MATH = 'ComfyMathExpression'
+    LIST_ITEM = 'GetItemFromList'
+    SAVE_IMAGE = 'SaveImage'
+    PREVIEW_IMAGE = 'PreviewImage'
+    JOIN_ALPHA = 'JoinImageWithAlpha'
+    SAVE_TEXT = 'SaveText'
+    SAVE_VIDEO = 'SaveVideo'
+    SAVE_MESH = 'SaveGLB'
+    JOIN_VIDEOS = 'ConcatenateVideo'
 
 
-__all__ = ["HostNode"]
+__all__ = ['HostNode']

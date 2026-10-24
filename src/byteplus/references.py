@@ -1,13 +1,14 @@
 """Parse, check, and build references to files ModelArk reads by address, so every node applies the same rules."""
 
 import re
+from datetime import UTC, datetime, timedelta
 from urllib.parse import urlsplit
 from collections.abc import Sequence
+
 from ..config.units import SECONDS_PER_MINUTE
-from datetime import UTC, datetime, timedelta
+from ..state.errors import ErrorCode, BytePlusError
 from ..config.patterns import ASSET_ID_PATTERN
-from ..types.errors import ErrorCode, BytePlusError
-from ..types.references import Reference, ReferenceKind
+from ..state.references import Reference, ReferenceKind
 from ..config.messages.references import (
     REFERENCE_URL,
     REFERENCE_KIND,
@@ -44,10 +45,10 @@ def _is_link(text: str) -> bool:
 
 
 def parse_reference_url(url: str, kind: ReferenceKind) -> Reference:
-    """Parse the address typed into Reference: Add, which is an asset ID, an asset:// URI, or a public https address.
+    """Parse the address typed into Reference: Add: an asset ID, an `asset://` address, or a public `https` address.
 
-    The asset ID is kept exactly as typed, since ModelArk treats IDs as opaque. Any other text, such as an http://
-    or data: address, is refused.
+    This function keeps the asset ID exactly as typed, because ModelArk treats IDs as opaque. It refuses any other
+    text, such as an `http://` or `data:` address.
     """
     text = url.strip()
     if not text:
@@ -56,9 +57,9 @@ def parse_reference_url(url: str, kind: ReferenceKind) -> Reference:
         raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_ADDRESS_LENGTH.format(maximum=MAX_ADDRESS_CHARACTERS))
     match = _ASSET_ID.match(text)
     if match is not None:
-        return Reference(kind, ASSET_URI_PREFIX + match.group(1), "asset", None)
+        return Reference(kind, ASSET_URI_PREFIX + match.group(1), 'asset', None)
     if _is_link(text):
-        return Reference(kind, text, "link", None)
+        return Reference(kind, text, 'link', None)
     raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_URL)
 
 
@@ -76,12 +77,12 @@ def validate_references(
     deadline = datetime.now(UTC) + timedelta(seconds=EXPIRY_MARGIN_SECONDS)
     for position, reference in enumerate(references, start=1):
         if reference.kind not in kinds:
-            message = REFERENCE_KIND.format(kinds=", ".join(kinds), position=position, kind=reference.kind)
+            message = REFERENCE_KIND.format(kinds=', '.join(kinds), position=position, kind=reference.kind)
             raise BytePlusError(ErrorCode.INVALID_INPUT, message)
-        if reference.origin == "asset" and not can_read_assets:
+        if reference.origin == 'asset' and not can_read_assets:
             raise BytePlusError(ErrorCode.INVALID_INPUT, REFERENCE_ASSET.format(position=position))
         if reference.expires_at is not None and reference.expires_at < deadline:
-            template = REFERENCE_DRAFT_EXPIRED if reference.kind == "draft" else REFERENCE_EXPIRED
+            template = REFERENCE_DRAFT_EXPIRED if reference.kind == 'draft' else REFERENCE_EXPIRED
             message = template.format(position=position, minutes=EXPIRY_MARGIN_SECONDS // SECONDS_PER_MINUTE)
             raise BytePlusError(ErrorCode.INVALID_INPUT, message)
 
@@ -92,9 +93,9 @@ def build_output_reference(kind: ReferenceKind, address: str, created_at: int) -
     The lifetime counts from when ModelArk accepted the request, so a reference expires a little before its address
     does, never after. A draft lasts 7 days, and every other output 24 hours.
     """
-    lifetime = DRAFT_LIFETIME_SECONDS if kind == "draft" else OUTPUT_LIFETIME_SECONDS
+    lifetime = DRAFT_LIFETIME_SECONDS if kind == 'draft' else OUTPUT_LIFETIME_SECONDS
     expires_at = datetime.fromtimestamp(created_at, UTC) + timedelta(seconds=lifetime)
-    return Reference(kind, address, "output", expires_at)
+    return Reference(kind, address, 'output', expires_at)
 
 
-__all__ = ["build_output_reference", "parse_reference_url", "validate_references"]
+__all__ = ['build_output_reference', 'parse_reference_url', 'validate_references']

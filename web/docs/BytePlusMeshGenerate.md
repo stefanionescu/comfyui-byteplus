@@ -14,7 +14,7 @@ prompt, images of the subject, or image references.
 | `options`    | Settings from **Request Options**.                                                                                                                                                                                                                       |
 | `prompt`     | What to make, in English, for Hyper3D, then any of the model's own commands, such as `--material PBR --TAPose true`. Hyper3D reads 400 characters in all. The node adds the GLB format command. It can be empty when images or references are connected. |
 
-Before anything is paid, the node refuses a file format command other than
+Before you pay anything, the node refuses a file format command other than
 GLB, or no image for Hitem3D.
 
 ## Outputs
@@ -29,10 +29,10 @@ GLB, or no image for Hitem3D.
 2. Connect `model_3d` to **Save 3D Model**.
 3. Select **Run**.
 
-Example: **3d-01-turn-a-character-into-a-3d-model**.
+Example: `3d-01-turn-a-character-into-a-3d-model`.
 
-ModelArk usually starts a task at once. The task then runs to the end and is
-billed even if you cancel, ComfyUI restarts, or the **Request timeout
-(seconds)** passes. Collect it with **3D: Download**.
+ModelArk starts most tasks at once. A started task runs to the end, and
+ModelArk bills it even if you cancel, ComfyUI restarts, or the request timeout
+in **BytePlus Settings** passes. Collect it with **3D: Download**.
 
 [ModelArk 3D generation documentation](https://docs.byteplus.com/en/docs/modelark/shadoweye-create-3d-generation-task-api)

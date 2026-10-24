@@ -7,3 +7,24 @@
 *.wav binary
 *.mp3 binary
 *.pdf binary
+
+# The build tasks write these from their sources: mise run comfy:frontend:build, comfy:workflows:build, and
+# comfy:requirements:build.
+/web/extension.js linguist-generated
+/web/extension.css linguist-generated
+/example_workflows/*.json linguist-generated
+/subgraphs/*.json linguist-generated
+/requirements.txt linguist-generated
+
+# >>> gspot managed >>>
+.gspot/** linguist-generated
+/.editorconfig linguist-generated
+/.github/workflows/gspot.yml linguist-generated
+/.markdownlint.jsonc linguist-generated
+/.prettierignore linguist-generated
+/.stylelintrc.json linguist-generated
+/eslint.config.mjs linguist-generated
+/prettier.config.mjs linguist-generated
+/pyrightconfig.json linguist-generated
+/ruff.toml linguist-generated
+# <<< gspot managed <<<

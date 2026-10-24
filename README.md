@@ -23,8 +23,8 @@ Run any BytePlus ModelArk model in ComfyUI with your own API key.
 ## Requirements
 
 - Python 3.12 or later.
-- ComfyUI 0.37.2 or later, with frontend 1.52.7 or later in the 1.x series.
-- A ModelArk API key for the Asia Pacific (Johor) region.
+- ComfyUI 0.37.2 or later, with frontend 1.52.7 or later, below 2.0.
+- A ModelArk API key for the Johor region in Asia Pacific.
 
 Activate each model you plan to use on the **Model activation** page of the
 ModelArk console.
@@ -42,7 +42,7 @@ Put the extension in `ComfyUI/custom_nodes/comfyui-byteplus`, install its
    that holds `main.py`, and put the extension in its `custom_nodes` folder.
 3. Select **Terminal** in the same panel and run:
 
-```sh
+```sh title="Comfy Desktop terminal"
 pip install -r custom_nodes/comfyui-byteplus/requirements.txt
 ```
 
@@ -50,13 +50,13 @@ pip install -r custom_nodes/comfyui-byteplus/requirements.txt
 
 From the ComfyUI folder:
 
-```sh
+```sh title="ComfyUI folder"
 .venv/bin/python -m pip install -r custom_nodes/comfyui-byteplus/requirements.txt
 ```
 
 With uv:
 
-```sh
+```sh title="ComfyUI folder"
 uv pip install --python .venv/bin/python -r custom_nodes/comfyui-byteplus/requirements.txt
 ```
 
@@ -70,7 +70,7 @@ From the ComfyUI folder, in PowerShell:
 
 ### Windows portable
 
-From the folder that holds `ComfyUI` and `python_embeded`, in PowerShell:
+From the folder that holds `ComfyUI` and its embedded Python, in PowerShell:
 
 ```powershell
 .\python_embeded\python.exe -m pip install -r .\ComfyUI\custom_nodes\comfyui-byteplus\requirements.txt
@@ -81,14 +81,14 @@ To update or remove the extension, see the
 
 ## First run
 
-1. Save your ModelArk API key in **ComfyUI menu → Extensions → BytePlus →
-   BytePlus Settings**.
-2. Activate Seedream 5.0 flash (`dola-seedream-5-0-flash-260915`) on the
-   **Model activation** page of the ModelArk console.
-3. Open **Browse Templates → comfyui-byteplus →
-   image-01-design-a-character** and select **Run**.
-4. See your character, then the same character waving, in **Design** and
-   **Wave**.
+1. In the ComfyUI menu, select **Extensions**, then **BytePlus**, then
+   **BytePlus Settings**, and save your ModelArk API key.
+2. On the **Model activation** page of the ModelArk console, activate
+   Seedream 5.0 flash, `dola-seedream-5-0-flash-260915`.
+3. In **Browse Templates**, open **comfyui-byteplus**, then
+   **image-01-design-a-character**, and select **Run**.
+4. **Design** shows your character, and **Wave** shows the same character
+   waving.
 
 To send the same request again, change `run_number`.
 
@@ -109,7 +109,7 @@ To send the same request again, change `run_number`.
 | [Search: Choose a Hero Image](example_workflows/search-01-choose-a-hero-image.json)                   | A brief                       |
 | [3D: Turn a Character into a 3D Model](example_workflows/3d-01-turn-a-character-into-a-3d-model.json) | A character description       |
 
-They are in **Browse Templates → comfyui-byteplus**. Start with each
+They are in **Browse Templates**, under **comfyui-byteplus**. Start with each
 workflow's **Start Here** note. Most steps are subgraphs. Media inputs start
 empty, and most workflows draw their own inputs with Seedream.
 
@@ -121,7 +121,7 @@ After an update, open the examples in a new tab to get the new versions.
 
 The nodes are under **BytePlus** in the node menu, and each has a help page.
 
-![Node map: one card for each kind of node. Chat: Attach Document feeds Chat: Ask, and Image: Generate feeds Image: Split Layers. Reference: Add adds files to the references of the chat, image, video, and 3D nodes. Video: Download and 3D: Download collect tasks left running. Request Options and Model: Info are shared. A blue square marks a node that sends a paid request, and a hollow square one that bills nothing.](docs/images/diagrams/node-map.svg)
+![Node map: one card for each kind of node. Chat: Attach Document feeds Chat: Ask, and Image: Generate feeds Image: Split Layers. Reference: Add adds files to the references of the chat, image, video, and 3D nodes. Video: Download and 3D: Download collect tasks left running. Request Options feeds any paid node, and Model: Info shows what a model takes. A blue square marks a node that sends a paid request, and a hollow square one that bills nothing.](docs/images/diagrams/node-map.svg)
 
 | Node                                                            | What it does                                                                                | Paid |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---- |
@@ -143,33 +143,34 @@ The nodes are under **BytePlus** in the node menu, and each has a help page.
 Each paid node takes any model ID from the
 [ModelArk model list](https://docs.byteplus.com/en/docs/modelark/model-list),
 including newer versions of the models the extension knows. **Model: Info**
-shows what a known model takes, for free and without a key.
+shows what a known model takes. It needs no key and bills nothing.
 
 ![Video: Generate on the canvas: sockets for first_frame, last_frame, reference_image, reference_audio, references, and options; model set to dreamina-seedance-2-0-mini-260615; duration 5, resolution 720p, ratio, generate_audio, omni_reference_task_type, draft, camera_fixed, output_format, watermark, seed, and run_number; and a prompt about a red fox in the snow.](docs/images/screenshots/video-generate-node.png)
 
 Before sending, the node checks your request against the extension's own
-table of ModelArk models, and stops before anything is paid if the model
-cannot take it. The error names what the model does take. The
-[advanced guide](ADVANCED.md#models) lists every check and each node's default
-model.
+table of ModelArk models. If the model cannot take the request, the node stops
+before you pay anything. The error names what the model does take. The
+[advanced guide](ADVANCED.md#models) lists every check and the default model of
+each node.
 
 ## How a run works
 
 1. The node checks its inputs against the model's row in the extension's
-   table, and stops before anything is paid.
-2. It sends the request with your key, straight to ModelArk. Nothing is sent
-   twice. A video or 3D task is recorded, checked until ready, and
-   downloaded.
+   table, and stops before you pay anything.
+2. It sends the request with your key, straight to ModelArk, and never sends
+   it twice. The node records a video or 3D task, checks it until it is ready,
+   and downloads it.
 3. Outputs also carry the ModelArk address of each file, so the next node
    sends that address instead of uploading the file again. Nodes connected to
-   an empty output are skipped.
+   an empty output do not run.
 
 The [advanced guide](ADVANCED.md#what-each-node-sends) lists what each node
 sends and returns.
 
 ## Development
 
-Development needs mise. Point the checks at ComfyUI in `.mise.local.toml`:
+Development needs mise. Name your ComfyUI install in `.mise.local.toml`, which
+Git ignores:
 
 ```toml
 [env]
@@ -177,18 +178,18 @@ COMFYUI_PATH = "/path/to/ComfyUI"
 COMFYUI_PYTHON = "/path/to/ComfyUI/.venv/bin/python"
 ```
 
-Install the tools, dependencies, and Git hooks, and run the full check:
+Install the tools, the dependencies, and the Git hooks, then run every check:
 
 ```shell
 mise trust
-mise run repo:setup
-mise run repo:check
+mise run setup
+bun run --no-install gspot check
 ```
 
 Restart ComfyUI after changing Python. After changing the browser code, run
-`mise run comfy:frontend:build`; after changing a workflow description, run
+`mise run comfy:frontend:build`. After changing a workflow description, run
 `mise run comfy:workflows:build`. The [advanced guide](ADVANCED.md#development)
-lists every task.
+lists every task and check.
 
 ## Common problems
 

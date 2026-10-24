@@ -19,48 +19,58 @@
 
 ## What each node sends
 
-- **Chat: Ask** sends, in this order, the documents, the images as PNG, image
-  references, the videos as MP4, video references, the audio as WAV, and audio
-  references, then the prompt. PDF files go as files and text files as text.
-  Earlier turns come from `conversation`. It returns the answer, the
-  reasoning when the model shares it, and the conversation.
-- **Image: Generate** sends the prompt, the chosen settings, each image in
-  `image` as PNG, and image references as their addresses. When `max_images`
-  is above 1, it asks for sequential image generation of up to that many
-  images. It returns the images, their masks (white is transparent), and their
-  addresses as references.
-- **Image: Split Layers** sends one image or image reference. It returns the
-  base image, each layer, and each layer's mask.
-- **Video: Generate** sends the prompt, the length, the resolution, the chosen
-  settings, the frames, `reference_image`, `reference_audio`, and
-  `references`. It records the task as soon as ModelArk accepts it, checks it
-  every 10 seconds, and downloads the video and its last frame when it is
-  ready.
-- **Video: Download** checks one recorded task and downloads its video. Status
-  checks and downloads are free.
-- **Reference: Add** adds an asset ID or a public address to a chain of
-  references. It sends nothing.
-- **Search: Embed** sends each text line, image, and video in its own request,
-  one after another. It compares each embedding with the first one locally.
-- **3D: Generate** sends the prompt with the model's own commands and the GLB
-  format command, the images as PNG, and the image references, as one task. It
-  records the task, checks it every 10 seconds, and downloads the GLB file.
-  **3D: Download** collects a recorded 3D task.
-- **Request Options** adds `service_tier` and `extra_fields` to each
-  connected paid node's request.
-- **Model: Info** reads the model table bundled with the extension and returns
-  one row as JSON. It sends nothing.
+**Chat: Ask** sends, in this order, the documents, the images as PNG, image
+references, the videos as MP4, video references, the audio as WAV, and audio
+references, then the prompt. PDF files go as files and text files as text.
+Earlier turns come from `conversation`. It returns the answer, the reasoning
+when the model shares it, and the conversation.
 
-Every request goes out once. Files ModelArk makes are downloaded without the
-key.
+**Image: Generate** sends the prompt, the chosen settings, each image in
+`image` as PNG, and image references as their addresses. When `max_images` is
+above 1, it asks for sequential image generation of up to that many images. It
+returns the images, their masks, and their addresses as references. White is
+transparent in a mask.
+
+**Image: Split Layers** sends one image or image reference. It returns the base
+image, each layer, and the mask of each layer.
+
+**Video: Generate** sends the prompt, the length, the resolution, the chosen
+settings, the frames, `reference_image`, `reference_audio`, and `references`.
+It records the task as soon as ModelArk accepts it, checks it every 10
+seconds, and downloads the video and its last frame when it is ready.
+
+**Video: Download** checks one recorded task and downloads its video. Status
+checks and downloads are free.
+
+**Reference: Add** adds an asset ID or a public address to a chain of
+references. It sends nothing.
+
+**Search: Embed** sends each text line, image, and video in its own request,
+one after another. It compares each embedding with the first one locally.
+
+**3D: Generate** sends the prompt with the model's own commands and the GLB
+format command, the images as PNG, and the image references, as one task. It
+records the task, checks it every 10 seconds, and downloads the GLB file.
+
+**3D: Download** collects a recorded 3D task.
+
+**Request Options** adds `service_tier` and `extra_fields` to the request of
+each connected paid node.
+
+**Model: Info** reads the model table bundled with the extension and returns
+one row as JSON. It sends nothing.
+
+Every request goes out once. The extension downloads the files ModelArk makes
+without the key.
 
 ## Keys and access
 
-Save the key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.
-It is stored in the private folder and checked by the first request that uses
-it. `ARK_API_KEY`, set where ComfyUI starts, takes precedence.
+In the ComfyUI menu, select **Extensions**, then **BytePlus**, then **BytePlus
+Settings**, and save the key. The extension stores the key in the private
+folder, and the first request that uses the key checks it. `ARK_API_KEY`, set
+where ComfyUI starts, takes precedence.
 
-The key and settings can be changed only over a direct local connection to the
+You can change the key and settings only over a direct local connection to the
 ComfyUI server. For remote access, a reverse proxy, or multi-user mode, set
 `ARK_API_KEY` instead.
 
@@ -73,14 +83,14 @@ The private folder is:
 | Windows | `%LOCALAPPDATA%\BytePlusComfyUI`                   |
 
 To use another folder, set `BYTEPLUS_COMFY_STATE_DIRECTORY` to an absolute
-path outside the extension and ComfyUI's folders. Files are unencrypted, with
-owner-only permissions.
+path outside the extension and ComfyUI's folders. The extension does not
+encrypt these files, and only their owner can open them.
 
 ## Settings
 
 Change these in **BytePlus Settings**. New requests use the saved values.
 
-![The BytePlus Settings dialog: Credentials with the ModelArk API key field, Save Key, and Clear Saved Key, and Request limits with Request timeout (seconds), Maximum upload size (MB), Maximum download size (MB), and Save Limits.](docs/images/screenshots/settings-dialog.png)
+![The BytePlus Settings dialog: Credentials with the ModelArk API key field, Save Key, and Clear Saved Key, and Request limits with fields for the request timeout in seconds, the maximum upload size in MB, and the maximum download size in MB, and Save Limits.](docs/images/screenshots/settings-dialog.png)
 
 | Setting                        | Default | Range      | What it limits                                                         |
 | ------------------------------ | ------- | ---------- | ---------------------------------------------------------------------- |
@@ -93,7 +103,7 @@ Change these in **BytePlus Settings**. New requests use the saved values.
 The extension bundles a table of every model it knows: what each model reads,
 and the settings and limits it takes. ModelArk's model list does not give these
 for image, video, or 3D models. Before it sends, a paid node finds its model in
-the table and stops, before anything is paid, when:
+the table. It stops before you pay anything when:
 
 - the ID is empty, is an endpoint ID (`ep-…`), belongs to no family in the
   table, or names a family without its six-digit version;
@@ -104,10 +114,10 @@ the table and stops, before anything is paid, when:
 - **Request Options** sets `service_tier` to `flex` on a model that does not
   take it.
 
-The message names what the model takes. A newer version of a known model,
-such as a future `seed-2-0-lite-261201`, is checked against its family's newest
-row and sent as typed. **Model: Info** returns the row a node uses, as JSON,
-for free.
+The message names what the model takes. A paid node checks a newer version of
+a known model, such as a future `seed-2-0-lite-261201`, against the newest row
+of its family, and sends the ID as typed. **Model: Info** returns the row a
+node uses, as JSON, and bills nothing.
 
 **Chat: Ask** also takes a chat model newer than the table. The node reads
 ModelArk's model list once per ComfyUI session and checks the media against
@@ -126,29 +136,31 @@ four `stop` words.
 
 ## Characters and references
 
-Seedance 2.x refuses reference images and videos with real-looking faces. It
-accepts these characters:
+The Seedance 2.0 and 2.5 models refuse reference images and videos with
+real-looking faces. They accept these characters:
 
 - A preset character from ModelArk's digital character library, added with
   **Reference: Add**.
-- An image Seedream 5.0 drew from a prompt alone, or a Seedance 2.x video or
-  its last frame, made with your account in the last 30 days. Seedance trusts
-  only the original file, so connect the `references` output, not the
-  decoded image.
+- An image Seedream 5.0 drew from a prompt alone, or a video or its last
+  frame from these Seedance models, made with your account in the last 30
+  days. Seedance trusts only the original file, so connect the `references`
+  output, not the decoded image.
 - An asset from your ModelArk asset library, added by its ID with
   **Reference: Add**.
 
-A reference is a file address that ModelArk downloads itself: an output
-address from **Image: Generate**, **Video: Generate**, or **Video: Download**;
-an asset (`asset://asset-…`); or a public `https://` address added with
-**Reference: Add**.
+A reference is a file address that ModelArk downloads itself:
+
+- an output address from **Image: Generate**, **Video: Generate**, or
+  **Video: Download**;
+- an asset, such as `asset://asset-…`;
+- a public `https://` address added with **Reference: Add**.
 
 **Video: Generate** numbers media by kind, in the order it sends them: Image
 1, Image 2, Video 1, Audio 1. Images connected to `reference_image` come
 first, then image references in chain order. Audio works the same way, and
 videos come only from references. **Reference: Add** puts its reference after
-the ones it receives. Name each file in the prompt by its place, such as "the
-person in Image 2".
+the ones it receives. Name each file in the prompt by its place. For example,
+"the person in Image 2" names a person in the second image.
 
 | Reference                                        | Lasts                                 |
 | ------------------------------------------------ | ------------------------------------- |
@@ -163,22 +175,23 @@ or extend your own video, put it at a public address and add it with
 ## Caching and reruns
 
 - Change `run_number` to send the same request again.
-- **Video: Generate**'s `seed` starts at `fixed`. Set **control after
+- The `seed` of **Video: Generate** starts at `fixed`. Set **control after
   generate** to `randomize` to send a new request each run.
 - Saving a different key invalidates the cached results; changing settings
   does not.
-- Every request is sent once.
+- The extension sends every request once.
 - Cancelling stops the wait. A chat model still bills the tokens it produced,
   and a video or 3D task that has started keeps running.
 
 ## Recover a video or 3D task
 
 **Video: Generate** and **3D: Generate** record each task as soon as ModelArk
-accepts it. ModelArk usually starts a task at once. The task then runs to the
-end and is billed even if you cancel, ComfyUI restarts, or the **Request
-timeout (seconds)** passes. Collect it with **Video: Download** or **3D:
-Download** (press R to list new tasks). A task leaves the list once its file
-is downloaded, or when it fails, is cancelled, or expires.
+accepts it. ModelArk starts most tasks at once. A started task runs to the
+end, and ModelArk bills it even if you cancel, ComfyUI restarts, or the
+request timeout in **BytePlus Settings** passes. Collect it with
+**Video: Download** or **3D: Download**, and press R to list new tasks. A task
+leaves the list once a node downloads its file, or when its status becomes
+`failed`, `cancelled`, or `expired`.
 
 ## Limits
 
@@ -202,7 +215,7 @@ object.
 
 **Chat: Attach Document** stops when:
 
-- No file is chosen, or the file is outside the input folder.
+- You chose no file, or the file is outside the input folder.
 - The file is not a PDF or text file, is over the upload limit, or is not UTF-8
   text.
 
@@ -213,24 +226,28 @@ asks for JPEG or lacks exactly one reference image with transparency.
 
 **Video: Generate** stops when:
 
-- There is no prompt, frame, or reference media.
-- `last_frame` is connected without `first_frame`.
+- It gets no prompt, frame, or reference media.
+- You connect `last_frame` without `first_frame`.
 - Frames and reference media are both connected, or a frame holds more than one
   image.
-- The prompt holds a setting the node's inputs set, such as `--duration 5`.
+- The prompt holds a setting that an input of the node sets, such as
+  `--duration 5`.
 - `omni_reference_task_type` is `edit` or `extend` without a reference
   video, or `reference` without reference media.
 - A draft to finish comes with a prompt, other media, or `draft` turned on.
 
 **Reference: Add** stops when `url` is empty, is not an asset ID, an
-`asset://` URI, or an `https://` address, or is already in the chain.
+`asset://` address, or an `https://` address, or is already in the chain.
 
 **Search: Embed** stops when there are no items, or a line, image, or video is
 outside the sizes ModelArk embeds.
 
-**3D: Generate** stops when there is no prompt and no image, Hitem3D gets no
-image, or the prompt is longer than Hyper3D reads or asks for a file format
-other than GLB.
+**3D: Generate** stops when:
+
+- It gets no prompt and no image.
+- Hitem3D gets no image.
+- The prompt is longer than Hyper3D reads, or asks for a file format other
+  than GLB.
 
 **Video: Download** and **3D: Download** stop when the chosen task is not
 recorded on this server.
@@ -253,18 +270,19 @@ row = json.loads(output.args[0])
 ```
 
 - Call a node by its ID on a class clone with an empty hidden holder, as above.
-  A called node leaves the calling node's progress bar alone.
+  A called node leaves the progress bar of the calling node alone.
 - **Model: Info**, **Reference: Add**, and **Request Options** return at once,
   as above; await every other node.
 - A node that takes input lists, such as **Chat: Ask**, takes every input as a
   one-item list; only its media inputs hold several items.
-- Read a dropdown's choices from the node's schema, such as
+- Read the choices of a dropdown from the schema of the node, such as
   `/object_info/BytePlusVideoGenerate`, instead of copying them.
 - Read a model's limits with **Model: Info**.
 - A failed request raises an error whose `code` names its kind, such as
   `rate_limited`, `timeout`, or `uncertain`. Check `code`, not the message
   text, which can change.
-- Do not send a failed paid request again: it may have run and been billed.
+- Do not send a failed paid request again: it may have run, and ModelArk may
+  have billed it.
 
 ## Update or remove
 
@@ -280,7 +298,7 @@ settings, and task records.
 
 ### Setup
 
-Point the checks at ComfyUI in `.mise.local.toml`, which Git ignores:
+Name your ComfyUI install in `.mise.local.toml`, which Git ignores:
 
 ```toml
 [env]
@@ -288,105 +306,86 @@ COMFYUI_PATH = "/path/to/ComfyUI"
 COMFYUI_PYTHON = "/path/to/ComfyUI/.venv/bin/python"
 ```
 
-Then install the tools, dependencies, Semgrep rules, and Git hooks:
+Then install the tools, the dependencies, and the Git hooks:
 
 ```shell
-mise trust && mise run repo:setup
+mise trust && mise run setup
 ```
+
+`mise run setup` runs `mise install`, then `mise run deps`, then
+`bun run gspot install`:
+
+- `mise run deps` installs the locked Python and Bun dependencies. It also
+  writes a path file that shows the type checker the ComfyUI install.
+- `bun run gspot install` installs the gspot tools and the Git hooks.
+
+### Checks
+
+gspot runs every check. From the repository folder:
+
+```shell
+bun run --no-install gspot check           # Check the working tree
+bun run --no-install gspot check --fix     # Run the fixers, then check
+bun run --no-install gspot check --staged  # Check what you staged
+```
+
+To learn what a check looks for, run `bun run --no-install gspot explain`
+with the name of the check. The checks cover:
+
+- Formatting: Ruff, Prettier, taplo, and shfmt.
+- Linting: Ruff, ESLint, stylelint, ShellCheck, markdownlint, Vale, and typos.
+- Types: basedpyright in strict mode against the ComfyUI install, and `tsc`.
+- Dependencies and secrets: deptry, knip, osv-scanner, and Gitleaks.
+- Licenses and links.
+- Structure: naming, import rules, duplication, and function size.
+
+The settings are in `gspot.toml`. From it, `bun run --no-install gspot apply`
+writes `ruff.toml`, `eslint.config.mjs`, `prettier.config.mjs`,
+`pyrightconfig.json`, `.stylelintrc.json`, `.markdownlint.jsonc`,
+`.editorconfig`, `.prettierignore`, and the `.gspot/` folder. Change
+`gspot.toml`, not these files.
+
+### Project checks
+
+The `[[command_check]]` records in `gspot.toml` add the checks of this
+project, and gspot runs them with the others:
+
+| Check               | Stage  | What it checks                                                                                                                                                                              |
+| ------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `comfy-boundary`    | commit | import-linter checks that only `src/comfy`, `src/nodes`, and the package entry import the modules of ComfyUI. The contract is in `pyproject.toml`.                                          |
+| `frontend-bundle`   | commit | `web/extension.js` and `web/extension.css` match their source.                                                                                                                              |
+| `requirements`      | commit | `requirements.txt` lists the runtime dependencies of `pyproject.toml`.                                                                                                                      |
+| `node-schemas`      | push   | The `send` parameters of each paid node, or the `execute` parameters of each other node, match its inputs. Every node has a help page that names real sockets, and sits in a BytePlus menu. |
+| `example-workflows` | push   | The example workflows and the subgraph blueprints match their descriptions. The README links each workflow, and every node appears in a workflow.                                           |
+
+`mise run comfy:frontend:check`, `mise run comfy:nodes:check`, and
+`mise run comfy:workflows:check` run the browser-file, node, and workflow
+checks alone.
 
 ### Generated files
 
 ```shell
-mise run repo:deps:export          # Regenerate requirements.txt from pyproject.toml
+mise run comfy:requirements:build  # Write requirements.txt from pyproject.toml
 mise run comfy:frontend:build      # Build the browser files
 mise run comfy:workflows:build     # Build the example workflows
 ```
 
-The example workflows are generated from `scripts/workflows/descriptions/`:
-one module per category, the group notes in `notes.py`, and the titles in
-`texts.py`. The build reads the node definitions through ComfyUI's Python. It
-also writes every subgraph to `subgraphs/`, which ComfyUI lists under
-**Subgraph Blueprints** in its node library.
-
-### Full check
-
-```shell
-mise run repo:check                # Run every check below
-```
-
-This runs `repo:deps:verify`, `repo:format:check`, `repo:lint`, `repo:type`,
-`comfy:frontend:check`, `comfy:nodes:check`, `comfy:workflows:check`,
-`repo:security`, `repo:licenses`, and `repo:links:external`.
-
-### Format
-
-```shell
-mise run repo:format               # Format Python, pyproject.toml, web, and Markdown files
-mise run repo:format:check         # List files that need formatting
-```
-
-This uses Ruff for Python, pyproject-fmt for `pyproject.toml`, and Prettier for
-web and Markdown files.
-
-### Lint
-
-```shell
-mise run repo:lint                 # Run every linter
-```
-
-- `repo:lint:policy`: repository structure, naming, and function rules.
-- `repo:lint:python`: Ruff, the custom Python rules, import-linter, pydoclint,
-  interrogate, deptry, and vulture.
-- `repo:lint:frontend`: ESLint, naming, stylelint, knip, madge, and jscpd.
-- `repo:lint:shell`, `repo:lint:hooks`, and `repo:lint:mise`: shell syntax,
-  ShellCheck, shfmt, and the shell rules.
-- `repo:lint:docs`: markdownlint, typos, and local links.
-- `repo:lint:quality`: the quality tools and their configuration.
-
-### Types
-
-```shell
-mise run repo:type                 # Check Python and TypeScript types
-```
-
-This runs basedpyright in strict mode against your ComfyUI installation, and
-`tsc` for the browser code.
-
-### Generated-file checks
-
-```shell
-mise run comfy:frontend:check      # The browser files match their source
-mise run comfy:nodes:check         # The help pages and menus match the nodes
-mise run comfy:workflows:check     # The workflows match their descriptions, and the README links each one
-```
-
-The workflow check also requires every node to appear in at least one
-workflow.
-
-### Security and licenses
-
-```shell
-mise run repo:security             # Run the secret, code, and dependency scanners
-mise run repo:licenses             # Check dependency licenses
-```
-
-`repo:security` runs Gitleaks, Bearer, Bandit, the Python and Bun advisory
-audits, Semgrep with the pinned rules, and CodeQL for Python and the browser
-code.
+The workflow build writes the example workflows from
+`scripts/workflows/descriptions/`: one module per category, the group notes in
+`notes.py`, and the titles in `texts.py`. The build reads the node definitions
+through ComfyUI's Python. It also writes every subgraph to `subgraphs/`, which
+ComfyUI lists under **Subgraph Blueprints** in its node library.
 
 ### Git hooks
 
-`mise run repo:setup` installs the hooks:
+`bun run gspot install` points `core.hooksPath` at `.gspot/hooks`:
 
-- **pre-commit** checks for private files and staged secrets, then runs the
-  source, formatting, type, and browser-file checks.
+- **pre-commit** runs the commit checks on the staged files.
 - **commit-msg** checks the [conventional
   commit](https://www.conventionalcommits.org/) format, `type(scope): subject`.
-- **pre-push** runs the full check.
-
-To skip a run, set `SKIP_HOOKS=1`. To skip only part of it, set `SKIP_LINT=1`
-(the pre-commit checks), `SKIP_ENV_CHECK=1` (the private-file check), or
-`SKIP_COMMITLINT=1` (the commit message check).
+  The scopes are `nodes`, `frontend`, `workflows`, `docs`, `hooks`, `quality`,
+  `root`, and `deps`.
+- **pre-push** checks each pushed commit with the commit and push checks.
 
 ### Test a change
 
@@ -396,61 +395,69 @@ workflows with inexpensive models.
 
 ### Import rules
 
-Each package imports only the packages below it:
+The `[[import_rule]]` records in `gspot.toml` list what each package imports
+besides itself:
 
-```text
-src.nodes
-src.comfy
-src.byteplus | src.settings
-src.storage
-src.types
-src.config
-```
+| Package                             | Imports                                        |
+| ----------------------------------- | ---------------------------------------------- |
+| `src/config`                        | Nothing                                        |
+| `src/state`                         | config                                         |
+| `src/storage`                       | config and state                               |
+| `src/byteplus` and `src/settings`   | config, state, and storage, and not each other |
+| `src/comfy`                         | config, state, storage, byteplus, and settings |
+| `src/nodes`                         | config, state, byteplus, and comfy             |
+| `__init__.py` and `src/__init__.py` | comfy and nodes                                |
+| `scripts/`                          | config, comfy, and nodes                       |
 
-- ComfyUI is imported only in `src/nodes/`, `src/comfy/`, and the package's
-  `__init__.py`.
+In the browser code, the page modules import only each other,
+`web/scripts/settings/` imports the page modules, and
+`web/scripts/extension.ts` imports both.
+
+- Only `src/comfy/`, `src/nodes/`, and the package entry import the modules of
+  ComfyUI. The `comfy-boundary` check enforces this rule.
+- `src/state/` holds the records.
 - All BytePlus requests are in `src/byteplus/`.
   `src/byteplus/transport.py` is the one place that sends the API key.
 - The model table, every message, and every other fixed value, such as a
   limit, a step, a file name, or a route, are constants in `src/config/`.
   The dialog text is in `web/scripts/text.ts`.
-- The import contracts in `pyproject.toml` enforce these rules.
-- Node names, descriptions, and tooltips are in each node's `io.Schema` call.
+- Node names, descriptions, and tooltips are in the `io.Schema` call of each
+  node.
 
-### Function names
+### Names
 
-Every function in `src/`, `scripts/`, and `__init__.py` starts with a verb from
-the table in `rules/NAMING.md`, or is an `is_` or `has_` predicate. In each
-module and class, private functions come first, `__all__` lists no private
-name, and a function only its own module uses is private. `repo:lint:policy`
-checks all four.
+Names follow `.gspot/configurations/general/naming/rules/NAMING.md`. The
+naming checks refuse banned words, wrong cases, digits, and names of more than
+four words.
 
 ### Images
 
-The README's and this guide's images are in `docs/images/`:
+The README and this guide use these images:
 
-- `brand/banner.svg`, `diagrams/node-map.svg`, and the four `badges/*.svg`
-  files are SVG files; edit them as text. They use black `#06080D`, surfaces
-  `#10141B`, hairlines `#232A35`, light text `#EEF3FF`, muted text `#8A93A3`,
-  accent `#5C9DFF`, and the blue gradient `#9CC4FF` to `#2F80FF`. Headings use
-  Helvetica Neue with tight spacing; labels use a monospace font in wide-spaced
-  capitals.
-- `brand/logo.png` is the extension's mark: a rounded node tile in BytePlus blue
-  `#0066FC`, with a plus cut out and an output socket on its right edge, at 400
-  × 400 pixels on a transparent background. The banner draws the same mark, and
-  `pyproject.toml` names `brand/logo.png` as the Registry icon.
+- `docs/images/brand/banner.svg`, `docs/images/diagrams/node-map.svg`, and the
+  four SVG files in `docs/images/badges/` are SVG files; edit them as text.
+  They use black `#06080D`, surfaces `#10141B`, hairlines `#232A35`, light text
+  `#EEF3FF`, muted text `#8A93A3`, accent `#5C9DFF`, and the blue gradient
+  `#9CC4FF` to `#2F80FF`. Headings use Helvetica Neue with tight spacing;
+  labels use a monospace font in wide-spaced capitals.
+- `docs/images/brand/logo.png` is the mark of the extension: a rounded node
+  tile in BytePlus blue `#0066FC` with a cut-out plus and an output socket on
+  its right edge. It is 400 × 400 pixels, on a transparent background.
+- The banner draws the same mark, and `pyproject.toml` names the logo as the
+  Registry icon.
 - The node map has one card for each kind of node. A blue square marks a node
   that sends a paid request and a hollow square one that bills nothing. A blue
   arrow runs from an output to the input it feeds.
 - The badges under the banner name the ComfyUI, frontend, and Python versions
   and the license, as black pills with a blue value; update them when those
   change.
-- `screenshots/video-01-workflow.png` is video-01 at 100% zoom, with link
-  midpoint markers off.
-- `screenshots/video-generate-node.png` is a new **Video: Generate** node, 420
-  pixels wide, at 100% zoom, with a prompt typed in.
-- `screenshots/settings-dialog.png` is the **BytePlus Settings** dialog with
-  default settings and a saved key.
+- `docs/images/screenshots/video-01-workflow.png` is video-01 at 100% zoom,
+  with link midpoint markers off.
+- `docs/images/screenshots/video-generate-node.png` is a new
+  **Video: Generate** node, 420 pixels wide, at 100% zoom, with a prompt typed
+  in.
+- `docs/images/screenshots/settings-dialog.png` is the **BytePlus Settings**
+  dialog with default settings and a saved key.
 
 Keep each image under 100 KB, and give it alt text.
 
@@ -458,22 +465,21 @@ Keep each image under 100 KB, and give it alt text.
 
 - **A message:** edit its constant in `src/config/messages/`, and its entry
   under [troubleshooting](#troubleshooting) if it has one.
-- **A node's labels or tooltips:** edit its `io.Schema` call in `src/nodes/`,
-  then its help page in `web/docs/`.
+- **The labels or tooltips of a node:** edit its `io.Schema` call in
+  `src/nodes/`, then its help page in `web/docs/`.
 - **The dialogs:** edit `web/scripts/text.ts`, then rebuild the browser files.
 - **A workflow's notes:** edit `scripts/workflows/descriptions/notes.py`; for
   titles, `texts.py`; for nodes, models, or prompts, the workflow's module. Then
   rebuild the workflows.
 - **The model table:** edit the model's row in `src/config/models/`, then the
-  node's help page if the families change.
-- **A node's default model:** edit `src/config/generation/models.py`, then the
-  table under [models](#models) and the node's help page.
+  help page of the node if the families change.
+- **The default model of a node:** edit `src/config/generation/models.py`, then
+  the table under [models](#models) and the help page of the node.
 
 ## Package and publish
 
-The Comfy Registry package is made with
-[comfy-cli](https://github.com/Comfy-Org/comfy-cli). These steps use version
-1.20.0.
+[comfy-cli](https://github.com/Comfy-Org/comfy-cli) builds and publishes the
+Comfy Registry package. These steps use version 1.20.0.
 
 1. Create a publisher and a publishing key in the
    [Comfy Registry](https://docs.comfy.org/registry/publishing).
@@ -483,7 +489,7 @@ The Comfy Registry package is made with
 3. Rebuild the generated files:
 
     ```sh
-    mise run repo:deps:export
+    mise run comfy:requirements:build
     mise run comfy:frontend:build
     mise run comfy:workflows:build
     ```
@@ -496,8 +502,8 @@ The Comfy Registry package is made with
     mise run comfy:release:package
     ```
 
-    This runs the full check, builds `node.zip` with `comfy node pack`, lists
-    its contents, and scans it for secrets.
+    This runs `bun run --no-install gspot check`, packs `node.zip` with
+    `comfy node pack`, lists its contents, and scans it with Gitleaks.
 
 6. Publish:
 
@@ -505,7 +511,8 @@ The Comfy Registry package is made with
     mise run comfy:release:publish
     ```
 
-    This repeats the package checks, then asks for the publishing key.
+    This runs the package steps, then `comfy node publish`, which asks for the
+    publishing key.
 
 7. Install the published version with ComfyUI Manager, and check that the nodes,
    menus, help pages, and templates load.
@@ -541,10 +548,10 @@ A failed generation is not billed.
 
 ### ModelArk is limiting requests from your account
 
-Wait a minute and run again, or run fewer paid nodes at once. Nothing is sent
-again for you.
+Wait a minute and run again, or run fewer paid nodes at once. The extension
+does not send the request again for you.
 
-### That BytePlus setting cannot be changed here
+### You cannot change that BytePlus setting here
 
 Reload the window.
 

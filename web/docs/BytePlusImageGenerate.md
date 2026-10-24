@@ -20,7 +20,7 @@ outputs each image's ModelArk address as a reference.
 | `prompt`                  | What to draw or change. Name each image by its place, such as Image 1 or Image 2.                                                                                                           |
 | `options`                 | Settings from **Request Options**.                                                                                                                                                          |
 
-`default` sends nothing. Before anything is paid, the node refuses a
+`default` sends nothing. Before you pay anything, the node refuses a
 `size`, `max_images`, `background`, or `output_format` the model does not
 take, naming what it does take.
 

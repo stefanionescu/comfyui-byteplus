@@ -49,11 +49,15 @@ Examples: **chat-01-write-a-product-listing** and
 Everything connected goes in one request. To ask about the same media in a
 later turn, connect it again.
 
-Before anything is paid, the node refuses media the model does not read, a
-`thinking` or `reasoning_effort` value it does not take, a sampling setting or
-`stop` it ignores, and a `json_schema` it cannot follow. DeepSeek V4.1 Flash
-uses `top_p` only while it thinks, and DeepSeek V4 Pro and Flash use the
-penalties only with `thinking` set to `disabled`.
+Before you pay anything, the node refuses:
+
+- media the model does not read;
+- a `thinking` or `reasoning_effort` value the model does not take;
+- a sampling setting or `stop` that the model ignores;
+- a `json_schema` the model cannot follow.
+
+DeepSeek V4.1 Flash uses `top_p` only while it thinks, and DeepSeek V4 Pro and
+Flash use the penalties only with `thinking` set to `disabled`.
 
 An answer that stops mid-sentence hit the token limit; raise
 `max_completion_tokens`.

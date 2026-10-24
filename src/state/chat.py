@@ -1,0 +1,116 @@
+"""Chat documents, conversations, requests, and results."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Literal
+from dataclasses import dataclass
+
+from .options import ModelRequest
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from . import Json
+    from .references import Reference
+
+
+@dataclass(frozen=True, slots=True)
+class Document:
+    """One file attached to a chat request.
+
+    Attributes:
+        name: The file name that the model receives.
+        media_type: The file's media type.
+        text: The contents of a text file.
+        file_url: A PDF as a data URL.
+
+    """
+
+    name: str
+    media_type: str
+    text: str | None
+    file_url: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class Turn:
+    """One message of an earlier exchange.
+
+    Attributes:
+        role: Who wrote the message.
+        text: What the message says.
+
+    """
+
+    role: Literal['user', 'assistant']
+    text: str
+
+
+@dataclass(frozen=True, slots=True)
+class Conversation:
+    """The turns before the next question, oldest first.
+
+    Attributes:
+        turns: The earlier messages.
+
+    """
+
+    turns: tuple[Turn, ...]
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ChatRequest(ModelRequest):
+    """One chat completion with its media already encoded; None means default.
+
+    Attributes:
+        system_prompt: System instructions, sent when not blank.
+        prompt: The question.
+        conversation: Earlier turns sent before the question.
+
+        image_urls: PNG data URLs.
+        video_urls: MP4 data URLs.
+        audio_clips: Base64 WAV without a data: prefix, as the input_audio part takes it.
+        documents: Attached files, in chain order.
+        references: Image, video, and audio addresses ModelArk reads itself, in chain order.
+
+        thinking: The thinking.type to send: enabled or disabled.
+        effort: The reasoning effort to send.
+        max_completion_tokens: The most tokens the model may write, reasoning included, or 0 for ModelArk's answer
+            limit.
+        sampling: The sampling fields to send, by ModelArk's name.
+        stop: The stop words to send, or none.
+        json_schema: The response_format.json_schema object to send as written, or None for unstructured text.
+
+    """
+
+    system_prompt: str
+    prompt: str
+    conversation: Conversation
+    image_urls: tuple[str, ...]
+    video_urls: tuple[str, ...]
+    audio_clips: tuple[str, ...]
+    documents: tuple[Document, ...]
+    references: tuple[Reference, ...]
+    thinking: str | None
+    effort: str | None
+    max_completion_tokens: int
+    sampling: Mapping[str, float]
+    stop: tuple[str, ...]
+    json_schema: Mapping[str, Json] | None
+
+
+@dataclass(frozen=True, slots=True)
+class ChatResult:
+    """What one chat completion returned.
+
+    Attributes:
+        text: The answer.
+        reasoning: The model's reasoning, or a summary of it, when it shares one.
+
+    """
+
+    text: str
+    reasoning: str
+
+
+__all__ = ['ChatRequest', 'ChatResult', 'Conversation', 'Document', 'Turn']

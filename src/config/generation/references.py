@@ -1,13 +1,13 @@
 """The kinds, addresses, and lifetimes of the files ModelArk reads by address."""
 
 # The kinds Reference: Add offers; drafts come only from video nodes.
-ADDED_KINDS = ("image", "video", "audio")
+ADDED_KINDS = ('image', 'video', 'audio')
 
 # The scheme ModelArk reads asset IDs with.
-ASSET_URI_PREFIX = "asset://"
+ASSET_URI_PREFIX = 'asset://'
 
 # The only scheme for links and outputs.
-LINK_SCHEME = "https"
+LINK_SCHEME = 'https'
 
 # A typical web address limit; longer text is a paste mistake.
 MAX_ADDRESS_CHARACTERS = 2048
@@ -15,18 +15,18 @@ MAX_ADDRESS_CHARACTERS = 2048
 # Image, video, and last-frame addresses last 24 hours.
 OUTPUT_LIFETIME_SECONDS = 86_400
 
-# A draft task can be finished for 7 days.
+# ModelArk lets a person finish a draft task for 7 days.
 DRAFT_LIFETIME_SECONDS = 604_800
 
 # ModelArk can read the file as late as when a queued task starts, so a reference must last this long after the request.
 EXPIRY_MARGIN_SECONDS = 600
 
 __all__ = [
-    "ADDED_KINDS",
-    "ASSET_URI_PREFIX",
-    "DRAFT_LIFETIME_SECONDS",
-    "EXPIRY_MARGIN_SECONDS",
-    "LINK_SCHEME",
-    "MAX_ADDRESS_CHARACTERS",
-    "OUTPUT_LIFETIME_SECONDS",
+    'ADDED_KINDS',
+    'ASSET_URI_PREFIX',
+    'DRAFT_LIFETIME_SECONDS',
+    'EXPIRY_MARGIN_SECONDS',
+    'LINK_SCHEME',
+    'MAX_ADDRESS_CHARACTERS',
+    'OUTPUT_LIFETIME_SECONDS',
 ]

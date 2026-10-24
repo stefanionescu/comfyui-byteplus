@@ -1,12 +1,14 @@
 """List and read the PDF and text documents at the top of ComfyUI's input folder."""
 
-import folder_paths
 from pathlib import Path
-from ..types.chat import Document
-from ..config.units import BYTES_PER_MEGABYTE
-from ..types.errors import ErrorCode, BytePlusError
-from ..config.generation.chat import DOCUMENT_TYPES, PDF_MEDIA_TYPE
+
+import folder_paths
 from comfy_api_nodes.util.conversions import text_filepath_to_data_uri
+
+from ..state.chat import Document
+from ..config.units import BYTES_PER_MEGABYTE
+from ..state.errors import ErrorCode, BytePlusError
+from ..config.generation.chat import DOCUMENT_TYPES, PDF_MEDIA_TYPE
 from ..config.messages.inputs import DOCUMENT_KIND, DOCUMENT_SIZE, DOCUMENT_OUTSIDE, DOCUMENT_UNREADABLE
 
 
@@ -39,9 +41,9 @@ def read_document(name: str, max_megabytes: int) -> Document:
     if media_type == PDF_MEDIA_TYPE:
         return Document(path.name, media_type, None, text_filepath_to_data_uri(str(path)))
     try:
-        return Document(path.name, media_type, path.read_text(encoding="utf-8"), None)
+        return Document(path.name, media_type, path.read_text(encoding='utf-8'), None)
     except UnicodeError:
         raise BytePlusError(ErrorCode.INVALID_INPUT, DOCUMENT_UNREADABLE) from None
 
 
-__all__ = ["list_documents", "read_document"]
+__all__ = ['list_documents', 'read_document']

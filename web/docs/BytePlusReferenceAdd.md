@@ -24,7 +24,8 @@ Chain several of these nodes to add several files. It sends nothing.
    the **Digital characters** tab.
 2. Open a character, copy its **asset ID**, and paste it into `url`.
 3. Connect `references` to **Video: Generate**, and name the character in its
-   prompt by its place among the images, such as "the person in Image 2".
+   prompt by its place among the images. For example, write "the person in
+   Image 2" when the character is the second image.
 
 Asset IDs work only in **Video: Generate** with Seedance 2.5 and 2.0-series
 models. Every other node takes `https://` addresses and ModelArk outputs.

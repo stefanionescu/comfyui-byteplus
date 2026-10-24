@@ -28,7 +28,7 @@ last frame, and their ModelArk addresses for the next shot.
 | `prompt`                   | What the video shows. Name media as Image 1, Video 1, and Audio 1. It can be empty when frames or references are connected.                                                                                                                                       |
 | `options`                  | Settings from **Request Options**.                                                                                                                                                                                                                                |
 
-`default` sends nothing. Before anything is paid, the node refuses a
+`default` sends nothing. Before you pay anything, the node refuses a
 `duration`, `resolution`, `ratio`, `generate_audio`, `omni_reference_task_type`,
 or `output_format` the model does not take, and names what it does take.
 
@@ -49,8 +49,8 @@ or `output_format` the model does not take, and names what it does take.
 Examples: **video-01-animate-a-character**, **video-02-continue-a-shot**, and
 **video-04-draft-then-finish**.
 
-ModelArk usually starts a task at once. The task then runs to the end and is
-billed even if you cancel, ComfyUI restarts, or the **Request timeout
-(seconds)** passes. Collect it with **Video: Download**.
+ModelArk starts most tasks at once. A started task runs to the end, and
+ModelArk bills it even if you cancel, ComfyUI restarts, or the request timeout
+in **BytePlus Settings** passes. Collect it with **Video: Download**.
 
 [ModelArk video generation documentation](https://docs.byteplus.com/en/docs/modelark/create-video-generation-task-api)

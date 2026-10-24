@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Write requirements.txt from the runtime dependencies in pyproject.toml.
+# Runtime: Bash 3.2+ on macOS or Linux.
+#MISE description="Write requirements.txt from the runtime dependencies in pyproject.toml."
+set -euo pipefail
+
+# main - Write requirements.txt from the runtime dependencies in pyproject.toml.
+main() {
+    REPO_ROOT="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
+    cd "${REPO_ROOT}" || exit 1
+    exec uv run --no-sync python -m scripts.dependencies "$@"
+}
+main "$@"

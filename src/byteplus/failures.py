@@ -2,11 +2,13 @@
 
 import re
 from http import HTTPStatus
+
 from pydantic import ValidationError
-from ..types.replies import ErrorReply
-from ..config.patterns import REASON_PATTERNS
-from ..types.errors import ErrorCode, BytePlusError
+
+from ..state.errors import ErrorCode, BytePlusError
+from ..state.replies import ErrorReply
 from ..config.byteplus import CONSOLE_URLS, REASON_ENDINGS, MAX_REASON_CHARACTERS
+from ..config.patterns import REASON_PATTERNS
 from ..config.messages.run import (
     NO_REASON,
     REAL_PERSON,
@@ -33,55 +35,55 @@ from ..config.messages.run import (
     MODEL_NOT_ACTIVATED,
 )
 
-_KEY = re.compile(REASON_PATTERNS["KEY"])
-_URL = re.compile(REASON_PATTERNS["URL"])
-_CONSOLE_URL = re.compile(REASON_PATTERNS["CONSOLE_URL"])
-_REQUEST_ID = re.compile(REASON_PATTERNS["REQUEST_ID"])
-_FREE_TRIAL = re.compile(REASON_PATTERNS["FREE_TRIAL"])
-# ModelArk's codes, each with its category and message. A code that extends a listed one, such as
-# InputImageSensitiveContentDetected.PolicyViolation, takes the row of the code it extends.
+_KEY = re.compile(REASON_PATTERNS['KEY'])
+_URL = re.compile(REASON_PATTERNS['URL'])
+_CONSOLE_URL = re.compile(REASON_PATTERNS['CONSOLE_URL'])
+_REQUEST_ID = re.compile(REASON_PATTERNS['REQUEST_ID'])
+_FREE_TRIAL = re.compile(REASON_PATTERNS['FREE_TRIAL'])
+# Each error code of ModelArk maps to its category and message. A code that extends a listed one, such as
+# `InputImageSensitiveContentDetected.PolicyViolation`, takes the row of the code it extends.
 _FAILURE_CODES: dict[str, tuple[ErrorCode, str]] = {
-    "AuthenticationError": (ErrorCode.AUTHENTICATION, KEY_REJECTED),
-    "InvalidAccountStatus": (ErrorCode.AUTHENTICATION, ACCOUNT_STATUS),
-    "AccessDenied": (ErrorCode.AUTHENTICATION, ACCESS_DENIED),
-    "AccountOverdueError": (ErrorCode.CREDITS, ACCOUNT_OVERDUE),
-    "OperationDenied.ServiceOverdue": (ErrorCode.CREDITS, ACCOUNT_OVERDUE),
-    "ModelNotOpen": (ErrorCode.UNAVAILABLE, MODEL_NOT_ACTIVATED),
-    "OperationDenied.ServiceNotOpen": (ErrorCode.UNAVAILABLE, MODEL_NOT_ACTIVATED),
-    "InvalidEndpointOrModel.NotFound": (ErrorCode.UNAVAILABLE, MODEL_NOT_FOUND),
-    "InvalidEndpointOrModel.ModelIDAccessDisabled": (ErrorCode.UNAVAILABLE, MODEL_ID_DISABLED),
-    "InvalidEndpoint.ClosedEndpoint": (ErrorCode.UNAVAILABLE, ENDPOINT_CLOSED),
-    "SetLimitExceeded": (ErrorCode.LIMITED, LIMIT_REACHED),
-    "QuotaExceeded": (ErrorCode.RATE_LIMITED, TASK_QUEUE_FULL),
-    "ServerOverloaded": (ErrorCode.UNAVAILABLE, SERVER_BUSY),
-    "RequestBurstTooFast": (ErrorCode.UNAVAILABLE, SERVER_BUSY),
-    "ModelAccountRpmRateLimitExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "ModelAccountTpmRateLimitExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "ModelAccountIpmRateLimitExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "ModelAccountFlexTpmRateLimitExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "APIAccountRpmRateLimitExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "AccountRateLimitExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "RateLimitExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "InflightBatchsizeExceeded": (ErrorCode.RATE_LIMITED, RATE_LIMITED),
-    "InputImageSensitiveContentDetected.PrivacyInformation": (ErrorCode.REFUSED, REAL_PERSON),
-    "InputVideoSensitiveContentDetected.PrivacyInformation": (ErrorCode.REFUSED, REAL_PERSON),
-    "SensitiveContentDetected": (ErrorCode.REFUSED, INPUT_REFUSED),
-    "InputTextSensitiveContentDetected": (ErrorCode.REFUSED, INPUT_REFUSED),
-    "InputImageSensitiveContentDetected": (ErrorCode.REFUSED, INPUT_REFUSED),
-    "InputVideoSensitiveContentDetected": (ErrorCode.REFUSED, INPUT_REFUSED),
-    "InputAudioSensitiveContentDetected": (ErrorCode.REFUSED, INPUT_REFUSED),
-    "OutputTextSensitiveContentDetected": (ErrorCode.REFUSED, OUTPUT_REFUSED),
-    "OutputImageSensitiveContentDetected": (ErrorCode.REFUSED, OUTPUT_REFUSED),
-    "OutputVideoSensitiveContentDetected": (ErrorCode.REFUSED, OUTPUT_REFUSED),
-    "OutputAudioSensitiveContentDetected": (ErrorCode.REFUSED, OUTPUT_REFUSED),
-    "InvalidParameter.TaskTypeConstraint": (ErrorCode.INVALID_INPUT, TASK_TYPE_REFUSED),
-    "InvalidParameter.TaskTypeMismatch": (ErrorCode.INVALID_INPUT, TASK_TYPE_REFUSED),
-    "InvalidParameter": (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
-    "MissingParameter": (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
-    "InvalidArgumentError": (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
-    "InvalidImageURL": (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
-    "OutofContextError": (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
-    "InternalServiceError": (ErrorCode.TRANSPORT, SERVER_FAILED),
+    'AuthenticationError': (ErrorCode.AUTHENTICATION, KEY_REJECTED),
+    'InvalidAccountStatus': (ErrorCode.AUTHENTICATION, ACCOUNT_STATUS),
+    'AccessDenied': (ErrorCode.AUTHENTICATION, ACCESS_DENIED),
+    'AccountOverdueError': (ErrorCode.CREDITS, ACCOUNT_OVERDUE),
+    'OperationDenied.ServiceOverdue': (ErrorCode.CREDITS, ACCOUNT_OVERDUE),
+    'ModelNotOpen': (ErrorCode.UNAVAILABLE, MODEL_NOT_ACTIVATED),
+    'OperationDenied.ServiceNotOpen': (ErrorCode.UNAVAILABLE, MODEL_NOT_ACTIVATED),
+    'InvalidEndpointOrModel.NotFound': (ErrorCode.UNAVAILABLE, MODEL_NOT_FOUND),
+    'InvalidEndpointOrModel.ModelIDAccessDisabled': (ErrorCode.UNAVAILABLE, MODEL_ID_DISABLED),
+    'InvalidEndpoint.ClosedEndpoint': (ErrorCode.UNAVAILABLE, ENDPOINT_CLOSED),
+    'SetLimitExceeded': (ErrorCode.LIMITED, LIMIT_REACHED),
+    'QuotaExceeded': (ErrorCode.RATE_LIMITED, TASK_QUEUE_FULL),
+    'ServerOverloaded': (ErrorCode.UNAVAILABLE, SERVER_BUSY),
+    'RequestBurstTooFast': (ErrorCode.UNAVAILABLE, SERVER_BUSY),
+    'ModelAccountRpmRateLimitExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'ModelAccountTpmRateLimitExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'ModelAccountIpmRateLimitExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'ModelAccountFlexTpmRateLimitExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'APIAccountRpmRateLimitExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'AccountRateLimitExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'RateLimitExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'InflightBatchsizeExceeded': (ErrorCode.RATE_LIMITED, RATE_LIMITED),
+    'InputImageSensitiveContentDetected.PrivacyInformation': (ErrorCode.REFUSED, REAL_PERSON),
+    'InputVideoSensitiveContentDetected.PrivacyInformation': (ErrorCode.REFUSED, REAL_PERSON),
+    'SensitiveContentDetected': (ErrorCode.REFUSED, INPUT_REFUSED),
+    'InputTextSensitiveContentDetected': (ErrorCode.REFUSED, INPUT_REFUSED),
+    'InputImageSensitiveContentDetected': (ErrorCode.REFUSED, INPUT_REFUSED),
+    'InputVideoSensitiveContentDetected': (ErrorCode.REFUSED, INPUT_REFUSED),
+    'InputAudioSensitiveContentDetected': (ErrorCode.REFUSED, INPUT_REFUSED),
+    'OutputTextSensitiveContentDetected': (ErrorCode.REFUSED, OUTPUT_REFUSED),
+    'OutputImageSensitiveContentDetected': (ErrorCode.REFUSED, OUTPUT_REFUSED),
+    'OutputVideoSensitiveContentDetected': (ErrorCode.REFUSED, OUTPUT_REFUSED),
+    'OutputAudioSensitiveContentDetected': (ErrorCode.REFUSED, OUTPUT_REFUSED),
+    'InvalidParameter.TaskTypeConstraint': (ErrorCode.INVALID_INPUT, TASK_TYPE_REFUSED),
+    'InvalidParameter.TaskTypeMismatch': (ErrorCode.INVALID_INPUT, TASK_TYPE_REFUSED),
+    'InvalidParameter': (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
+    'MissingParameter': (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
+    'InvalidArgumentError': (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
+    'InvalidImageURL': (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
+    'OutofContextError': (ErrorCode.INVALID_INPUT, REQUEST_REJECTED),
+    'InternalServiceError': (ErrorCode.TRANSPORT, SERVER_FAILED),
 }
 # The statuses that decide a failure whose code is missing or unknown.
 _STATUS_FAILURES: dict[int, tuple[ErrorCode, str]] = {
@@ -94,15 +96,15 @@ _STATUS_FAILURES: dict[int, tuple[ErrorCode, str]] = {
 
 
 def _find_failure(code: str) -> tuple[ErrorCode, str] | None:
-    """Look a code up whole, then without its last dot-separated part, until a part is listed or nothing is left.
+    """Look up the code, then drop its last dot-separated part until `_FAILURE_CODES` lists the rest or none remains.
 
-    Some codes end in a dot, such as InvalidParameter., so the empty last part is dropped like any other.
+    Some codes end in a dot, such as `InvalidParameter.`, so the loop drops the empty last part like any other.
     """
     candidate = code
     while candidate:
         if candidate in _FAILURE_CODES:
             return _FAILURE_CODES[candidate]
-        candidate = candidate.rpartition(".")[0]
+        candidate = candidate.rpartition('.')[0]
     return None
 
 
@@ -125,10 +127,10 @@ def _choose_status_failure(status: int | None) -> tuple[ErrorCode, str]:
 def _choose_failure(status: int | None, code: str | None, message: str) -> tuple[ErrorCode, str]:
     """Choose by code, then by status for a code that is missing or unknown.
 
-    QuotaExceeded is the one code whose meaning only ModelArk's wording tells apart: a used-up free trial needs the
-    model activated, while the other replies need fewer queued tasks.
+    `QuotaExceeded` has two meanings, and only the message text of ModelArk separates them: a used-up free trial
+    needs the model activated, while the other replies need fewer queued tasks.
     """
-    if code and code.partition(".")[0] == "QuotaExceeded" and _FREE_TRIAL.search(message):
+    if code and code.partition('.')[0] == 'QuotaExceeded' and _FREE_TRIAL.search(message):
         return ErrorCode.LIMITED, FREE_QUOTA_USED
     failure = _find_failure(code) if code else None
     return failure if failure is not None else _choose_status_failure(status)
@@ -137,16 +139,16 @@ def _choose_failure(status: int | None, code: str | None, message: str) -> tuple
 def _sanitize_reason(message: str) -> str:
     """Remove the only private details a reason can carry, then shorten it.
 
-    Console addresses stay, without the scheme. Other addresses are removed, because storage links carry signatures.
-    ModelArk's request ID and key-shaped text are removed too. The reason ends as a sentence, because a message can add
-    its next step after it.
+    Console addresses stay, without the scheme. This function removes other addresses, because storage links carry
+    signatures. It also removes the request ID of ModelArk and key-shaped text. The reason ends as a sentence, because
+    a message can add its next step after it.
     """
-    text = _URL.sub("", _CONSOLE_URL.sub(r"\1", message))
-    text = " ".join(_KEY.sub("", _REQUEST_ID.sub("", text)).split())
+    text = _URL.sub('', _CONSOLE_URL.sub(r'\1', message))
+    text = ' '.join(_KEY.sub('', _REQUEST_ID.sub('', text)).split())
     if len(text) > MAX_REASON_CHARACTERS:
-        text = text[: MAX_REASON_CHARACTERS - 1].rstrip() + "…"
+        text = text[: MAX_REASON_CHARACTERS - 1].rstrip() + '…'
     if text and not text.endswith(REASON_ENDINGS):
-        text += "."
+        text += '.'
     return text or NO_REASON
 
 
@@ -166,8 +168,8 @@ def read_failure(status: int, body: bytes) -> BytePlusError:
     try:
         error = ErrorReply.model_validate_json(body).error
     except ValidationError:
-        return build_failure(status, None, "")
+        return build_failure(status, None, '')
     return build_failure(status, error.code, error.message)
 
 
-__all__ = ["build_failure", "read_failure"]
+__all__ = ['build_failure', 'read_failure']

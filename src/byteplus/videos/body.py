@@ -5,20 +5,20 @@ The mode decides the content items and their fixed order, and the row decides th
 
 from __future__ import annotations
 
-from functools import partial
-from ...config.media import WAV
 from typing import TYPE_CHECKING
-from ...types.tasks import TaskRequest
-from ...types.images import EncodedImage
-from ..options import build_request_body
-from ...types.references import Reference
-from ..tasks.operation import TaskOperation
-from ..references import validate_references
-from ..models import find_model, validate_value
-from ...types.errors import ErrorCode, BytePlusError
+from functools import partial
+
 from .modes import choose_video_mode, validate_video_request
-from ...config.messages.models import MODEL_FIELD, MODEL_RANGE, MODEL_RANGE_EXTRA
-from ...config.generation.videos import DURATION, ADAPTIVE_RATIO, DRAFT_RESOLUTION, ADAPTIVE_TASK_TYPES
+from ..models import find_model, validate_value
+from ..options import build_request_body
+from ..references import validate_references
+from ...state.tasks import TaskRequest
+from ...config.media import WAV
+from ...state.errors import ErrorCode, BytePlusError
+from ...state.images import EncodedImage
+from ...state.models import VideoRow
+from ..tasks.operation import TaskOperation
+from ...state.references import Reference
 from ...config.messages.inputs import (
     RATIO_FIXED_ONLY,
     DRAFT_FINISH_SIZE,
@@ -27,12 +27,14 @@ from ...config.messages.inputs import (
     VIDEO_MODE_UNSUPPORTED,
     DRAFT_FINISH_UNSUPPORTED,
 )
+from ...config.messages.models import MODEL_FIELD, MODEL_RANGE, MODEL_RANGE_EXTRA
+from ...config.generation.videos import DURATION, ADAPTIVE_RATIO, DRAFT_RESOLUTION, ADAPTIVE_TASK_TYPES
 
 if TYPE_CHECKING:
-    from ...types import Json
+    from ...state import Json
+    from ...state.tasks import VideoRequest
+    from ...state.models import ModelMatch
     from ..tasks.records import TaskStore
-    from ...types.videos import VideoRequest
-    from ...types.models import VideoRow, ModelMatch
 
 
 def _validate_draft_finish(request: VideoRequest, match: ModelMatch[VideoRow]) -> None:
@@ -40,12 +42,12 @@ def _validate_draft_finish(request: VideoRequest, match: ModelMatch[VideoRow]) -
     limits = match.row.video
     if not limits.draft_resolutions:
         raise BytePlusError(ErrorCode.INVALID_INPUT, DRAFT_FINISH_UNSUPPORTED.format(model=match.model_id))
-    validate_references(request.references, ("draft",), can_read_assets=False)
+    validate_references(request.references, ('draft',), can_read_assets=False)
     if request.resolution not in limits.draft_resolutions:
-        message = DRAFT_FINISH_SIZE.format(model=match.model_id, resolutions=", ".join(limits.draft_resolutions))
+        message = DRAFT_FINISH_SIZE.format(model=match.model_id, resolutions=', '.join(limits.draft_resolutions))
         raise BytePlusError(ErrorCode.INVALID_INPUT, message)
     if request.output_format is not None:
-        validate_value(match, "output_format", request.output_format, limits.output_formats)
+        validate_value(match, 'output_format', request.output_format, limits.output_formats)
 
 
 def _validate_media(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> None:
@@ -57,56 +59,58 @@ def _validate_media(request: VideoRequest, match: ModelMatch[VideoRow], mode: st
     if mode not in match.row.video.modes:
         message = VIDEO_MODE_UNSUPPORTED.format(model=match.model_id, mode=VIDEO_MODE_LABELS[mode])
         raise BytePlusError(ErrorCode.INVALID_INPUT, message)
-    validate_references(request.references, ("image", "video", "audio"), can_read_assets=True)
+    validate_references(request.references, ('image', 'video', 'audio'), can_read_assets=True)
     frames = [frame for frame in (request.first_frame, request.last_frame) if isinstance(frame, Reference)]
-    validate_references(frames, ("image",), can_read_assets=False)
+    validate_references(frames, ('image',), can_read_assets=False)
 
 
 def _choose_duration(request: VideoRequest, match: ModelMatch[VideoRow]) -> int:
-    """Choose the duration, refusing one outside the model's range; -1 lets a model that can choose pick the length.
+    """Choose the duration and refuse one outside the model range; `-1` lets a model that can choose pick the length.
 
-    An edit always sends -1, since it matches the length of the video it edits.
+    An edit always sends `-1`, because it matches the length of the video it edits.
     """
     limits = match.row.video
-    duration = DURATION["AUTO"] if request.omni_reference_task_type == "edit" else request.duration
+    duration = DURATION['AUTO'] if request.omni_reference_task_type == 'edit' else request.duration
     minimum, maximum = limits.durations
-    if minimum <= duration <= maximum or (limits.can_choose_duration and duration == DURATION["AUTO"]):
+    if minimum <= duration <= maximum or (limits.can_choose_duration and duration == DURATION['AUTO']):
         return duration
-    fields = {"model": match.model_id, "field": "duration", "minimum": minimum, "maximum": maximum}
+    fields = {'model': match.model_id, 'field': 'duration', 'minimum': minimum, 'maximum': maximum}
     if limits.can_choose_duration:
-        raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_RANGE_EXTRA.format(**fields, extra=DURATION["AUTO"]))
+        raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_RANGE_EXTRA.format(**fields, extra=DURATION['AUTO']))
     raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_RANGE.format(**fields))
 
 
 def _choose_task_fields(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict[str, Json]:
     """Choose the task type, resolution, and duration fields.
 
-    The task type is sent only when it is not auto. A draft is made at 480p whatever the resolution says.
+    The body carries the task type only when it is not `auto`. A draft always uses `DRAFT_RESOLUTION`, whatever the
+    resolution says.
     """
     limits = match.row.video
     fields: dict[str, Json] = {}
-    if request.omni_reference_task_type != "auto":
+    if request.omni_reference_task_type != 'auto':
         validate_value(
-            match, "omni_reference_task_type", request.omni_reference_task_type, limits.omni_reference_task_types
+            match, 'omni_reference_task_type', request.omni_reference_task_type, limits.omni_reference_task_types
         )
-        fields["omni_reference_task_type"] = request.omni_reference_task_type
+        fields['omni_reference_task_type'] = request.omni_reference_task_type
     if request.is_draft:
         if not limits.draft_resolutions:
-            raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field="draft"))
-        fields["draft"] = True
-        fields["resolution"] = DRAFT_RESOLUTION
+            raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field='draft'))
+        fields['draft'] = True
+        fields['resolution'] = DRAFT_RESOLUTION
     else:
-        validate_value(match, "resolution", request.resolution, limits.resolutions)
-        fields["resolution"] = request.resolution
-    fields["duration"] = _choose_duration(request, match)
+        validate_value(match, 'resolution', request.resolution, limits.resolutions)
+        fields['resolution'] = request.resolution
+    fields['duration'] = _choose_duration(request, match)
     return fields
 
 
 def _choose_ratio(request: VideoRequest, match: ModelMatch[VideoRow], mode: str) -> str | None:
-    """Choose the ratio for the mode, or for an edit or extend task, which keeps its video's shape.
+    """Choose the ratio for the mode, or for an edit or extend task, which keeps the shape of its video.
 
-    Where the model keeps the shape of its input, default sends adaptive and a fixed ratio is refused. Where it
-    cannot choose a shape, adaptive is refused. Every Seedance model takes every other ratio.
+    Where the model keeps the shape of its input, default sends `adaptive`, and this function refuses a fixed ratio.
+    Where the model cannot choose a shape, this function refuses `adaptive`. Every Seedance model takes every other
+    ratio.
     """
     limits = match.row.video
     is_adaptive_task = request.omni_reference_task_type in ADAPTIVE_TASK_TYPES
@@ -127,24 +131,24 @@ def _choose_controls(request: VideoRequest, match: ModelMatch[VideoRow]) -> dict
     for a model that takes none.
     """
     limits = match.row.video
-    fields: dict[str, Json] = {"watermark": request.has_watermark}
+    fields: dict[str, Json] = {'watermark': request.has_watermark}
     if request.has_audio is not None:
         if not limits.has_audio:
             raise BytePlusError(
-                ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field="generate_audio")
+                ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field='generate_audio')
             )
-        fields["generate_audio"] = request.has_audio
+        fields['generate_audio'] = request.has_audio
     if request.is_camera_fixed:
         if not limits.has_fixed_camera:
-            raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field="camera_fixed"))
-        fields["camera_fixed"] = True
+            raise BytePlusError(ErrorCode.INVALID_INPUT, MODEL_FIELD.format(model=match.model_id, field='camera_fixed'))
+        fields['camera_fixed'] = True
     if request.output_format is not None:
-        validate_value(match, "output_format", request.output_format, limits.output_formats)
-        fields["output_format"] = request.output_format
+        validate_value(match, 'output_format', request.output_format, limits.output_formats)
+        fields['output_format'] = request.output_format
     if not request.is_draft:
-        fields["return_last_frame"] = True
+        fields['return_last_frame'] = True
     if limits.has_seed:
-        fields["seed"] = request.seed
+        fields['seed'] = request.seed
     return fields
 
 
@@ -154,60 +158,60 @@ def _build_content(request: VideoRequest) -> list[Json]:
     ModelArk names media by kind and position, Image 1 being the first image item, so this order is the numbering
     the prompt uses.
     """
-    content: list[Json] = [{"type": "text", "text": request.prompt}] if request.prompt.strip() else []
-    for role, frame in (("first_frame", request.first_frame), ("last_frame", request.last_frame)):
+    content: list[Json] = [{'type': 'text', 'text': request.prompt}] if request.prompt.strip() else []
+    for role, frame in (('first_frame', request.first_frame), ('last_frame', request.last_frame)):
         if frame is not None:
             url = frame.url if isinstance(frame, EncodedImage) else frame.address
-            content.append({"type": "image_url", "image_url": {"url": url}, "role": role})
+            content.append({'type': 'image_url', 'image_url': {'url': url}, 'role': role})
     local = {
-        "image": [image.url for image in request.images],
-        "audio": [WAV["URL_PREFIX"] + clip for clip in request.clips],
+        'image': [image.url for image in request.images],
+        'audio': [WAV['URL_PREFIX'] + clip for clip in request.clips],
     }
-    for kind in ("image", "video", "audio"):
+    for kind in ('image', 'video', 'audio'):
         urls = [
             *local.get(kind, ()),
             *(reference.address for reference in request.references if reference.kind == kind),
         ]
         content.extend(
-            {"type": f"{kind}_url", f"{kind}_url": {"url": url}, "role": f"reference_{kind}"} for url in urls
+            {'type': f'{kind}_url', f'{kind}_url': {'url': url}, 'role': f'reference_{kind}'} for url in urls
         )
     return content
 
 
 def _build_video_body(request: VideoRequest) -> dict[str, Json]:
-    """Refuse, before anything is paid, what the model's row does not take, then build the body with Request Options.
+    """Refuse what the model row does not take before ModelArk bills anything, then build the body with Request Options.
 
     Finishing a draft sends only the draft and the settings a finish can change. ModelArk reuses the rest from the
-    draft, and refuses the request if the rest is sent again.
+    draft, and refuses the request when the body sends the rest again.
     """
-    match = find_model(request.model_id, "videos")
+    match = find_model(request.model_id, 'videos', VideoRow)
     mode = choose_video_mode(request)
-    if mode == "draft":
+    if mode == 'draft':
         _validate_draft_finish(request, match)
         body: dict[str, Json] = {
-            "model": match.model_id,
-            "content": [{"type": "draft_task", "draft_task": {"id": draft.address}} for draft in request.references],
-            "resolution": request.resolution,
-            "watermark": request.has_watermark,
-            "return_last_frame": True,
+            'model': match.model_id,
+            'content': [{'type': 'draft_task', 'draft_task': {'id': draft.address}} for draft in request.references],
+            'resolution': request.resolution,
+            'watermark': request.has_watermark,
+            'return_last_frame': True,
         }
         if request.output_format is not None:
-            body["output_format"] = request.output_format
+            body['output_format'] = request.output_format
     else:
         _validate_media(request, match, mode)
-        body = {"model": match.model_id, "content": _build_content(request), **_choose_task_fields(request, match)}
+        body = {'model': match.model_id, 'content': _build_content(request), **_choose_task_fields(request, match)}
         ratio = _choose_ratio(request, match, mode)
         if ratio is not None:
-            body["ratio"] = ratio
+            body['ratio'] = ratio
         body |= _choose_controls(request, match)
-    return build_request_body(body, request.options, "videos", match.row)
+    return build_request_body(body, request.options, 'videos', match.row)
 
 
 def build_video_operation(request: VideoRequest, tasks: TaskStore) -> TaskOperation:
     """Build the task that checks the Seedance request, sends it, and records it, as a draft when it makes one."""
     validate_request = partial(validate_video_request, request)
     build_body = partial(_build_video_body, request)
-    return TaskOperation(TaskRequest("videos", request.model_id, validate_request, build_body, request.is_draft), tasks)
+    return TaskOperation(TaskRequest('videos', request.model_id, validate_request, build_body, request.is_draft), tasks)
 
 
-__all__ = ["build_video_operation"]
+__all__ = ['build_video_operation']

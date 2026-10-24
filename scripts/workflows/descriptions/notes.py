@@ -1,235 +1,235 @@
 """The group notes and subgraph descriptions of the shipped workflows, in plain language."""
 
-KEY_STEP = "1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n"
+KEY_STEP = '1. Set your key in **ComfyUI menu → Extensions → BytePlus → BytePlus Settings**.\n'
 RECOVER_NOTE = (
     "ModelArk usually starts the task at once, so a cancelled run's video is still made and billed. Collect it with "
-    "**video-05-recover-a-video**."
+    '**video-05-recover-a-video**.'
 )
 
 WORKFLOW_TEXTS = {
-    "chat-01-write-a-product-listing": {
-        "input": (
-            KEY_STEP + "2. Describe your product in **Product**.\n"
+    'chat-01-write-a-product-listing': {
+        'input': (
+            KEY_STEP + '2. Describe your product in **Product**.\n'
             "3. In **Chat: Attach Document**, choose its spec sheet: a PDF or text file at the top of ComfyUI's input "
-            "folder.\n"
-            "4. Press **Run**. The listing is saved as JSON under `text/byteplus`."
+            'folder.\n'
+            '4. Press **Run**. The listing is saved as JSON under `text/byteplus`.'
         ),
-        "photo": (
-            "Seedream 5.0 flash draws a square product photo from **Product**. To use your own photo, add **Load "
+        'photo': (
+            'Seedream 5.0 flash draws a square product photo from **Product**. To use your own photo, add **Load '
             "Image** and connect it to **Write**'s `image` instead."
         ),
-        "photo_description": "Draws the product photo.",
-        "write": (
-            "Seed 2.0 lite reads the photo and the spec sheet in one request, with `thinking` set to `disabled`, and "
-            "writes the listing as JSON: a title, five bullet points, and a short description. **Write** shows the "
-            "listing and saves it.\n\n"
-            "Open **Write** to change the instructions or the schema."
+        'photo_description': 'Draws the product photo.',
+        'write': (
+            'Seed 2.0 lite reads the photo and the spec sheet in one request, with `thinking` set to `disabled`, and '
+            'writes the listing as JSON: a title, five bullet points, and a short description. **Write** shows the '
+            'listing and saves it.\n\n'
+            'Open **Write** to change the instructions or the schema.'
         ),
-        "write_description": "Writes the listing from the photo and the spec sheet, as JSON, and saves it.",
+        'write_description': 'Writes the listing from the photo and the spec sheet, as JSON, and saves it.',
     },
-    "chat-02-summarize-a-voice-note": {
-        "input": (
-            KEY_STEP + "2. Upload a voice note in **Voice Note**: a recording of up to a few minutes.\n"
-            "3. Press **Run**. The transcript and the action items are saved under `text/byteplus`."
+    'chat-02-summarize-a-voice-note': {
+        'input': (
+            KEY_STEP + '2. Upload a voice note in **Voice Note**: a recording of up to a few minutes.\n'
+            '3. Press **Run**. The transcript and the action items are saved under `text/byteplus`.'
         ),
-        "transcribe": (
-            "Seed 2.0 mini listens to the voice note and writes what is said, word for word, with `thinking` set to "
-            "`disabled`. "
-            "**Transcribe** shows the transcript and saves it."
+        'transcribe': (
+            'Seed 2.0 mini listens to the voice note and writes what is said, word for word, with `thinking` set to '
+            '`disabled`. '
+            '**Transcribe** shows the transcript and saves it.'
         ),
-        "transcribe_description": "Transcribes the voice note and saves the transcript.",
-        "actions": (
-            "DeepSeek V4 flash GA continues the same conversation: `conversation` carries the transcript, so the "
-            "audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the "
-            "list.\n\n"
-            "**Request Options** sets `service_tier` to `flex`, which costs less but can take several minutes."
+        'transcribe_description': 'Transcribes the voice note and saves the transcript.',
+        'actions': (
+            'DeepSeek V4 flash GA continues the same conversation: `conversation` carries the transcript, so the '
+            'audio is not sent again. It lists every action item and sums up the note, and **Action Items** saves the '
+            'list.\n\n'
+            '**Request Options** sets `service_tier` to `flex`, which costs less but can take several minutes.'
         ),
-        "actions_description": "Lists the action items from the transcript and saves them.",
+        'actions_description': 'Lists the action items from the transcript and saves them.',
     },
-    "image-01-design-a-character": {
-        "input": (
-            KEY_STEP + "2. Describe your character in **Character**: who they are, what they wear, and what they "
-            "carry.\n"
-            "3. Press **Run**. Both images are saved under `image/byteplus`."
+    'image-01-design-a-character': {
+        'input': (
+            KEY_STEP + '2. Describe your character in **Character**: who they are, what they wear, and what they '
+            'carry.\n'
+            '3. Press **Run**. Both images are saved under `image/byteplus`.'
         ),
-        "design": (
-            "Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its `references` carry the "
+        'design': (
+            'Seedream 5.0 flash draws the character in full, from the front, at 3:4. Its `references` carry the '
             "image's own ModelArk address on to **Wave**."
         ),
-        "design_description": "Draws the character and saves the image.",
-        "wave": (
-            "Seedream 5.0 flash edits the character from its address, keeping the outfit, and draws it waving. "
-            "Change the prompt in **Wave** to pose the character another way."
+        'design_description': 'Draws the character and saves the image.',
+        'wave': (
+            'Seedream 5.0 flash edits the character from its address, keeping the outfit, and draws it waving. '
+            'Change the prompt in **Wave** to pose the character another way.'
         ),
-        "wave_description": "Draws the same character waving and saves the image.",
+        'wave_description': 'Draws the same character waving and saves the image.',
     },
-    "image-02-make-a-poster-series": {
-        "input": (
+    'image-02-make-a-poster-series': {
+        'input': (
             KEY_STEP + '2. Describe the series in **Brief**, starting with how many, such as "Generate 4 posters".\n'
-            "3. Press **Run**. Up to four posters are saved under `image/byteplus`."
+            '3. Press **Run**. Up to four posters are saved under `image/byteplus`.'
         ),
-        "model": (
-            "**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for "
-            "free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes several related images in "
-            "one request, so `max_images` can be 4. The default, Seedream 5.0 flash, makes one image per request, "
-            "so the node refuses 4 for it before sending anything."
+        'model': (
+            '**Model** holds the model **Series** uses. **Model: Info** shows what the extension knows about it, for '
+            'free and without the key, and **Info** shows it as JSON. Seedream 4.0 makes several related images in '
+            'one request, so `max_images` can be 4. The default, Seedream 5.0 flash, makes one image per request, '
+            'so the node refuses 4 for it before sending anything.'
         ),
-        "series": (
-            "Seedream 4.0 draws the posters as one series, so the style and the typeface match. It makes as many as "
-            "**Brief** asks for, up to the four `max_images` allows."
+        'series': (
+            'Seedream 4.0 draws the posters as one series, so the style and the typeface match. It makes as many as '
+            '**Brief** asks for, up to the four `max_images` allows.'
         ),
-        "series_description": "Draws the poster series and saves it.",
+        'series_description': 'Draws the poster series and saves it.',
     },
-    "image-03-split-a-poster-into-layers": {
-        "input": (
-            KEY_STEP + "2. Describe the poster in **Poster**. Put any words it shows in quotation marks.\n"
-            "3. Press **Run**. The poster and each layer are saved under `image/byteplus`."
+    'image-03-split-a-poster-into-layers': {
+        'input': (
+            KEY_STEP + '2. Describe the poster in **Poster**. Put any words it shows in quotation marks.\n'
+            '3. Press **Run**. The poster and each layer are saved under `image/byteplus`.'
         ),
-        "draw": (
+        'draw': (
             "Seedream 5.0 flash draws the poster at 3:4 as a PNG. Its `references` carry the poster's own address "
-            "on to **Split**."
+            'on to **Split**.'
         ),
-        "draw_description": "Draws the poster and saves it.",
-        "split": (
-            "Seedream 5.0 flash splits the poster into separate layers, such as the title, the lanterns, and the "
-            "date. **Join Image with Alpha** gives each layer its transparency, and the layers are saved as PNG "
-            "files, each at its place on a canvas the size of the poster. Each layer is billed as one image."
+        'draw_description': 'Draws the poster and saves it.',
+        'split': (
+            'Seedream 5.0 flash splits the poster into separate layers, such as the title, the lanterns, and the '
+            'date. **Join Image with Alpha** gives each layer its transparency, and the layers are saved as PNG '
+            'files, each at its place on a canvas the size of the poster. Each layer is billed as one image.'
         ),
-        "split_description": "Splits the poster into transparent layers and saves them.",
+        'split_description': 'Splits the poster into transparent layers and saves them.',
     },
-    "video-01-animate-a-character": {
-        "input": (
-            KEY_STEP + "2. Describe your character in **Character**, and what they do and say in **Scene**. Put "
-            "spoken words in double quotation marks.\n"
-            "3. Press **Run**. The video is saved under `video/byteplus`."
+    'video-01-animate-a-character': {
+        'input': (
+            KEY_STEP + '2. Describe your character in **Character**, and what they do and say in **Scene**. Put '
+            'spoken words in double quotation marks.\n'
+            '3. Press **Run**. The video is saved under `video/byteplus`.'
         ),
-        "design": (
+        'design': (
             "Seedream 5.0 flash draws the character, which becomes the video's first frame. `references` carries "
             "the image's original file, so Seedance accepts its real-looking face."
         ),
-        "design_description": "Draws the character.",
-        "animate": (
-            "Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the "
-            "line.\n\n" + RECOVER_NOTE
+        'design_description': 'Draws the character.',
+        'animate': (
+            'Seedance 2.0 mini starts on the character and makes a five-second 480p video with sound, speaking the '
+            'line.\n\n' + RECOVER_NOTE
         ),
-        "animate_description": "Turns the character into a video and saves it.",
+        'animate_description': 'Turns the character into a video and saves it.',
     },
-    "video-02-continue-a-shot": {
-        "input": (
-            KEY_STEP + "2. Describe the first shot in **Opening** and the next in **Next**.\n"
-            "3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`."
+    'video-02-continue-a-shot': {
+        'input': (
+            KEY_STEP + '2. Describe the first shot in **Opening** and the next in **Next**.\n'
+            '3. Press **Run**. Both shots, and the two joined, are saved under `video/byteplus`.'
         ),
-        "shot_1": (
+        'shot_1': (
             "Seedance 2.0 mini makes the first five-second shot at 480p. Its `references` carry the shot's video "
             "and its last frame on, as ModelArk's own files.\n\n" + RECOVER_NOTE
         ),
-        "shot_1_description": "Makes the first shot and saves it.",
-        "shot_2": (
-            "The next shot starts on the last frame of the first, so the two cut together. Add more shots the same "
-            "way, each connected to the one before.\n\n"
-            "To continue the clip itself rather than start from its last frame, use Seedance 2.5, set "
+        'shot_1_description': 'Makes the first shot and saves it.',
+        'shot_2': (
+            'The next shot starts on the last frame of the first, so the two cut together. Add more shots the same '
+            'way, each connected to the one before.\n\n'
+            'To continue the clip itself rather than start from its last frame, use Seedance 2.5, set '
             "`omni_reference_task_type` to `extend`, and connect the first shot's `references` to `references` "
-            "instead of `first_frame`."
+            'instead of `first_frame`.'
         ),
-        "shot_2_description": "Makes the next shot from the first shot's last frame and saves it.",
-        "join": "**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.",
-        "join_description": "Joins the two shots and saves the result.",
+        'shot_2_description': "Makes the next shot from the first shot's last frame and saves it.",
+        'join': '**Concatenate Video** joins the two shots in order, and the result is saved under `video/byteplus`.',
+        'join_description': 'Joins the two shots and saves the result.',
     },
-    "video-03-cast-a-preset-character": {
-        "input": (
-            KEY_STEP + "2. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open the **Digital "
-            "characters** tab. Open a character, copy its asset ID, and paste it into `url` on "
-            "**Reference: Add** in **Character**.\n"
-            "3. Describe the product in **Product** and the shot in **Scene**.\n"
-            "4. Press **Run**. The video is saved under `video/byteplus`."
+    'video-03-cast-a-preset-character': {
+        'input': (
+            KEY_STEP + '2. In the ModelArk console, open **Playground**, choose Seedance 2.5, and open the **Digital '
+            'characters** tab. Open a character, copy its asset ID, and paste it into `url` on '
+            '**Reference: Add** in **Character**.\n'
+            '3. Describe the product in **Product** and the shot in **Scene**.\n'
+            '4. Press **Run**. The video is saved under `video/byteplus`.'
         ),
-        "draw": (
+        'draw': (
             "Seedream 5.0 flash draws the product. Its `references` carry the image's address on to **Reference: Add**."
         ),
-        "draw_description": "Draws the product.",
-        "character": (
-            "**Reference: Add** adds the preset character after the product, so the product is Image 1 and the "
-            "character Image 2, as **Scene** says. The first run stops here until you paste an asset ID."
+        'draw_description': 'Draws the product.',
+        'character': (
+            '**Reference: Add** adds the preset character after the product, so the product is Image 1 and the '
+            'character Image 2, as **Scene** says. The first run stops here until you paste an asset ID.'
         ),
-        "film": "Seedance 2.0 mini films the character with the product.\n\n" + RECOVER_NOTE,
-        "film_description": "Films the preset character with the product and saves the video.",
+        'film': 'Seedance 2.0 mini films the character with the product.\n\n' + RECOVER_NOTE,
+        'film_description': 'Films the preset character with the product and saves the video.',
     },
-    "video-04-draft-then-finish": {
-        "input": (
-            KEY_STEP + "2. Describe the video in **Prompt**.\n"
-            "3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n"
-            "4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. "
-            "Only the finish runs. ComfyUI reuses the draft."
+    'video-04-draft-then-finish': {
+        'input': (
+            KEY_STEP + '2. Describe the video in **Prompt**.\n'
+            '3. Press **Run**. A four-second 480p draft is saved under `video/byteplus`.\n'
+            '4. If the draft looks right, select **Finish** and press Ctrl+B to turn it on, then press **Run** again. '
+            'Only the finish runs. ComfyUI reuses the draft.'
         ),
-        "draft": (
+        'draft': (
             "Seedance 2.5 makes a quick 480p draft. Its `references` carry the draft's task ID, which ModelArk "
-            "keeps for 7 days."
+            'keeps for 7 days.'
         ),
-        "draft_description": "Makes a four-second 480p draft and saves it.",
-        "finish": (
-            "**Finish** is off when the workflow opens, because a finished video is billed as a 1080p video. "
-            "Seedance 2.5 remakes the draft at 1080p with the same prompt, length, and shape. It finishes drafts only "
-            "at 1080p.\n\n"
-            "1080p video from Seedance 2.5 is 10-bit H.265. If your player shows nothing, open the file in VLC, mpv, "
-            "or QuickTime Player."
+        'draft_description': 'Makes a four-second 480p draft and saves it.',
+        'finish': (
+            '**Finish** is off when the workflow opens, because a finished video is billed as a 1080p video. '
+            'Seedance 2.5 remakes the draft at 1080p with the same prompt, length, and shape. It finishes drafts only '
+            'at 1080p.\n\n'
+            '1080p video from Seedance 2.5 is 10-bit H.265. If your player shows nothing, open the file in VLC, mpv, '
+            'or QuickTime Player.'
         ),
-        "finish_description": "Finishes the draft at 1080p and saves it.",
+        'finish_description': 'Finishes the draft at 1080p and saves it.',
     },
-    "video-05-recover-a-video": {
-        "recover": (
-            "Use this after you cancel a run of **Video: Generate**, after it times out, or after ComfyUI restarts "
-            "while a video is being made. ModelArk still makes the video.\n\n"
+    'video-05-recover-a-video': {
+        'recover': (
+            'Use this after you cancel a run of **Video: Generate**, after it times out, or after ComfyUI restarts '
+            'while a video is being made. ModelArk still makes the video.\n\n'
             + KEY_STEP
-            + "2. In `task`, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R "
-            "to list tasks started after the page loaded.\n"
-            "3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\n"
-            "A task leaves the list once its video is downloaded."
+            + '2. In `task`, choose the video. Each entry shows its task ID, model, and start time in UTC. Press R '
+            'to list tasks started after the page loaded.\n'
+            '3. Press **Run**. The video is saved under `video/byteplus`, and **Last Frame** shows its last frame.\n\n'
+            'A task leaves the list once its video is downloaded.'
         ),
     },
-    "search-01-choose-a-hero-image": {
-        "input": (
-            KEY_STEP + "2. Describe the product and the picture you need in **Brief**, in one line.\n"
-            "3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`."
+    'search-01-choose-a-hero-image': {
+        'input': (
+            KEY_STEP + '2. Describe the product and the picture you need in **Brief**, in one line.\n'
+            '3. Press **Run**. The image that best matches the brief is saved under `image/byteplus`.'
         ),
-        "draw": "Seedream 4.0 draws four options from the brief in one request.",
-        "draw_description": "Draws four options from the brief.",
-        "score": (
-            "Skylark embedding vision turns the brief and each option into an embedding and compares each with the "
-            "brief. **Scores** lists the brief first, compared with itself, then each option in order. The highest "
-            "after the first is the best match."
+        'draw': 'Seedream 4.0 draws four options from the brief in one request.',
+        'draw_description': 'Draws four options from the brief.',
+        'score': (
+            'Skylark embedding vision turns the brief and each option into an embedding and compares each with the '
+            'brief. **Scores** lists the brief first, compared with itself, then each option in order. The highest '
+            'after the first is the best match.'
         ),
-        "score_description": "Embeds the brief and the options, and compares each option with the brief.",
-        "choose": (
+        'score_description': 'Embeds the brief and the options, and compares each option with the brief.',
+        'choose': (
             "**Choose** picks the best match with ComfyUI's own nodes. **Extract Text** reads each option's score, "
-            "**Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes "
-            "that option. The option is saved under `image/byteplus`."
+            '**Math Expression** finds the highest with `values.index(max(values))`, and **Get Item From List** takes '
+            'that option. The option is saved under `image/byteplus`.'
         ),
-        "choose_description": "Picks the option with the highest score and saves it.",
+        'choose_description': 'Picks the option with the highest score and saves it.',
     },
-    "3d-01-turn-a-character-into-a-3d-model": {
-        "input": (
-            KEY_STEP + "2. Describe your character in **Character**.\n"
-            "3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`."
+    '3d-01-turn-a-character-into-a-3d-model': {
+        'input': (
+            KEY_STEP + '2. Describe your character in **Character**.\n'
+            '3. Press **Run**. The 3D model is saved as a GLB file under `3d/byteplus`.'
         ),
-        "design": (
-            "Seedream 5.0 flash draws the character standing in a T-pose, from the front, on a plain white "
-            "background, which Hyper3D turns into a clean 3D model."
+        'design': (
+            'Seedream 5.0 flash draws the character standing in a T-pose, from the front, on a plain white '
+            'background, which Hyper3D turns into a clean 3D model.'
         ),
-        "design_description": "Draws the character in a T-pose.",
-        "build": (
+        'design_description': 'Draws the character in a T-pose.',
+        'build': (
             "Hyper3D Gen2 turns the image into a 3D model. Its prompt holds Hyper3D's commands for PBR textures and a "
-            "pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it."
+            'pose ready for rigging: `--material PBR --TAPose true`. **Save 3D Model** saves it and shows it.'
         ),
-        "recover": (
-            "**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or "
-            "after ComfyUI restarts while one runs.\n\n"
-            "1. Select **Pose**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so "
-            "they do not run and bill again.\n"
-            "2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n"
-            "3. In `task`, choose the task, and press **Run** (press R to list tasks started after the page "
-            "loaded)."
+        'recover': (
+            '**Recover** is off when the workflow opens. Use it after you cancel a 3D task, after it times out, or '
+            'after ComfyUI restarts while one runs.\n\n'
+            '1. Select **Pose**, **3D: Generate**, and its **Save 3D Model**, and press Ctrl+B to turn them off, so '
+            'they do not run and bill again.\n'
+            '2. Select **3D: Download** and **Save 3D Model** here, and press Ctrl+B to turn them on.\n'
+            '3. In `task`, choose the task, and press **Run** (press R to list tasks started after the page '
+            'loaded).'
         ),
     },
 }
 
-__all__ = ["WORKFLOW_TEXTS"]
+__all__ = ['WORKFLOW_TEXTS']

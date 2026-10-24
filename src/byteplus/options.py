@@ -3,22 +3,24 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+
+from ..state.errors import ErrorCode, BytePlusError
 from ..config.byteplus import RESERVED_FIELDS
-from ..types.errors import ErrorCode, BytePlusError
 from ..config.messages.inputs import OPTION_FLEX, OPTION_RESERVED_FIELD
 
 if TYPE_CHECKING:
-    from ..types import Json, Kind
-    from ..types.models import ModelRow
-    from ..types.options import Options
     from collections.abc import Mapping
+
+    from ..state import Json, Kind
+    from ..state.models import ModelRow
+    from ..state.options import Options
 
 
 def build_request_body(body: Mapping[str, Json], options: Options | None, kind: Kind, row: ModelRow) -> dict[str, Json]:
     """Add the extra fields and service tier of Request Options, refusing any this request cannot take before sending.
 
     Extra fields go at the top level as written and can replace a field the node set, such as watermark, but never one
-    it reserves. Flex is refused for a model whose row lacks it.
+    it reserves. This function refuses Flex for a model whose row lacks it.
     """
     merged = dict(body)
     if options is None:
@@ -30,8 +32,8 @@ def build_request_body(body: Mapping[str, Json], options: Options | None, kind: 
     if options.service_tier is not None:
         if not row.has_flex:
             raise BytePlusError(ErrorCode.INVALID_INPUT, OPTION_FLEX.format(model=row.model_id))
-        merged["service_tier"] = options.service_tier
+        merged['service_tier'] = options.service_tier
     return merged
 
 
-__all__ = ["build_request_body"]
+__all__ = ['build_request_body']

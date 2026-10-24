@@ -1,14 +1,14 @@
-"""Tell what a Seedance request starts from, and refuse what no model could take before the model row is read."""
+"""Tell what a Seedance request starts from, and refuse what no model takes before reading the model row."""
 
 from __future__ import annotations
 
 import re
 from typing import TYPE_CHECKING
-from ...types.images import EncodedImage
-from ..operation import validate_upload_size
+
+from ..uploads import validate_upload_size
+from ...state.errors import ErrorCode, BytePlusError
+from ...state.images import EncodedImage
 from ...config.patterns import VIDEO_COMMAND_PATTERN
-from ...types.errors import ErrorCode, BytePlusError
-from ...config.generation.videos import ADAPTIVE_TASK_TYPES
 from ...config.messages.inputs import (
     DRAFT_ALONE,
     DRAFT_TWICE,
@@ -20,17 +20,18 @@ from ...config.messages.inputs import (
     TASK_NEEDS_REFERENCES,
     FRAMES_BESIDE_REFERENCES,
 )
+from ...config.generation.videos import ADAPTIVE_TASK_TYPES
 
 if TYPE_CHECKING:
-    from ...types.settings import Settings
-    from ...types.videos import VideoRequest
+    from ...state.tasks import VideoRequest
+    from ...state.settings import Settings
 
 _VIDEO_COMMAND = re.compile(VIDEO_COMMAND_PATTERN)
 
 
 def _validate_draft(request: VideoRequest) -> None:
     """Refuse more than one draft, a draft beside any other input, or a draft finish with draft turned on."""
-    drafts = [reference for reference in request.references if reference.kind == "draft"]
+    drafts = [reference for reference in request.references if reference.kind == 'draft']
     if len(drafts) > 1:
         raise BytePlusError(ErrorCode.INVALID_INPUT, DRAFT_SINGLE.format(count=len(drafts)))
     has_frames = request.first_frame is not None or request.last_frame is not None
@@ -46,39 +47,39 @@ def _validate_sources(request: VideoRequest, mode: str) -> None:
     A last frame needs a first frame, and frames cannot go beside reference media. A task type other than auto needs
     reference media, and edit and extend need a reference video.
     """
-    if mode == "text" and not request.prompt.strip() and request.last_frame is None:
+    if mode == 'text' and not request.prompt.strip() and request.last_frame is None:
         raise BytePlusError(ErrorCode.INVALID_INPUT, VIDEO_EMPTY)
     if request.last_frame is not None and request.first_frame is None:
         raise BytePlusError(ErrorCode.INVALID_INPUT, LAST_FRAME_ALONE)
     if request.first_frame is not None and (request.images or request.clips or request.references):
         raise BytePlusError(ErrorCode.INVALID_INPUT, FRAMES_BESIDE_REFERENCES)
-    if request.omni_reference_task_type != "auto" and mode != "references":
+    if request.omni_reference_task_type != 'auto' and mode != 'references':
         raise BytePlusError(
             ErrorCode.INVALID_INPUT, TASK_NEEDS_REFERENCES.format(task=request.omni_reference_task_type)
         )
-    has_video = any(reference.kind == "video" for reference in request.references)
+    has_video = any(reference.kind == 'video' for reference in request.references)
     if request.omni_reference_task_type in ADAPTIVE_TASK_TYPES and not has_video:
         raise BytePlusError(ErrorCode.INVALID_INPUT, TASK_NEEDS_VIDEO.format(task=request.omni_reference_task_type))
 
 
 def choose_video_mode(request: VideoRequest) -> str:
     """Choose what the video starts from: a draft to finish, frames, reference media, or a prompt alone."""
-    if any(reference.kind == "draft" for reference in request.references):
-        return "draft"
+    if any(reference.kind == 'draft' for reference in request.references):
+        return 'draft'
     if request.first_frame is not None:
-        return "first_last_frame" if request.last_frame is not None else "first_frame"
+        return 'first_last_frame' if request.last_frame is not None else 'first_frame'
     if request.images or request.clips or request.references:
-        return "references"
-    return "text"
+        return 'references'
+    return 'text'
 
 
 def validate_video_request(request: VideoRequest, settings: Settings) -> None:
-    """Refuse, before anything is sent, a request no model could take, and local media over the upload limit."""
+    """Refuse a request that no model takes, and local media over the upload limit, before sending anything."""
     command = _VIDEO_COMMAND.search(request.prompt)
     if command is not None:
         raise BytePlusError(ErrorCode.INVALID_INPUT, PROMPT_COMMAND.format(command=command.group().strip()))
     mode = choose_video_mode(request)
-    if mode == "draft":
+    if mode == 'draft':
         _validate_draft(request)
     else:
         _validate_sources(request, mode)
@@ -87,4 +88,4 @@ def validate_video_request(request: VideoRequest, settings: Settings) -> None:
     validate_upload_size((*frames, *images, *request.clips), settings)
 
 
-__all__ = ["choose_video_mode", "validate_video_request"]
+__all__ = ['choose_video_mode', 'validate_video_request']
