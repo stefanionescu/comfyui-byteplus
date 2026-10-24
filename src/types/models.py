@@ -5,6 +5,7 @@ from typing import Literal
 from dataclasses import dataclass
 
 type ModelStatus = Literal["current", "deprecated", "retiring"]
+type SamplingMode = Literal["always", "with_thinking", "without_thinking"]
 type MatchMethod = Literal["exact", "family", "listing"]
 
 
@@ -18,7 +19,9 @@ class ChatLimits(Value):
             be turned off, or none.
         has_effort: Whether the model takes reasoning_effort; a model that does takes all seven values and maps some
             to others.
-        has_temperature: Whether temperature takes effect; False where ModelArk fixes it and ignores the value.
+        sampling: The sampling fields that take effect, each always, only with thinking, or only without it. ModelArk
+            fixes every other field and ignores its value.
+        max_stop: The most stop words the model takes; 0 when it ignores stop.
         response_formats: The structured output modes: json_schema, json_object, both, or none.
 
     """
@@ -27,7 +30,8 @@ class ChatLimits(Value):
     max_output: int
     thinking: tuple[str, ...]
     has_effort: bool
-    has_temperature: bool
+    sampling: dict[str, SamplingMode]
+    max_stop: int
     response_formats: tuple[str, ...]
 
 

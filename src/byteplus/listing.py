@@ -14,7 +14,7 @@ from ..config.byteplus import ENDPOINT_URLS
 from ..types.models import ChatRow, ModelMatch
 from ..types.errors import ErrorCode, BytePlusError
 from ..config.messages.models import MODEL_SHUT_DOWN
-from ..config.generation.chat import LISTED_SHUT_DOWN, LISTED_CHAT_DOMAINS
+from ..config.generation.chat import SAMPLING, MAX_STOP, LISTED_SHUT_DOWN, LISTED_CHAT_DOMAINS
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -38,7 +38,11 @@ async def _read_listing(configuration: Configuration) -> Mapping[str, ListedMode
 
 
 def _build_row(listed: ListedModel) -> ChatRow:
-    """Build a chat row from what the listing says the model reads and takes."""
+    """Build a chat row from what the listing says the model reads and takes.
+
+    The listing names no sampling limits, so a listed model takes every sampling field and the Chat API's own number
+    of stop words.
+    """
     limits = listed.token_limits
     formats = listed.features.structured_outputs
     offered = {"json_schema": formats.has_schema, "json_object": formats.has_json}
@@ -53,7 +57,8 @@ def _build_row(listed: ListedModel) -> ChatRow:
                 "max_output": limits.max_output_token_length,
                 "thinking": (),
                 "has_effort": False,
-                "has_temperature": True,
+                "sampling": dict.fromkeys(SAMPLING, "always"),
+                "max_stop": MAX_STOP,
                 "response_formats": tuple(name for name, is_offered in offered.items() if is_offered),
             },
         }

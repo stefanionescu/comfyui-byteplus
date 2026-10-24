@@ -112,7 +112,8 @@ for free.
 **Chat: Ask** also takes a chat model newer than the table. The node reads
 ModelArk's model list once per ComfyUI session and checks the media against
 what the list says the model reads. Such a model takes no `thinking`,
-`reasoning_effort`, or PDFs.
+`reasoning_effort`, or PDFs, and it takes every sampling setting and up to
+four `stop` words.
 
 | Node                | Default model                       |
 | ------------------- | ----------------------------------- |

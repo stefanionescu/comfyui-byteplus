@@ -1,4 +1,4 @@
-"""Share the cache key, run number, and list inputs of the paid nodes, and the Download nodes' task collection."""
+"""Share the paid nodes' cache key, run number, list inputs, and dropdowns, and the Download nodes' collection."""
 
 from __future__ import annotations
 
@@ -7,10 +7,10 @@ from comfy_api.latest import io
 from ..comfy.runtime import get_runtime
 from ..byteplus.tasks.records import TASK_ID
 from ..config.messages.inputs import SINGLE_VALUE
-from ..config.generation.inputs import INPUT_NAMES
 from ..types.errors import ErrorCode, BytePlusError
 from ..comfy.execution import send_request, wait_for_task
 from ..byteplus.tasks.operation import TaskDownloadOperation
+from ..config.generation.inputs import INPUT_NAMES, VALUE_CHOICE
 from typing import cast, Literal, ClassVar, override, TYPE_CHECKING
 from ..config.messages.tasks import TASK_KIND, TASK_NAMES, TASK_UNKNOWN, DOWNLOAD_NODES
 
@@ -26,11 +26,13 @@ class PaidNode(io.ComfyNode):
         send: Typed entry point that receives every saved input except the run number.
         list_inputs: The media inputs of a node that takes input lists; each reaches send as the whole list, and
             every other input as its one value.
+        choice_inputs: The default or custom dropdowns; each reaches send as its custom value, or None at default.
 
     """
 
     send: ClassVar[Callable[..., Awaitable[io.NodeOutput]]]
     list_inputs: ClassVar[frozenset[str]] = frozenset()
+    choice_inputs: ClassVar[frozenset[str]] = frozenset()
 
     @classmethod
     async def fingerprint_inputs(cls, **_inputs: object) -> str:
@@ -49,6 +51,9 @@ class PaidNode(io.ComfyNode):
             for name, value in inputs.items():
                 if name not in cls.list_inputs:
                     inputs[name] = _read_single(name, value)
+        for name in cls.choice_inputs & inputs.keys():
+            choice = cast("dict[str, object]", inputs[name])
+            inputs[name] = choice[VALUE_CHOICE["VALUE"]] if choice[name] == VALUE_CHOICE["SET"] else None
         return await cls.send(**inputs)
 
 

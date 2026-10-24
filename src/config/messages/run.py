@@ -73,7 +73,7 @@ OUTPUT_REFUSED = (
 
 PAYLOAD_TOO_LARGE = "The request is larger than the 64 MB ModelArk accepts. Send fewer or smaller files."
 
-RATE_LIMITED = "ModelArk is limiting requests from your account: {reason} Wait a minute before running again."
+RATE_LIMITED = "ModelArk is limiting requests: {reason} Wait a moment before running again."
 
 REAL_PERSON = (
     "ModelArk refused a reference that may show a real person. Use a preset character or an asset through Reference: "

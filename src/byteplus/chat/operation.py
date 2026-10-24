@@ -19,8 +19,11 @@ from ...types.errors import ErrorCode, BytePlusError, UnknownModelError
 from ...config.messages.run import ANSWER_CUT, REPLY_EMPTY, ANSWER_FILTERED, REPLY_UNREADABLE
 from ...config.messages.inputs import (
     PROMPT_EMPTY,
+    STOP_TOO_MANY,
+    SAMPLING_FIXED,
     SCHEMA_JSON_ONLY,
-    TEMPERATURE_FIXED,
+    STOP_UNSUPPORTED,
+    SAMPLING_THINKING,
     EFFORT_UNSUPPORTED,
     SCHEMA_UNSUPPORTED,
 )
@@ -47,6 +50,21 @@ def _validate_inputs(request: ChatRequest, match: ModelMatch[ChatRow]) -> None:
             raise BytePlusError(ErrorCode.INVALID_INPUT, message)
 
 
+def _validate_sampling(request: ChatRequest, match: ModelMatch[ChatRow], field: str) -> None:
+    """Refuse a sampling field ModelArk fixes for the model, or one that takes effect only with the other thinking.
+
+    Every model in the table reasons by default, so a field for models that do not reason needs thinking disabled.
+    """
+    mode = match.row.chat.sampling.get(field)
+    names = {"model": match.model_id, "field": field}
+    if mode is None:
+        raise BytePlusError(ErrorCode.INVALID_INPUT, SAMPLING_FIXED.format(**names))
+    if mode == "with_thinking" and request.thinking == "disabled":
+        raise BytePlusError(ErrorCode.INVALID_INPUT, SAMPLING_THINKING.format(**names, thinking="enabled"))
+    if mode == "without_thinking" and request.thinking != "disabled":
+        raise BytePlusError(ErrorCode.INVALID_INPUT, SAMPLING_THINKING.format(**names, thinking="disabled"))
+
+
 def _validate_controls(request: ChatRequest, match: ModelMatch[ChatRow]) -> None:
     """Refuse, before anything is paid, a control the model's row does not take.
 
@@ -58,8 +76,13 @@ def _validate_controls(request: ChatRequest, match: ModelMatch[ChatRow]) -> None
         validate_value(match, "thinking", request.thinking, limits.thinking)
     if request.effort is not None and not limits.has_effort:
         raise BytePlusError(ErrorCode.INVALID_INPUT, EFFORT_UNSUPPORTED.format(model=match.model_id))
-    if request.temperature is not None and not limits.has_temperature:
-        raise BytePlusError(ErrorCode.INVALID_INPUT, TEMPERATURE_FIXED.format(model=match.model_id))
+    for field in request.sampling:
+        _validate_sampling(request, match, field)
+    if request.stop and len(request.stop) > limits.max_stop:
+        count = len(request.stop)
+        names = {"model": match.model_id, "maximum": limits.max_stop, "count": count, "extra": count - limits.max_stop}
+        template = STOP_TOO_MANY if limits.max_stop else STOP_UNSUPPORTED
+        raise BytePlusError(ErrorCode.INVALID_INPUT, template.format(**names))
     if request.json_schema is not None and "json_schema" not in limits.response_formats:
         template = SCHEMA_JSON_ONLY if "json_object" in limits.response_formats else SCHEMA_UNSUPPORTED
         raise BytePlusError(ErrorCode.INVALID_INPUT, template.format(model=match.model_id))

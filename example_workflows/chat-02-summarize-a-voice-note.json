@@ -424,7 +424,7 @@
             ],
             "size": [
               340,
-              460
+              586
             ],
             "flags": {},
             "order": 100,
@@ -507,6 +507,30 @@
                 }
               },
               {
+                "name": "top_p",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "top_p"
+                }
+              },
+              {
+                "name": "frequency_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "frequency_penalty"
+                }
+              },
+              {
+                "name": "presence_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "presence_penalty"
+                }
+              },
+              {
                 "name": "run_number",
                 "type": "INT",
                 "link": null,
@@ -526,6 +550,14 @@
                 "link": null,
                 "widget": {
                   "name": "json_schema"
+                }
+              },
+              {
+                "name": "stop",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "stop"
                 }
               },
               {
@@ -575,7 +607,11 @@
               "default",
               0,
               "default",
+              "default",
+              "default",
+              "default",
               0,
+              "",
               "",
               "Transcribe this voice note word for word. Write only what is said.",
               ""
@@ -735,7 +771,7 @@
             ],
             "size": [
               340,
-              460
+              586
             ],
             "flags": {},
             "order": 200,
@@ -818,6 +854,30 @@
                 }
               },
               {
+                "name": "top_p",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "top_p"
+                }
+              },
+              {
+                "name": "frequency_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "frequency_penalty"
+                }
+              },
+              {
+                "name": "presence_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "presence_penalty"
+                }
+              },
+              {
                 "name": "run_number",
                 "type": "INT",
                 "link": null,
@@ -837,6 +897,14 @@
                 "link": null,
                 "widget": {
                   "name": "json_schema"
+                }
+              },
+              {
+                "name": "stop",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "stop"
                 }
               },
               {
@@ -884,7 +952,11 @@
               "default",
               0,
               "default",
+              "default",
+              "default",
+              "default",
               0,
+              "",
               "",
               "List every action item in the voice note as a checklist, each with who does it and by when if the note says. Then sum up the note in two sentences.",
               ""
@@ -968,7 +1040,7 @@
             "origin_id": -10,
             "origin_slot": 1,
             "target_id": 201,
-            "target_slot": 12,
+            "target_slot": 15,
             "type": "BYTEPLUS_OPTIONS"
           }
         ],

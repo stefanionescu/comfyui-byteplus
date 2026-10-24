@@ -119,7 +119,7 @@
             ],
             "size": [
               340,
-              460
+              586
             ],
             "flags": {},
             "order": 100,
@@ -202,6 +202,30 @@
                 }
               },
               {
+                "name": "top_p",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "top_p"
+                }
+              },
+              {
+                "name": "frequency_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "frequency_penalty"
+                }
+              },
+              {
+                "name": "presence_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "presence_penalty"
+                }
+              },
+              {
                 "name": "run_number",
                 "type": "INT",
                 "link": null,
@@ -221,6 +245,14 @@
                 "link": null,
                 "widget": {
                   "name": "json_schema"
+                }
+              },
+              {
+                "name": "stop",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "stop"
                 }
               },
               {
@@ -268,8 +300,12 @@
               "default",
               0,
               "default",
+              "default",
+              "default",
+              "default",
               0,
               "{\n  \"name\": \"listing\",\n  \"schema\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"title\": {\n        \"type\": \"string\"\n      },\n      \"bullets\": {\n        \"type\": \"array\",\n        \"items\": {\n          \"type\": \"string\"\n        }\n      },\n      \"description\": {\n        \"type\": \"string\"\n      }\n    },\n    \"required\": [\n      \"title\",\n      \"bullets\",\n      \"description\"\n    ],\n    \"additionalProperties\": false\n  },\n  \"strict\": true\n}",
+              "",
               "Write a marketplace listing for this product from the photo and the spec sheet. Use only facts you can see in the photo or read in the spec sheet. Keep the title under 80 characters, write five bullet points, and keep the description under 60 words.",
               ""
             ],

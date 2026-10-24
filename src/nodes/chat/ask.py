@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 from ..base import PaidNode
 from comfy_api.latest import io
-from typing import cast, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from ...comfy.media import encode_video
 from ...types.parsing import parse_fields
 from comfy_execution.graph import ExecutionBlocker
@@ -15,14 +15,13 @@ from ...config.messages.inputs import JSON_SCHEMA_INVALID
 from ...types.chat import Turn, ChatRequest, Conversation
 from ...config.namespace import MENUS, NODE_PREFIX, SOCKET_TYPES
 from ...comfy.execution import send_request, wait_for_task, wait_for_thread
-from ...config.generation.inputs import INPUT_NAMES, MODEL_DEFAULT, MODEL_TOOLTIP
+from ...config.generation.inputs import INPUT_NAMES, VALUE_CHOICE, MODEL_DEFAULT, MODEL_TOOLTIP
 from ..inputs import REFERENCES_INPUT, encode_audio_clips, encode_sized_images, build_request_inputs
-from ...config.generation.chat import EFFORTS, TEMPERATURE, THINKING_CHOICES, TEMPERATURE_CHOICE, MAX_COMPLETION_TOKENS
+from ...config.generation.chat import EFFORTS, SAMPLING, THINKING_CHOICES, SAMPLING_TOOLTIPS, MAX_COMPLETION_TOKENS
 
 if TYPE_CHECKING:
     import torch
     from comfy_api.latest import Input
-    from collections.abc import Mapping
     from ...types.options import Options
     from ...types.references import Reference
     from ...types.chat import Document, ChatResult
@@ -44,6 +43,19 @@ _MEDIA = (
 )
 
 
+def _build_sampling(name: str) -> io.DynamicCombo.Input:
+    """Build one sampling dropdown: default sends nothing, and custom shows the value at ModelArk's own range."""
+    tooltip = SAMPLING_TOOLTIPS[name]
+    start, minimum, maximum, step = SAMPLING[name]
+    value = io.Float.Input(
+        VALUE_CHOICE["VALUE"], default=start, min=minimum, max=maximum, step=step, advanced=True, tooltip=tooltip
+    )
+    options = [io.DynamicCombo.Option(MODEL_DEFAULT, []), io.DynamicCombo.Option(VALUE_CHOICE["SET"], [value])]
+    return io.DynamicCombo.Input(
+        name, options=options, tooltip=f"{tooltip} Choose custom to send a value.", extra_dict={"advanced": True}
+    )
+
+
 # The controls a chat model may take; each left at its default sends nothing.
 _CONTROLS = (
     io.Combo.Input(
@@ -60,7 +72,7 @@ _CONTROLS = (
         options=list(EFFORTS),
         default=MODEL_DEFAULT,
         advanced=True,
-        tooltip="How much the model reasons before answering. With thinking set to disabled, only minimal is allowed.",
+        tooltip="How much the model thinks before answering. With thinking set to disabled, only minimal is allowed.",
     ),
     io.Int.Input(
         "max_completion_tokens",
@@ -73,36 +85,8 @@ _CONTROLS = (
             "most models."
         ),
     ),
-    io.DynamicCombo.Input(
-        TEMPERATURE_CHOICE["INPUT"],
-        options=[
-            io.DynamicCombo.Option(MODEL_DEFAULT, []),
-            io.DynamicCombo.Option(
-                TEMPERATURE_CHOICE["SET"],
-                [
-                    io.Float.Input(
-                        TEMPERATURE_CHOICE["VALUE"],
-                        default=TEMPERATURE["DEFAULT"],
-                        min=0,
-                        max=TEMPERATURE["MAX"],
-                        step=TEMPERATURE["STEP"],
-                        advanced=True,
-                        tooltip="Higher values vary the answer more.",
-                    )
-                ],
-            ),
-        ],
-        tooltip="How much the answer varies. Choose custom to send a value to models that take a temperature.",
-        extra_dict={"advanced": True},
-    ),
+    *(_build_sampling(name) for name in SAMPLING),
 )
-
-
-def _read_temperature(choice: Mapping[str, object] | None) -> float | None:
-    """Read the custom temperature; default, or no choice from a node that calls this one, sends none."""
-    if choice is None or choice[TEMPERATURE_CHOICE["INPUT"]] != TEMPERATURE_CHOICE["SET"]:
-        return None
-    return float(cast("float", choice[TEMPERATURE_CHOICE["VALUE"]]))
 
 
 def _build_outputs(result: ChatResult, history: Conversation, prompt: str) -> io.NodeOutput:
@@ -116,6 +100,7 @@ class ChatAsk(PaidNode):
     """Send one chat completion and return the answer, the reasoning, and the conversation."""
 
     list_inputs = frozenset({"images", "videos", "audio"})
+    choice_inputs = frozenset(SAMPLING)
 
     @classmethod
     def define_schema(cls) -> io.Schema:
@@ -153,6 +138,13 @@ class ChatAsk(PaidNode):
                         "for free text."
                     ),
                 ),
+                io.String.Input(
+                    "stop",
+                    default="",
+                    multiline=True,
+                    advanced=True,
+                    tooltip="Text that ends the answer, one per line. Leave it empty to send none.",
+                ),
                 io.String.Input("prompt", multiline=True, default="", tooltip="The question or instruction."),
                 io.String.Input(
                     "system_prompt",
@@ -181,8 +173,12 @@ class ChatAsk(PaidNode):
         thinking: str = MODEL_DEFAULT,
         reasoning_effort: str = MODEL_DEFAULT,
         max_completion_tokens: int = 0,
-        temperature: Mapping[str, object] | None = None,
+        temperature: float | None = None,
+        top_p: float | None = None,
+        frequency_penalty: float | None = None,
+        presence_penalty: float | None = None,
         json_schema: str = "",
+        stop: str = "",
         system_prompt: str = "",
         conversation: Conversation | None = None,
         documents: tuple[Document, ...] | None = None,
@@ -195,7 +191,7 @@ class ChatAsk(PaidNode):
         """Read the schema before any media is encoded, then wait for the request in an owned task."""
         history = conversation or Conversation(())
         schema = parse_fields(json_schema, JSON_SCHEMA_INVALID)
-        temperature_value = _read_temperature(temperature)
+        choices = (temperature, top_p, frequency_penalty, presence_penalty)
 
         async def send_encoded() -> io.NodeOutput:
             """Encode the media in a worker thread, then send the request."""
@@ -219,7 +215,8 @@ class ChatAsk(PaidNode):
                 thinking=None if thinking == MODEL_DEFAULT else thinking,
                 effort=None if reasoning_effort == MODEL_DEFAULT else reasoning_effort,
                 max_completion_tokens=max_completion_tokens,
-                temperature=temperature_value,
+                sampling={name: value for name, value in zip(SAMPLING, choices, strict=True) if value is not None},
+                stop=tuple(line for line in stop.splitlines() if line),
                 json_schema=schema,
                 options=options,
             )

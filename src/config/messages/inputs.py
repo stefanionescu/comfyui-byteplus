@@ -80,6 +80,12 @@ RATIO_FIXED_ONLY = "{model} cannot choose the shape of a video from {mode}. Set 
 
 REFERENCE_IMAGE_SINGLE = "Connect references that hold exactly one image to {input}; they hold {count}."
 
+SAMPLING_FIXED = "{model} always uses its own {field}. Set {field} to default, or choose another model."
+
+SAMPLING_THINKING = (
+    "{model} uses {field} only with thinking set to {thinking}. Set thinking to {thinking}, or set {field} to default."
+)
+
 SCHEMA_JSON_ONLY = (
     "{model} can answer in JSON but cannot follow a schema. Clear json_schema and ask for JSON in the prompt, "
     "or choose a model such as seed-2-0-lite-260428."
@@ -113,6 +119,10 @@ SEARCH_VIDEO_SIZE = (
 
 SINGLE_VALUE = "Connect one value to {name}, not a list."
 
+STOP_TOO_MANY = "{model} takes at most {maximum} stop words, and stop has {count}. Remove {extra}."
+
+STOP_UNSUPPORTED = "{model} ignores stop words. Clear stop, or choose another model."
+
 TASK_NEEDS_REFERENCES = (
     "With omni_reference_task_type set to {task}, the video needs reference media. Connect references or "
     "reference_image, or set omni_reference_task_type to auto."
@@ -122,8 +132,6 @@ TASK_NEEDS_VIDEO = (
     "With omni_reference_task_type set to {task}, the video needs a reference video. Add one to references, or set "
     "omni_reference_task_type to reference or auto."
 )
-
-TEMPERATURE_FIXED = "{model} always uses its own temperature. Set temperature to default, or choose another model."
 
 TRANSPARENT_FORMAT = "A transparent background needs a PNG. Set output_format to png or default."
 
@@ -176,6 +184,8 @@ __all__ = [
     "RATIO_ADAPTIVE_ONLY",
     "RATIO_FIXED_ONLY",
     "REFERENCE_IMAGE_SINGLE",
+    "SAMPLING_FIXED",
+    "SAMPLING_THINKING",
     "SCHEMA_JSON_ONLY",
     "SCHEMA_UNSUPPORTED",
     "SEARCH_DIMENSIONS",
@@ -185,9 +195,10 @@ __all__ = [
     "SEARCH_TEXT_SIZE",
     "SEARCH_VIDEO_SIZE",
     "SINGLE_VALUE",
+    "STOP_TOO_MANY",
+    "STOP_UNSUPPORTED",
     "TASK_NEEDS_REFERENCES",
     "TASK_NEEDS_VIDEO",
-    "TEMPERATURE_FIXED",
     "TRANSPARENT_FORMAT",
     "TRANSPARENT_SOURCE",
     "VIDEO_EMPTY",

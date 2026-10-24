@@ -121,7 +121,7 @@
             ],
             "size": [
               340,
-              460
+              586
             ],
             "flags": {},
             "order": 100,
@@ -204,6 +204,30 @@
                 }
               },
               {
+                "name": "top_p",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "top_p"
+                }
+              },
+              {
+                "name": "frequency_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "frequency_penalty"
+                }
+              },
+              {
+                "name": "presence_penalty",
+                "type": "COMFY_DYNAMICCOMBO_V3",
+                "link": null,
+                "widget": {
+                  "name": "presence_penalty"
+                }
+              },
+              {
                 "name": "run_number",
                 "type": "INT",
                 "link": null,
@@ -223,6 +247,14 @@
                 "link": null,
                 "widget": {
                   "name": "json_schema"
+                }
+              },
+              {
+                "name": "stop",
+                "type": "STRING",
+                "link": null,
+                "widget": {
+                  "name": "stop"
                 }
               },
               {
@@ -272,7 +304,11 @@
               "default",
               0,
               "default",
+              "default",
+              "default",
+              "default",
               0,
+              "",
               "",
               "Transcribe this voice note word for word. Write only what is said.",
               ""

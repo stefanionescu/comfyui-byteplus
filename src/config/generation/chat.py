@@ -2,19 +2,25 @@
 
 from .inputs import MODEL_DEFAULT
 
-# The temperature dropdown's input and choice names: default sends none, and custom sends its value.
-TEMPERATURE_CHOICE = {
-    "INPUT": "temperature",
-    "SET": "custom",
-    "VALUE": "value",
+# The sampling fields ModelArk's Chat API takes, in node order, each as the value custom starts at, which is
+# ModelArk's default, the documented minimum and maximum, and the step.
+SAMPLING = {
+    "temperature": (1.0, 0.0, 2.0, 0.05),
+    "top_p": (0.7, 0.0, 1.0, 0.01),
+    "frequency_penalty": (0.0, -2.0, 2.0, 0.05),
+    "presence_penalty": (0.0, -2.0, 2.0, 0.05),
 }
 
-# A custom temperature, in ModelArk's documented range.
-TEMPERATURE = {
-    "DEFAULT": 1.0,
-    "MAX": 2.0,
-    "STEP": 0.05,
+# What each sampling field does, for its tooltip.
+SAMPLING_TOOLTIPS = {
+    "temperature": "How much the answer varies.",
+    "top_p": "The share of likely words the model picks from; lower keeps the answer more focused.",
+    "frequency_penalty": "Above 0, the model repeats a word less the more often it has appeared.",
+    "presence_penalty": "Above 0, the model repeats less any word that has appeared.",
 }
+
+# The most stop words the Chat API takes for a model that takes stop at all, when the model list names no other number.
+MAX_STOP = 4
 
 # The thinking.type values; a model's row lists the ones it takes.
 THINKING_CHOICES = (MODEL_DEFAULT, "enabled", "disabled")
@@ -54,8 +60,9 @@ __all__ = [
     "LISTED_CHAT_DOMAINS",
     "LISTED_SHUT_DOWN",
     "MAX_COMPLETION_TOKENS",
+    "MAX_STOP",
     "PDF_MEDIA_TYPE",
-    "TEMPERATURE",
-    "TEMPERATURE_CHOICE",
+    "SAMPLING",
+    "SAMPLING_TOOLTIPS",
     "THINKING_CHOICES",
 ]

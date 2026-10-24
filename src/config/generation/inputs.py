@@ -13,6 +13,12 @@ MODEL_TOOLTIP = "Any ModelArk model ID. Copy one from the model list at docs.byt
 # Every dropdown's choice that sends nothing and leaves the value to the model.
 MODEL_DEFAULT = "default"
 
+# A default or custom dropdown's choice that shows a value, and the name of that value.
+VALUE_CHOICE = {
+    "SET": "custom",
+    "VALUE": "value",
+}
+
 # The run number is the extension's own cache counter.
 RUN_NUMBER = {
     "DEFAULT": 0,
@@ -25,4 +31,5 @@ __all__ = [
     "MODEL_DEFAULT",
     "MODEL_TOOLTIP",
     "RUN_NUMBER",
+    "VALUE_CHOICE",
 ]

@@ -63,8 +63,9 @@ def build_body(request: ChatRequest, row: ModelRow) -> dict[str, Json]:
         body["reasoning_effort"] = request.effort
     if request.max_completion_tokens > 0:
         body["max_completion_tokens"] = request.max_completion_tokens
-    if request.temperature is not None:
-        body["temperature"] = request.temperature
+    body.update(request.sampling)
+    if request.stop:
+        body["stop"] = list(request.stop)
     if request.json_schema is not None:
         body["response_format"] = {"type": "json_schema", "json_schema": dict(request.json_schema)}
     return build_request_body(body, request.options, "chat", row)

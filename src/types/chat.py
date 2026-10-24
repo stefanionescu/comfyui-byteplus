@@ -74,7 +74,8 @@ class ChatRequest:
         effort: The reasoning effort to send.
         max_completion_tokens: The most tokens the model may write, reasoning included, or 0 for ModelArk's answer
             limit.
-        temperature: The sampling temperature to send.
+        sampling: The sampling fields to send, by ModelArk's name.
+        stop: The stop words to send, or none.
         json_schema: The response_format.json_schema object to send as written, or None for free text.
         options: The service tier and extra fields from Request Options.
 
@@ -92,7 +93,8 @@ class ChatRequest:
     thinking: str | None
     effort: str | None
     max_completion_tokens: int
-    temperature: float | None
+    sampling: Mapping[str, float]
+    stop: tuple[str, ...]
     json_schema: Mapping[str, Json] | None
     options: Options | None
 
