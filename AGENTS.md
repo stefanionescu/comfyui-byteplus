@@ -70,3 +70,21 @@ Do not edit these files. Change `gspot.toml`, then run `bun run --no-install gsp
 - `ruff.toml`
 
 <!-- <<< gspot managed <<< -->
+
+## This project
+
+This repository is a ComfyUI extension that runs BytePlus ModelArk models. Its Python code in `src/` runs inside
+ComfyUI, and its browser code in `web/scripts/` ships as the built `web/extension.js` and `web/extension.css`.
+
+- After a change in `web/scripts/`, run `mise run comfy:frontend:build` and commit both built files.
+- A registered node ID, `BytePlus` and the class name, never changes. A display label can change, but it changes no
+  saved key. The help page of a node is `web/docs/<node ID>.md`, named with the exact registered ID.
+- `mise run comfy:workflows:build` writes the example workflows and the subgraph blueprints from
+  `scripts/workflows/descriptions/`; do not edit them by hand. Each example is
+  `example_workflows/<family>-<two-digit number>-<task>.json`, and the README links each one.
+- `mise run comfy:requirements:build` writes `requirements.txt` from the runtime dependencies in `pyproject.toml`.
+- The type checker reads the ComfyUI install that `.mise.local.toml` names in `COMFYUI_PATH` and `COMFYUI_PYTHON`.
+  `mise run deps` puts that install on the path of the project environment.
+- Keep the API key out of widgets, saved workflows, logs, and public files: it lives in the private state folder or in
+  `ARK_API_KEY`.
+- Send no paid request to ModelArk without the owner's approval, and state its cost first.
