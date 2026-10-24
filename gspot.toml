@@ -9,6 +9,7 @@ enabled = true
 
 [ci]
 enabled = true
+setup_command = ["mise", "run", "ci:setup"]
 
 [format]
 quotes = "single"
@@ -190,19 +191,14 @@ reason = "ComfyUI serves ../../scripts/app.js and ../../scripts/api.js at runtim
 
 [[ignore]]
 check = "naming/paths"
-rule = "banned-word"
-paths = ["ADVANCED.md"]
-reason = "ADVANCED.md is the advanced guide of every pack in the family, the name its readers and the README link know."
-
-[[ignore]]
-check = "structure/shared-prefixes"
-paths = ["example_workflows/**"]
-reason = "ComfyUI's template browser reads one flat example_workflows folder, and the owner names each workflow <family>-<two-digit number>-<task>."
+paths = ["web/docs/**"]
+reason = "ComfyUI reads each node's help page from web/docs/<node id>.md, so the file name must equal the registered node ID."
 
 [[ignore]]
 check = "naming/paths"
-paths = ["web/docs/**"]
-reason = "ComfyUI reads each node's help page from web/docs/<node id>.md, so the file name must equal the registered node ID."
+rule = "banned-word"
+paths = ["ADVANCED.md"]
+reason = "ADVANCED.md is the advanced guide of every pack in the family, the name its readers and the README link know."
 
 [[ignore]]
 check = "prose/vale"
@@ -217,9 +213,20 @@ reason = "ComfyUI calls the extension's on_load, get_node_list, and comfy_entryp
 
 [[ignore]]
 check = "python/vulture"
+names = ["cpu"]
+paths = ["scripts/nodes/export.py"]
+reason = "ComfyUI's model_management reads args.cpu when its device code loads; the schema export sets it so ComfyUI loads without a graphics card."
+
+[[ignore]]
+check = "python/vulture"
 names = ["define_schema", "execute", "validate_inputs", "fingerprint_inputs"]
 paths = ["src/nodes/**"]
 reason = "ComfyUI calls each node's define_schema, execute, validate_inputs, and fingerprint_inputs by name."
+
+[[ignore]]
+check = "structure/shared-prefixes"
+paths = ["example_workflows/**"]
+reason = "ComfyUI's template browser reads one flat example_workflows folder, and the owner names each workflow <family>-<two-digit number>-<task>."
 
 [[ignore]]
 check = "structure/trivial-functions"
